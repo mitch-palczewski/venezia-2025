@@ -7,4 +7,6 @@
 	<a class="hover:bg-blue-500"  href="/demos/demo1">Demo 1</a>
 	<br />
 	<a class="hover:bg-blue-500"  href="/demos/demo2">Demo 2</a>
+	<br />
+	<a class="hover:bg-blue-500"  href="/demos/demo3">Demo 3</a>
 </div>
