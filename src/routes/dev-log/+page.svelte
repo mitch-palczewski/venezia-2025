@@ -1,6 +1,11 @@
 <div>
 	<div class="m-3 bg-gray-200 p-5">
 		<p>
+			10/3/25 - Figured out how to make copys of models utilizing trelte commands
+		</p>
+	</div>
+	<div class="m-3 bg-gray-200 p-5">
+		<p>
 			10/2/25 - Implemented Large File Storage. 
 		</p>
 		<p>Uploading large files to github was not working (due
