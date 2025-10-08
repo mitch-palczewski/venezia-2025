@@ -2,12 +2,12 @@
   import CanvasPortalTarget from "$lib/components/CanvasPortalTarget.svelte";
   import { Canvas } from "@threlte/core";
 	import {onMount, type  Snippet } from 'svelte';
-
+  //add data
   let { children }: { children: Snippet } = $props();
 
 </script>
 
-<div >
+<div class="m-0">
     <Canvas>
         <CanvasPortalTarget />
     </Canvas>

@@ -1,6 +1,6 @@
 <script>
 	import CanvasPortal from '$lib/components/CanvasPortal.svelte';
-	import Scene from '$lib/scenes/demo4.svelte';
+	import Scene from '$lib/scenes/demos/demo4.svelte';
 
 </script>
 <p>To create multiple of the same model utilize npx threlte/gilf@latest path/to/model.glb to create a reusable component</p>

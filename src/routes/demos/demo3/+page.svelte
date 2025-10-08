@@ -1,6 +1,6 @@
 <script>
 	import CanvasPortal from '$lib/components/CanvasPortal.svelte';
-	import Scene from '$lib/scenes/demo3.svelte';
+	import Scene from '$lib/scenes/demos/demo3.svelte';
 
 </script>
 <p>This page may take some time to load</p>
