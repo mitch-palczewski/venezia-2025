@@ -36,7 +36,7 @@
 </script>
 
 <div id="container" class="bg-white">
-	<div id="content" class="relative z-1 h-full overflow-y-scroll">
+	<div id="content" class="relative z-1 h-full">
 		{#each items as item, i}
 			<div id="item" class="m-4 inline-block p-4 shadow-md">
 				<div bind:this={item.dom} class="h-[200px] w-[200px]"></div>

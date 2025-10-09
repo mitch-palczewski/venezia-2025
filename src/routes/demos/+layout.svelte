@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CanvasPortalTarget from "$lib/components/CanvasPortalTarget.svelte";
+  import CanvasPortalTarget from "$lib/components/3d-core/CanvasPortalTarget.svelte";
   import { Canvas } from "@threlte/core";
 	import {onMount, type  Snippet } from 'svelte';
   //add data
@@ -7,7 +7,7 @@
 
 </script>
 
-<div class="m-0">
+<div class="m-0 ">
     <Canvas>
         <CanvasPortalTarget />
     </Canvas>
@@ -17,7 +17,7 @@
 
 <style>
   div {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;

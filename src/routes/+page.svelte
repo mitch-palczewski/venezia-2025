@@ -17,4 +17,6 @@
 	<a class="hover:bg-blue-500"  href="/demos/demo6">Demo 6 View Demo</a>
 	<br />
 	<a class="hover:bg-blue-500"  href="/demos/demo7">Demo 7 Ascii Renderer</a>
+	<br />
+	<a class="hover:bg-blue-500"  href="/demos/demo8">Demo 8 Terrain</a>
 </div>
