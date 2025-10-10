@@ -1,31 +1,50 @@
-<script lang='ts'>
-    import { generateTerrainGeometry } from "$lib/3d/generateTerrain";
-	import { T } from "@threlte/core";
-	import { OrbitControls } from "@threlte/extras";
-    import { onMount } from "svelte";
-	import type { PlaneGeometry } from "three";
+<script lang="ts">
+	import { generateTerrainGeometry } from '$lib/3d/generateTerrain';
+	import { T, useThrelte } from '@threlte/core';
+	import { OrbitControls } from '@threlte/extras';
+	import { onMount } from 'svelte';
+	import type { PlaneGeometry } from 'three';
+	import * as THREE from 'three';
+    import ClickToMove from '$lib/components/3d/camera/clickToMove.svelte';
 
+	let geometry: PlaneGeometry | undefined | null = null;
+    const {scene} = useThrelte();
+    scene.fog = new THREE.FogExp2( 0xefd1b5, 0.0005 );
 
-    const geometry: PlaneGeometry = generateTerrainGeometry()
+  
+
+  onMount(() => {
+    geometry = generateTerrainGeometry(7500, 7500, 10);
+    console.log('terrain attributes', geometry?.attributes);
    
+  });
 
 </script>
 
-<T.PerspectiveCamera 
-    makeDefault
-    position={[1,2,5]}
-    oncreate={(ref) => {ref.lookAt(0,1,0)}}
-    
-><OrbitControls enableDamping />
+<T.PerspectiveCamera
+	makeDefault
+    near={1}
+    far={5000}
+	position={[100, 800, -800]}
+	oncreate={(ref) => {
+		ref.lookAt(- 100, 810, - 800);
+	}}
+>
+    <ClickToMove/>
+    <OrbitControls/>
 </T.PerspectiveCamera>
 
+<T.DirectionalLight position={[0, 10, 10]} castShadow intensity={1} />
+<T.AmbientLight intensity={0.3} />
 
-<T.DirectionalLight 
-    position={[0,10,10]}
-    castShadow
-/>
+
+{#if geometry}
+	<T.Mesh geometry={geometry} castShadow receiveShadow>
+		<T.MeshStandardMaterial color="blue" />
+	</T.Mesh>
+{/if}
 
 <T.Mesh>
-    <T is={geometry}> </T>
-    <T.MeshDepthMaterial></T.MeshDepthMaterial>
+	<T.TorusKnotGeometry />
+	<T.MeshNormalMaterial />
 </T.Mesh>

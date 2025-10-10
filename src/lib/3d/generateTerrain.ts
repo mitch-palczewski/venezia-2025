@@ -31,18 +31,49 @@ export function generateTerrainHeight(width = 256, height = 256, octaves = 4){
         }
         quality *= 5;
     }
-    return data;
+    return {data, width, height};
 }
 
-export function generateTerrainGeometry(width = 7500, height = 7500, height_data:Uint8Array | null = null){
-  if(!height_data){
-    height_data = generateTerrainHeight()
+export function generateTerrainGeometry(
+  worldWidth = 7500, 
+  worldHeight = 7500, 
+  heightScale = 10,
+  flatten = false,
+  height_payload:{ data: Uint8Array; width: number; height: number } | null = null
+){
+  if(!height_payload){
+    try{
+      height_payload = generateTerrainHeight()
+    }catch(e){
+      console.log(e)
+      console.log("Error: Could not generate terrain heights")
+      return null;
+    } 
   }
-  const geometry = new THREE.PlaneGeometry(width, height);
+  const { data: height_data, width: wSeg, height: hSeg } = height_payload;
+  const widthSegments = wSeg-1
+  const heightSegments = hSeg-1
+
+  const geometry = new THREE.PlaneGeometry(worldWidth, worldHeight, widthSegments, heightSegments);
   geometry.rotateX(-Math.PI/2);
-  const vertices = geometry.attributes.position.array;
-  for (let i=0, j=0, len = vertices.length; i < len; i++, j += 3){
-    vertices[j+1] = height_data[i] * 10;
+  const vertices = geometry.attributes.position.array as Float32Array;
+  const vertexCount = vertices.length / 3
+  const expectedCount = wSeg*hSeg
+  if (vertexCount !== expectedCount) {
+    console.warn(
+      "Vertex count mismatch",
+      { vertexCount, expectedCount, widthSegments, heightSegments }
+    );
+    return null;
   }
+  for (let i=0, j=0, len = vertexCount; i < len; i++, j += 3){
+    const h = height_data[i]
+    vertices[j+1] = flatten ? 0 : h * heightScale;
+  }
+
+  geometry.attributes.position.needsUpdate = true;
+  geometry.computeVertexNormals();
+  geometry.computeBoundingSphere();
+  geometry.computeBoundingBox();
   return geometry
 }
