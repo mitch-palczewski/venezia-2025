@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { T } from '@threlte/core';
   import { useGltf } from '@threlte/extras';
   import { OrbitControls } from '@threlte/extras';

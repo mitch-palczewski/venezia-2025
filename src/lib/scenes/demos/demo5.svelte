@@ -1,11 +1,11 @@
-<script>
+<script lang="ts">
 	// @ts-nocheck
 
 	import { T } from '@threlte/core';
 	import { useGltf } from '@threlte/extras';
 	import { OrbitControls } from '@threlte/extras';
-	import Interactive1Zardoz01 from '$lib/assets/models/interactive1_Zardoz_01.svelte';
-    import Interactive2Zardoz01 from '$lib/assets/models/interactive2_Zardoz_01.svelte';
+	import Interactive1Zardoz01 from '$lib/assets/models/Zardoz_01/interactive1_Zardoz_01.svelte';
+    import Interactive2Zardoz01 from '$lib/assets/models/Zardoz_01/interactive2_Zardoz_01.svelte';
 </script>
 
 <T.PerspectiveCamera

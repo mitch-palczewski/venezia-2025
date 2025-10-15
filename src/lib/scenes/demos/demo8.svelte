@@ -5,7 +5,7 @@
 	import { onMount } from 'svelte';
 	import type { PlaneGeometry } from 'three';
 	import * as THREE from 'three';
-    import ClickToMove from '$lib/components/3d/camera/clickToMove.svelte';
+    
 
 	let geometry: PlaneGeometry | undefined | null = null;
     const {scene} = useThrelte();
@@ -30,7 +30,7 @@
 		ref.lookAt(- 100, 810, - 800);
 	}}
 >
-    <ClickToMove/>
+    
     <OrbitControls/>
 </T.PerspectiveCamera>
 
