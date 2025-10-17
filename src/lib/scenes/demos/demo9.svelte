@@ -4,6 +4,7 @@
     import { T, useTask } from '@threlte/core';
     import Crocodile01 from '$lib/assets/models/crocodile_01/Crocodile_01.svelte';
 	import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
+	import { OrbitControls } from '@threlte/extras';
 
 
 
@@ -20,6 +21,7 @@ let rotation = $state(0)
     position={[0,6,1]}
     oncreate={(ref) => {ref.lookAt(0,0,0)}}
 >
+<OrbitControls enableZoom={false}/>
 </T.PerspectiveCamera>
 
 
