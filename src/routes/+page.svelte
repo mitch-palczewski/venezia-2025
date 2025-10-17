@@ -20,5 +20,5 @@
 	<br />
 	<a class="hover:bg-blue-500"  href="/demos/demo8">Demo 8 Terrain</a>
 	<br />
-	<a class="hover:bg-blue-500"  href="/demos/demo9">Demo 9</a>
+	<a class="hover:bg-blue-500"  href="/demos/demo9">Demo 9 Framed Spinning Crocodile01</a>
 </div>

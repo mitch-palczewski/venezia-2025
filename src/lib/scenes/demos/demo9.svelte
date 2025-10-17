@@ -1,22 +1,25 @@
 <script lang="ts">
 
   
-    import { isInstanceOf, T, useThrelte } from '@threlte/core';
-    import { useGltf } from '@threlte/extras';
-    import { OrbitControls } from '@threlte/extras';
+    import { T, useTask } from '@threlte/core';
     import Crocodile01 from '$lib/assets/models/crocodile_01/Crocodile_01.svelte';
-    import InteractiveCorcodile01 from '$lib/assets/models/crocodile_01/interactive_Corcodile_01.svelte';
-	import { PerspectiveCamera } from 'three';
+	import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
 
+
+
+let rotation = $state(0)
+    useTask((delta)=>{
+        rotation += delta
+    })
 
 </script>
 
 
 <T.PerspectiveCamera 
     makeDefault
-    position={[1,2,5]}
-    oncreate={(ref) => {ref.lookAt(0,1,0)}}
-><OrbitControls enableDamping />
+    position={[0,6,1]}
+    oncreate={(ref) => {ref.lookAt(0,0,0)}}
+>
 </T.PerspectiveCamera>
 
 
@@ -24,7 +27,17 @@
 <T.DirectionalLight 
     position={[0,10,10]}
     castShadow
+    color="lightgreen"
 />
 
-<InteractiveCorcodile01/>
+
+<T.Object3D 
+rotation.z={rotation}>
+    <Crocodile01
+    rotation.y={degToRad(-6)}
+    position={[0,.2,0]}
+
+    />
+</T.Object3D>
+
 

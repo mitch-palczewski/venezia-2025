@@ -60,6 +60,9 @@ importers:
       globals:
         specifier: ^16.0.0
         version: 16.4.0
+      meshoptimizer:
+        specifier: ^0.25.0
+        version: 0.25.0
       prettier:
         specifier: ^3.4.2
         version: 3.6.2
@@ -1139,6 +1142,9 @@ packages:
 
   meshoptimizer@0.22.0:
     resolution: {integrity: sha512-IebiK79sqIy+E4EgOr+CAw+Ke8hAspXKzBd0JdgEmPHiAwmvEj2S4h1rfvo+o/BnfEYd/jAOg5IeeIjzlzSnDg==}
+
+  meshoptimizer@0.25.0:
+    resolution: {integrity: sha512-ewwuAo3ujPZ7T3Y2oTkEoLlXvNOqnr0cjyAxfv5djXJqwD9QlxDDO0qGtsqB4Z9QUVvhruKXg9q/xfK9I5S1xQ==}
 
   micromatch@4.0.8:
     resolution: {integrity: sha512-PXwfBhYu0hBCPw8Dn0E+WDYb7af3dSLVWKi3HGv84IdF4TyFoC0ysxFd0Goxw7nSv4T/PzEJQxsYsEiFCKo2BA==}
@@ -2530,6 +2536,8 @@ snapshots:
   merge2@1.4.1: {}
 
   meshoptimizer@0.22.0: {}
+
+  meshoptimizer@0.25.0: {}
 
   micromatch@4.0.8:
     dependencies:

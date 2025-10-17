@@ -7,4 +7,5 @@ export default defineConfig({
 	ssr: {
 		noExternal: ['camera-controls']
 	}
+	
 });
