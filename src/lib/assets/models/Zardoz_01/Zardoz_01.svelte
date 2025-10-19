@@ -4,48 +4,22 @@ Command: npx @threlte/gltf@3.0.1 ./static\models\undertow\Zardoz_01.glb
 -->
 
 <script>
-				
-	
-	
-  
-        import { T } from '@threlte/core'
-        import { useGltf } from '@threlte/extras'
-	
+	import { T } from '@threlte/core';
+	import { useGltf } from '@threlte/extras';
 
-        let {
-					fallback,
-          error,
-          children,
-          ref = $bindable(),
-          ...props
-        } = $props()
+	let { fallback, error, children, ref = $bindable(), ...props } = $props();
 
-				
-
-				
-
-        
-
-        const gltf = useGltf('/models/undertow/Zardoz_01.glb')
-
-
+	const gltf = useGltf('/models/undertow/Zardoz_01.glb');
 </script>
 
-<T.Group
-  bind:ref
-  dispose={false}
-  {...props}
->
-  {#await gltf}
-    {@render fallback?.()}
-  {:then gltf}
-    <T.Mesh
-      geometry={gltf.nodes.Zardoz_01.geometry}
-      material={gltf.nodes.Zardoz_01.material}
-    />
-  {:catch err}
-    {@render error?.({ error: err })}
-  {/await}
+<T.Group bind:ref dispose={false} {...props}>
+	{#await gltf}
+		{@render fallback?.()}
+	{:then gltf}
+		<T.Mesh geometry={gltf.nodes.Zardoz_01.geometry} material={gltf.nodes.Zardoz_01.material} />
+	{:catch err}
+		{@render error?.({ error: err })}
+	{/await}
 
-  {@render children?.({ ref })}
+	{@render children?.({ ref })}
 </T.Group>

@@ -4,6 +4,8 @@
 	<br />
 	<a class="hover:bg-blue-500" href="/dev-log">Dev Log</a>
 	<br />
+	<a class="hover:bg-blue-500"  href="/demos/model-inventory">model invetory</a>
+	<br />
 	<a class="hover:bg-blue-500"  href="/demos/demo1">Demo 1 Tutorial</a>
 	<br />
 	<a class="hover:bg-blue-500"  href="/demos/demo2">Demo 2 Rendering gilf</a>

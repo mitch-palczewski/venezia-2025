@@ -1,6 +1,5 @@
 <script>
 	import CanvasPortal from '$lib/components/3d-core/CanvasPortal.svelte';
-	
     import { AsciiRenderer } from '@threlte/extras';
     import { T } from '@threlte/core';
     import { OrbitControls } from '@threlte/extras';

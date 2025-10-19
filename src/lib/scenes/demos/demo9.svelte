@@ -3,8 +3,8 @@
   
     import { T, useTask } from '@threlte/core';
     import Crocodile01 from '$lib/assets/models/crocodile_01/Crocodile_01.svelte';
-	import { degToRad, radToDeg } from 'three/src/math/MathUtils.js';
-	import { OrbitControls } from '@threlte/extras';
+	import { degToRad} from 'three/src/math/MathUtils.js';
+	import { AsciiRenderer, OrbitControls } from '@threlte/extras';
 
 
 
