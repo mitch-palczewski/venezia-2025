@@ -1,8 +1,12 @@
 <script lang="ts">
+
+
   import { T } from '@threlte/core';
   import { OrbitControls } from '@threlte/extras';
-  
   import Arch01 from '$lib/assets/models/Arch_01/Arch_01.svelte';
+
+
+
 </script>
 
 
