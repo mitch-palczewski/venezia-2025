@@ -46,7 +46,6 @@
 	"dependencies": {
 		"@threlte/core": "^8.1.5",
 		"@threlte/extras": "^9.5.4",
-		"@threlte/studio": "^0.1.11",
 		"@types/three": "^0.180.0",
 		"@vercel/blob": "^2.0.0",
 		"three": "^0.180.0"
