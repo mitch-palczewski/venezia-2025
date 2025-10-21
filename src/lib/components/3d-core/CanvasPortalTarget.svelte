@@ -1,7 +1,11 @@
-<script lang="ts" module>
+<script 
+	lang="ts" 
+	module
+>
 	import type { Snippet } from 'svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	let snippets = new SvelteSet<Snippet>();
+	
 	export const addCanvasPortalSnippet = (snippet: Snippet) => {
 		snippets.add(snippet);
 	};
@@ -11,5 +15,5 @@
 </script>
 
 {#each snippets as snippet}
-	{@render snippet?.()}
+	{@render snippet()}
 {/each}

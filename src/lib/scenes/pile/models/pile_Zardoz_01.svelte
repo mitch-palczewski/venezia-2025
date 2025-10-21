@@ -4,17 +4,29 @@ Command: npx @threlte/gltf@3.0.1 ./static\models\undertow\Zardoz_01.glb
 -->
 
 <script lang="ts">
+	import type { Props } from '@threlte/core';
+	import type * as THREE from 'three';
 	import { T } from '@threlte/core';
-	import { useGltf } from '@threlte/extras';
-	import { meshBounds } from '@threlte/extras';
-	import { interactivity } from '@threlte/extras';
-	import { TransformControls } from '@threlte/extras';
-	import { Text } from '@threlte/extras';
+	import { interactivity, meshBounds, TransformControls, useGltf, Text } from '@threlte/extras';
+	import type { Snippet } from 'svelte';
+
+	let {
+		fallback,
+		error,
+		children,
+		ref = $bindable(),
+		...props
+	}: Props<THREE.Group> & {
+		ref?: THREE.Group;
+		children?: Snippet<[{ ref: THREE.Group }]>;
+		fallback?: Snippet;
+		error?: Snippet<[{ error: Error }]>;
+	} = $props();
 
 	interactivity();
 	
 	let showTransformControls = $state(true)
-	let { fallback, error, children, ref = $bindable(), ...props } = $props();
+	
 	const gltf = useGltf('/models/undertow/Zardoz_01.glb');
 </script>
 
@@ -49,7 +61,9 @@ Command: npx @threlte/gltf@3.0.1 ./static\models\undertow\Zardoz_01.glb
 		{@render error?.({ error: err })}
 	{/await}
 
-	{@render children?.({ ref })}
+	{#if ref}
+		{@render children?.({ ref })}
+	{/if}
 </T.Group>
 </TransformControls>
 

@@ -4,8 +4,9 @@
 
 </script>
 
+
+
 <CanvasPortal>
 	<Scene/>
 </CanvasPortal>
-
 

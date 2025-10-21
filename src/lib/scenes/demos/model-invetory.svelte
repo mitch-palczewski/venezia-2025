@@ -3,7 +3,7 @@
 
   import { T } from '@threlte/core';
   import { OrbitControls } from '@threlte/extras';
-  import Arch01 from '$lib/assets/models/Arch_01/Arch_01.svelte';
+  import Arch01 from '$lib/components/models/Arch_01/Arch_01.svelte';
 
 
 

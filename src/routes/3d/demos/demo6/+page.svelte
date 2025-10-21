@@ -43,6 +43,9 @@
 				<div class="mt-2">Scene {i + 1}</div>
 			</div>
 		{/each}
+		
+	<button on:click={() => {console.log("click")}} class="rounded bg-green-600 px-4 p-2 text-white hover:bg-green-200 hover:border-2">Send JSON</button>
+
 	</div>
 	<div class="absolute top-0 h-full">
 		<CanvasPortal>

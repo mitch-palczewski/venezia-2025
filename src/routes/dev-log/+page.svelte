@@ -1,6 +1,11 @@
 <div>
 	<div class="m-3 bg-gray-200 p-5">
 		<p>
+			10/20/25 - VERY IMPORTANT if you want a button or interactive base html to work it needs to be wrapped in a div with class="relative"
+		</p>
+	</div>
+	<div class="m-3 bg-gray-200 p-5">
+		<p>
 			10/16/25 - Looking for a solution to having multiple cameras. I think this is the wrong way to
 			think about it. the camera should just move to a different postion.
 		</p>

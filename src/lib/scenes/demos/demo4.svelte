@@ -1,11 +1,11 @@
 <script lang="ts">
-// @ts-nocheck
+
 
   
   import { T } from '@threlte/core';
   import { useGltf } from '@threlte/extras';
   import { OrbitControls } from '@threlte/extras';
-    import Zardoz01 from '$lib/assets/models/Zardoz_01/Zardoz_01.svelte';
+    import Zardoz01 from '$lib/components/models/Zardoz_01/Zardoz_01.svelte';
   
 </script>
 
