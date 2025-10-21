@@ -9,7 +9,7 @@
 
 	import type { Vec3, ObjectTransform, ObjectPositions } from './types';
 
-	export let blobUrl: string = import.meta.env.VITE_PILE_POSITION_URL || '';
+	//export let blobUrl: string = import.meta.env.VITE_PILE_POSITION_URL || '';
 	const data = writable<ObjectPositions | null>(null);
 	const loading = writable<boolean>(true);
 	const error = writable<string | null>(null);
@@ -22,7 +22,7 @@
 	}
 
 	onMount(() => {
-		fetchPositions(blobUrl, data, loading, error);
+		//fetchPositions(blobUrl, data, loading, error);
 	
 	});
 </script>
