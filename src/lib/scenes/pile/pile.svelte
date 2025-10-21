@@ -5,7 +5,6 @@
 	import { OrbitControls } from '@threlte/extras';
 
 	import { fetchPositions } from './hooks/fetchPositions';
-	import { uploadPositions } from './hooks/uploadPositions';
 	import PileZardoz01 from './models/pile_Zardoz_01.svelte';
 
 	import type { Vec3, ObjectTransform, ObjectPositions } from './types';
@@ -24,6 +23,7 @@
 
 	onMount(() => {
 		fetchPositions(blobUrl, data, loading, error);
+	
 	});
 </script>
 
