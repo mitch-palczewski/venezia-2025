@@ -4,6 +4,7 @@ Command: npx @threlte/gltf@3.0.1 C:\Users\mpalc\OneDrive\Desktop\_projects\Venez
 -->
 
 <script lang="ts">
+	//test
 	import type * as THREE from 'three';
 
 	import type { Snippet } from 'svelte';
