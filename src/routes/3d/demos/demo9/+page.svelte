@@ -6,10 +6,6 @@
 	let itemDom1: any;
 	let itemDom2: any;
 	let itemDom3: any;
-
-	function test() {
-		console.log('click');
-	}
 </script>
 
 <p class="p-10">Each Croc is a duplicate scene in its own container</p>

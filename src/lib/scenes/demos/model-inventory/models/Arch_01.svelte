@@ -33,11 +33,11 @@ Command: npx @threlte/gltf@3.0.1 C:\Users\mpalc\OneDrive\Desktop\_projects\Venez
 	const gltf = useGltf<GLTFResult>('/models/undertow/Arch_01.glb');
 </script>
 
-<T.Group bind:ref dispose={false} {...props}>
+<T.Group bind:ref dispose={false} {...props} position={[ 5.9, -0.1, 0 ]}>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}
-		<T.Mesh geometry={gltf.nodes.Arch_01.geometry} material={gltf.nodes.Arch_01.material} />
+		<T.Mesh geometry={gltf.nodes.Arch_01.geometry} material={gltf.nodes.Arch_01.material} position={[ 2.9, 0, 2.5 ]} />
 	{:catch err}
 		{@render error?.({ error: err })}
 	{/await}

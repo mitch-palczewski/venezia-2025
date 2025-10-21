@@ -2,7 +2,7 @@
 
   
     import { T, useTask } from '@threlte/core';
-    import Crocodile01 from '$lib/components/models/crocodile_01/Crocodile_01.svelte';
+    import Crocodile01 from '$lib/components/models/Crocodile_01/Crocodile_01.svelte';
 	import { degToRad} from 'three/src/math/MathUtils.js';
 	import { AsciiRenderer, OrbitControls } from '@threlte/extras';
 

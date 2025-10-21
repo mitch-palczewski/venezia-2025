@@ -4,64 +4,44 @@ Command: npx @threlte/gltf@3.0.1 C:\Users\mpalc\OneDrive\Desktop\_projects\Venez
 -->
 
 <script lang="ts">
-				
-	
-import type * as THREE from 'three'
-	
-  import type { Snippet } from 'svelte'
-        import { T, type Props } from '@threlte/core'
-        import { useGltf } from '@threlte/extras'
-	
+	import type * as THREE from 'three';
 
-        let {
-					fallback,
-          error,
-          children,
-          ref = $bindable(),
-          ...props
-        }: Props<THREE.Group> &  {
-          ref?: THREE.Group
-          children?: Snippet<[{ ref: THREE.Group }]>
-          fallback?: Snippet
-          error?: Snippet<[{ error: Error }]>
-        } = $props()
+	import type { Snippet } from 'svelte';
+	import { T, type Props } from '@threlte/core';
+	import { useGltf } from '@threlte/extras';
 
-				
+	let {
+		fallback,
+		error,
+		children,
+		ref = $bindable(),
+		...props
+	}: Props<THREE.Group> & {
+		ref?: THREE.Group;
+		children?: Snippet<[{ ref: THREE.Group }]>;
+		fallback?: Snippet;
+		error?: Snippet<[{ error: Error }]>;
+	} = $props();
 
-				
+	type GLTFResult = {
+		nodes: {
+			Bull_01: THREE.Mesh;
+		};
+		materials: {};
+	};
 
-        type GLTFResult = {
-    nodes: {
-      Bull_01: THREE.Mesh
-      
-    }
-    materials: {
-      
-    }
-  }
-
-        const gltf = useGltf<GLTFResult>('/models/undertow/Crocodile_01.glb')
-
-
+	const gltf = useGltf<GLTFResult>('/models/undertow/Bull_01.glb');
 </script>
 
-<T.Group
-  bind:ref
-  dispose={false}
-  {...props}
->
-  {#await gltf}
-    {@render fallback?.()}
-  {:then gltf}
-    <T.Mesh
-      geometry={gltf.nodes.Bull_01.geometry}
-      material={gltf.nodes.Bull_01.material}
-    />
-  {:catch err}
-    {@render error?.({ error: err })}
-  {/await}
-  {#if ref}
-    {@render children?.({ ref })}
-  {/if}
-
+<T.Group bind:ref dispose={false} {...props} >
+	{#await gltf}
+		{@render fallback?.()}
+	{:then gltf}
+		<T.Mesh geometry={gltf.nodes.Bull_01.geometry} material={gltf.nodes.Bull_01.material}  />
+	{:catch err}
+		{@render error?.({ error: err })}
+	{/await}
+	{#if ref}
+		{@render children?.({ ref })}
+	{/if}
 </T.Group>
