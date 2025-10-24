@@ -48,7 +48,6 @@ Command: npx @threlte/gltf@3.0.1 ./static\models\undertow\Zardoz_01.glb
 			ondblclick={(e: any) => 
 				showTransformControls = !showTransformControls
 			}
-		
 		>
 		</T.Mesh>
 		<Text

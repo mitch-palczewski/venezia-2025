@@ -1,12 +1,10 @@
-import type { ObjectPositions } from "../types";
+import type { PilePositionData } from "../types";
 
 
-export async function uploadData(positions: ObjectPositions) {
-	
-	const data = positions
+export async function uploadData(positionsData: PilePositionData) {
 
 	const signalTimeoutMs = 10000;
-	const payload = { test_data: data, label: 'from-client' };
+	const payload = positionsData;
 	const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
 	const file = new File([blob], 'object_positions.json', { type: 'application/json' });
 
