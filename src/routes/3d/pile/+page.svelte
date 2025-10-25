@@ -24,13 +24,11 @@
 	>
 </div>
 
-<div bind:this={pileSceneDom} class="relative h-[200px] w-[400px] p-10"></div>
+
 
 <CanvasPortal>
-	<View dom={pileSceneDom}>
 		<PileScene 
 			bind:this={sceneRef} 
 			rawPositionData = {data}
 		/>
-	</View>
 </CanvasPortal>

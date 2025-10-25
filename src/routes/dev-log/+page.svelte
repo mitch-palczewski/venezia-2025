@@ -13,6 +13,7 @@
 			<br />
 			model states -- Models can be in a transformable state or static state and need to be able to be
 			switched back and forth. Ideally onclick swap state. This may require some interesting wrappers.
+
 		</p>
 		<img class="h-[80vh] p-1" src="/images/dev-log/pile-routing.png" alt="Sketch1" />
 	</div>
