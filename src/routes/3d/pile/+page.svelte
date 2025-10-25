@@ -9,8 +9,8 @@
 	let sceneRef: PileScene;
 	let pileSceneDom:HTMLDivElement;
 
-	async function uploadDataBuilder(){
-		//Retrieves position data from Pile Scene and uploads that Data
+	async function uploadDataFactory(){
+		//Retrieves position data from Pile Scene and uploads that Data to DB
 		const positions:PilePositionData = sceneRef.getPositions()
 		uploadData(positions)
 	}
@@ -18,7 +18,7 @@
 
 <div class="relative">
 	<button
-		onclick={uploadDataBuilder}
+		onclick={uploadDataFactory}
 		class="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 		>Upload Test Data</button
 	>

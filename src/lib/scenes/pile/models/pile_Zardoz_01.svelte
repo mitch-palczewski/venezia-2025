@@ -24,9 +24,8 @@ Command: npx @threlte/gltf@3.0.1 ./static\models\undertow\Zardoz_01.glb
 	} = $props();
 
 	interactivity();
-	
 	let showTransformControls = $state(true)
-	
+
 	const gltf = useGltf('/models/undertow/Zardoz_01.glb');
 </script>
 
@@ -36,6 +35,7 @@ Command: npx @threlte/gltf@3.0.1 ./static\models\undertow\Zardoz_01.glb
 	showX={showTransformControls} 
 	showY={showTransformControls}
 	showZ={showTransformControls}
+	position={[0,0,0]}
 >
 <T.Group bind:ref dispose={false} {...props}>
 	{#await gltf}

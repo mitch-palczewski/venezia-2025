@@ -1,4 +1,4 @@
-export type Vec3 = [number, number, number]
+export type Vec3 = {'x':number, 'y':number, 'z':number}
 export type ObjectTransform = {
     position: Vec3,
     rotation: Vec3,

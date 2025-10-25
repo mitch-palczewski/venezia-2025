@@ -1,7 +1,25 @@
 <div>
 	<div class="m-3 bg-gray-200 p-5">
 		<p>
-			10/20/25 - VERY IMPORTANT if you want a button or interactive base html to work it needs to be wrapped in a div with class="relative"
+			10/25/25 - I have been working on a the networking for a multiplayer pile. In short
+			+page.server.ts handles the put and get requests. Then data must flow though the page and into
+			the component and then back up. Attached is a rough diagram of whats going on.
+			<br />
+			Next up is builting the editable environments which may be more challenging then I thought.
+			<br />
+			TODO:
+			<br />
+			pileState.svelte.ts -- Keeps track of the selected model and controls data and states
+			<br />
+			model states -- Models can be in a transformable state or static state and need to be able to be
+			switched back and forth. Ideally onclick swap state. This may require some interesting wrappers.
+		</p>
+		<img class="h-[80vh] p-1" src="/images/dev-log/pile-routing.png" alt="Sketch1" />
+	</div>
+	<div class="m-3 bg-gray-200 p-5">
+		<p>
+			10/20/25 - VERY IMPORTANT if you want a button or interactive base html to work it needs to be
+			wrapped in a div with class="relative"
 		</p>
 	</div>
 	<div class="m-3 bg-gray-200 p-5">
