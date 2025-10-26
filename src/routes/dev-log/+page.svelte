@@ -1,6 +1,27 @@
 <div>
 	<div class="m-3 bg-gray-200 p-5">
 		<p>
+			10/26/25 - A few notes on Network Pile ... The model interaction e.g. the double click on Zardoz_01 comes with some constraints (although deeper research may solve these). 
+			<br>
+			** The canvas must be the full screen. When i portal content to a div container I lose interactivity. There is probably a way to do it but its not obvious. 
+			<br> 
+			<br>
+			Some Other things to think about ... 
+			<br>
+			What are things successful and unsuccessful about the first iterations of pile? 
+			<br>
+			Is there a HUD what does it look like what does it do? 
+			<br>
+			Is there a base terrain that is not movable? 
+			<br>
+			Is there a way to add more objects to the scene ... piling? (comes with technical challenges.)
+			<br> 
+			lighting generally. Lighting that reflects a locations day night cycle could be cool. 
+		</p>
+		
+	</div>
+	<div class="m-3 bg-gray-200 p-5">
+		<p>
 			10/25/25 - I have been working on a the networking for a multiplayer pile. In short
 			+page.server.ts handles the put and get requests. Then data must flow though the page and into
 			the component and then back up. Attached is a rough diagram of whats going on.
