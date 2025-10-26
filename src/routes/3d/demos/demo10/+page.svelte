@@ -10,7 +10,5 @@
 <div bind:this={viewRef} class="relative h-[200px] w-[400px] p-10"></div>
 
 <CanvasPortal>
-    
         <Demo10/>
-    
 </CanvasPortal>

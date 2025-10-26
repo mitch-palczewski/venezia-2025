@@ -1,42 +1,42 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { OrbitControls } from '@threlte/extras';
+	import { OrbitControls, Text } from '@threlte/extras';
 	import PileZardoz01 from './models/pile_Zardoz_01.svelte';
 	import type { ObjectPositions, PilePositionData } from './types';
 	import { Vector3, type Group, type Object3DEventMap } from 'three';
 	import { pileState } from './pileState.svelte';
+	import TestWorld from '../demos/testWorld.svelte';
 
 	let { rawPositionData } = $props();
 	const pile_position_data: ObjectPositions = rawPositionData.data.pile_position_data;
 	const pileZardoz01Data = pile_position_data.PileZardoz01;
 	let pileZardoz01Ref: Group<Object3DEventMap>;
 
-	debugFetch()
-	function debugFetch(){
+	debugFetch();
+	function debugFetch() {
 		//console.log('Raw Position Data');
 		//console.log(rawPositionData);
 		console.log('Fetched Position Data');
 		console.log(rawPositionData.data.pile_position_data);
-	}function debugUpload(pileZardoz01Position:Vector3){
-		console.log("Debuging Position Upload")
-		console.log("ref children list  -- should contain mesh")
-		console.log(pileZardoz01Ref.children)
-
-		console.log("ref.child[mesh] world position")
-		console.log(pileZardoz01Position)
-
-		console.log("ref.child[mesh] local position (NOT USED)")
-		console.log(pileZardoz01Ref.children[0].position)
 	}
+	function debugUpload(pileZardoz01Position: Vector3) {
+		console.log('Debuging Position Upload');
+		console.log('ref children list  -- should contain mesh');
+		console.log(pileZardoz01Ref.children);
 
+		console.log('ref.child[mesh] world position');
+		console.log(pileZardoz01Position);
 
-	
+		console.log('ref.child[mesh] local position (NOT USED)');
+		console.log(pileZardoz01Ref.children[0].position);
+	}
 
 	export function getPositions(): PilePositionData {
 		// return a fresh snapshot from scene state
-		let pileZardoz01V3Position = new Vector3(0,0,0)
-		const pileZardoz01Position = pileZardoz01Ref.children[0].getWorldPosition(pileZardoz01V3Position)
-		debugUpload(pileZardoz01Position)
+		let pileZardoz01V3Position = new Vector3(0, 0, 0);
+		const pileZardoz01Position =
+			pileZardoz01Ref.children[0].getWorldPosition(pileZardoz01V3Position);
+		debugUpload(pileZardoz01Position);
 		return {
 			pile_position_data: {
 				PileZardoz01: {
@@ -69,6 +69,16 @@
 </T.PerspectiveCamera>
 
 <T.DirectionalLight position={[0, 10, 10]} />
+<T.AmbientLight intensity={0.1} />
+
+<TestWorld />
+<Text
+	text="Double click on Zardoz_01 to show or hide Transform Controls. 
+	Try moving Zardoz_01 around uploading position data wait 30 sec then reloading the page. "
+	color="black"
+	anchorX="50%"
+	position={[0,2,-3.5]}
+/>
 
 <PileZardoz01
 	oncreate={(ref) => {
@@ -76,5 +86,3 @@
 	}}
 	position={[pileZardoz01Data.position.x, pileZardoz01Data.position.y, pileZardoz01Data.position.z]}
 />
-
-<PileZardoz01 position={[1, 1, 1]} />

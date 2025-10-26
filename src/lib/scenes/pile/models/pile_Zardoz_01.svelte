@@ -19,7 +19,7 @@
 	} = $props();
 	interactivity();
 	
-	let showTransformControls = $state(true);
+	let showTransformControls = $state(false);
 	let meshRef: THREE.Mesh | undefined;
 
 	export function getPosition(target: THREE.Vector3){
@@ -58,12 +58,6 @@
 			}}
 		>
 		</T.Mesh>
-		<Text
-			text ="Double click to show or hide Transform Controls"
-			color="black"
-			anchorX="50%"
-			anchorY="650%"
-		/>
 		</TransformControls>
 	{:catch err}
 		{@render error?.({ error: err })}
