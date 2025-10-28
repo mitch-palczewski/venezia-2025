@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { Props } from '@threlte/core';
-	import * as THREE from 'three';
-	import { T } from '@threlte/core';
-	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
-	import { type Snippet } from 'svelte';
+	import type * as THREE from 'three';
+
+	import type { Snippet } from 'svelte';
+	import { T, type Props } from '@threlte/core';
+	import { interactivity, TransformControls, useGltf } from '@threlte/extras';
 	import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 
 	let {
@@ -11,21 +11,28 @@
 		error,
 		children,
 		ref = $bindable(),
-		name='Zardoz_01',
+        name='Misc_01',
 		...props
 	}: Props<THREE.Group> & {
 		ref?: THREE.Group;
 		children?: Snippet<[{ ref: THREE.Group }]>;
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
-		name?: String;
+        name?: String;
 	} = $props();
+
+	type GLTFResult = {
+		nodes: {
+			Misc_01: THREE.Mesh;
+		};
+		materials: {};
+	};
 	interactivity();
 
 	let showTransformControls: boolean = $state(false);
 	let transformControlsMode: TransformControlsMode = $state('translate');
 
-	const gltf = useGltf('/models/undertow/Zardoz_01.glb');
+	const gltf = useGltf<GLTFResult>('/models/undertow/Misc_01.glb');
 </script>
 
 <T.Group bind:ref dispose={false} name={name} {...props}>
@@ -38,12 +45,7 @@
 			showZ={showTransformControls}
 			mode={transformControlsMode}
 		>
-			<T.Mesh
-				geometry={gltf.nodes.Zardoz_01.geometry}
-				material={gltf.nodes.Zardoz_01.material}
-				raycast={meshBounds}
-				ondblclick={(e: any) => (showTransformControls = !showTransformControls)}
-			></T.Mesh>
+			<T.Mesh geometry={gltf.nodes.Misc_01.geometry} material={gltf.nodes.Misc_01.material} />
 		</TransformControls>
 	{:catch err}
 		{@render error?.({ error: err })}

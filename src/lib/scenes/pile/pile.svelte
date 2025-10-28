@@ -2,59 +2,36 @@
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
 	import PileZardoz01 from './models/pile_Zardoz_01.svelte';
-	import type { ObjectPositions, PilePositionData } from './types';
+	import type { ObjectPositions, ObjectTransform, PilePositionData } from './types';
 	import { Vector3, type Group, type Object3DEventMap } from 'three';
 	import { pileState } from './pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
+	import PileBurntBoy01 from './models/pile_BurntBoy_01.svelte';
 
 	let { rawPositionData } = $props();
 	const pile_position_data: ObjectPositions = rawPositionData.data.pile_position_data;
-	const pileZardoz01Data = pile_position_data.PileZardoz01;
-	let pileZardoz01Ref: Group<Object3DEventMap>;
+	const Zardoz01ReadData = pile_position_data.Zardoz_01;
+	const BurntBoy01ReadData = pile_position_data.BurntBoy_01;
+	let zardoz01Ref: Group<Object3DEventMap>;
 
-	debugFetch();
-	function debugFetch() {
-		//console.log('Raw Position Data');
-		//console.log(rawPositionData);
-		console.log('Fetched Position Data');
-		console.log(rawPositionData.data.pile_position_data);
-	}
-	function debugUpload(pileZardoz01Position: Vector3) {
-		console.log('Debuging Position Upload');
-		console.log('ref children list  -- should contain mesh');
-		console.log(pileZardoz01Ref.children);
-
-		console.log('ref.child[mesh] world position');
-		console.log(pileZardoz01Position);
-
-		console.log('ref.child[mesh] local position (NOT USED)');
-		console.log(pileZardoz01Ref.children[0].position);
-	}
+	let pileObjectsRef: Array<Group<Object3DEventMap>> = [];
 
 	export function getPositions(): PilePositionData {
 		// return a fresh snapshot from scene state
-		let pileZardoz01V3Position = new Vector3(0, 0, 0);
-		const pileZardoz01Position =
-			pileZardoz01Ref.children[0].getWorldPosition(pileZardoz01V3Position);
-		debugUpload(pileZardoz01Position);
-		return {
-			pile_position_data: {
-				PileZardoz01: {
-					position: {
-						x: pileZardoz01Position.x,
-						y: pileZardoz01Position.y,
-						z: pileZardoz01Position.z
-					},
-					rotation: { x: 0, y: 0, z: 0 },
-					scale: { x: 0, y: 0, z: 0 }
-				},
-				TestObject: {
-					position: { x: 0, y: 0, z: 0 },
-					rotation: { x: 0, y: 0, z: 0 },
-					scale: { x: 0, y: 0, z: 0 }
-				}
-			}
-		};
+		const pileObjectPositions: ObjectPositions = {};
+
+		pileObjectsRef.forEach((ref) => {
+			const v3Position = new Vector3(0, 0, 0);
+			ref.children[0].getWorldPosition(v3Position);
+			const transform: ObjectTransform = {
+				position: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
+				rotation: { x: 0, y: 0, z: 0 },
+				scale: { x: 0, y: 0, z: 0 }
+			};
+			pileObjectPositions[ref.name] = transform;
+		});
+
+		return { pile_position_data: pileObjectPositions };
 	}
 </script>
 
@@ -77,12 +54,20 @@
 	Try moving Zardoz_01 around uploading position data wait 30 sec then reloading the page. "
 	color="black"
 	anchorX="50%"
-	position={[0,2,-3.5]}
+	position={[0, 2, -3.5]}
 />
 
 <PileZardoz01
 	oncreate={(ref) => {
-		pileZardoz01Ref = ref;
+		zardoz01Ref = ref;
+		pileObjectsRef.push(zardoz01Ref);
 	}}
-	position={[pileZardoz01Data.position.x, pileZardoz01Data.position.y, pileZardoz01Data.position.z]}
+	position={[Zardoz01ReadData.position.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.z]}
+/>
+
+<PileBurntBoy01
+	oncreate={(ref) => {
+		pileObjectsRef.push(ref);
+	}}
+	position={[BurntBoy01ReadData.position.x, BurntBoy01ReadData.position.y, BurntBoy01ReadData.position.z]}
 />

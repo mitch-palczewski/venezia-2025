@@ -5,7 +5,6 @@ export type ObjectTransform = {
     scale: Vec3
 }
 export type ObjectPositions = Record<string, ObjectTransform>
-
 export type PilePositionData = {
   'pile_position_data': ObjectPositions;
 };
