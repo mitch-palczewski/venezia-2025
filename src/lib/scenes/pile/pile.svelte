@@ -7,11 +7,13 @@
 	import { pileState } from './pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import PileBurntBoy01 from './models/pile_BurntBoy_01.svelte';
+	import PileMisc01 from './models/pile_Misc_01.svelte';
 
 	let { rawPositionData } = $props();
 	const pile_position_data: ObjectPositions = rawPositionData.data.pile_position_data;
 	const Zardoz01ReadData = pile_position_data.Zardoz_01;
 	const BurntBoy01ReadData = pile_position_data.BurntBoy_01;
+	const Misc01ReadData = pile_position_data.Misc_01;
 	let zardoz01Ref: Group<Object3DEventMap>;
 
 	let pileObjectsRef: Array<Group<Object3DEventMap>> = [];
@@ -70,4 +72,12 @@
 		pileObjectsRef.push(ref);
 	}}
 	position={[BurntBoy01ReadData.position.x, BurntBoy01ReadData.position.y, BurntBoy01ReadData.position.z]}
+/>
+
+<PileMisc01
+oncreate={(ref) => {
+		pileObjectsRef.push(ref);
+	}}
+	position={[ Misc01ReadData.position.x,Misc01ReadData.position.y, Misc01ReadData.position.z]}
+
 />
