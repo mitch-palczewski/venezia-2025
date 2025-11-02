@@ -5,6 +5,7 @@
 	import { T, type Props } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
+	import type { ModelName } from '../types';
 
 	let {
 		fallback,
@@ -18,7 +19,7 @@
 		children?: Snippet<[{ ref: THREE.Group }]>;
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
-		name?: String;
+		name?: ModelName;
 	} = $props();
 
 	type GLTFResult = {

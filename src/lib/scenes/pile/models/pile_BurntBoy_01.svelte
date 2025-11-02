@@ -10,6 +10,7 @@ Command: npx @threlte/gltf@3.0.1 C:\Users\mpalc\OneDrive\Desktop\_projects\Venez
 	import { T, type Props } from '@threlte/core';
 	import {interactivity, TransformControls, useGltf, meshBounds} from '@threlte/extras';
 	import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
+	import type { ModelName } from '../types';
 
 	let {
 		fallback,
@@ -23,7 +24,7 @@ Command: npx @threlte/gltf@3.0.1 C:\Users\mpalc\OneDrive\Desktop\_projects\Venez
 		children?: Snippet<[{ ref: THREE.Group }]>;
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
-		name?: String;
+		name?: ModelName;
 	} = $props();
 
 	type GLTFResult = {
