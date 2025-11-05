@@ -4,8 +4,8 @@
 	import { T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { type Snippet } from 'svelte';
-	import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 	import type { ModelName } from '../types';
+	import { pileState, isSelectedObject } from '../pileState.svelte';
 
 	let {
 		fallback,
@@ -23,10 +23,14 @@
 	} = $props();
 	interactivity();
 
-	let showTransformControls: boolean = $state(false);
-	let transformControlsMode: TransformControlsMode = $state('translate');
-
 	const gltf = useGltf('/models/undertow/Zardoz_01.glb');
+	let showThisTransformControls = $derived.by(() => {
+		if(isSelectedObject(name)){
+			return pileState.showTransformControls
+		}else{
+			return false
+		}
+	})
 </script>
 
 <T.Group bind:ref dispose={false} name={name} {...props}>
@@ -34,16 +38,26 @@
 		{@render fallback?.()}
 	{:then gltf}
 		<TransformControls
-			showX={showTransformControls}
-			showY={showTransformControls}
-			showZ={showTransformControls}
-			mode={transformControlsMode}
+			showX={ showThisTransformControls }
+			showY={ showThisTransformControls }
+			showZ={ showThisTransformControls }
+			mode={pileState.transformControlsMode}
 		>
 			<T.Mesh
 				geometry={gltf.nodes.Zardoz_01.geometry}
 				material={gltf.nodes.Zardoz_01.material}
 				raycast={meshBounds}
-				ondblclick={(e: any) => (showTransformControls = !showTransformControls)}
+				ondblclick={(e: any) => {
+					if (isSelectedObject(name)){
+						pileState.showTransformControls = !pileState.showTransformControls
+						
+					}else{
+						if(ref){
+							pileState.selectedObject = ref
+						}
+						pileState.showTransformControls = true
+					}	
+				}}
 			></T.Mesh>
 		</TransformControls>
 	{:catch err}

@@ -4,7 +4,7 @@
 	import PileZardoz01 from './models/pile_Zardoz_01.svelte';
 	import type { ObjectPositions, ObjectTransform, PilePositionData } from './types';
 	import { Vector3, type Group, type Object3DEventMap } from 'three';
-	import { pileState, pushObjectRef } from './pileState.svelte';
+	import { pileState, pushObjectRef, testState } from './pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import PileBurntBoy01 from './models/pile_BurntBoy_01.svelte';
 	import PileMisc01 from './models/pile_Misc_01.svelte';
@@ -35,6 +35,7 @@
 
 		return { pile_position_data: pileObjectPositions };
 	}
+	//pileState.transformControlsMode = "rotate"
 </script>
 
 <T.PerspectiveCamera
@@ -62,7 +63,6 @@
 <PileZardoz01
 	oncreate={(ref) => {
 		zardoz01Ref = ref;
-		pileObjectsRef.push(zardoz01Ref);
 		pushObjectRef(ref)
 	}}
 	position={[Zardoz01ReadData.position.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.z]}
