@@ -4,7 +4,7 @@
 	import PileZardoz01 from './models/pile_Zardoz_01.svelte';
 	import type { ObjectPositions, ObjectTransform, PilePositionData } from './types';
 	import { Vector3, type Group, type Object3DEventMap } from 'three';
-	import { pileState } from './pileState.svelte';
+	import { pileState, pushObjectRef } from './pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import PileBurntBoy01 from './models/pile_BurntBoy_01.svelte';
 	import PileMisc01 from './models/pile_Misc_01.svelte';
@@ -63,20 +63,21 @@
 	oncreate={(ref) => {
 		zardoz01Ref = ref;
 		pileObjectsRef.push(zardoz01Ref);
+		pushObjectRef(ref)
 	}}
 	position={[Zardoz01ReadData.position.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.z]}
 />
 
 <PileBurntBoy01
 	oncreate={(ref) => {
-		pileObjectsRef.push(ref);
+		pushObjectRef(ref)
 	}}
 	position={[BurntBoy01ReadData.position.x, BurntBoy01ReadData.position.y, BurntBoy01ReadData.position.z]}
 />
 
 <PileMisc01
 oncreate={(ref) => {
-		pileObjectsRef.push(ref);
+		pushObjectRef(ref)
 	}}
 	position={[ Misc01ReadData.position.x,Misc01ReadData.position.y, Misc01ReadData.position.z]}
 
