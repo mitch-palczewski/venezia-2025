@@ -35,7 +35,6 @@
 
 		return { pile_position_data: pileObjectPositions };
 	}
-	//pileState.transformControlsMode = "rotate"
 </script>
 
 <T.PerspectiveCamera
@@ -64,12 +63,14 @@
 	oncreate={(ref) => {
 		zardoz01Ref = ref;
 		pushObjectRef(ref)
+		pileObjectsRef.push(ref)
 	}}
 	position={[Zardoz01ReadData.position.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.z]}
 />
 
 <PileBurntBoy01
 	oncreate={(ref) => {
+		pileObjectsRef.push(ref)
 		pushObjectRef(ref)
 	}}
 	position={[BurntBoy01ReadData.position.x, BurntBoy01ReadData.position.y, BurntBoy01ReadData.position.z]}
@@ -77,6 +78,7 @@
 
 <PileMisc01
 oncreate={(ref) => {
+		pileObjectsRef.push(ref)
 		pushObjectRef(ref)
 	}}
 	position={[ Misc01ReadData.position.x,Misc01ReadData.position.y, Misc01ReadData.position.z]}

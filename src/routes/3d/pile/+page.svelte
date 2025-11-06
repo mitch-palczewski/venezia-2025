@@ -1,18 +1,21 @@
 <script lang="ts">
-	import { View } from '@threlte/extras';
 	import CanvasPortal from '$lib/components/3d-core/CanvasPortal.svelte';
-	import { PileScene, type ObjectPositions, type PilePositionData } from '$lib/scenes/pile';
-	import { uploadData } from '$lib/scenes/pile/hooks/uploadPositions';
+	import { PileScene, uploadData ,type PilePositionData } from '$lib/scenes/pile';
+	import PileUI from '$lib/scenes/pile/components/pileUI.svelte';
 
 	//export let data; Where the +page.server.ts returns when the load() function is called
 	export let data; 
 	let sceneRef: PileScene;
-	let pileSceneDom:HTMLDivElement;
 
 	async function uploadDataFactory(){
 		//Retrieves position data from Pile Scene and uploads that Data to DB
 		const positions:PilePositionData = sceneRef.getPositions()
-		uploadData(positions)
+		if (positions){
+			uploadData(positions)
+		}else{
+			console.log("No position Data to upload")
+		}
+		
 	}
 </script>
 
@@ -23,6 +26,7 @@
 		>Upload Position Data</button
 	>
 </div>
+
 
 
 
