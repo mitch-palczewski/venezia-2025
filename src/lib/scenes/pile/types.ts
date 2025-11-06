@@ -1,7 +1,8 @@
 export type Vec3 = {'x':number, 'y':number, 'z':number}
+export type Quaternion = {'x':number, 'y':number, 'z':number, 'w':number}
 export type ObjectTransform = {
     position: Vec3,
-    rotation: Vec3,
+    rotation: Quaternion,
     scale: Vec3
 }
 export type ObjectPositions = Record<string, ObjectTransform>

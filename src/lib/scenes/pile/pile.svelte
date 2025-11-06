@@ -31,7 +31,7 @@
 			ref.children[0].getWorldScale(v3Scale)
 			const transform: ObjectTransform = {
 				position: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
-				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z},
+				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z, w: quatRotation.w},
 				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
 			};
 			pileObjectPositions[ref.name] = transform;
@@ -70,7 +70,7 @@
 		pileObjectsRef.push(ref)
 	}}
 	position={[Zardoz01ReadData.position.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.z]}
-	rotation={[Zardoz01ReadData.rotation.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.y]}
+	quaternion={[Zardoz01ReadData.rotation.x, Zardoz01ReadData.rotation.y, Zardoz01ReadData.rotation.z, Zardoz01ReadData.rotation.w]}
 	scale={[Zardoz01ReadData.scale.x, Zardoz01ReadData.scale.y, Zardoz01ReadData.scale.z]}
 />
 
@@ -80,7 +80,7 @@
 		pushObjectRef(ref)
 	}}
 	position={[BurntBoy01ReadData.position.x, BurntBoy01ReadData.position.y, BurntBoy01ReadData.position.z]}
-	rotation={[BurntBoy01ReadData.rotation.x, BurntBoy01ReadData.rotation.y, BurntBoy01ReadData.rotation.z]}
+	quaternion={[BurntBoy01ReadData.rotation.x, BurntBoy01ReadData.rotation.y, BurntBoy01ReadData.rotation.z, BurntBoy01ReadData.rotation.w]}
 	scale={[BurntBoy01ReadData.scale.x, BurntBoy01ReadData.scale.y, BurntBoy01ReadData.scale.z]}
 />
 
@@ -90,7 +90,7 @@ oncreate={(ref) => {
 		pushObjectRef(ref)
 	}}
 	position={[ Misc01ReadData.position.x,Misc01ReadData.position.y, Misc01ReadData.position.z]}
-	rotation={[Misc01ReadData.rotation.x, Misc01ReadData.rotation.y, Misc01ReadData.rotation.z]}
+	quaternion={[Misc01ReadData.rotation.x, Misc01ReadData.rotation.y, Misc01ReadData.rotation.z, Misc01ReadData.rotation.w]}
 	scale={[Misc01ReadData.scale.x, Misc01ReadData.scale.y, Misc01ReadData.scale.z]}
 
 />
