@@ -2,10 +2,6 @@ import type { Group, Object3DEventMap } from "three";
 import type { TransformControlsMode } from "three/examples/jsm/Addons.js";
 import type { ModelName } from "./types";
 
-export const testState = $state({
-    show: false
-});
-
 export const pileState: {
     selectedObject: null | Group<Object3DEventMap>,
     pileObjectRefs: Array<Group<Object3DEventMap>>,

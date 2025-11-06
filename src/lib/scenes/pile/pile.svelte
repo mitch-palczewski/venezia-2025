@@ -3,8 +3,8 @@
 	import { OrbitControls, Text } from '@threlte/extras';
 	import PileZardoz01 from './models/pile_Zardoz_01.svelte';
 	import type { ObjectPositions, ObjectTransform, PilePositionData } from './types';
-	import { Vector3, type Group, type Object3DEventMap } from 'three';
-	import { pileState, pushObjectRef, testState } from './pileState.svelte';
+	import { Quaternion, Vector3, type Group, type Object3DEventMap } from 'three';
+	import { pileState, pushObjectRef } from './pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import PileBurntBoy01 from './models/pile_BurntBoy_01.svelte';
 	import PileMisc01 from './models/pile_Misc_01.svelte';
@@ -23,12 +23,16 @@
 		const pileObjectPositions: ObjectPositions = {};
 
 		pileObjectsRef.forEach((ref) => {
-			const v3Position = new Vector3(0, 0, 0);
+			const v3Position = new Vector3( 0, 0, 0);
+			const quatRotation = new Quaternion( 0,0,0,0);
+			const v3Scale = new Vector3( 0,0,0);
 			ref.children[0].getWorldPosition(v3Position);
+			ref.children[0].getWorldQuaternion(quatRotation)
+			ref.children[0].getWorldScale(v3Scale)
 			const transform: ObjectTransform = {
 				position: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
-				rotation: { x: 0, y: 0, z: 0 },
-				scale: { x: 0, y: 0, z: 0 }
+				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z},
+				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
 			};
 			pileObjectPositions[ref.name] = transform;
 		});
@@ -66,6 +70,8 @@
 		pileObjectsRef.push(ref)
 	}}
 	position={[Zardoz01ReadData.position.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.z]}
+	rotation={[Zardoz01ReadData.rotation.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.y]}
+	scale={[Zardoz01ReadData.scale.x, Zardoz01ReadData.scale.y, Zardoz01ReadData.scale.z]}
 />
 
 <PileBurntBoy01
@@ -74,6 +80,8 @@
 		pushObjectRef(ref)
 	}}
 	position={[BurntBoy01ReadData.position.x, BurntBoy01ReadData.position.y, BurntBoy01ReadData.position.z]}
+	rotation={[BurntBoy01ReadData.rotation.x, BurntBoy01ReadData.rotation.y, BurntBoy01ReadData.rotation.z]}
+	scale={[BurntBoy01ReadData.scale.x, BurntBoy01ReadData.scale.y, BurntBoy01ReadData.scale.z]}
 />
 
 <PileMisc01
@@ -82,5 +90,7 @@ oncreate={(ref) => {
 		pushObjectRef(ref)
 	}}
 	position={[ Misc01ReadData.position.x,Misc01ReadData.position.y, Misc01ReadData.position.z]}
+	rotation={[Misc01ReadData.rotation.x, Misc01ReadData.rotation.y, Misc01ReadData.rotation.z]}
+	scale={[Misc01ReadData.scale.x, Misc01ReadData.scale.y, Misc01ReadData.scale.z]}
 
 />
