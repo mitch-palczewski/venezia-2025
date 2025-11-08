@@ -16,7 +16,7 @@
 	}
 	let { rawPositionData }: Props = $props();
 	const positionData: ObjectPositionsDTO = rawPositionData.data.pile_position_data;
-	const downloadedObjects = Object.entries(positionData)
+	const downloadedObjects = Object.entries(positionData);
 
 	//for testing
 	const Zardoz01ReadData = positionData.Zardoz_01;
@@ -70,6 +70,8 @@
 	position={[0, 2, -3.5]}
 />
 
+
+<!--
 <PileZardoz01
 	oncreate={(ref) => {
 		pushObjectRef(ref);
@@ -122,13 +124,23 @@
 	]}
 	scale={[Misc01ReadData.scale.x, Misc01ReadData.scale.y, Misc01ReadData.scale.z]}
 />
-
 <ModelTemplate name="Arch_01" />
+-->
 
-
-{#each downloadedObjects as [key, value](key)}
-		<ModelTemplate 
-			name={key}
-		/>
+{#each downloadedObjects as [key, value] (key)}
+	<ModelTemplate
+		name={key}
+		oncreate={(ref) => {
+			pileObjectsRef.push(ref);
+			pushObjectRef(ref);
+		}}
+		position={[value.translate.x, value.translate.y, value.translate.z]}
+		quaternion={[
+			value.rotation.x,
+			value.rotation.y,
+			value.rotation.z,
+			value.rotation.w
+		]}
+		scale={[value.scale.x, value.scale.y, value.scale.z]}
+	/>
 {/each}
-
