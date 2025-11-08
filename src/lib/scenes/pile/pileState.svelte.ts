@@ -1,6 +1,5 @@
 import type { Group, Object3DEventMap } from "three";
 import type { TransformControlsMode } from "three/examples/jsm/Addons.js";
-import type { ModelKey } from "./types";
 
 export const pileState: {
     selectedObject: null | Group<Object3DEventMap>,
@@ -20,7 +19,7 @@ export function pushObjectRef(ref:Group<Object3DEventMap>){
     pileState.pileObjectRefs.push(ref)
 }
 
-export function isSelectedObject(name:ModelKey){
+export function isSelectedObject(name:string){
     if (pileState.selectedObject && pileState.selectedObject.name === name){     
         return true;
     }

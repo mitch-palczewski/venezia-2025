@@ -13,7 +13,8 @@
 		rawPositionData: RawDataDTO
 	}
 	let { rawPositionData }:Props = $props();
-	const downloadedPositions = rawPositionData.data.pile_position_data;
+	const downloadedPositions:ObjectPositionsDTO = rawPositionData.data.pile_position_data;
+
 
 	//for testing
 	const Zardoz01ReadData = downloadedPositions.Zardoz_01;

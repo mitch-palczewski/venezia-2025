@@ -1,11 +1,10 @@
 <script lang="ts">
-	import type * as THREE from 'three';
-
-	import type { Snippet } from 'svelte';
-	import { T, type Props } from '@threlte/core';
+	import type { Props } from '@threlte/core';
+	import * as THREE from 'three';
+	import { T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
-	import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
-	import { isSelectedObject, pileState } from '../pileState.svelte';
+	import { type Snippet } from 'svelte';
+	import { pileState, isSelectedObject } from '../pileState.svelte';
 	import type { ModelName } from './models';
 
 	let {
@@ -13,7 +12,8 @@
 		error,
 		children,
 		ref = $bindable(),
-		name = 'Misc_01',
+		name,
+        gltfPath='',
 		...props
 	}: Props<THREE.Group> & {
 		ref?: THREE.Group;
@@ -21,19 +21,13 @@
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
 		name?: ModelName;
+        gltfPath?: string;
 	} = $props();
-
-	type GLTFResult = {
-		nodes: {
-			Misc_01: THREE.Mesh;
-		};
-		materials: {};
-	};
 	interactivity();
 
-	const gltf = useGltf<GLTFResult>('/models/undertow/Misc_01.glb');
+	const gltf = useGltf(gltfPath);
 	let showThisTransformControls = $derived.by(() => {
-		if(isSelectedObject(name)){
+		if(name && isSelectedObject(name)){
 			return pileState.showTransformControls
 		}else{
 			return false
@@ -41,7 +35,7 @@
 	})
 </script>
 
-<T.Group bind:ref dispose={false} {name} {...props}>
+<T.Group bind:ref dispose={false} name={name} {...props}>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}
@@ -52,13 +46,12 @@
 			mode={pileState.transformControlsMode}
 		>
 			<T.Mesh
-				geometry={gltf.nodes.Misc_01.geometry}
-				material={gltf.nodes.Misc_01.material}
+				geometry={gltf.nodes.name.geometry}
+				material={gltf.nodes.name.material}
 				raycast={meshBounds}
 				ondblclick={(e: any) => {
-					if (isSelectedObject(name)){
+					if (name && isSelectedObject(name)){
 						pileState.showTransformControls = !pileState.showTransformControls
-						
 					}else{
 						if(ref){
 							pileState.selectedObject = ref
@@ -66,7 +59,7 @@
 						pileState.showTransformControls = true
 					}	
 				}}
-			/>
+			></T.Mesh>
 		</TransformControls>
 	{:catch err}
 		{@render error?.({ error: err })}

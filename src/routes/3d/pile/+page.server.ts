@@ -3,8 +3,11 @@ import { put } from '@vercel/blob';
 import { env } from '$env/dynamic/private';
 import type { PageServerLoad } from './$types';
 
+export const _OBJECT_POSITIONS_PATH: string = 'https://ib2aqt4stktesjza.public.blob.vercel-storage.com/object_positions.json'
+export const _OBJECT_POSITIONS_FILE_NAME: string = 'object_positions.json'
+
 export const load: PageServerLoad = async ({ fetch }) => {
-  const res = await fetch('https://ib2aqt4stktesjza.public.blob.vercel-storage.com/object_positions.json');
+  const res = await fetch(_OBJECT_POSITIONS_PATH);
   if (!res.ok) throw error(res.status, 'Failed to fetch data');
   const data = (await res.json());
   return { data: data };
@@ -42,7 +45,7 @@ export const actions = {
 		}
 
 		try {
-			const { url } = await put('object_positions.json', file, {
+			const { url } = await put(_OBJECT_POSITIONS_FILE_NAME, file, {
 				token: env.BLOB_READ_WRITE_TOKEN,
 				access: 'public',
 				allowOverwrite: true
