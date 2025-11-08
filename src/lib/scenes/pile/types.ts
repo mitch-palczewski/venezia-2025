@@ -1,3 +1,4 @@
+import { BufferGeometry, Material } from "three";
 
 
 
@@ -22,3 +23,7 @@ export type Quaternion = { x: number; y: number; z: number; w: number };
 export type Scale = { s: number } 
  
 export type PlacedModel = {name: string, modelPath: string, transform: TransformDTO}
+export type GltfNode = {
+	geometry?: BufferGeometry;
+    material?: Material;
+};
