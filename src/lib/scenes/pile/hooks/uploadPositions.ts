@@ -1,7 +1,7 @@
-import type { PilePositionData } from "../types";
+import type { PileDataDTO } from "../types";
 
 
-export async function uploadData(positionsData: PilePositionData) {
+export async function uploadData(positionsData: PileDataDTO) {
 	const signalTimeoutMs = 10000;
 	const payload = positionsData;
 	const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });

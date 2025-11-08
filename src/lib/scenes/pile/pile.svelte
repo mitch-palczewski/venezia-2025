@@ -2,25 +2,31 @@
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
 	import PileZardoz01 from './models/pile_Zardoz_01.svelte';
-	import type { ObjectPositions, ObjectTransform, PilePositionData } from './types';
 	import { Quaternion, Vector3, type Group, type Object3DEventMap } from 'three';
 	import { pileState, pushObjectRef } from './pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import PileBurntBoy01 from './models/pile_BurntBoy_01.svelte';
 	import PileMisc01 from './models/pile_Misc_01.svelte';
+	import type {ObjectPositionsDTO, TransformDTO, PileDataDTO, RawDataDTO } from './types';
 
-	let { rawPositionData } = $props();
-	const pile_position_data: ObjectPositions = rawPositionData.data.pile_position_data;
-	const Zardoz01ReadData = pile_position_data.Zardoz_01;
-	const BurntBoy01ReadData = pile_position_data.BurntBoy_01;
-	const Misc01ReadData = pile_position_data.Misc_01;
-	let zardoz01Ref: Group<Object3DEventMap>;
+	interface Props {
+		rawPositionData: RawDataDTO
+	}
+	let { rawPositionData }:Props = $props();
+	const downloadedPositions = rawPositionData.data.pile_position_data;
+
+	//for testing
+	const Zardoz01ReadData = downloadedPositions.Zardoz_01;
+	const BurntBoy01ReadData = downloadedPositions.BurntBoy_01;
+	const Misc01ReadData = downloadedPositions.Misc_01;
+
+
 
 	let pileObjectsRef: Array<Group<Object3DEventMap>> = [];
 
-	export function getPositions(): PilePositionData {
+	export function getPositions(): PileDataDTO {
 		// return a fresh snapshot from scene state
-		const pileObjectPositions: ObjectPositions = {};
+		const pileObjectPositions:ObjectPositionsDTO = {};
 
 		pileObjectsRef.forEach((ref) => {
 			const v3Position = new Vector3( 0, 0, 0);
@@ -29,8 +35,8 @@
 			ref.children[0].getWorldPosition(v3Position);
 			ref.children[0].getWorldQuaternion(quatRotation)
 			ref.children[0].getWorldScale(v3Scale)
-			const transform: ObjectTransform = {
-				position: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
+			const transform: TransformDTO = {
+				translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
 				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z, w: quatRotation.w},
 				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
 			};
@@ -65,11 +71,10 @@
 
 <PileZardoz01
 	oncreate={(ref) => {
-		zardoz01Ref = ref;
 		pushObjectRef(ref)
 		pileObjectsRef.push(ref)
 	}}
-	position={[Zardoz01ReadData.position.x, Zardoz01ReadData.position.y, Zardoz01ReadData.position.z]}
+	position={[Zardoz01ReadData.translate.x, Zardoz01ReadData.translate.y, Zardoz01ReadData.translate.z]}
 	quaternion={[Zardoz01ReadData.rotation.x, Zardoz01ReadData.rotation.y, Zardoz01ReadData.rotation.z, Zardoz01ReadData.rotation.w]}
 	scale={[Zardoz01ReadData.scale.x, Zardoz01ReadData.scale.y, Zardoz01ReadData.scale.z]}
 />
@@ -79,7 +84,7 @@
 		pileObjectsRef.push(ref)
 		pushObjectRef(ref)
 	}}
-	position={[BurntBoy01ReadData.position.x, BurntBoy01ReadData.position.y, BurntBoy01ReadData.position.z]}
+	position={[BurntBoy01ReadData.translate.x, BurntBoy01ReadData.translate.y, BurntBoy01ReadData.translate.z]}
 	quaternion={[BurntBoy01ReadData.rotation.x, BurntBoy01ReadData.rotation.y, BurntBoy01ReadData.rotation.z, BurntBoy01ReadData.rotation.w]}
 	scale={[BurntBoy01ReadData.scale.x, BurntBoy01ReadData.scale.y, BurntBoy01ReadData.scale.z]}
 />
@@ -89,7 +94,7 @@ oncreate={(ref) => {
 		pileObjectsRef.push(ref)
 		pushObjectRef(ref)
 	}}
-	position={[ Misc01ReadData.position.x,Misc01ReadData.position.y, Misc01ReadData.position.z]}
+	position={[ Misc01ReadData.translate.x,Misc01ReadData.translate.y, Misc01ReadData.translate.z]}
 	quaternion={[Misc01ReadData.rotation.x, Misc01ReadData.rotation.y, Misc01ReadData.rotation.z, Misc01ReadData.rotation.w]}
 	scale={[Misc01ReadData.scale.x, Misc01ReadData.scale.y, Misc01ReadData.scale.z]}
 

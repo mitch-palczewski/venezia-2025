@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { PileScene, pileState, uploadData, type PilePositionData } from '$lib/scenes/pile';
+	import { PileScene, pileState, uploadData, type PileDataDTO } from '$lib/scenes/pile';
 
 	let { pileSceneRef } = $props();
 	async function uploadDataFactory() {
-		const positions: PilePositionData = pileSceneRef.getPositions();
+		const positions: PileDataDTO = pileSceneRef.getPositions();
 		uploadData(positions);
 	}
 </script>

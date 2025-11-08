@@ -4,7 +4,7 @@
 	import { T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { type Snippet } from 'svelte';
-	import type { ModelName } from '../types';
+	import type { ModelKey } from '../types';
 	import { pileState, isSelectedObject } from '../pileState.svelte';
 
 	let {
@@ -19,7 +19,7 @@
 		children?: Snippet<[{ ref: THREE.Group }]>;
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
-		name?: ModelName;
+		name?: ModelKey;
 	} = $props();
 	interactivity();
 
