@@ -2,6 +2,7 @@
 
 
 
+
 <script lang="ts">
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
@@ -24,8 +25,9 @@
 	export function getPositions(): PileDataDTO {
 		// return a fresh snapshot from scene state
 		const pileObjectPositions: ObjectPositionsDTO = {};
-
+		let id = 1001
 		pileObjectsRef.forEach((ref) => {
+			console.log(ref)
 			const v3Position = new Vector3(0, 0, 0);
 			const quatRotation = new Quaternion(0, 0, 0, 0);
 			const v3Scale = new Vector3(0, 0, 0);
@@ -37,7 +39,8 @@
 				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z, w: quatRotation.w },
 				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
 			};
-			pileObjectPositions[ref.name] = transform;
+			pileObjectPositions[id] = {transform:transform, name: ref.name};
+			id += 1
 		});
 
 		return { pile_position_data: pileObjectPositions };
@@ -82,18 +85,18 @@
 
 {#each downloadedObjects as [key, value] (key)}
 	<ModelTemplate
-		name={key}
+		name={value.name}
 		oncreate={(ref) => {
 			pileObjectsRef.push(ref);
 			pushObjectRef(ref);
 		}}
-		position={[value.translate.x, value.translate.y, value.translate.z]}
+		position={[value.transform.translate.x, value.transform.translate.y, value.transform.translate.z]}
 		quaternion={[
-			value.rotation.x,
-			value.rotation.y,
-			value.rotation.z,
-			value.rotation.w
+			value.transform.rotation.x,
+			value.transform.rotation.y,
+			value.transform.rotation.z,
+			value.transform.rotation.w
 		]}
-		scale={[value.scale.x, value.scale.y, value.scale.z]}
+		scale={[value.transform.scale.x, value.transform.scale.y, value.transform.scale.z]}
 	/>
 {/each}

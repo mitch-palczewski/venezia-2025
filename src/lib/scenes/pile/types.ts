@@ -2,6 +2,7 @@
 Defines Types used in Pile
  */
 
+
 //Data Transform Object -- For upload and download to the cloud
 export type RawDataDTO = {
 	data: PileDataDTO;
@@ -9,7 +10,7 @@ export type RawDataDTO = {
 export type PileDataDTO = {
 	pile_position_data: ObjectPositionsDTO;
 };
-export type ObjectPositionsDTO = Record<string, Transform>;
+export type ObjectPositionsDTO = Record<string, {transform: Transform, name: string}>;
 
 //Transform types
 export type Vec3 = { x: number; y: number; z: number };
