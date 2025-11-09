@@ -1,16 +1,19 @@
 import type { Group, Object3DEventMap } from "three";
 import type { TransformControlsMode } from "three/examples/jsm/Addons.js";
+import type { Models } from "../types";
 
 export const pileState: {
     selectedObject: null | Group<Object3DEventMap>,
     pileObjectRefs: Array<Group<Object3DEventMap>>,
-    showTransformControls: boolean
-    transformControlsMode: TransformControlsMode
+    showTransformControls: boolean,
+    transformControlsMode: TransformControlsMode,
+    newModels: Models 
 } =$state({
     selectedObject: null,
     pileObjectRefs: [],
     showTransformControls: false,
-    transformControlsMode: "translate"
+    transformControlsMode: "translate",
+    newModels: []
 });
 
 export function pushObjectRef(ref:Group<Object3DEventMap>){

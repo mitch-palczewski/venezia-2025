@@ -69,13 +69,14 @@
 />
 
 
-{#each newObjects as model}
+{#each pileState.newModels as model}
 	<ModelTemplate
 		name={model.name}
 		oncreate={(ref) => {
 			pileObjectsRef.push(ref);
 			pushObjectRef(ref);
 		}}
+		position={[model.transform.translate.x, model.transform.translate.y, model.transform.translate.z]}
 	/>
 {/each}
 
