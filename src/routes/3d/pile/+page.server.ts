@@ -6,9 +6,9 @@ import { error, fail } from '@sveltejs/kit';
 import { put } from '@vercel/blob';
 import { env } from '$env/dynamic/private';
 import type { PageServerLoad } from './$types';
+import { _OBJECT_POSITIONS_FILE_NAME, _OBJECT_POSITIONS_PATH } from '../../../constants';
 
-export const _OBJECT_POSITIONS_PATH: string = 'https://ib2aqt4stktesjza.public.blob.vercel-storage.com/object_positions.json'
-export const _OBJECT_POSITIONS_FILE_NAME: string = 'object_positions.json'
+
 
 export const load: PageServerLoad = async ({ fetch }) => {
   const res = await fetch(_OBJECT_POSITIONS_PATH);

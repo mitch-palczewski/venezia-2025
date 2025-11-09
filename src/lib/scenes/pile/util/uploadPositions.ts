@@ -1,7 +1,7 @@
 /*
 Formats positionData for upload to Vercel Blob Storage
 */
-
+import { _OBJECT_POSITIONS_FILE_NAME, _PILE_PAGE_PATH } from "../../../../constants";
 import type { PileDataDTO } from "../types";
 
 
@@ -9,7 +9,7 @@ export async function uploadData(positionsData: PileDataDTO) {
 	const signalTimeoutMs = 10000;
 	const payload = positionsData;
 	const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
-	const file = new File([blob], 'object_positions.json', { type: 'application/json' });
+	const file = new File([blob], _OBJECT_POSITIONS_FILE_NAME, { type: 'application/json' });
 
 	const form = new FormData();
 	form.append('file', file);
@@ -19,7 +19,7 @@ export async function uploadData(positionsData: PileDataDTO) {
 	const timeout = setTimeout(() => controller.abort(), signalTimeoutMs);
 
 	try {
-		const res = await fetch('/3d/pile', {
+		const res = await fetch(_PILE_PAGE_PATH, {
 			method: 'POST',
 			body: form,
 			signal: controller.signal
