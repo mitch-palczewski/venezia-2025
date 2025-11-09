@@ -4,7 +4,7 @@
 	import { T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { type Snippet } from 'svelte';
-	import { pileState, isSelectedObject } from '../pileState.svelte';
+	import { pileState, isSelectedObject } from '../util/pileState.svelte';
 	import type { ModelName } from './models';
 
 	let {

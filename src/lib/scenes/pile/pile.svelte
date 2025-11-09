@@ -1,15 +1,11 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
-	import PileZardoz01 from './models/pile_Zardoz_01.svelte';
 	import { Quaternion, Vector3, type Group, type Object3DEventMap } from 'three';
-	import { pileState, pushObjectRef } from './pileState.svelte';
+	import { pileState, pushObjectRef } from './util/pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
-	import PileBurntBoy01 from './models/pile_BurntBoy_01.svelte';
-	import PileMisc01 from './models/pile_Misc_01.svelte';
 	import ModelTemplate from './models/modelTemplate.svelte';
-	import type { ObjectPositionsDTO, TransformDTO, PileDataDTO, RawDataDTO } from './types';
-	import { isModelName } from './models/models';
+	import type { ObjectPositionsDTO, Transform, PileDataDTO, RawDataDTO, Models } from './types';
 
 	interface Props {
 		rawPositionData: RawDataDTO;
@@ -17,11 +13,7 @@
 	let { rawPositionData }: Props = $props();
 	const positionData: ObjectPositionsDTO = rawPositionData.data.pile_position_data;
 	const downloadedObjects = Object.entries(positionData);
-
-	//for testing
-	const Zardoz01ReadData = positionData.Zardoz_01;
-	const BurntBoy01ReadData = positionData.BurntBoy_01;
-	const Misc01ReadData = positionData.Misc_01;
+	const newObjects: Models = []
 
 	let pileObjectsRef: Array<Group<Object3DEventMap>> = [];
 
@@ -36,7 +28,7 @@
 			ref.children[0].getWorldPosition(v3Position);
 			ref.children[0].getWorldQuaternion(quatRotation);
 			ref.children[0].getWorldScale(v3Scale);
-			const transform: TransformDTO = {
+			const transform: Transform = {
 				translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
 				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z, w: quatRotation.w },
 				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
@@ -46,6 +38,8 @@
 
 		return { pile_position_data: pileObjectPositions };
 	}
+
+
 </script>
 
 <T.PerspectiveCamera
@@ -71,61 +65,15 @@
 />
 
 
-<!--
-<PileZardoz01
-	oncreate={(ref) => {
-		pushObjectRef(ref);
-		pileObjectsRef.push(ref);
-	}}
-	position={[
-		Zardoz01ReadData.translate.x,
-		Zardoz01ReadData.translate.y,
-		Zardoz01ReadData.translate.z
-	]}
-	quaternion={[
-		Zardoz01ReadData.rotation.x,
-		Zardoz01ReadData.rotation.y,
-		Zardoz01ReadData.rotation.z,
-		Zardoz01ReadData.rotation.w
-	]}
-	scale={[Zardoz01ReadData.scale.x, Zardoz01ReadData.scale.y, Zardoz01ReadData.scale.z]}
-/>
-
-<PileBurntBoy01
-	oncreate={(ref) => {
-		pileObjectsRef.push(ref);
-		pushObjectRef(ref);
-	}}
-	position={[
-		BurntBoy01ReadData.translate.x,
-		BurntBoy01ReadData.translate.y,
-		BurntBoy01ReadData.translate.z
-	]}
-	quaternion={[
-		BurntBoy01ReadData.rotation.x,
-		BurntBoy01ReadData.rotation.y,
-		BurntBoy01ReadData.rotation.z,
-		BurntBoy01ReadData.rotation.w
-	]}
-	scale={[BurntBoy01ReadData.scale.x, BurntBoy01ReadData.scale.y, BurntBoy01ReadData.scale.z]}
-/>
-
-<PileMisc01
-	oncreate={(ref) => {
-		pileObjectsRef.push(ref);
-		pushObjectRef(ref);
-	}}
-	position={[Misc01ReadData.translate.x, Misc01ReadData.translate.y, Misc01ReadData.translate.z]}
-	quaternion={[
-		Misc01ReadData.rotation.x,
-		Misc01ReadData.rotation.y,
-		Misc01ReadData.rotation.z,
-		Misc01ReadData.rotation.w
-	]}
-	scale={[Misc01ReadData.scale.x, Misc01ReadData.scale.y, Misc01ReadData.scale.z]}
-/>
-<ModelTemplate name="Arch_01" />
--->
+{#each newObjects as model}
+	<ModelTemplate
+		name={model.name}
+		oncreate={(ref) => {
+			pileObjectsRef.push(ref);
+			pushObjectRef(ref);
+		}}
+	/>
+{/each}
 
 {#each downloadedObjects as [key, value] (key)}
 	<ModelTemplate

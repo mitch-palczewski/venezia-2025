@@ -5,7 +5,7 @@
 	import { T, type Props } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
-	import { isSelectedObject, pileState } from '../pileState.svelte';
+	import { isSelectedObject, pileState } from '../util/pileState.svelte';
 	import type { ModelName } from './models';
 
 	let {

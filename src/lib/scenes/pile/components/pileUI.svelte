@@ -30,5 +30,9 @@
 			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 			>Scale</button
 		>
+		<button
+			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
+			>Add Model</button
+		>
 	</div>
 </div>

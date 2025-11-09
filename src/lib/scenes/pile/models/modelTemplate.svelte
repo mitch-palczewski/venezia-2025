@@ -5,7 +5,7 @@
 	import { T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { onMount, type Snippet } from 'svelte';
-	import { pileState, isSelectedObject } from '../pileState.svelte';
+	import { pileState, isSelectedObject } from '../util/pileState.svelte';
 	import type { ModelName } from './models';
 	import { getModelPath } from './models';
 	import type { GltfNode } from '../types';
@@ -28,7 +28,6 @@
 
 	const gltfPath = getModelPath(name);
 	const gltf = useGltf(gltfPath);
-	console.log(gltf);
 
 	let showThisTransformControls = $derived.by(() => {
 		if (name && isSelectedObject(name)) {
