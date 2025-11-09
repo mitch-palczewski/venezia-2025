@@ -1,3 +1,7 @@
+<!--
+Pile webpage. Combines PileUI and PileScene.
+-->
+
 <script lang="ts">
 	import CanvasPortal from '$lib/components/3d-core/CanvasPortal.svelte';
 	import { PileScene } from '$lib/scenes/pile';
@@ -8,8 +12,6 @@
 	let pileSceneRef: PileScene;
 
 </script>
-
-
 
 <PileUI pileSceneRef={pileSceneRef}/>
 

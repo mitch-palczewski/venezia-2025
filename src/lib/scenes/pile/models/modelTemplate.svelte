@@ -4,11 +4,9 @@
 	import * as THREE from 'three';
 	import { T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
-	import { onMount, type Snippet } from 'svelte';
+	import { type Snippet } from 'svelte';
 	import { pileState, isSelectedObject } from '../util/pileState.svelte';
-	import type { ModelName } from './models';
 	import { getModelPath } from './models';
-	import type { GltfNode } from '../types';
 
 	let {
 		fallback,

@@ -1,3 +1,7 @@
+/*
+Uploads and Downloads Object Positions from Vercel Blob Storage. 
+*/
+
 import { error, fail } from '@sveltejs/kit';
 import { put } from '@vercel/blob';
 import { env } from '$env/dynamic/private';

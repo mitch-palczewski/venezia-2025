@@ -1,3 +1,7 @@
+/*
+Formats positionData for upload to Vercel Blob Storage
+*/
+
 import type { PileDataDTO } from "../types";
 
 

@@ -1,3 +1,5 @@
+<!--Contains All 3D content for Pile -->
+
 <script lang="ts">
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
