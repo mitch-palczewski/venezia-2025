@@ -7,13 +7,15 @@ export const pileState: {
     pileObjectRefs: Array<Group<Object3DEventMap>>,
     showTransformControls: boolean,
     transformControlsMode: TransformControlsMode,
-    newModels: Models 
+    newModels: Models,
+    maxID: number
 } =$state({
     selectedObject: null,
     pileObjectRefs: [],
     showTransformControls: false,
     transformControlsMode: "translate",
-    newModels: []
+    newModels: [],
+    maxID: 1000
 });
 
 export function pushObjectRef(ref:Group<Object3DEventMap>){

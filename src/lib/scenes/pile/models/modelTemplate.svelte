@@ -13,7 +13,8 @@
 		error,
 		children,
 		ref = $bindable(),
-		name = 'Arch_01',
+		name = '',
+		id = '',
 		...props
 	}: Props<THREE.Group> & {
 		ref?: THREE.Group;
@@ -21,6 +22,7 @@
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
 		name?: string;
+		id?: string | number;
 	} = $props();
 	interactivity();
 
@@ -40,6 +42,7 @@
 		if (!name) return;
 		if (isSelectedObject(name)) {
 			pileState.showTransformControls = !pileState.showTransformControls;
+			pileState.selectedObject = null
 			return;
 		} else {
 			if (ref) {

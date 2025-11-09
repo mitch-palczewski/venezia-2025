@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { pileState } from '$lib/scenes/pile';
-	import { uploadDataFactory, addNewModel } from '../util/uiActions';
+	import { uploadDataFactory, addNewModel, deleteSelectedModel } from '../util/uiActions';
 	import AddNewModel from './addNewModel.svelte';
 
 	let { pileSceneRef } = $props();
@@ -13,6 +13,7 @@
 			class="relative h-auto w-auto rounded bg-red-600 px-1 py-2 text-sm text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 			>Upload Position Data</button
 		>
+		{#if pileState.selectedObject}
 		<button
 			onclick={() => (pileState.transformControlsMode = 'translate')}
 			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
@@ -28,6 +29,14 @@
 			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 			>Scale</button
 		>
+		<button
+			onclick={deleteSelectedModel}
+			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
+			>Delete</button
+		>
+			
+		{/if}
+		
 		<AddNewModel/>
 	</div>
 </div>

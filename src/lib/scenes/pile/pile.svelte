@@ -1,8 +1,5 @@
 <!--Contains All 3D content for Pile -->
 
-
-
-
 <script lang="ts">
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
@@ -86,9 +83,11 @@
 {#each downloadedObjects as [key, value] (key)}
 	<ModelTemplate
 		name={value.name}
+		id={pileState.maxID}
 		oncreate={(ref) => {
 			pileObjectsRef.push(ref);
 			pushObjectRef(ref);
+			pileState.maxID += 1
 		}}
 		position={[value.transform.translate.x, value.transform.translate.y, value.transform.translate.z]}
 		quaternion={[

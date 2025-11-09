@@ -11,3 +11,7 @@ export function addNewModel(modelName: ModelName){
 	const model: PlacedModel = {name:modelName, modelPath:path, transform:baseTrandform}
 	pileState.newModels?.push(model)
 }
+
+export function deleteSelectedModel(){
+
+}
