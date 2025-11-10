@@ -1,5 +1,4 @@
 <script lang="ts">
-	//TODO: get node function
 	import type { Props } from '@threlte/core';
 	import * as THREE from 'three';
 	import { T } from '@threlte/core';
@@ -22,7 +21,7 @@
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
 		name?: string;
-		id?: string | number;
+		id?: string;
 	} = $props();
 	interactivity();
 
@@ -46,7 +45,7 @@
 			return;
 		} else {
 			if (ref) {
-				pileState.selectedObject = ref;
+				pileState.selectedObject= {name:name, id:id, modelPath:gltfPath, transform: null, ref:ref};
 			}
 			pileState.showTransformControls = true;
 		}

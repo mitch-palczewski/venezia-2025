@@ -7,24 +7,29 @@
 	import { pileState, pushObjectRef } from './util/pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import ModelTemplate from './models/modelTemplate.svelte';
-	import type { ObjectPositionsDTO, Transform, PileDataDTO, RawDataDTO, Models } from './types';
+	import type {
+		ObjectPositionsPayload,
+		Transform,
+		PileDataPayload,
+		RawDataPayload,
+		PileModels
+	} from './types';
 
 	interface Props {
-		rawPositionData: RawDataDTO;
+		rawPositionData: RawDataPayload;
 	}
 	let { rawPositionData }: Props = $props();
-	const positionData: ObjectPositionsDTO = rawPositionData.data.pile_position_data;
+	const positionData: ObjectPositionsPayload = rawPositionData.data.pile_position_data;
 	const downloadedObjects = Object.entries(positionData);
-	const newObjects: Models = []
 
 	let pileObjectsRef: Array<Group<Object3DEventMap>> = [];
 
-	export function getPositions(): PileDataDTO {
+	export function getPositions(): PileDataPayload {
 		// return a fresh snapshot from scene state
-		const pileObjectPositions: ObjectPositionsDTO = {};
-		let id = 1001
+		const pileObjectPositions: ObjectPositionsPayload = {};
+		let id = 1001;
 		pileObjectsRef.forEach((ref) => {
-			console.log(ref)
+			console.log(ref);
 			const v3Position = new Vector3(0, 0, 0);
 			const quatRotation = new Quaternion(0, 0, 0, 0);
 			const v3Scale = new Vector3(0, 0, 0);
@@ -36,14 +41,12 @@
 				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z, w: quatRotation.w },
 				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
 			};
-			pileObjectPositions[id] = {transform:transform, name: ref.name};
-			id += 1
+			pileObjectPositions[id] = { transform: transform, name: ref.name };
+			id += 1;
 		});
 
 		return { pile_position_data: pileObjectPositions };
 	}
-
-
 </script>
 
 <T.PerspectiveCamera
@@ -68,6 +71,7 @@
 	position={[0, 2, -3.5]}
 />
 
+<!--TODO: Instead of seperating out newModels and downloadedObjects have a singluar models object-->
 
 {#each pileState.newModels as model}
 	<ModelTemplate
@@ -76,20 +80,28 @@
 			pileObjectsRef.push(ref);
 			pushObjectRef(ref);
 		}}
-		position={[model.transform.translate.x, model.transform.translate.y, model.transform.translate.z]}
+		position={[
+			model.transform!.translate.x,
+			model.transform!.translate.y,
+			model.transform!.translate.z
+		]}
 	/>
 {/each}
 
 {#each downloadedObjects as [key, value] (key)}
 	<ModelTemplate
 		name={value.name}
-		id={pileState.maxID}
+		id={pileState.maxID.toString()}
 		oncreate={(ref) => {
 			pileObjectsRef.push(ref);
 			pushObjectRef(ref);
-			pileState.maxID += 1
+			pileState.maxID += 1;
 		}}
-		position={[value.transform.translate.x, value.transform.translate.y, value.transform.translate.z]}
+		position={[
+			value.transform.translate.x,
+			value.transform.translate.y,
+			value.transform.translate.z
+		]}
 		quaternion={[
 			value.transform.rotation.x,
 			value.transform.rotation.y,

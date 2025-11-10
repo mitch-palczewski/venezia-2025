@@ -1,14 +1,20 @@
-import { getModelPath, pileState, uploadData, type ModelName, type PileDataDTO, type PlacedModel, type Transform } from "..";
+/**
+ * Functions for UI Actions 
+ * uploadDataFactory: gets position data to be uploaded to the Blob Storage
+ * addNewModel: addes a Model of Model Name to newModels 
+ */
 
-export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataDTO; }) {
-		const positions: PileDataDTO = pileSceneRef.getPositions();
+import { getModelPath, pileState, uploadData, type ModelName, type PileDataPayload, type Model, type Transform, BASE_TRANSFORM } from "..";
+
+export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataPayload; }) {
+		const positions: PileDataPayload = pileSceneRef.getPositions();
 		uploadData(positions);
 	}
 
 export function addNewModel(modelName: ModelName){
-	const baseTrandform:Transform = {translate:{x:0,y:0,z:0}, rotation:{x:0,y:0,z:0,w:0}, scale:{x:0,y:0,z:0}}
+	const baseTrandform:Transform = BASE_TRANSFORM
 	const path = getModelPath(modelName)
-	const model: PlacedModel = {name:modelName, modelPath:path, transform:baseTrandform}
+	const model: Model = {name:modelName, modelPath:path, id:pileState.maxID.toString(), transform:baseTrandform, ref: null}
 	pileState.newModels?.push(model)
 }
 
