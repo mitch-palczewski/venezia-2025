@@ -1,7 +1,6 @@
 /**
  * Functions for UI Actions 
  * uploadDataFactory: gets position data to be uploaded to the Blob Storage
- * addNewModel: addes a Model of Model Name to newModels 
  */
 
 import { getModelPath, pileState, uploadData, type ModelName, type PileDataPayload, type Model, type Transform, BASE_TRANSFORM } from "..";
@@ -15,9 +14,14 @@ export function addNewModel(modelName: ModelName){
 	const baseTrandform:Transform = BASE_TRANSFORM
 	const path = getModelPath(modelName)
 	const model: Model = {name:modelName, modelPath:path, id:pileState.maxID.toString(), transform:baseTrandform, ref: null}
-	pileState.newModels?.push(model)
+	pileState.pileModels.push(model)
 }
 
 export function deleteSelectedModel(){
-
+	const selectedId = pileState.selectedObject?.id
+	for(let i = pileState.pileModels.length; i>=0; i--){
+		if (pileState.pileModels[i].id === selectedId){
+			pileState.pileModels.splice(i,1)
+		}
+	}
 }

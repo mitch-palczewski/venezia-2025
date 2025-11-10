@@ -5,6 +5,7 @@ import type { Model, PileModels } from "../types";
 export const pileState: {
     selectedObject: null | Model,
     pileObjectRefs: Array<Group<Object3DEventMap>>,
+    pileModels:PileModels,
     showTransformControls: boolean,
     transformControlsMode: TransformControlsMode,
     newModels: PileModels,
@@ -12,6 +13,7 @@ export const pileState: {
 } =$state({
     selectedObject: null,
     pileObjectRefs: [],
+    pileModels: [],
     showTransformControls: false,
     transformControlsMode: "translate",
     newModels: [],
@@ -25,8 +27,20 @@ export function pushObjectRef(ref:Group<Object3DEventMap>){
 }
 
 export function isSelectedObject(name:string){
-    if (pileState.selectedObject && pileState.selectedObject.name === name){     
+    if (pileState.selectedObject && pileState.selectedObject.name === name ){     
         return true;
     }
     return false;
+}
+
+export function getNewID(){
+    let maxID = 1000
+    for (const model of pileState.pileModels){
+        const idNum = parseInt(model.id, 10)
+        if( idNum > maxID){
+            maxID = idNum + 1 
+        }
+    }
+    maxID += 1
+    return maxID.toString()
 }

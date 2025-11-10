@@ -1,11 +1,12 @@
 <script lang="ts">
-	import type { Props } from '@threlte/core';
-	import * as THREE from 'three';
 	import { T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
-	import { type Snippet } from 'svelte';
+	import { Group, Vector3, Quaternion } from 'three';
 	import { pileState, isSelectedObject } from '../util/pileState.svelte';
-	import { getModelPath } from './models';
+	import { BASE_TRANSFORM, getModelPath } from './models';
+	import type { Props } from '@threlte/core';
+	import { type Snippet } from 'svelte';
+	import type { Transform } from '../types';
 
 	let {
 		fallback,
@@ -15,9 +16,9 @@
 		name = '',
 		id = '',
 		...props
-	}: Props<THREE.Group> & {
-		ref?: THREE.Group;
-		children?: Snippet<[{ ref: THREE.Group }]>;
+	}: Props<Group> & {
+		ref?: Group;
+		children?: Snippet<[{ ref: Group }]>;
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
 		name?: string;
@@ -35,6 +36,19 @@
 			return false;
 		}
 	});
+
+	export function getTransform(): Transform{
+		const positionVec = new Vector3(0, 0, 0);
+		const quaternionVec = new Quaternion(0, 0, 0, 0);
+		const scaleVec = new Vector3(0, 0, 0);
+		ref?.children[0].getWorldPosition(positionVec)
+		ref?.children[0].getWorldQuaternion(quaternionVec)
+		ref?.children[0].getWorldScale(scaleVec)
+		const transform:Transform = {translate: { x: positionVec.x, y: positionVec.y, z: positionVec.z },
+				rotation: { x: quaternionVec.x, y: quaternionVec.y, z: quaternionVec.z, w: quaternionVec.w },
+				scale: { x: scaleVec.x, y: scaleVec.y, z: scaleVec.z }}
+		return transform
+	}
 
 	function handleDoubleClick(e: MouseEvent) {
 		e.stopPropagation();

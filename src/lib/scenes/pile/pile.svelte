@@ -11,14 +11,18 @@
 		ObjectPositionsPayload,
 		Transform,
 		PileDataPayload,
-		RawDataPayload,
-		PileModels
+		RawDataPayload as RawPayload,
+		PileModels,
+		Model
 	} from './types';
+	import { getModelPath } from './models/models';
 
 	interface Props {
-		rawPositionData: RawDataPayload;
+		rawPositionData: RawPayload;
 	}
 	let { rawPositionData }: Props = $props();
+	initObjectPositions(rawPositionData)
+
 	const positionData: ObjectPositionsPayload = rawPositionData.data.pile_position_data;
 	const downloadedObjects = Object.entries(positionData);
 
@@ -47,6 +51,20 @@
 
 		return { pile_position_data: pileObjectPositions };
 	}
+
+	function initObjectPositions(rawPositionData: RawPayload) {
+		const positionData: ObjectPositionsPayload = rawPositionData.data.pile_position_data;
+		for (const [key, value] of Object.entries(positionData)) {
+			const downloadedModel: Model = {
+				name: value.name,
+				id: key,
+				modelPath: getModelPath(value.name),
+				transform: value.transform,
+				ref: null
+			};
+			pileState.pileModels.push(downloadedModel);
+		}
+	}
 </script>
 
 <T.PerspectiveCamera
@@ -72,7 +90,33 @@
 />
 
 <!--TODO: Instead of seperating out newModels and downloadedObjects have a singluar models object-->
+{#each pileState.pileModels as model}
+	<ModelTemplate
+		name={model.name}
+		id={pileState.maxID.toString()}
+		oncreate={(ref) => {
+			pileObjectsRef.push(ref);
+			pushObjectRef(ref);
+			pileState.maxID += 1;
+		}}
+		position={[
+			model.transform!.translate.x,
+			model.transform!.translate.y,
+			model.transform!.translate.z
+		]}
+		quaternion={[
+			model.transform!.rotation.x,
+			model.transform!.rotation.y,
+			model.transform!.rotation.z,
+			model.transform!.rotation.w
+		]}
+		scale={[model.transform!.scale.x, model.transform!.scale.y, model.transform!.scale.z]}
+	/>
+{/each}
 
+
+
+<!--
 {#each pileState.newModels as model}
 	<ModelTemplate
 		name={model.name}
@@ -111,3 +155,5 @@
 		scale={[value.transform.scale.x, value.transform.scale.y, value.transform.scale.z]}
 	/>
 {/each}
+
+-->
