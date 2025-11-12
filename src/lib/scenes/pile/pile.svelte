@@ -20,17 +20,17 @@
 		rawPositionData: RawPayload;
 	}
 	let { rawPositionData }: Props = $props();
+	let pileObjectRefs: Array<Group<Object3DEventMap>> = [];
+
+
 	initObjectPositions(rawPositionData)
-
-	const positionData: ObjectPositionsPayload = rawPositionData.data.pile_position_data;
-
-	let pileObjectsRef: Array<Group<Object3DEventMap>> = [];
-
+	
+	
 	export function getPositions(): PileDataPayload {
 		// return a fresh snapshot from scene state
-		const pileObjectPositions: ObjectPositionsPayload = {};
+		const objectPositionsPayload: ObjectPositionsPayload = {};
 		let id = 1001;
-		pileObjectsRef.forEach((ref) => {
+		pileState.pileObjectRefs.forEach((ref) => {
 			console.log(ref);
 			const v3Position = new Vector3(0, 0, 0);
 			const quatRotation = new Quaternion(0, 0, 0, 0);
@@ -43,11 +43,11 @@
 				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z, w: quatRotation.w },
 				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
 			};
-			pileObjectPositions[id] = { transform: transform, name: ref.name };
+			objectPositionsPayload[id] = { transform: transform, name: ref.name };
 			id += 1;
 		});
 
-		return { pile_position_data: pileObjectPositions };
+		return { pile_position_data: objectPositionsPayload };
 	}
 
 	function initObjectPositions(rawPositionData: RawPayload) {
@@ -93,7 +93,7 @@
 		name={model.name}
 		id={model.id}
 		oncreate={(ref) => {
-			pileObjectsRef.push(ref);
+			pileObjectRefs.push(ref);
 			pushObjectRef(ref);
 			pileState.maxID += 1;
 			model.ref = ref

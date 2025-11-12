@@ -80,6 +80,7 @@
 				showY={showThisTransformControls}
 				showZ={showThisTransformControls}
 				mode={pileState.transformControlsMode}
+				
 			>
 				<T.Mesh
 					geometry={gltf.nodes[name].geometry}

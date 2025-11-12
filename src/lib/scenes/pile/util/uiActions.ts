@@ -30,31 +30,24 @@ export function addNewModel(modelName: ModelName) {
 		id: getNewID(),
 		transform: baseTrandform,
 		ref: null,
-		shown:true
+		shown: true
 	};
 	pileState.pileModels.push(model);
 }
 
+
 export function deleteSelectedModel() {
-	const selectedId = pileState.selectedObjectID;
-	for (let i = pileState.pileModels.length -1; i >= 0; i--) {
-		if (pileState.pileModels[i].id === selectedId) {
-			const model = pileState.pileModels[i]
-			console.log(model)
-			console.log(model.ref)
-			const mesh = model.ref?.children[0].children[0] as Mesh
-			if (mesh.isMesh){
-				console.log("mesh!!")
-				pileState.showTransformControls = false
-				mesh.geometry.dispose()
-				model.ref?.clear()
-			}
-			console.log(model.ref)
-
-
-			//pileState.pileModels.splice(i, 1);
-		}
+	for (let i = pileState.pileModels.length - 1; i >= 0; i--) {
+		if (pileState.pileModels[i].id != pileState.selectedObjectID) continue;
+		const model = pileState.pileModels[i];
+		const tfrom = model.ref?.children[0]
+		const mesh = model.ref?.children[0].children[0] as Mesh;
+		
+		model.shown = false
+		if (mesh.isMesh) { mesh.geometry.dispose();}
+		tfrom?.clear()
+		tfrom?.remove()
+		console.log(model.ref);
 	}
+	pileState.showTransformControls = false
 }
-
-
