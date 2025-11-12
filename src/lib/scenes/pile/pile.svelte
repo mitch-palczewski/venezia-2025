@@ -4,7 +4,7 @@
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
 	import { Quaternion, Vector3, type Group, type Object3DEventMap } from 'three';
-	import { getNewID, pileState, pushObjectRef } from './util/pileState.svelte';
+	import { pileState, pushObjectRef } from './util/pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import ModelTemplate from './models/modelTemplate.svelte';
 	import type {
@@ -12,7 +12,6 @@
 		Transform,
 		PileDataPayload,
 		RawDataPayload as RawPayload,
-		PileModels,
 		Model
 	} from './types';
 	import { getModelPath } from './models/models';
@@ -24,7 +23,6 @@
 	initObjectPositions(rawPositionData)
 
 	const positionData: ObjectPositionsPayload = rawPositionData.data.pile_position_data;
-	const downloadedObjects = Object.entries(positionData);
 
 	let pileObjectsRef: Array<Group<Object3DEventMap>> = [];
 
@@ -60,7 +58,8 @@
 				id: key,
 				modelPath: getModelPath(value.name),
 				transform: value.transform,
-				ref: null
+				ref: null,
+				shown:true
 			};
 			pileState.pileModels.push(downloadedModel);
 		}
@@ -89,7 +88,6 @@
 	position={[0, 2, -3.5]}
 />
 
-<!--TODO: Instead of seperating out newModels and downloadedObjects have a singluar models object-->
 {#each pileState.pileModels as model}
 	<ModelTemplate
 		name={model.name}
@@ -98,6 +96,7 @@
 			pileObjectsRef.push(ref);
 			pushObjectRef(ref);
 			pileState.maxID += 1;
+			model.ref = ref
 		}}
 		position={[
 			model.transform!.translate.x,
@@ -116,44 +115,3 @@
 
 
 
-<!--
-{#each pileState.newModels as model}
-	<ModelTemplate
-		name={model.name}
-		oncreate={(ref) => {
-			pileObjectsRef.push(ref);
-			pushObjectRef(ref);
-		}}
-		position={[
-			model.transform!.translate.x,
-			model.transform!.translate.y,
-			model.transform!.translate.z
-		]}
-	/>
-{/each}
-
-{#each downloadedObjects as [key, value] (key)}
-	<ModelTemplate
-		name={value.name}
-		id={pileState.maxID.toString()}
-		oncreate={(ref) => {
-			pileObjectsRef.push(ref);
-			pushObjectRef(ref);
-			pileState.maxID += 1;
-		}}
-		position={[
-			value.transform.translate.x,
-			value.transform.translate.y,
-			value.transform.translate.z
-		]}
-		quaternion={[
-			value.transform.rotation.x,
-			value.transform.rotation.y,
-			value.transform.rotation.z,
-			value.transform.rotation.w
-		]}
-		scale={[value.transform.scale.x, value.transform.scale.y, value.transform.scale.z]}
-	/>
-{/each}
-
--->

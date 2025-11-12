@@ -14,12 +14,14 @@ export type PileDataPayload = {
 export type ObjectPositionsPayload = Record<string, { transform: Transform; name: string }>;
 
 //Active Model Type
+export type ID = string
 export type Model = {
 	name: string;
-	id: string;
+	id: ID;
 	modelPath: string;
 	transform: Transform | null;
 	ref: Group<Object3DEventMap> | null;
+	shown: boolean; 
 };
 export type PileModels = Array<Model>;
 

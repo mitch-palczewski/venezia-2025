@@ -1,9 +1,9 @@
 import type { Group, Object3DEventMap } from 'three';
 import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
-import type { Model, PileModels } from '../types';
+import type { ID,  PileModels } from '../types';
 
 export const pileState: {
-	selectedObject: null | Model;
+	selectedObjectID: null | ID;
 	pileObjectRefs: Array<Group<Object3DEventMap>>;
 	pileModels: PileModels;
 	showTransformControls: boolean;
@@ -11,7 +11,7 @@ export const pileState: {
 	newModels: PileModels;
 	maxID: number;
 } = $state({
-	selectedObject: null,
+	selectedObjectID: null,
 	pileObjectRefs: [],
 	pileModels: [],
 	showTransformControls: false,
@@ -33,8 +33,8 @@ export function pushObjectRef(ref: Group<Object3DEventMap>) {
 
 export function isSelectedObject( id: string) {
 	if (
-		pileState.selectedObject &&
-		pileState.selectedObject.id === id
+		pileState.selectedObjectID &&
+		pileState.selectedObjectID === id
 	) {
 		return true;
 	}

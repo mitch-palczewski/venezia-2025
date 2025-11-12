@@ -61,7 +61,7 @@
 						
 					}else{
 						if(ref){
-							pileState.selectedObject = pileState.selectedObject= {name:name, id:"9999", modelPath:'', transform: null, ref:ref}
+							pileState.selectedObjectID = pileState.selectedObjectID= {name:name, id:"9999", modelPath:'', transform: null, ref:ref}
 						}
 						pileState.showTransformControls = true
 					}	

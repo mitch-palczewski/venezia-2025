@@ -3,6 +3,7 @@
  * uploadDataFactory: gets position data to be uploaded to the Blob Storage
  */
 
+import type { Mesh } from 'three';
 import {
 	getModelPath,
 	pileState,
@@ -28,16 +29,32 @@ export function addNewModel(modelName: ModelName) {
 		modelPath: path,
 		id: getNewID(),
 		transform: baseTrandform,
-		ref: null
+		ref: null,
+		shown:true
 	};
 	pileState.pileModels.push(model);
 }
 
 export function deleteSelectedModel() {
-	const selectedId = pileState.selectedObject?.id;
+	const selectedId = pileState.selectedObjectID;
 	for (let i = pileState.pileModels.length -1; i >= 0; i--) {
 		if (pileState.pileModels[i].id === selectedId) {
-			pileState.pileModels.splice(i, 1);
+			const model = pileState.pileModels[i]
+			console.log(model)
+			console.log(model.ref)
+			const mesh = model.ref?.children[0].children[0] as Mesh
+			if (mesh.isMesh){
+				console.log("mesh!!")
+				pileState.showTransformControls = false
+				mesh.geometry.dispose()
+				model.ref?.clear()
+			}
+			console.log(model.ref)
+
+
+			//pileState.pileModels.splice(i, 1);
 		}
 	}
 }
+
+

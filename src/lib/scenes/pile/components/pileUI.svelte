@@ -13,7 +13,7 @@
 			class="relative h-auto w-auto rounded bg-red-600 px-1 py-2 text-sm text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 			>Upload Position Data</button
 		>
-		{#if pileState.selectedObject}
+		{#if pileState.selectedObjectID}
 		<button
 			onclick={() => (pileState.transformControlsMode = 'translate')}
 			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
