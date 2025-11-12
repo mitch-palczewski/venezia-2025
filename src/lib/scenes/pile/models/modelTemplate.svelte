@@ -3,7 +3,7 @@
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { Group, Vector3, Quaternion } from 'three';
 	import { pileState, isSelectedObject } from '../util/pileState.svelte';
-	import { BASE_TRANSFORM, getModelPath } from './models';
+	import { getModelPath } from './models';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import type { Transform } from '../types';
@@ -29,8 +29,9 @@
 	const gltfPath = getModelPath(name);
 	const gltf = useGltf(gltfPath);
 
+
 	let showThisTransformControls = $derived.by(() => {
-		if (name && isSelectedObject(name)) {
+		if (id && id != '' && isSelectedObject(id)) {
 			return pileState.showTransformControls;
 		} else {
 			return false;
@@ -53,7 +54,7 @@
 	function handleDoubleClick(e: MouseEvent) {
 		e.stopPropagation();
 		if (!name) return;
-		if (isSelectedObject(name)) {
+		if (isSelectedObject(id)) {
 			pileState.showTransformControls = !pileState.showTransformControls;
 			pileState.selectedObject = null
 			return;

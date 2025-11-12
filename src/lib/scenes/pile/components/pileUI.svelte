@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { pileState } from '$lib/scenes/pile';
-	import { uploadDataFactory, addNewModel, deleteSelectedModel } from '../util/uiActions';
+	import { uploadDataFactory, deleteSelectedModel } from '../util/uiActions';
 	import AddNewModel from './addNewModel.svelte';
 
 	let { pileSceneRef } = $props();

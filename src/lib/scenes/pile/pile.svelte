@@ -4,7 +4,7 @@
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
 	import { Quaternion, Vector3, type Group, type Object3DEventMap } from 'three';
-	import { pileState, pushObjectRef } from './util/pileState.svelte';
+	import { getNewID, pileState, pushObjectRef } from './util/pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import ModelTemplate from './models/modelTemplate.svelte';
 	import type {
@@ -93,7 +93,7 @@
 {#each pileState.pileModels as model}
 	<ModelTemplate
 		name={model.name}
-		id={pileState.maxID.toString()}
+		id={model.id}
 		oncreate={(ref) => {
 			pileObjectsRef.push(ref);
 			pushObjectRef(ref);
