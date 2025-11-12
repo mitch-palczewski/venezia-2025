@@ -20,35 +20,39 @@
 		rawPositionData: RawPayload;
 	}
 	let { rawPositionData }: Props = $props();
-	let pileObjectRefs: Array<Group<Object3DEventMap>> = [];
+
+	initObjectPositions(rawPositionData);
 
 
-	initObjectPositions(rawPositionData)
-	
-	
+
+
 	export function getPositions(): PileDataPayload {
 		// return a fresh snapshot from scene state
 		const objectPositionsPayload: ObjectPositionsPayload = {};
 		let id = 1001;
-		pileState.pileObjectRefs.forEach((ref) => {
-			console.log(ref);
-			const v3Position = new Vector3(0, 0, 0);
-			const quatRotation = new Quaternion(0, 0, 0, 0);
-			const v3Scale = new Vector3(0, 0, 0);
-			ref.children[0].getWorldPosition(v3Position);
-			ref.children[0].getWorldQuaternion(quatRotation);
-			ref.children[0].getWorldScale(v3Scale);
-			const transform: Transform = {
-				translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
-				rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z, w: quatRotation.w },
-				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
-			};
-			objectPositionsPayload[id] = { transform: transform, name: ref.name };
-			id += 1;
+		pileState.pileModels.forEach((model) => {
+			if (model.shown) {
+				console.log(model.ref);
+				const v3Position = new Vector3(0, 0, 0);
+				const quatRotation = new Quaternion(0, 0, 0, 0);
+				const v3Scale = new Vector3(0, 0, 0);
+				model.ref?.children[0].getWorldPosition(v3Position);
+				model.ref?.children[0].getWorldQuaternion(quatRotation);
+				model.ref?.children[0].getWorldScale(v3Scale);
+				const transform: Transform = {
+					translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
+					rotation: { x: quatRotation.x, y: quatRotation.y, z: quatRotation.z, w: quatRotation.w },
+					scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
+				};
+				objectPositionsPayload[id] = { transform: transform, name: model.name };
+				id += 1;
+			}
 		});
 
 		return { pile_position_data: objectPositionsPayload };
 	}
+
+
 
 	function initObjectPositions(rawPositionData: RawPayload) {
 		const positionData: ObjectPositionsPayload = rawPositionData.data.pile_position_data;
@@ -59,7 +63,7 @@
 				modelPath: getModelPath(value.name),
 				transform: value.transform,
 				ref: null,
-				shown:true
+				shown: true
 			};
 			pileState.pileModels.push(downloadedModel);
 		}
@@ -93,10 +97,9 @@
 		name={model.name}
 		id={model.id}
 		oncreate={(ref) => {
-			pileObjectRefs.push(ref);
 			pushObjectRef(ref);
 			pileState.maxID += 1;
-			model.ref = ref
+			model.ref = ref;
 		}}
 		position={[
 			model.transform!.translate.x,
@@ -112,6 +115,3 @@
 		scale={[model.transform!.scale.x, model.transform!.scale.y, model.transform!.scale.z]}
 	/>
 {/each}
-
-
-
