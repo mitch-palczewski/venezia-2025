@@ -3,12 +3,12 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
 	import { OrbitControls, Text } from '@threlte/extras';
-	import { Quaternion, Vector3, type Group, type Object3DEventMap } from 'three';
-	import { pileState, pushObjectRef } from './util/pileState.svelte';
+	import { Quaternion, Vector3} from 'three';
+	import { pileState} from './util/pileState.svelte';
 	import TestWorld from '../demos/testWorld.svelte';
 	import ModelTemplate from './models/modelTemplate.svelte';
 	import type {
-		ObjectPositionsPayload,
+		ObjectPositionPayload,
 		Transform,
 		PileDataPayload,
 		RawDataPayload as RawPayload,
@@ -28,7 +28,7 @@
 
 	export function getPositions(): PileDataPayload {
 		// return a fresh snapshot from scene state
-		const objectPositionsPayload: ObjectPositionsPayload = {};
+		const objectPositionsPayload: ObjectPositionPayload = {};
 		let id = 1001;
 		pileState.pileModels.forEach((model) => {
 			if (model.shown) {
@@ -55,7 +55,7 @@
 
 
 	function initObjectPositions(rawPositionData: RawPayload) {
-		const positionData: ObjectPositionsPayload = rawPositionData.data.pile_position_data;
+		const positionData: ObjectPositionPayload = rawPositionData.data.pile_position_data;
 		for (const [key, value] of Object.entries(positionData)) {
 			const downloadedModel: Model = {
 				name: value.name,
@@ -84,20 +84,12 @@
 <T.AmbientLight intensity={0.1} />
 
 <TestWorld />
-<Text
-	text="Double click on Zardoz_01 to show or hide Transform Controls. 
-	Try moving Zardoz_01 around uploading position data wait 30 sec then reloading the page. "
-	color="black"
-	anchorX="50%"
-	position={[0, 2, -3.5]}
-/>
 
 {#each pileState.pileModels as model}
 	<ModelTemplate
 		name={model.name}
 		id={model.id}
 		oncreate={(ref) => {
-			pushObjectRef(ref);
 			pileState.maxID += 1;
 			model.ref = ref;
 		}}

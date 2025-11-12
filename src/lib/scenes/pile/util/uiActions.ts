@@ -8,12 +8,12 @@ import {
 	getModelPath,
 	pileState,
 	uploadData,
+	BASE_TRANSFORM,
+	getNewID,
 	type ModelName,
 	type PileDataPayload,
 	type Model,
-	type Transform,
-	BASE_TRANSFORM,
-	getNewID
+	type Transform
 } from '..';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataPayload }) {
@@ -42,7 +42,7 @@ export function deleteSelectedModel() {
 		const model = pileState.pileModels[i];
 		const tfrom = model.ref?.children[0]
 		const mesh = model.ref?.children[0].children[0] as Mesh;
-		
+
 		model.shown = false
 		if (mesh.isMesh) { mesh.geometry.dispose();}
 		tfrom?.clear()

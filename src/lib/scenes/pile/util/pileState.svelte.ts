@@ -1,10 +1,9 @@
-import type { Group, Object3DEventMap } from 'three';
+
 import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 import type { ID,  PileModels } from '../types';
 
 export const pileState: {
 	selectedObjectID: null | ID;
-	pileObjectRefs: Array<Group<Object3DEventMap>>;
 	pileModels: PileModels;
 	showTransformControls: boolean;
 	transformControlsMode: TransformControlsMode;
@@ -12,7 +11,6 @@ export const pileState: {
 	maxID: number;
 } = $state({
 	selectedObjectID: null,
-	pileObjectRefs: [],
 	pileModels: [],
 	showTransformControls: false,
 	transformControlsMode: 'translate',
@@ -20,16 +18,6 @@ export const pileState: {
 	maxID: 1000
 });
 
-export function pushObjectRef(ref: Group<Object3DEventMap>) {
-	if (!ref) {
-		return;
-	}
-	if (!ref.name || typeof ref.name != 'string' || ref.name == '') {
-		console.log('Ref Does not have a name');
-		return;
-	}
-	pileState.pileObjectRefs.push(ref);
-}
 
 export function isSelectedObject( id: string) {
 	if (
@@ -40,6 +28,7 @@ export function isSelectedObject( id: string) {
 	}
 	return false;
 }
+
 
 export function getNewID() {
 	let maxID = 1000;
