@@ -31,7 +31,8 @@
 		const objectPositionsPayload: ObjectPositionPayload = {};
 		let id = 1001;
 		pileState.pileModels.forEach((model) => {
-			if (model.shown) {
+			try{
+if (model.shown) {
 				console.log(model.ref);
 				const v3Position = new Vector3(0, 0, 0);
 				const quatRotation = new Quaternion(0, 0, 0, 0);
@@ -46,6 +47,9 @@
 				};
 				objectPositionsPayload[id] = { transform: transform, name: model.name };
 				id += 1;
+			}
+			} catch (e){
+				console.log(e)
 			}
 		});
 
@@ -83,7 +87,7 @@
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.1} />
 
-<TestWorld />
+
 
 {#each pileState.pileModels as model}
 	<ModelTemplate
