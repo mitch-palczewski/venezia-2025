@@ -87,7 +87,7 @@ if (model.shown) {
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.1} />
 
-
+<TestWorld/>
 
 {#each pileState.pileModels as model}
 	<ModelTemplate
