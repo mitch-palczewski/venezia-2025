@@ -5,6 +5,7 @@
 
 </script>
 
+<!--
 <T.Mesh
    position={[0,0, -3]}> 
 	<T.BoxGeometry 
@@ -28,6 +29,9 @@
 		/>
 	<T.MeshStandardMaterial color = "hotpink"/>
 </T.Mesh>
+-->
+
+
 
 <T.Mesh 
     rotation.x={-Math.PI/2}

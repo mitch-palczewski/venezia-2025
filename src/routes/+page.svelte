@@ -26,6 +26,8 @@
 		<a class="hover:bg-blue-500" href="/3d/demos/demo9">Demo 9 Framed Spinning Crocodile01</a>
 		<br />
 		<a class="hover:bg-blue-500" href="/3d/demos/demo10">Demo 10 </a>
+		<br>
+		<a class="hover:bg-blue-500" href="/3d/demos/demo11">Demo 11 </a>
 	</div>
 	<div class="p-5">
 		<a class="hover:bg-blue-500" href="/3d/pile">Pile</a>
