@@ -17,7 +17,7 @@
 </div>
 
 <div class="absolute z-[-20] w-full h-full object-cover overflow-hidden" >
-    <img src="/images/environment/yellow.png" alt="">
+    <img src="/images/test/flatbg.jpg" alt="">
 </div>
 
 
