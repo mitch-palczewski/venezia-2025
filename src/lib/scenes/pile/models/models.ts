@@ -4,7 +4,7 @@ Maintains Model -> Path
 
 import type { Transform } from '../types';
 
-export type ModelName = UndertowModel;
+export type ModelName = UndertowModel | Various;
 
 export type UndertowModel =
 	| 'Arch_01'
@@ -24,7 +24,13 @@ export type UndertowModel =
 	| 'Misc_05'
 	| 'Zardoz_01';
 
+export type Various = 
+	| 'Acquarossa'
+	| 'ArchwayMultiple_01'
+	| 'BrickWall_Stock';
+
 export const MODEL_PATHS: Record<string, string> = {
+	//Undertow
 	Arch_01: '/models/undertow/Arch_01.glb',
 	Bull_01: '/models/undertow/Bull_01.glb',
 	Bull_02: '/models/undertow/Bull_02.glb',
@@ -39,7 +45,11 @@ export const MODEL_PATHS: Record<string, string> = {
 	Misc_01: '/models/undertow/Misc_01.glb',
 	Misc_02: '/models/undertow/Misc_02.glb',
 	Misc_05: '/models/undertow/Misc_05.glb',
-	Zardoz_01: '/models/undertow/Zardoz_01.glb'
+	Zardoz_01: '/models/undertow/Zardoz_01.glb',
+	//Various
+	Acquarossa: '/models/various/Acquarossa.glb',
+	ArchwayMultiple_01: '/models/various/ArchwayMultiple_01.glb',
+	BrickWall_Stock: '/models/various/BrickWall_Stock.glb'
 };
 export const BASE_TRANSFORM: Transform = {
 	translate: { x: 0, y: 0, z: 0 },
