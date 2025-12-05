@@ -47,9 +47,9 @@ export const MODEL_PATHS: Record<string, string> = {
 	Misc_05: '/models/undertow/Misc_05.glb',
 	Zardoz_01: '/models/undertow/Zardoz_01.glb',
 	//Various
-	Acquarossa: '/models/various/Acquarossa.glb',
-	ArchwayMultiple_01: '/models/various/ArchwayMultiple_01.glb',
-	BrickWall_Stock: '/models/various/BrickWall_Stock.glb'
+	//Acquarossa: '/models/various/Acquarossa.glb',
+	//ArchwayMultiple_01: '/models/various/ArchwayMultiple_01.glb',
+	//BrickWall_Stock: '/models/various/BrickWall_Stock.glb'
 };
 export const BASE_TRANSFORM: Transform = {
 	translate: { x: 0, y: 0, z: 0 },
