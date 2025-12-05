@@ -28,6 +28,7 @@
 
 	const gltfPath = getModelPath(name);
 	const gltf = useGltf(gltfPath);
+	console.log(gltf)
 	let shown = $state(true);
 	let mesh: Mesh
 
