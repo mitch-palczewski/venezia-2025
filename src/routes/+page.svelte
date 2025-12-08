@@ -32,5 +32,9 @@
 	<div class="p-5">
 		<a class="hover:bg-blue-500" href="/3d/pile">Pile</a>
 		<br />
+		<a class="hover:bg-blue-500" href="/3d/spaces/space1">Sketch Space 1</a>
+		<br />
+		<a class="hover:bg-blue-500" href="/3d/spaces/h-zon">Sketch Space 2 long hoz</a>
+		<br />
 	</div>
 </div>

@@ -25,9 +25,7 @@ export type UndertowModel =
 	| 'Zardoz_01';
 
 export type Various = 
-	| 'Acquarossa'
-	| 'ArchwayMultiple_01'
-	| 'BrickWall_Stock';
+	| 'Arch_01_m';
 
 export const MODEL_PATHS: Record<string, string> = {
 	//Undertow
@@ -47,6 +45,7 @@ export const MODEL_PATHS: Record<string, string> = {
 	Misc_05: '/models/undertow/Misc_05.glb',
 	Zardoz_01: '/models/undertow/Zardoz_01.glb',
 	//Various
+	//Arch_01_m: '/models/various/Arch_01-m.glb'
 	//Acquarossa: '/models/various/Acquarossa.glb',
 	//ArchwayMultiple_01: '/models/various/ArchwayMultiple_01.glb',
 	//BrickWall_Stock: '/models/various/BrickWall_Stock.glb'
