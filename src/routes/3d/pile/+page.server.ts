@@ -6,7 +6,7 @@ import { error, fail } from '@sveltejs/kit';
 import { put } from '@vercel/blob';
 import { env } from '$env/dynamic/private';
 import type { PageServerLoad } from './$types';
-import { _OBJECT_POSITIONS_FILE_NAME, _OBJECT_POSITIONS_PATH } from '../../../constants';
+import { _OBJECT_POSITIONS_FILE_NAME, _OBJECT_POSITIONS_PATH } from '../../../lib/constants';
 
 
 

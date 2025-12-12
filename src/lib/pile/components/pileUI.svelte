@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { pileState } from '$lib/scenes/pile';
+	import { pileState } from '$lib/pile';
 	import { uploadDataFactory, deleteSelectedModel } from '../util/uiActions';
 	import AddNewModel from './addNewModel.svelte';
 

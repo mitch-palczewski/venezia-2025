@@ -4,8 +4,8 @@
 	import { T } from '@threlte/core';
 	import { CubeEnvironment, Environment, OrbitControls, Text } from '@threlte/extras';
 	import { Quaternion, Vector3 } from 'three';
-	import { pileState } from './util/pileState.svelte';
-	import TestWorld from '../demos/testWorld.svelte';
+	import { pileState } from './util/pileState.svelte';	
+	import TestWorld from '$lib/scenes/demos/testWorld.svelte';
 	import ModelTemplate from './models/modelTemplate.svelte';
 	import type {
 		ObjectPositionPayload,
