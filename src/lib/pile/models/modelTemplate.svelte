@@ -26,11 +26,18 @@
 	} = $props();
 	interactivity();
 
+	let shown = $state(true);
 	const gltfPath = getModelPath(name);
 	const gltf = useGltf(gltfPath);
-	console.log(gltf)
-	let shown = $state(true);
-	let mesh: Mesh
+	console.log(name);
+	console.log(gltf);
+	
+	const nodes = $derived.by(() => {
+		if (!$gltf || !$gltf.nodes) {
+			return [];
+		}
+		return Object.values($gltf.nodes) as Mesh[];
+	});
 
 	let showThisTransformControls = $derived.by(() => {
 		if (id && id != '' && isSelectedObject(id)) {
@@ -71,24 +78,27 @@
 	}
 </script>
 
-<T.Group bind:ref dispose={true} {name}  {...props}>
+<T.Group bind:ref dispose={true} {name} {...props}>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}
-		{#if shown}
+		{#if shown && nodes}
 			<TransformControls
 				showX={showThisTransformControls}
 				showY={showThisTransformControls}
 				showZ={showThisTransformControls}
 				mode={pileState.transformControlsMode}
-				
 			>
-				<T.Mesh
-					geometry={gltf.nodes[name].geometry}
-					material={gltf.nodes[name].material}
-					raycast={meshBounds}
-					ondblclick={handleDoubleClick}
-				></T.Mesh>
+				{#each nodes as node}
+					{#if node.type == 'Mesh'}
+						<T.Mesh
+							geometry={node.geometry}
+							material={node.material}
+							raycast={meshBounds}
+							ondblclick={handleDoubleClick}
+						/>
+					{/if}
+				{/each}
 			</TransformControls>
 		{/if}
 	{:catch err}

@@ -24,8 +24,7 @@ export type UndertowModel =
 	| 'Misc_05'
 	| 'Zardoz_01';
 
-export type Various = 
-	| 'Arch_01_m';
+export type Various = 'Archway_Multiple_01';
 
 export const MODEL_PATHS: Record<string, string> = {
 	//Undertow
@@ -47,7 +46,7 @@ export const MODEL_PATHS: Record<string, string> = {
 	//Various
 	//Arch_01_m: '/models/various/Arch_01-m.glb'
 	//Acquarossa: '/models/various/Acquarossa.glb',
-	//ArchwayMultiple_01: '/models/various/ArchwayMultiple_01.glb',
+	Archway_Multiple_01: '/models/various/Archway_Multiple_01.glb'
 	//BrickWall_Stock: '/models/various/BrickWall_Stock.glb'
 };
 export const BASE_TRANSFORM: Transform = {
@@ -56,9 +55,35 @@ export const BASE_TRANSFORM: Transform = {
 	scale: { x: 1, y: 1, z: 1 }
 };
 
-export function getModelPath(name: string): string {
-	return MODEL_PATHS[name];
+
+
+/**
+ * Gets the model path associated to the model name
+ * @param modelName like Zardoz_01
+ * @returns .glb path like /models/undertow/Zardoz_01.glb
+ */
+export function getModelPath(modelName: string): string {
+	if (modelName.endsWith(".glb")){
+		console.log("WARNING: file model name should not end with '.glb'")
+	}
+	const path = MODEL_PATHS[modelName];
+	if (!path) {
+		const err = new Error(
+			`Model not found path not found: ${modelName}. Check make sure models name and path is properly added to models.ts`
+		);
+		err.name = 'ModelNotFoundError';
+		throw err;
+	}
+	return path;
 }
+
+
+
+/**
+ * Checks if a string is a modelname
+ * @param x checked string
+ * @returns object as typed ModelName
+ */
 export function isModelName(x: string): x is ModelName {
 	return Object.prototype.hasOwnProperty.call(MODEL_PATHS, x);
 }
