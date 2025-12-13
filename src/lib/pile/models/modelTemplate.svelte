@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { T } from '@threlte/core';
+	import { isInstanceOf, T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
-	import { Group, Vector3, Quaternion, Mesh } from 'three';
+	import { Group, Vector3, Quaternion, Mesh, Object3D } from 'three';
 	import { pileState, isSelectedObject } from '../util/pileState.svelte';
 	import { getModelPath } from './models';
 	import type { Props } from '@threlte/core';
@@ -30,13 +30,13 @@
 	const gltfPath = getModelPath(name);
 	const gltf = useGltf(gltfPath);
 	console.log(name);
-	console.log(gltf);
-	
-	const nodes = $derived.by(() => {
-		if (!$gltf || !$gltf.nodes) {
+	const sceneChildren = $derived.by(() => {
+		if (!$gltf || !$gltf.scene.children) {
 			return [];
 		}
-		return Object.values($gltf.nodes) as Mesh[];
+		const thisSceneChildren = Object.values($gltf.scene.children) as Mesh[];
+		//console.log(thisSceneChildren)
+		return thisSceneChildren;
 	});
 
 	let showThisTransformControls = $derived.by(() => {
@@ -78,27 +78,49 @@
 	}
 </script>
 
+<!-- 
+	SNIPPET
+	parameter: sceneChildren: Object3D[]
+	description: If child is group calls self recursivly. If Mesh creates mesh. 
+ -->
+{#snippet sceneBuilder(sceneChildren: Object3D[])}
+	{#each sceneChildren as child}
+		{#if child.type == 'Group' && child.children}
+			<T.Group
+				position={[child.position.x, child.position.y, child.position.z]}
+				scale={[child.scale.x, child.scale.y, child.scale.z]}
+			>
+				{@render sceneBuilder(child.children)}
+			</T.Group>
+		{/if}
+		{#if child.type == 'Mesh' && isInstanceOf(child, 'Mesh')}
+			<T.Mesh
+				geometry={(child as Mesh).geometry}
+				material={(child as Mesh).material}
+				position={[child.position.x, child.position.y, child.position.z]}
+				scale={[child.scale.x, child.scale.y, child.scale.z]}
+				raycast={meshBounds}
+				ondblclick={handleDoubleClick}
+			/>
+		{/if}
+	{/each}
+{/snippet}
+
+<!-- MAIN EXECUTION -->
 <T.Group bind:ref dispose={true} {name} {...props}>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}
-		{#if shown && nodes}
+		{#if shown && sceneChildren}
 			<TransformControls
 				showX={showThisTransformControls}
 				showY={showThisTransformControls}
 				showZ={showThisTransformControls}
 				mode={pileState.transformControlsMode}
 			>
-				{#each nodes as node}
-					{#if node.type == 'Mesh'}
-						<T.Mesh
-							geometry={node.geometry}
-							material={node.material}
-							raycast={meshBounds}
-							ondblclick={handleDoubleClick}
-						/>
-					{/if}
-				{/each}
+				<T.Group >
+					{@render sceneBuilder(sceneChildren)}
+				</T.Group>
 			</TransformControls>
 		{/if}
 	{:catch err}
