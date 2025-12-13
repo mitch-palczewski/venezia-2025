@@ -6,7 +6,11 @@
 	
 	
 
-    const modelInventory = ['Zardoz_01', 'Archway_Multiple_01']
+    const modelInventory = [
+		//'Zardoz_01', 
+		//'BT_02',
+		'Archway_Multiple_01'
+		]
     let counter = 0
 </script>
 
@@ -24,7 +28,7 @@
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.08} />
 
-<ArchwayMultiple01/>
+
 
 {#each modelInventory as model}
 	<ModelTemplate2

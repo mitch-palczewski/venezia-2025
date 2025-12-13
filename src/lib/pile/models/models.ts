@@ -24,7 +24,9 @@ export type UndertowModel =
 	| 'Misc_05'
 	| 'Zardoz_01';
 
-export type Various = 'Archway_Multiple_01';
+export type Various = 
+	| 'Archway_Multiple_01'
+	| 'BT_02';
 
 export const MODEL_PATHS: Record<string, string> = {
 	//Undertow
@@ -44,10 +46,9 @@ export const MODEL_PATHS: Record<string, string> = {
 	Misc_05: '/models/undertow/Misc_05.glb',
 	Zardoz_01: '/models/undertow/Zardoz_01.glb',
 	//Various
-	//Arch_01_m: '/models/various/Arch_01-m.glb'
-	//Acquarossa: '/models/various/Acquarossa.glb',
-	Archway_Multiple_01: '/models/various/Archway_Multiple_01.glb'
-	//BrickWall_Stock: '/models/various/BrickWall_Stock.glb'
+	Archway_Multiple_01: '/models/various/Archway_Multiple_01.glb',
+	BT_02: '/models/various/BT_02.glb'
+	
 };
 export const BASE_TRANSFORM: Transform = {
 	translate: { x: 0, y: 0, z: 0 },
