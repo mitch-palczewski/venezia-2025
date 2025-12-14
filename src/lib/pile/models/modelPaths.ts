@@ -2,7 +2,7 @@
 Maintains Model -> Path
  */
 
-import type { Transform } from '../types';
+import type { Transform3D } from '../types';
 
 export type ModelName = UndertowModel | Various;
 
@@ -50,13 +50,11 @@ export const MODEL_PATHS: Record<string, string> = {
 	BT_02: '/models/various/BT_02.glb'
 	
 };
-export const BASE_TRANSFORM: Transform = {
+export const BASE_TRANSFORM: Transform3D = {
 	translate: { x: 0, y: 0, z: 0 },
 	rotation: { x: 0, y: 0, z: 0, w: 0 },
 	scale: { x: 1, y: 1, z: 1 }
 };
-
-
 
 /**
  * Gets the model path associated to the model name

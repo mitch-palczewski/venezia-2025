@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MODEL_PATHS, type ModelName } from '../models/models';
+	import { MODEL_PATHS, type ModelName } from '../models/modelPaths';
     import { addNewModel } from '../util/uiActions';
 
 	let selectedModel: ModelName | null = $state(null);

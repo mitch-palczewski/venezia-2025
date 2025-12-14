@@ -4,17 +4,17 @@
 	import { T } from '@threlte/core';
 	import { CubeEnvironment, Environment, OrbitControls, Text } from '@threlte/extras';
 	import { Quaternion, Vector3 } from 'three';
-	import { pileState } from './util/pileState.svelte';	
+	import { pileState } from './util/pileState.svelte';
 	import TestWorld from '$lib/scenes/demos/testWorld.svelte';
 	import ModelTemplate from './models/modelTemplate.svelte';
 	import type {
 		ObjectPositionPayload,
-		Transform,
+		Transform3D,
 		PileDataPayload,
 		RawDataPayload as RawPayload,
-		Model
 	} from './types';
-	import { getModelPath } from './models/models';
+	import { getModelPath } from './models/modelPaths';
+	import { PileObject } from './models/model';
 
 	interface Props {
 		rawPositionData: RawPayload;
@@ -37,7 +37,7 @@
 					model.ref?.children[0].getWorldPosition(v3Position);
 					model.ref?.children[0].getWorldQuaternion(quatRotation);
 					model.ref?.children[0].getWorldScale(v3Scale);
-					const transform: Transform = {
+					const transform: Transform3D = {
 						translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
 						rotation: {
 							x: quatRotation.x,
@@ -61,15 +61,13 @@
 	function initObjectPositions(rawPositionData: RawPayload) {
 		const positionData: ObjectPositionPayload = rawPositionData.data.pile_position_data;
 		for (const [key, value] of Object.entries(positionData)) {
-			const downloadedModel: Model = {
+			const downloadedModel2 = new PileObject({
 				name: value.name,
 				id: key,
 				modelPath: getModelPath(value.name),
-				transform: value.transform,
-				ref: null,
-				shown: true
-			};
-			pileState.pileModels.push(downloadedModel);
+				transform3D: value.transform
+			});
+			pileState.pileModels.push(downloadedModel2);
 		}
 	}
 </script>
@@ -86,10 +84,7 @@
 
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.08} />
-<Environment
-	url={"/images/environment/world.jpg"}
-	isBackground={true}
-/>
+<Environment url={'/images/environment/world.jpg'} isBackground={true} />
 
 <TestWorld />
 
@@ -102,16 +97,20 @@
 			model.ref = ref;
 		}}
 		position={[
-			model.transform!.translate.x,
-			model.transform!.translate.y,
-			model.transform!.translate.z
+			model.transform3D!.translate.x,
+			model.transform3D!.translate.y,
+			model.transform3D!.translate.z
 		]}
 		quaternion={[
-			model.transform!.rotation.x,
-			model.transform!.rotation.y,
-			model.transform!.rotation.z,
-			model.transform!.rotation.w
+			model.transform3D!.rotation.x,
+			model.transform3D!.rotation.y,
+			model.transform3D!.rotation.z,
+			model.transform3D!.rotation.w
 		]}
-		scale={[model.transform!.scale.x, model.transform!.scale.y, model.transform!.scale.z]}
+		scale={[
+			model.transform3D!.scale.x, 
+			model.transform3D!.scale.y, 
+			model.transform3D!.scale.z
+		]}
 	/>
 {/each}

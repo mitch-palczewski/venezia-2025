@@ -8,7 +8,7 @@
 
     const modelInventory = [
 		//'Zardoz_01', 
-		//'BT_02',
+		'BT_02',
 		'Archway_Multiple_01'
 		]
     let counter = 0

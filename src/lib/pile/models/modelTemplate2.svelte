@@ -3,10 +3,10 @@
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { Group, Vector3, Quaternion, Mesh, Object3D } from 'three';
 	import { pileState, isSelectedObject } from '../util/pileState.svelte';
-	import { getModelPath } from './models';
+	import { getModelPath } from './modelPaths';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
-	import type { Transform } from '../types';
+	import type { Transform3D } from '../types';
 
 	let {
 		fallback,
@@ -48,14 +48,14 @@
 		}
 	});
 
-	export function getTransform(): Transform {
+	export function getTransform(): Transform3D {
 		const positionVec = new Vector3(0, 0, 0);
 		const quaternionVec = new Quaternion(0, 0, 0, 0);
 		const scaleVec = new Vector3(0, 0, 0);
 		ref?.children[0].getWorldPosition(positionVec);
 		ref?.children[0].getWorldQuaternion(quaternionVec);
 		ref?.children[0].getWorldScale(scaleVec);
-		const transform: Transform = {
+		const transform: Transform3D = {
 			translate: { x: positionVec.x, y: positionVec.y, z: positionVec.z },
 			rotation: { x: quaternionVec.x, y: quaternionVec.y, z: quaternionVec.z, w: quaternionVec.w },
 			scale: { x: scaleVec.x, y: scaleVec.y, z: scaleVec.z }

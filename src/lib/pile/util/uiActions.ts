@@ -13,7 +13,7 @@ import {
 	type ModelName,
 	type PileDataPayload,
 	type Model,
-	type Transform
+	type Transform3D
 } from '..';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataPayload }) {
@@ -22,7 +22,7 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => Pile
 }
 
 export function addNewModel(modelName: ModelName) {
-	const baseTrandform: Transform = BASE_TRANSFORM;
+	const baseTrandform: Transform3D = BASE_TRANSFORM;
 	const path = getModelPath(modelName);
 	const model: Model = {
 		name: modelName,
