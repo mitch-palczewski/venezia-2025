@@ -1,7 +1,7 @@
 <script lang='ts'>
     import { T } from "@threlte/core";
     import { OrbitControls } from "@threlte/extras";
-    import ModelTemplate2 from "$lib/pile/models/modelTemplate2.svelte";
+    import ModelTemplate from "$lib/pile/models/modelTemplate.svelte";
 	import ArchwayMultiple01 from "$lib/components/models/_test/Archway_Multiple_01.svelte";
 	
 	
@@ -29,12 +29,12 @@
 <T.AmbientLight intensity={0.08} />
 
 
-
+<!--
 {#each modelInventory as model}
-	<ModelTemplate2
+	<ModelTemplate
 		name={model}
 		id={'00000'}
-		oncreate={(ref) => {
+		oncreate={() => {
             counter += 1
 			
 		}}
@@ -48,5 +48,7 @@
 		scale={[1,1,1]}
 	/>
 {/each}
+-->
+
 
 

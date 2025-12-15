@@ -12,9 +12,9 @@ import {
 	getNewID,
 	type ModelName,
 	type PileDataPayload,
-	type Model,
 	type Transform3D
 } from '..';
+import { PileObject } from '../models/model';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataPayload }) {
 	const positions: PileDataPayload = pileSceneRef.getPositions();
@@ -24,14 +24,12 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => Pile
 export function addNewModel(modelName: ModelName) {
 	const baseTrandform: Transform3D = BASE_TRANSFORM;
 	const path = getModelPath(modelName);
-	const model: Model = {
-		name: modelName,
-		modelPath: path,
-		id: getNewID(),
-		transform: baseTrandform,
-		ref: null,
-		shown: true
-	};
+	const model = new PileObject({
+		name: modelName, 
+		id: getNewID(), 
+		modelPath: path, 
+		transform3D: baseTrandform
+	});
 	pileState.pileModels.push(model);
 }
 

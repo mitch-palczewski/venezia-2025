@@ -7,29 +7,29 @@
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import type { Transform3D } from '../types';
+	import type { PileObject } from './model';
 
 	let {
 		fallback,
 		error,
 		children,
 		ref = $bindable(),
-		name = '',
-		id = '',
+		pileObjectData,
 		...props
 	}: Props<Group> & {
-		ref?: Group;
+		
 		children?: Snippet<[{ ref: Group }]>;
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
-		name?: string;
-		id?: string;
+		ref?: Group;
+		pileObjectData: PileObject
 	} = $props();
 	interactivity();
 
-	let shown = $state(true);
-	const gltfPath = getModelPath(name);
+	let shown = $state(pileObjectData.shown);
+	const gltfPath = getModelPath(pileObjectData.name);
 	const gltf = useGltf(gltfPath);
-	console.log(name);
+	console.log(pileObjectData.name);
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
 			return [];
@@ -40,7 +40,7 @@
 	});
 
 	let showThisTransformControls = $derived.by(() => {
-		if (id && id != '' && isSelectedObject(id)) {
+		if (pileObjectData.id && pileObjectData.id != '' && isSelectedObject(pileObjectData.id)) {
 			return pileState.showTransformControls;
 		} else {
 			return false;
@@ -64,14 +64,14 @@
 
 	function handleDoubleClick(e: MouseEvent) {
 		e.stopPropagation();
-		if (!name) return;
-		if (isSelectedObject(id)) {
+		if (!pileObjectData.name) return;
+		if (isSelectedObject(pileObjectData.id)) {
 			pileState.showTransformControls = !pileState.showTransformControls;
 			pileState.selectedObjectID = null;
 			return;
 		} else {
 			if (ref) {
-				pileState.selectedObjectID = id;
+				pileState.selectedObjectID = pileObjectData.id;
 			}
 			pileState.showTransformControls = true;
 		}
@@ -120,6 +120,7 @@
 			>
 				<T.Group >
 					{@render sceneBuilder(sceneChildren)}
+					
 				</T.Group>
 			</TransformControls>
 		{/if}
