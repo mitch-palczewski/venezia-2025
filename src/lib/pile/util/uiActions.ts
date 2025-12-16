@@ -21,6 +21,11 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => Pile
 	uploadData(positions);
 }
 
+
+/**
+ * Creates a new PileObject and adds it to pileModels[]. 
+ * @param modelName A valid model name with corresponding .glb file
+ */
 export function addNewModel(modelName: ModelName) {
 	const baseTrandform: Transform3D = BASE_TRANSFORM;
 	const path = getModelPath(modelName);

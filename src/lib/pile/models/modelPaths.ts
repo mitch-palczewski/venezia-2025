@@ -4,6 +4,204 @@ Maintains Model -> Path
 
 import type { Transform3D } from '../types';
 
+
+interface ModelMapOptions {
+	name: string,
+	displayName?: string,
+	category?: string,
+	path: string
+}
+export class ModelMap {
+	readonly name: string;
+	readonly displayName: string;
+	readonly category: string| null = null;
+	readonly path: string;
+	
+	constructor({name, displayName, category: category, path}: ModelMapOptions){
+		this.name = name
+		this.displayName = displayName ?? name;
+		this.category = category ?? null;
+		this.path = path
+	}
+}
+
+
+export class ModelInventory {
+	private items: ModelMap[];
+
+	constructor (models: ModelMap[]){
+		this.items = models
+	}
+
+	public validate(): void {
+        const names = new Set<string>();
+        const displayNames = new Set<string>();
+        const paths = new Set<string>();
+
+       	this.items.forEach((model, index) => {
+            if (!model.path.toLowerCase().endsWith('.glb')) {
+                throw new Error(`Invalid Extension: Model "${model.name}" at index ${index} must be a .glb file.`);
+            }
+            if (names.has(model.name)) {
+                throw new Error(`Duplicate Name: "${model.name}"`);
+            }
+            if (displayNames.has(model.displayName)) {
+                throw new Error(`Duplicate Display Name: "${model.displayName}"`);
+            }
+            if (paths.has(model.path)) {
+                throw new Error(`Duplicate Path: "${model.path}"`);
+            }
+
+            names.add(model.name);
+            displayNames.add(model.displayName);
+            paths.add(model.path);
+        });
+
+        console.log(`✅ Inventory Validated: ${this.items.length} models loaded.`);
+    }
+
+	public exists(name: string): boolean {
+        return this.items.some(m => m.name === name);
+    }
+
+    public get(name: string): ModelMap | undefined {
+        return this.items.find(m => m.name === name);
+    }
+
+	public add(models: ModelMap[]): void{
+		this.items = [...this.items, ...models];
+	}
+
+}
+
+
+const UndertowModelInventory:ModelMap[] = [
+	new ModelMap({
+		name: 'Arch_01',
+		displayName: 'Arch',
+		path: '/models/undertow/Arch_01.glb'
+	}),
+	new ModelMap({
+		name: 'Bull_01',
+		displayName: 'Bull 1',
+		path: '/models/undertow/Bull_01.glb'
+	}),
+	new ModelMap({
+		name: 'Bull_02',
+		displayName: 'Bull 2',
+		path: '/models/undertow/Bull_02.glb'
+	}),
+	new ModelMap({
+		name: 'BurntBoy_01',
+		displayName: 'Burnt Boy',
+		path: '/models/undertow/BurntBoy_01.glb'
+	}),
+	new ModelMap({
+		name: 'Cavallo_01',
+		displayName: 'Cavallo',
+		path: '/models/undertow/Cavallo_01.glb'
+	}),
+	new ModelMap({
+		name: 'Crocodile_01',
+		displayName: 'Crocodile',
+		path: '/models/undertow/Crocodile_01.glb'
+	}),
+	new ModelMap({
+		name: 'Gargoyle_01',
+		displayName: 'Gargoyle 1',
+		path: '/models/undertow/Gargoyle_01.glb'
+	}),
+	new ModelMap({
+		name: 'Gargoyle_02',
+		displayName: 'Gargoyle 2',
+		path: '/models/undertow/Gargoyle_02.glb'
+	}),
+	new ModelMap({
+		name: 'Gargoyle_04',
+		displayName: 'Gargoyle 4',
+		path: '/models/undertow/Gargoyle_04.glb'
+	}),
+	new ModelMap({
+		name: 'Gargoyle_05',
+		displayName: 'Gargoyle 5',
+		path: '/models/undertow/Gargoyle_05.glb'
+	}),
+	new ModelMap({
+		name: 'Leone_01',
+		displayName: '',
+		path: '/models/undertow/Leone_01.glb'
+	}),
+	new ModelMap({
+		name: 'Misc_01',
+		displayName: '',
+		path: '/models/undertow/Misc_01.glb'
+	}),
+	new ModelMap({
+		name: 'Misc_02',
+		displayName: '',
+		path: '/models/undertow/Misc_02.glb'
+	}),
+	new ModelMap({
+		name: 'Misc_05',
+		displayName: '',
+		path: '/models/undertow/Misc_05.glb'
+	}),
+	new ModelMap({
+		name: 'Zardoz_01',
+		displayName: '',
+		path: '/models/undertow/Zardoz_01.glb'
+	}),
+]
+export const modelInventory:ModelInventory = new ModelInventory(UndertowModelInventory)
+
+
+/**
+ * Validates a ModelMap inventory for path correctness and uniqueness.
+ * Throws an error if validation fails to prevent silent failures in the 3D scene.
+ */
+export function validateModelInventory(inventory: ModelMap[]){
+	const names = new Set<string>();
+	const displayNames = new Set<string>(); 
+	const paths = new Set<string>();
+
+	inventory.forEach((model, index) => {
+		// Checks for .glb extension 
+		if (!model.path.toLowerCase().endsWith('.glb')) {
+			throw new Error(
+				`Invalid Extension: Model "${model.name}" at index ${index} must be a .glb file. Path: ${model.path}`
+			)
+		}
+
+		// Checks for unique Name
+		if (names.has(model.name)) {
+            throw new Error(`Duplicate Name: The name "${model.name}" is used more than once in the inventory.`);
+        }
+        names.add(model.name);
+		
+		// Checks for unique displayName
+		if (displayNames.has(model.displayName)) {
+            throw new Error(`Duplicate Name: The name "${model.displayName}" is used more than once in the inventory.`);
+        }
+        displayNames.add(model.displayName);
+
+		// Checks for unqiue Paths
+		if (paths.has(model.path)) {
+            throw new Error(`Duplicate Path: The path "${model.path}" is assigned to multiple models.`);
+        }
+        paths.add(model.path);
+	});
+	console.log(`✅ Inventory Validated: ${inventory.length} models are ready to load.`);
+}
+/**
+ * Finds a model by name. Returns the ModelMap object or undefined if not found.
+ */
+export function getModelByName(nameToSearch: string): ModelMap | undefined {
+    return UndertowModelInventory.find(model => model.name === nameToSearch);
+}
+
+
+
+
 export type ModelName = UndertowModel | Various;
 
 export type UndertowModel =
@@ -78,11 +276,4 @@ export function getModelPath(modelName: string): string {
 
 
 
-/**
- * Checks if a string is a modelname
- * @param x checked string
- * @returns object as typed ModelName
- */
-export function isModelName(x: string): x is ModelName {
-	return Object.prototype.hasOwnProperty.call(MODEL_PATHS, x);
-}
+
