@@ -13,7 +13,7 @@
 		PileDataPayload,
 		RawDataPayload as RawPayload
 	} from './types';
-	import { getModelPath } from './models/modelPaths';
+	import { pileModelInventory } from './models/modelPaths';
 	import { PileObject } from './models/model';
 
 	interface Props {
@@ -64,7 +64,7 @@
 			const downloadedModel2 = new PileObject({
 				name: value.name,
 				id: key,
-				modelPath: getModelPath(value.name),
+				modelPath: pileModelInventory.get(value.name)?.path ?? '',
 				transform3D: value.transform
 			});
 			pileState.pileModels.push(downloadedModel2);

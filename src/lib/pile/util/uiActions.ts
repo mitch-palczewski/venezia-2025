@@ -5,14 +5,13 @@
 
 import type { Mesh } from 'three';
 import {
-	getModelPath,
 	pileState,
 	uploadData,
 	BASE_TRANSFORM,
 	getNewID,
-	type ModelName,
 	type PileDataPayload,
-	type Transform3D
+	type Transform3D,
+	pileModelInventory
 } from '..';
 import { PileObject } from '../models/model';
 
@@ -26,9 +25,9 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => Pile
  * Creates a new PileObject and adds it to pileModels[]. 
  * @param modelName A valid model name with corresponding .glb file
  */
-export function addNewModel(modelName: ModelName) {
+export function addNewModel(modelName: string) {
 	const baseTrandform: Transform3D = BASE_TRANSFORM;
-	const path = getModelPath(modelName);
+	const path = pileModelInventory.get(modelName)?.path ?? ''
 	const model = new PileObject({
 		name: modelName, 
 		id: getNewID(), 

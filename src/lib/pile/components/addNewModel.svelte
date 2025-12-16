@@ -1,8 +1,8 @@
 <script lang="ts">
-	import { MODEL_PATHS, type ModelName } from '../models/modelPaths';
+	import { pileModelInventory } from '../models/modelPaths';
     import { addNewModel } from '../util/uiActions';
 
-	let selectedModel: ModelName | null = $state(null);
+	let selectedModel: string | null = $state(null);
 
 	function handleAdd() {
         if(selectedModel){
@@ -14,9 +14,9 @@
 <form onsubmit={handleAdd}>
 	<div class="grid grid-cols-2 gap-5">
 		<select bind:value={selectedModel}>
-			{#each Object.entries(MODEL_PATHS) as [name, path] (name)}
-				<option value={name}>
-					{name}
+			{#each pileModelInventory.getAll() as modelMap}
+				<option value={modelMap.name}>
+					{modelMap.displayName}
 				</option>
 			{/each}
 		</select>

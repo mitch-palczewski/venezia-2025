@@ -3,7 +3,7 @@
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { Group, Vector3, Quaternion, Mesh, Object3D } from 'three';
 	import { pileState, isSelectedObject } from '../util/pileState.svelte';
-	import { getModelPath, modelInventory } from './modelPaths';
+	import { pileModelInventory } from './modelPaths';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import type { Transform3D } from '../types';
@@ -27,8 +27,8 @@
 	interactivity();
 
 	let shown = $state(pileObjectData.shown);
-	const gltfPath = getModelPath(pileObjectData.name);
-	const gltf = useGltf(gltfPath);
+	const modelEntry = pileModelInventory.get(pileObjectData.name)
+	const gltf = useGltf(modelEntry?.path ?? '');
 	console.log(pileObjectData.name);
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
