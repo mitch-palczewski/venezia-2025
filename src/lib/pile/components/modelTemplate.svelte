@@ -3,11 +3,11 @@
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { Group, Vector3, Quaternion, Mesh, Object3D } from 'three';
 	import { pileState, isSelectedObject } from '../util/pileState.svelte';
-	import { pileModelInventory } from './modelPaths';
+	import { pileModelInventory } from '../util/modelInventory';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import type { Transform3D } from '../types';
-	import type { PileObject } from './model';
+	import type { PileObject } from '../util/pileObject';
 
 	let {
 		fallback,

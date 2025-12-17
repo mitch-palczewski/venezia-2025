@@ -1,7 +1,3 @@
-/*
-Maintains Model -> Path
- */
-
 import type { Transform3D } from '../types';
 
 
@@ -11,7 +7,7 @@ interface ModelMapOptions {
 	category?: string,
 	path: string
 }
-export class ModelMap {
+class ModelMap {
 	readonly name: string;
 	readonly displayName: string;
 	readonly category: string| null = null;
@@ -25,7 +21,7 @@ export class ModelMap {
 	}
 }
 
-export class ModelInventory {
+class ModelInventory {
 	private items: ModelMap[] = [];
 
 	constructor (models?: ModelMap[]){
@@ -73,9 +69,6 @@ export class ModelInventory {
 		this.items = [...this.items, ...models];
 	}
 
-	/**
-     * Returns a copy of all ModelMap objects in the inventory.
-     */
 	public getAll(): ModelMap[] {
         return [...this.items];
     }
@@ -178,8 +171,7 @@ pileModelInventory.add(variousModels)
 
 
 
-
-
+//TODO move this to another file. something like classes for each transform 
 export const BASE_TRANSFORM: Transform3D = {
 	translate: { x: 0, y: 0, z: 0 },
 	rotation: { x: 0, y: 0, z: 0, w: 0 },

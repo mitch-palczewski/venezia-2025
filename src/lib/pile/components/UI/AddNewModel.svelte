@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { pileModelInventory } from '../models/modelPaths';
-    import { addNewModel } from '../util/uiActions';
+	import { pileModelInventory } from '../../util/modelInventory';
+    import { addNewModel } from '../../util/uiActions';
 
 	let selectedModel: string | null = $state(null);
 

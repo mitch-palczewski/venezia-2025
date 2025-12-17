@@ -1,5 +1,5 @@
 import { type Group, type Object3DEventMap } from 'three';
-import type { Transform3D, Vec3 } from '..';
+import type { Transform3D} from '..';
 
 
 interface PileObjectOptions {
@@ -28,14 +28,3 @@ export class PileObject {
 }
 
 
-
-
-export function isVec3(value: unknown): value is Vec3{
-    return (
-        typeof value === 'object' && 
-        value != null &&
-        typeof (value as Vec3).x === 'number' &&
-        typeof (value as Vec3).y === 'number' &&
-        typeof (value as Vec3).z === 'number' 
-    );
-}

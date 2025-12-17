@@ -13,7 +13,7 @@ import {
 	type Transform3D,
 	pileModelInventory
 } from '..';
-import { PileObject } from '../models/model';
+import { PileObject } from './pileObject';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataPayload }) {
 	const positions: PileDataPayload = pileSceneRef.getPositions();

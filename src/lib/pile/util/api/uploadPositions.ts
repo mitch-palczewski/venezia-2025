@@ -2,7 +2,7 @@
 Formats positionData for upload to Vercel Blob Storage
 */
 import { _OBJECT_POSITIONS_FILE_NAME, _PILE_PAGE_PATH } from "$lib/constants";
-import type { PileDataPayload } from "../types";
+import type { PileDataPayload } from "../../types";
 
 
 export async function uploadData(positionsData: PileDataPayload) {

@@ -6,15 +6,15 @@
 	import { Quaternion, Vector3 } from 'three';
 	import { pileState } from './util/pileState.svelte';
 	import TestWorld from '$lib/scenes/demos/testWorld.svelte';
-	import ModelTemplate from './models/modelTemplate.svelte';
+	import ModelTemplate from './components/modelTemplate.svelte';
 	import type {
 		ObjectPositionPayload,
 		Transform3D,
 		PileDataPayload,
 		RawDataPayload as RawPayload
 	} from './types';
-	import { pileModelInventory } from './models/modelPaths';
-	import { PileObject } from './models/model';
+	import { pileModelInventory } from './util/modelInventory';
+	import { PileObject } from './util/pileObject';
 
 	interface Props {
 		rawPositionData: RawPayload;

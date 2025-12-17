@@ -1,7 +1,7 @@
 <script lang='ts'>
     import { T } from "@threlte/core";
     import { OrbitControls } from "@threlte/extras";
-    import ModelTemplate from "$lib/pile/models/modelTemplate.svelte";
+    import ModelTemplate from "$lib/pile/components/modelTemplate.svelte";
 	import ArchwayMultiple01 from "$lib/components/models/_test/Archway_Multiple_01.svelte";
 	
 	

@@ -3,7 +3,7 @@ Defines Types used in Pile
  */
 
 
-import type { PileObject } from './models/model';
+import type { PileObject } from './util/pileObject';
 
 
 /** For Construction and Parsing of Json Data (to be sent to cloud storage) */
