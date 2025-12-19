@@ -27,11 +27,11 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => Pile
  */
 export function addNewModel(modelName: string) {
 	const baseTrandform: Transform3D = BASE_TRANSFORM;
-	const path = pileModelInventory.get(modelName)?.path ?? ''
+	const modelData = pileModelInventory.get(modelName)
 	const model = new PileObject({
 		name: modelName, 
 		id: getNewID(), 
-		modelPath: path, 
+		modelPath: modelData?.path ?? '', 
 		transform3D: baseTrandform
 	});
 	pileState.pileModels.push(model);

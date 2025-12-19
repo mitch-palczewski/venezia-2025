@@ -1,27 +1,31 @@
 import type { Transform3D } from '../types';
 
+type ModelCategory = 'undertow' | 'various' | 'misc'
 
 interface ModelMapOptions {
 	name: string,
 	displayName?: string,
-	category?: string,
+	category?: ModelCategory,
 	path: string
+	baseScale?: number;
 }
 class ModelMap {
 	readonly name: string;
 	readonly displayName: string;
-	readonly category: string| null = null;
+	readonly category: ModelCategory;
 	readonly path: string;
+	readonly baseScale: number;
 	
-	constructor({name, displayName, category: category, path}: ModelMapOptions){
+	constructor({name, displayName, category = "misc", path, baseScale = 1}: ModelMapOptions){
 		this.name = name
 		this.displayName = displayName ?? name;
-		this.category = category ?? null;
+		this.category = category;
 		this.path = path
+		this.baseScale = baseScale
 	}
 }
 
-class ModelInventory {
+export class ModelInventory {
 	private items: ModelMap[] = [];
 
 	constructor (models?: ModelMap[]){
@@ -75,84 +79,100 @@ class ModelInventory {
 }
 
 
-const undertowModels:ModelMap[] = [
+export const undertowModels:ModelMap[] = [
 	new ModelMap({
 		name: 'Arch_01',
 		displayName: 'Arch',
-		path: '/models/undertow/Arch_01.glb'
+		path: '/models/undertow/Arch_01.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Bull_01',
 		displayName: 'Bull 1',
-		path: '/models/undertow/Bull_01.glb'
+		path: '/models/undertow/Bull_01.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Bull_02',
 		displayName: 'Bull 2',
-		path: '/models/undertow/Bull_02.glb'
+		path: '/models/undertow/Bull_02.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'BurntBoy_01',
 		displayName: 'Burnt Boy',
-		path: '/models/undertow/BurntBoy_01.glb'
+		path: '/models/undertow/BurntBoy_01.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Cavallo_01',
 		displayName: 'Cavallo',
-		path: '/models/undertow/Cavallo_01.glb'
+		path: '/models/undertow/Cavallo_01.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Crocodile_01',
 		displayName: 'Crocodile',
-		path: '/models/undertow/Crocodile_01.glb'
+		path: '/models/undertow/Crocodile_01.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Gargoyle_01',
 		displayName: 'Gargoyle 1',
-		path: '/models/undertow/Gargoyle_01.glb'
+		path: '/models/undertow/Gargoyle_01.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Gargoyle_02',
 		displayName: 'Gargoyle 2',
-		path: '/models/undertow/Gargoyle_02.glb'
+		path: '/models/undertow/Gargoyle_02.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Gargoyle_04',
 		displayName: 'Gargoyle 4',
-		path: '/models/undertow/Gargoyle_04.glb'
+		path: '/models/undertow/Gargoyle_04.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Gargoyle_05',
 		displayName: 'Gargoyle 5',
-		path: '/models/undertow/Gargoyle_05.glb'
+		path: '/models/undertow/Gargoyle_05.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Leone_01',
 		displayName: 'Leone',
-		path: '/models/undertow/Leone_01.glb'
+		path: '/models/undertow/Leone_01.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Misc_01',
 		displayName: 'Pizzas Alive!',
-		path: '/models/undertow/Misc_01.glb'
+		path: '/models/undertow/Misc_01.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Misc_02',
 		displayName: 'Jaw Line',
-		path: '/models/undertow/Misc_02.glb'
+		path: '/models/undertow/Misc_02.glb',
+		category: 'undertow',
+		baseScale: 10
 	}),
 	new ModelMap({
 		name: 'Misc_05',
 		displayName: 'Head Smoking',
-		path: '/models/undertow/Misc_05.glb'
+		path: '/models/undertow/Misc_05.glb',
+		category: 'undertow'
 	}),
 	new ModelMap({
 		name: 'Zardoz_01',
 		displayName: 'Zardoz',
-		path: '/models/undertow/Zardoz_01.glb'
+		path: '/models/undertow/Zardoz_01.glb',
+		category: 'undertow'
 	}),
 ]
-const variousModels: ModelMap[] = [
+export const variousModels: ModelMap[] = [
 	new ModelMap({
 		name: 'Archway_Multiple_01',
 		displayName: 'Archways',
