@@ -2,12 +2,11 @@
 	import { isInstanceOf, T } from '@threlte/core';
 	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { Group, Vector3, Quaternion, Mesh, Object3D } from 'three';
-	import { pileState, isSelectedObject } from '../util/pileState.svelte';
-	import { pileModelInventory } from '../util/modelInventory';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import type { Transform3D } from '../types';
 	import type { PileObject } from '../util/pileObject';
+	import type { PileApp } from '../util/pileApp';
 
 	let {
 		fallback,
@@ -15,19 +14,20 @@
 		children,
 		ref = $bindable(),
 		pileObjectData,
+		pileApp,
 		...props
 	}: Props<Group> & {
-		
 		children?: Snippet<[{ ref: Group }]>;
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
 		ref?: Group;
-		pileObjectData: PileObject
+		pileObjectData: PileObject;
+		pileApp: PileApp;
 	} = $props();
 	interactivity();
 
 	let shown = $state(pileObjectData.shown);
-	const modelEntry = pileModelInventory.get(pileObjectData.name)
+	const modelEntry = pileApp.modelInventory.get(pileObjectData.name);
 	const gltf = useGltf(modelEntry?.path ?? '');
 	console.log(pileObjectData.name);
 	const sceneChildren = $derived.by(() => {
@@ -40,8 +40,12 @@
 	});
 
 	let showThisTransformControls = $derived.by(() => {
-		if (pileObjectData.id && pileObjectData.id != '' && isSelectedObject(pileObjectData.id)) {
-			return pileState.showTransformControls;
+		if (
+			pileObjectData.id &&
+			pileObjectData.id != '' &&
+			pileApp.state.isSelected(pileObjectData.id)
+		) {
+			return pileApp.state.showTransformControls;
 		} else {
 			return false;
 		}
@@ -65,15 +69,15 @@
 	function handleDoubleClick(e: MouseEvent) {
 		e.stopPropagation();
 		if (!pileObjectData.name) return;
-		if (isSelectedObject(pileObjectData.id)) {
-			pileState.showTransformControls = !pileState.showTransformControls;
-			pileState.selectedObjectID = null;
+		if (pileApp.state.isSelected(pileObjectData.id)) {
+			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;
+			pileApp.state.selectedObjectID = null;
 			return;
 		} else {
 			if (ref) {
-				pileState.selectedObjectID = pileObjectData.id;
+				pileApp.state.selectedObjectID = pileObjectData.id;
 			}
-			pileState.showTransformControls = true;
+			pileApp.state.showTransformControls = true;
 		}
 	}
 </script>
@@ -116,11 +120,10 @@
 				showX={showThisTransformControls}
 				showY={showThisTransformControls}
 				showZ={showThisTransformControls}
-				mode={pileState.transformControlsMode}
+				mode={pileApp.state.transformControlsMode}
 			>
-				<T.Group >
+				<T.Group>
 					{@render sceneBuilder(sceneChildren)}
-					
 				</T.Group>
 			</TransformControls>
 		{/if}

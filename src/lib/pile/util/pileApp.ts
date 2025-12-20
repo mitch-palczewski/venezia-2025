@@ -1,21 +1,22 @@
 import { Quaternion, Vector3 } from 'three';
-import type { ObjectPositionPayload, RawDataPayload, Transform3D } from './types';
-import { ModelInventory, undertowModels, variousModels } from './util/modelInventory';
-import { PileObject } from './util/pileObject';
-import { PileState } from './util/pileState.svelte';
+import type { ObjectPositionPayload, RawDataPayload, Transform3D } from '../types';
+import { ModelInventory, undertowModels, variousModels } from './modelInventory';
+import { PileObject } from './pileObject';
+import { PileState } from './pileState.svelte';
 
 export class PileApp {
-	pileModelInventory = new ModelInventory();
-	pileState = new PileState();
-	constructor() {
+	modelInventory = new ModelInventory();
+	state = new PileState();
+	constructor(rawPositionData?:RawDataPayload) {
 		this.initPileApp();
+        if (rawPositionData) {this.initObjectPositions(rawPositionData)}
 	}
 
 
 
 	private initPileApp() {
-		this.pileModelInventory.add(undertowModels);
-		this.pileModelInventory.add(variousModels);
+		this.modelInventory.add(undertowModels);
+		this.modelInventory.add(variousModels);
 	}
 
 
@@ -25,17 +26,17 @@ export class PileApp {
 			const downloadedModel2 = new PileObject({
 				name: value.name,
 				id: key,
-				modelPath: this.pileModelInventory.get(value.name)?.path ?? '',
+				modelPath: this.modelInventory.get(value.name)?.path ?? '',
 				transform3D: value.transform
 			});
-			this.pileState.pileModels.push(downloadedModel2);
+			this.state.models.push(downloadedModel2);
 		}
 	}
 
     public getPileObjectPositions(){
         const objectPositionsPayload: ObjectPositionPayload = {};
 		let id = 1001;
-		this.pileState.pileModels.forEach((model) => {
+		this.state.models.forEach((model) => {
 			try {
 				if (!model.shown) {
 					return;

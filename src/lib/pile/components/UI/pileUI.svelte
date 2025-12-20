@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { pileState } from '$lib/pile';
 	import { uploadDataFactory, deleteSelectedModel } from '../../util/uiActions';
 	import AddNewModel from './AddNewModel.svelte';
 
@@ -13,30 +12,30 @@
 			class="relative h-auto w-auto rounded bg-red-600 px-1 py-2 text-sm text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 			>Upload Position Data</button
 		>
-		{#if pileState.selectedObjectID}
-		<button
-			onclick={() => (pileState.transformControlsMode = 'translate')}
-			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
-			>Translate</button
-		>
-		<button
-			onclick={() => (pileState.transformControlsMode = 'rotate')}
-			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
-			>Rotate</button
-		>
-		<button
-			onclick={() => (pileState.transformControlsMode = 'scale')}
-			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
-			>Scale</button
-		>
-		<button
-			onclick={deleteSelectedModel}
-			class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
-			>Delete</button
-		>
-			
+		{#if pileSceneRef?.pileApp?.state.selectedObjectID}
+			<button
+				onclick={() => (pileSceneRef.pileApp.state.transformControlsMode = 'translate')}
+				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
+				>Translate</button
+			>
+			<button
+				onclick={() => (pileSceneRef.pileApp.state.transformControlsMode = 'rotate')}
+				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
+				>Rotate</button
+			>
+			<button
+				onclick={() => (pileSceneRef.pileApp.state.transformControlsMode = 'scale')}
+				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
+				>Scale</button
+			>
+			<button
+				onclick={() => deleteSelectedModel(pileSceneRef.pileApp.state)}
+				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
+				>Delete</button
+			>
 		{/if}
-		
-		<AddNewModel/>
+		{#if pileSceneRef?.pileApp}
+			<AddNewModel pileApp={pileSceneRef.pileApp} />
+		{/if}
 	</div>
 </div>

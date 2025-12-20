@@ -13,7 +13,7 @@ Pile webpage. Combines PileUI and PileScene.
 
 </script>
 
-<PileUI pileSceneRef={pileSceneRef}/>
+
 
 <CanvasPortal>
 		<PileScene 
@@ -21,3 +21,4 @@ Pile webpage. Combines PileUI and PileScene.
 			rawPositionData = {data}
 		/>
 </CanvasPortal>
+<PileUI pileSceneRef={pileSceneRef}/>
