@@ -1,5 +1,5 @@
 import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
-import type { PileObject } from './pileObject';
+import type { PileObject } from './pileObject.svelte';
 
 export class PileState {
 	selectedObjectID = $state<string | null>(null);
@@ -26,5 +26,14 @@ export class PileState {
 	}
 	this.maxID += 1;
 	return this.maxID.toString();
+	}
+
+	public getSelectedModelObject(): PileObject |  null{
+		for (const model of this.models){
+			if (model.id === this.selectedObjectID){
+				return model
+			}
+		}
+		return null
 	}
 }

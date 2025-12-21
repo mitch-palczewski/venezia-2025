@@ -1,7 +1,7 @@
 import { Quaternion, Vector3 } from 'three';
 import type { ObjectPositionPayload, RawDataPayload, Transform3D } from '../types';
 import { ModelInventory, undertowModels, variousModels } from './modelInventory';
-import { PileObject } from './pileObject';
+import { PileObject } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 
 export class PileApp {

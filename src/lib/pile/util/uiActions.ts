@@ -13,7 +13,7 @@ import {
 	pileModelInventory,
 	PileState
 } from '..';
-import { PileObject } from './pileObject';
+import { PileObject } from './pileObject.svelte';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataPayload }) {
 	const positions: PileDataPayload = pileSceneRef.getPositions();

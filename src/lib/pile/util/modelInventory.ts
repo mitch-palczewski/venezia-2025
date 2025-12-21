@@ -79,6 +79,8 @@ export class ModelInventory {
 }
 
 
+
+
 export const undertowModels:ModelMap[] = [
 	new ModelMap({
 		name: 'Arch_01',
@@ -183,6 +185,12 @@ export const variousModels: ModelMap[] = [
 		displayName: 'Head 1',
 		path: '/models/various/BT_02.glb'
 	}),
+	new ModelMap({
+		name: 'Misc_05_fingers',
+		displayName: 'fingers',
+		path: '/models/various/Misc_05_fingers.glb'
+	}),
+
 ]
 export const pileModelInventory:ModelInventory = new ModelInventory()
 pileModelInventory.add(undertowModels)

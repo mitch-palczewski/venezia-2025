@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { uploadDataFactory, deleteSelectedModel } from '../../util/uiActions';
 	import AddNewModel from './AddNewModel.svelte';
+	import ScaleSlider from './ScaleSlider.svelte';
 
 	let { pileSceneRef } = $props();
 </script>
@@ -23,11 +24,7 @@
 				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 				>Rotate</button
 			>
-			<button
-				onclick={() => (pileSceneRef.pileApp.state.transformControlsMode = 'scale')}
-				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
-				>Scale</button
-			>
+			<ScaleSlider pileState = {pileSceneRef.pileApp.state}/>
 			<button
 				onclick={() => deleteSelectedModel(pileSceneRef.pileApp.state)}
 				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"

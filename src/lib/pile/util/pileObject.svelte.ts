@@ -17,17 +17,16 @@ export class PileObject {
 	transform3D: Transform3D;
 	ref: Group<Object3DEventMap> | null = null; 
 	shown: boolean = true;
-	uniformScale: number;
-
+	uniformScale: number = $state(1);
 	
 	constructor(
-        {name, id, modelPath, transform3D, uniformScale=1}: PileObjectOptions
+        {name, id, modelPath, transform3D, uniformScale}: PileObjectOptions
     ) {
 		this.name = name;
 		this.id = id;
 		this.modelPath = modelPath;
 		this.transform3D = transform3D;
-		this.uniformScale = uniformScale
+		if (uniformScale){this.uniformScale = uniformScale}
 	}
 }
 

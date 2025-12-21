@@ -5,7 +5,7 @@
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import type { Transform3D } from '../types';
-	import type { PileObject } from '../util/pileObject';
+	import type { PileObject } from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp';
 
 	let {
@@ -104,7 +104,7 @@
 				position={[child.position.x, child.position.y, child.position.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
 				raycast={meshBounds}
-				ondblclick={handleDoubleClick}
+				onclick={handleDoubleClick}
 			/>
 		{/if}
 	{/each}
@@ -122,7 +122,7 @@
 				showZ={showThisTransformControls}
 				mode={pileApp.state.transformControlsMode}
 			>
-				<T.Group>
+				<T.Group scale={pileObjectData.uniformScale}>
 					{@render sceneBuilder(sceneChildren)}
 				</T.Group>
 			</TransformControls>
