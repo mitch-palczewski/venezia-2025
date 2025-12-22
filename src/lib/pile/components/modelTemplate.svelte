@@ -7,6 +7,7 @@
 	import type { Transform3D } from '../types';
 	import type { PileObject } from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp';
+	import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 
 	let {
 		fallback,
