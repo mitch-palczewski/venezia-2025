@@ -78,13 +78,7 @@ export class ModelInventory {
     }
 }
 
-/*
-  new ModelMap({
-		name: 'Misc_05_fingers',
-		displayName: 'Pot Face Fingers',
-		path: '/models/various/Misc_05_fingers.glb'
-	}),
- */
+
 
 
 export const undertowModels:ModelMap[] = [
@@ -219,7 +213,13 @@ export const architectureModels: ModelMap[]=[
 	}),
 ]
 
-
+/*
+  new ModelMap({
+		name: 'Misc_05_fingers',
+		displayName: 'Pot Face Fingers',
+		path: '/models/various/Misc_05_fingers.glb'
+	}),
+ */
 
 
 

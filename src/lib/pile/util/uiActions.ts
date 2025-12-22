@@ -32,7 +32,8 @@ export function addNewModel(modelName: string, pileApp: PileApp) {
 		name: modelName, 
 		id: pileApp.state.getUniqueID(), 
 		modelPath: modelData?.path ?? '', 
-		transform3D: baseTrandform
+		transform3D: baseTrandform,
+		uniformScale: 1
 	});
 	pileApp.state.models.push(model);
 }

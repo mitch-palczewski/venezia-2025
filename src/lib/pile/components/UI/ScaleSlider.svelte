@@ -1,14 +1,20 @@
 <script>
-	
-	let {pileState} = $props()
-  let count = $state(0);
-  $effect(() => {
-    console.log(`The count is now: ${count}`);
-	const selectedObject = pileState.getSelectedModelObject
-	selectedObject.uniformScale = count
-  });
+	let { pileState } = $props();
+	let count = $derived(pileState.getSelectedModelObject().uniformScale)
+
+
+	$effect(() => {
+    if(!count){
+      count = 1
+    }
+    pileState.getSelectedModelObject().uniformScale = count
+    //pileState.getSelectedModelObject() = count
+	});
 </script>
 
-<input type="number" bind:value={count} />
-
-<p>The number is: {count}</p>
+<input 
+  bind:value={count}
+  type="number" 
+  min=".1"
+  step=".5"
+  />

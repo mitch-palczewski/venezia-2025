@@ -28,6 +28,10 @@ export class PileState {
 	return this.maxID.toString();
 	}
 
+	public clearAllModels(){
+		this.models = [];
+	}
+
 	public getSelectedModelObject(): PileObject |  null{
 		for (const model of this.models){
 			if (model.id === this.selectedObjectID){

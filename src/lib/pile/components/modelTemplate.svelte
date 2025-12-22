@@ -13,7 +13,7 @@
 		error,
 		children,
 		ref = $bindable(),
-		pileObjectData,
+		pileObjectData: objectData,
 		pileApp,
 		...props
 	}: Props<Group> & {
@@ -26,10 +26,10 @@
 	} = $props();
 	interactivity();
 
-	let shown = $state(pileObjectData.shown);
-	const modelEntry = pileApp.modelInventory.get(pileObjectData.name);
+	let shown = $state(objectData.shown);
+	const modelEntry = pileApp.modelInventory.get(objectData.name);
 	const gltf = useGltf(modelEntry?.path ?? '');
-	console.log(pileObjectData.name);
+	console.log(objectData.name);
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
 			return [];
@@ -41,9 +41,9 @@
 
 	let showThisTransformControls = $derived.by(() => {
 		if (
-			pileObjectData.id &&
-			pileObjectData.id != '' &&
-			pileApp.state.isSelected(pileObjectData.id)
+			objectData.id &&
+			objectData.id != '' &&
+			pileApp.state.isSelected(objectData.id)
 		) {
 			return pileApp.state.showTransformControls;
 		} else {
@@ -66,16 +66,20 @@
 		return transform;
 	}
 
-	function handleDoubleClick(e: MouseEvent) {
+
+	/**
+	 * Modifies the pile state showTransformControls and selectedObjectID
+	*/
+	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
-		if (!pileObjectData.name) return;
-		if (pileApp.state.isSelected(pileObjectData.id)) {
+		if (!objectData.id) return;
+		if (pileApp.state.isSelected(objectData.id)) {
 			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;
 			pileApp.state.selectedObjectID = null;
 			return;
 		} else {
 			if (ref) {
-				pileApp.state.selectedObjectID = pileObjectData.id;
+				pileApp.state.selectedObjectID = objectData.id;
 			}
 			pileApp.state.showTransformControls = true;
 		}
@@ -104,14 +108,14 @@
 				position={[child.position.x, child.position.y, child.position.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
 				raycast={meshBounds}
-				onclick={handleDoubleClick}
+				onclick={handleModelClick}
 			/>
 		{/if}
 	{/each}
 {/snippet}
 
 <!-- MAIN EXECUTION -->
-<T.Group bind:ref dispose={true} {name} {...props}>
+<T.Group bind:ref dispose={true} {name} {...props} scale={objectData.uniformScale!}>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}
@@ -122,7 +126,7 @@
 				showZ={showThisTransformControls}
 				mode={pileApp.state.transformControlsMode}
 			>
-				<T.Group scale={pileObjectData.uniformScale}>
+				<T.Group >
 					{@render sceneBuilder(sceneChildren)}
 				</T.Group>
 			</TransformControls>

@@ -10,6 +10,7 @@ export class PileApp {
 	constructor(rawPositionData?:RawDataPayload) {
 		this.initPileApp();
         if (rawPositionData) {this.initObjectPositions(rawPositionData)}
+		
 	}
 
 
@@ -29,7 +30,8 @@ export class PileApp {
 				name: value.name,
 				id: key,
 				modelPath: this.modelInventory.get(value.name)?.path ?? '',
-				transform3D: value.transform
+				transform3D: value.transform,
+				uniformScale: (value.transform.scale.x + value.transform.scale.y + value.transform.scale.z)/3
 			});
 			this.state.models.push(downloadedModel2);
 		}
