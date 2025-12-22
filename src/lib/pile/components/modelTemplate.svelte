@@ -35,7 +35,7 @@
 			return [];
 		}
 		const thisSceneChildren = Object.values($gltf.scene.children) as Mesh[];
-		//console.log(thisSceneChildren)
+		console.log(thisSceneChildren)
 		return thisSceneChildren;
 	});
 
@@ -89,7 +89,7 @@
  -->
 {#snippet sceneBuilder(sceneChildren: Object3D[])}
 	{#each sceneChildren as child}
-		{#if child.type == 'Group' && child.children}
+		{#if child.type == 'Group' && child.children || child.type == 'Object3D' && child.children}
 			<T.Group
 				position={[child.position.x, child.position.y, child.position.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}

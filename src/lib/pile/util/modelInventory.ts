@@ -78,7 +78,13 @@ export class ModelInventory {
     }
 }
 
-
+/*
+  new ModelMap({
+		name: 'Misc_05_fingers',
+		displayName: 'Pot Face Fingers',
+		path: '/models/various/Misc_05_fingers.glb'
+	}),
+ */
 
 
 export const undertowModels:ModelMap[] = [
@@ -185,16 +191,35 @@ export const variousModels: ModelMap[] = [
 		displayName: 'Head 1',
 		path: '/models/various/BT_02.glb'
 	}),
-	new ModelMap({
-		name: 'Misc_05_fingers',
-		displayName: 'fingers',
-		path: '/models/various/Misc_05_fingers.glb'
-	}),
+	
 
 ]
-export const pileModelInventory:ModelInventory = new ModelInventory()
-pileModelInventory.add(undertowModels)
-pileModelInventory.add(variousModels)
+export const potFace: ModelMap[]=[
+	new ModelMap({
+		name: 'Misc_05_fingers',
+		displayName: 'Pot Face Fingers',
+		path: '/models/pot_face/Misc_05_fingers.glb'
+	}),
+	new ModelMap({
+		name: 'Misc_05_big_eye',
+		displayName: 'Pot Face Big Eye',
+		path: '/models/pot_face/Misc_05_big_eye.glb'
+	}),
+	new ModelMap({
+		name: 'Misc_05_pot',
+		displayName: 'Pot For Face',
+		path: '/models/pot_face/Misc_05_pot.glb'
+	}),
+]
+export const architectureModels: ModelMap[]=[
+	new ModelMap({
+		name: 'Optimize_02',
+		displayName: 'Spire 01',
+		path: '/models/architecture/Optimize_02.glb'
+	}),
+]
+
+
 
 
 

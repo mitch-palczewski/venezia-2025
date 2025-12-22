@@ -36,7 +36,7 @@
 
 
 <TestWorld />
-<Environment url={'/images/environment/world.jpg'} isBackground={true} />
+<Environment url={'/images/environment/yellow.png'} isBackground={true} />
 
 {#each pileApp.state.models as model}
 	<ModelTemplate

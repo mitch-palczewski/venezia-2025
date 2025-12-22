@@ -10,10 +10,10 @@ import {
 	BASE_TRANSFORM,
 	type PileDataPayload,
 	type Transform3D,
-	pileModelInventory,
 	PileState
 } from '..';
 import { PileObject } from './pileObject.svelte';
+import type { PileApp } from './pileApp';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataPayload }) {
 	const positions: PileDataPayload = pileSceneRef.getPositions();
@@ -25,16 +25,16 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => Pile
  * Creates a new PileObject and adds it to pileModels[]. 
  * @param modelName A valid model name with corresponding .glb file
  */
-export function addNewModel(modelName: string, pileState: PileState) {
+export function addNewModel(modelName: string, pileApp: PileApp) {
 	const baseTrandform: Transform3D = BASE_TRANSFORM;
-	const modelData = pileModelInventory.get(modelName)
+	const modelData = pileApp.modelInventory.get(modelName)
 	const model = new PileObject({
 		name: modelName, 
-		id: pileState.getUniqueID(), 
+		id: pileApp.state.getUniqueID(), 
 		modelPath: modelData?.path ?? '', 
 		transform3D: baseTrandform
 	});
-	pileState.models.push(model);
+	pileApp.state.models.push(model);
 }
 
 

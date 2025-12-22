@@ -6,7 +6,7 @@
 
 	function handleAdd() {
         if(selectedModel){
-            addNewModel(selectedModel, pileApp.state)
+            addNewModel(selectedModel, pileApp)
         }
 	}
 </script>
