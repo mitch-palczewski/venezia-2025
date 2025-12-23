@@ -1,19 +1,20 @@
 import { Quaternion, Vector3 } from 'three';
 import type { ObjectPositionPayload, RawDataPayload, Transform3D } from '../types';
 import {
-	ModelInventory,
+	Object3DMapInventory,
 	undertowModels,
 	variousModels,
 	potFace,
 	architectureModels
-} from './modelInventory';
+} from './assetsMap';
 import { PileObject } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 
 export class PileApp {
-	modelInventory = new ModelInventory();
+	modelInventory = new Object3DMapInventory();
 	state = new PileState();
+
 	constructor(rawPositionData?: RawDataPayload) {
 		this.initPileApp();
 		if (rawPositionData) {

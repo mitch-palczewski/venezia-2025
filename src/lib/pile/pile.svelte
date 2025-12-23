@@ -2,12 +2,13 @@
 	import { T } from '@threlte/core';
 	import { Environment, OrbitControls } from '@threlte/extras';
 	import TestWorld from '$lib/scenes/demos/testWorld.svelte';
-	import ModelTemplate from './components/modelTemplate.svelte';
+	import ModelTemplate from './components/ModelTemplate.svelte';
 	import type {
 		PileDataPayload,
 		RawDataPayload as RawPayload
 	} from './types';
 	import { PileApp } from './util/pileApp';
+	import CameraControls from './components/CameraControls.svelte';
 
 	interface Props {rawPositionData: RawPayload;}
 	let { rawPositionData }: Props = $props();
@@ -21,15 +22,7 @@
 	}
 </script> 
 
-<T.PerspectiveCamera
-	makeDefault
-	position={[1, 2, 5]}
-	oncreate={(ref) => {
-		ref.lookAt(0, 1, 0);
-	}}
->
-	<OrbitControls enableDamping />
-</T.PerspectiveCamera>
+<CameraControls/>
 
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.08} />
