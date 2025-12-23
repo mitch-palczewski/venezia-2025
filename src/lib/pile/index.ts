@@ -8,3 +8,4 @@ export * from './util/api/uploadPositions';
 export * from './util/pileState.svelte';
 export * from './components/UI/pileUI.svelte';
 export * from './util/assetsMap';
+export * from './components/modelTemplate.svelte'

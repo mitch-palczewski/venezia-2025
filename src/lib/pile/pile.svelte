@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
 	import { Environment, Grid} from '@threlte/extras';
-	import ModelTemplate from './components/ModelTemplate.svelte';
+	import ModelTemplate from './components/modelTemplate.svelte';
 	import type {
 		PileDataPayload,
 		RawDataPayload as RawPayload
