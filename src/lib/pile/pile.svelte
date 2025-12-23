@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { Environment, OrbitControls } from '@threlte/extras';
-	import TestWorld from '$lib/scenes/demos/testWorld.svelte';
+	import { Environment, Grid} from '@threlte/extras';
 	import ModelTemplate from './components/ModelTemplate.svelte';
 	import type {
 		PileDataPayload,
@@ -28,7 +27,13 @@
 <T.AmbientLight intensity={0.08} />
 
 
-<TestWorld />
+<Grid
+	type={"polar"}
+	cellSize={5}
+	infiniteGrid={true}
+	sectionColor={'#000000'}
+	sectionThickness={1}
+/>
 <Environment url={'/images/environment/yellow.png'} isBackground={true} />
 
 {#each pileApp.state.models as model}
