@@ -7,7 +7,7 @@ import {
 	potFace,
 	architectureModels
 } from './assetsMap';
-import { PileObject } from './pileObject.svelte';
+import { PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 
@@ -32,7 +32,7 @@ export class PileApp {
 	public initObjectPositions(rawPositionData: RawDataPayload) {
 		const positionData: ObjectPositionPayload = rawPositionData.data.pile_position_data;
 		for (const [key, value] of Object.entries(positionData)) {
-			const downloadedModel2 = new PileObject({
+			const downloadedModel2 = new PileObject3D({
 				name: value.name,
 				id: key,
 				modelPath: this.modelInventory.get(value.name)?.path ?? '',
@@ -89,7 +89,7 @@ export class PileApp {
  * @param model
  * @returns true if within MAX_OBJECT_DISTANCE from the origin
  */
-function isInBounds(model: PileObject): boolean {
+function isInBounds(model: PileObject3D): boolean {
 	const position = new Vector3(0, 0, 0);
 	model.ref?.children[0].getWorldPosition(position);
 	if (

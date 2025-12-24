@@ -5,7 +5,7 @@
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import type { Transform3D } from '../types';
-	import type { PileObject } from '../util/pileObject.svelte';
+	import type { PileObject3D } from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp';
 
 	let {
@@ -21,7 +21,7 @@
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
 		ref?: Group;
-		pileObjectData: PileObject;
+		pileObjectData: PileObject3D;
 		pileApp: PileApp;
 	} = $props();
 	interactivity();

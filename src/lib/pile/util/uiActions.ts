@@ -10,7 +10,7 @@ import {
 	type Transform3D,
 	PileState
 } from '..';
-import { PileObject } from './pileObject.svelte';
+import { PileObject3D } from './pileObject.svelte';
 import type { PileApp } from './pileApp';
 import { BASE_TRANSFORM } from './transform';
 
@@ -27,7 +27,7 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => Pile
 export function addNewModel(modelName: string, pileApp: PileApp) {
 	const baseTrandform: Transform3D = BASE_TRANSFORM;
 	const modelData = pileApp.modelInventory.get(modelName)
-	const model = new PileObject({
+	const model = new PileObject3D({
 		name: modelName, 
 		id: pileApp.state.getUniqueID(), 
 		modelPath: modelData?.path ?? '', 

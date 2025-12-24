@@ -2,7 +2,7 @@ import { type Group, type Object3DEventMap } from 'three';
 import type { Transform3D} from '..';
 
 
-interface PileObjectOptions {
+interface PileObject3DOptions {
 	name: string,
 	id: string,
 	modelPath: string,
@@ -10,7 +10,7 @@ interface PileObjectOptions {
 	uniformScale: number
 }
 
-export class PileObject {
+export class PileObject3D {
 	name: string;
 	id: string;
 	modelPath: string;
@@ -20,7 +20,7 @@ export class PileObject {
 	uniformScale: number | null = $state(null);
 	
 	constructor(
-        {name, id, modelPath, transform3D, uniformScale = 1}: PileObjectOptions
+        {name, id, modelPath, transform3D, uniformScale = 1}: PileObject3DOptions
     ) {
 		this.name = name;
 		this.id = id;

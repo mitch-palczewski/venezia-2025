@@ -1,9 +1,9 @@
 import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
-import type { PileObject } from './pileObject.svelte';
+import type { PileObject3D } from './pileObject.svelte';
 
 export class PileState {
 	selectedObjectID = $state<string | null>(null);
-	models = $state<PileObject[]>([]);
+	models = $state<PileObject3D[]>([]);
 	showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
 	maxID = $state(1000);
@@ -12,7 +12,7 @@ export class PileState {
 		return this.selectedObjectID === id
 	}
 
-	public addModel(pileModel: PileObject) {
+	public addModel(pileModel: PileObject3D) {
         this.maxID += 1;
         this.models.push(pileModel);
     }
@@ -32,7 +32,7 @@ export class PileState {
 		this.models = [];
 	}
 
-	public getSelectedModelObject(): PileObject |  null{
+	public getSelectedModelObject(): PileObject3D |  null{
 		for (const model of this.models){
 			if (model.id === this.selectedObjectID){
 				return model
