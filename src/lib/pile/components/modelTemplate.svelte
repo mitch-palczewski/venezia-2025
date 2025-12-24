@@ -13,7 +13,7 @@
 		error,
 		children,
 		ref = $bindable(),
-		objectData,
+		pileObjectData,
 		pileApp,
 		...props
 	}: Props<Group> & {
@@ -21,15 +21,15 @@
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
 		ref?: Group;
-		objectData: PileObject;
+		pileObjectData: PileObject;
 		pileApp: PileApp;
 	} = $props();
 	interactivity();
 
-	let shown = $state(objectData.shown);
-	const modelEntry = pileApp.modelInventory.get(objectData.name);
+	let shown = $state(pileObjectData.shown);
+	const modelEntry = pileApp.modelInventory.get(pileObjectData.name);
 	const gltf = useGltf(modelEntry?.path ?? '');
-	console.log(objectData.name);
+	console.log(pileObjectData.name);
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
 			return [];
@@ -41,9 +41,9 @@
 
 	let showThisTransformControls = $derived.by(() => {
 		if (
-			objectData.id &&
-			objectData.id != '' &&
-			pileApp.state.isSelected(objectData.id)
+			pileObjectData.id &&
+			pileObjectData.id != '' &&
+			pileApp.state.isSelected(pileObjectData.id)
 		) {
 			return pileApp.state.showTransformControls;
 		} else {
@@ -72,14 +72,14 @@
 	*/
 	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
-		if (!objectData.id) return;
-		if (pileApp.state.isSelected(objectData.id)) {
+		if (!pileObjectData.id) return;
+		if (pileApp.state.isSelected(pileObjectData.id)) {
 			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;
 			pileApp.state.selectedObjectID = null;
 			return;
 		} else {
 			if (ref) {
-				pileApp.state.selectedObjectID = objectData.id;
+				pileApp.state.selectedObjectID = pileObjectData.id;
 			}
 			pileApp.state.showTransformControls = true;
 		}
@@ -117,7 +117,7 @@
 {/snippet}
 
 <!-- MAIN EXECUTION -->
-<T.Group bind:ref dispose={true} {name} {...props} scale={objectData.uniformScale!}>
+<T.Group bind:ref dispose={true} {name} {...props} scale={pileObjectData.uniformScale!}>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}

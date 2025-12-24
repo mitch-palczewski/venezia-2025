@@ -39,7 +39,7 @@
 {#each pileApp.state.models as model}
 	<ModelTemplate
 		pileApp = {pileApp}
-		objectData = {model}
+		pileObjectData = {model}
 		oncreate={(ref) => {
 			pileApp.state.maxID += 1;
 			model.ref = ref;
