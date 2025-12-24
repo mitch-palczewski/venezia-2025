@@ -1,9 +1,13 @@
+type Object2DFileType = "svg" | "png"
+
 interface Object2DMapOptions {
 	name: string,
 	displayName?: string,
 	category?: string,
 	path: string
 	baseScale?: number;
+	fileType: Object2DFileType
+
 }
 class Object2DMap {
 	readonly name: string;
@@ -12,13 +16,15 @@ class Object2DMap {
 	readonly path: string;
 	readonly baseScale: number;
 	readonly objectType = "2D";
+	readonly fileType: Object2DFileType;
 	
-	constructor({name, displayName, category = "misc", path, baseScale = 1}: Object2DMapOptions){
+	constructor({name, displayName, category = "misc", path, baseScale = 1, fileType}: Object2DMapOptions){
 		this.name = name
 		this.displayName = displayName ?? name;
 		this.category = category;
 		this.path = path
 		this.baseScale = baseScale
+		this.fileType = fileType
 	}
 }
 
@@ -149,8 +155,22 @@ export class Object3DMapInventory {
 
 
 
-
-
+export const test2D: Object2DMap[] = [
+	new Object2DMap({
+		name: 't1',
+		displayName: 'Test Svg',
+		category: 'test',
+		path: '/images/pile/t1.svg',
+		fileType: 'svg'
+	}),
+	new Object2DMap({
+		name: 'Rest',
+		displayName: 'Sheild Man',
+		category: 'test',
+		path: '/images/pile/Rest.PNG',
+		fileType: 'png'
+	}),
+]
 
 
 

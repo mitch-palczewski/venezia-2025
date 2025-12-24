@@ -7,14 +7,13 @@
 	import type { Transform3D } from '../types';
 	import type { PileObject } from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp';
-	import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 
 	let {
 		fallback,
 		error,
 		children,
 		ref = $bindable(),
-		pileObjectData: objectData,
+		objectData,
 		pileApp,
 		...props
 	}: Props<Group> & {
@@ -22,7 +21,7 @@
 		fallback?: Snippet;
 		error?: Snippet<[{ error: Error }]>;
 		ref?: Group;
-		pileObjectData: PileObject;
+		objectData: PileObject;
 		pileApp: PileApp;
 	} = $props();
 	interactivity();
@@ -97,6 +96,7 @@
 		{#if child.type == 'Group' && child.children || child.type == 'Object3D' && child.children}
 			<T.Group
 				position={[child.position.x, child.position.y, child.position.z]}
+				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
 			>
 				{@render sceneBuilder(child.children)}
@@ -107,6 +107,7 @@
 				geometry={(child as Mesh).geometry}
 				material={(child as Mesh).material}
 				position={[child.position.x, child.position.y, child.position.z]}
+				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
 				raycast={meshBounds}
 				onclick={handleModelClick}
