@@ -1,19 +1,12 @@
 <script lang="ts">
-	import { isInstanceOf, T } from '@threlte/core';
-	import {
-		interactivity,
-		meshBounds,
-		SVG,
-		TransformControls,
-		useGltf,
-		useTexture
-	} from '@threlte/extras';
-	import { Group, Vector3, Quaternion, Mesh, Object3D } from 'three';
-	import type { Props } from '@threlte/core';
+	import { T } from '@threlte/core';
+	import { interactivity, meshBounds, SVG, TransformControls, useTexture } from '@threlte/extras';
+	import { Group, Vector3, Quaternion, Texture } from 'three';
+	import type { AsyncWritable, Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import type { Transform3D } from '../types';
 	import type { PileObject2D } from '../util/pileObject.svelte';
-	import type { PileApp } from '../util/pileApp';
+	import type { PileApp } from '../util/pileApp.svelte';
 
 	let {
 		fallback,
@@ -35,7 +28,8 @@
 
 	let shown = $state(pileObjectData.shown);
 	const imageEntry = pileApp.imageInventory.get(pileObjectData.name);
-	let texture = null;
+	console.log(pileObjectData.name);
+	let texture: null | AsyncWritable<Texture> = $state(null);
 
 	if (imageEntry?.fileType === 'png') {
 		texture = useTexture(imageEntry.path);
@@ -105,9 +99,15 @@
 						src={imageEntry.path}
 						fillMeshProps={{ onclick: handleModelClick }}
 						raycast={meshBounds}
+						
 					/>
 				{:else if imageEntry?.fileType === 'png'}
-					<T.Mesh></T.Mesh>
+					{#await texture then map}
+						<T.Mesh onclick={handleModelClick} raycast={meshBounds}>
+							<T.PlaneGeometry args={[1, map?.image.height / map?.image.width]} />
+							<T.MeshBasicMaterial {map} transparent={true} side={2} alphaTest={0.5} />
+						</T.Mesh>
+					{/await}
 				{/if}
 			</TransformControls>
 		{/if}

@@ -6,7 +6,7 @@
 	import { type Snippet } from 'svelte';
 	import type { Transform3D } from '../types';
 	import type { PileObject3D } from '../util/pileObject.svelte';
-	import type { PileApp } from '../util/pileApp';
+	import type { PileApp } from '../util/pileApp.svelte';
 
 	let {
 		fallback,

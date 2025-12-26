@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Object2DMap, Object2DMapInventory, Object3DMap, Object3DMapInventory } from '$lib/pile/util/assetsMap';
-	import type { PileApp } from '$lib/pile/util/pileApp';
+	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
 	import { addNewModel } from '../../util/uiActions';
 
 	let selectedModel: Object2DMap | Object3DMap | null = $state(null);

@@ -5,6 +5,7 @@ import { _OBJECT_POSITIONS_FILE_NAME, _PILE_PAGE_PATH } from "$lib/constants";
 
 
 export async function uploadData(positionsData: object) {
+	console.log("Uploading Data ... ")
 	const signalTimeoutMs = 10000;
 	const payload = positionsData;
 	const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });

@@ -3,7 +3,7 @@
 	import { Environment, Grid} from '@threlte/extras';
 	import ModelTemplate from './components/modelTemplate.svelte';
 	import ImageTemplate from './components/imageTemplate.svelte';
-	import { PileApp } from './util/pileApp';
+	import { PileApp } from './util/pileApp.svelte';
 	import CameraControls from './components/CameraControls.svelte';
 	
 

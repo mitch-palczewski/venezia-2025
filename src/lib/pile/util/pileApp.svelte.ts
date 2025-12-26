@@ -13,16 +13,22 @@ import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
+import { uploadData } from './api/uploadPositions';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	state = new PileState();
+	lastUploadStatus = $state('Idle');
+	autosave = true
 
 	constructor(rawPositionData?: object) {
 		this.initPileApp();
 		if (rawPositionData) {
 			this.initObjectPositions(rawPositionData);
+		}
+		if (this.autosave){
+			this.startAutoSave()
 		}
 	}
 
@@ -32,6 +38,20 @@ export class PileApp {
 		this.modelInventory.add(variousModels);
 		this.modelInventory.add(potFace);
 		this.modelInventory.add(architectureModels);
+	}
+
+	public startAutoSave() {
+		const interval = setInterval(async () => {
+			try {
+				this.lastUploadStatus = 'Uploading...';
+				await uploadData(this.getPileObjectPositions());
+				this.lastUploadStatus = 'Success';
+			} catch (e) {
+				console.error('Auto-save failed', e);
+				this.lastUploadStatus = 'Error';
+			}
+		}, 60000);
+		return () => clearInterval(interval);
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any

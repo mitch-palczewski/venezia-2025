@@ -5,8 +5,11 @@
 
 	let { pileSceneRef } = $props();
 </script>
-
-<div class="absolute top-[93vh] left-[1vw]">
+{#if pileSceneRef?.pileApp}
+<div class="absolute top-[90vh] left-[1vw]">
+	<div>
+		<p>{pileSceneRef.pileApp?.lastUploadStatus}</p>
+	</div>
 	<div class="grid grid-cols-8 gap-3">
 		<button
 			onclick={() => uploadDataFactory(pileSceneRef)}
@@ -31,7 +34,7 @@
 				>Delete</button
 			>
 		{/if}
-		{#if pileSceneRef?.pileApp}
+		
 			<AddNewModel
 				pileApp={pileSceneRef.pileApp}
 				inventory={pileSceneRef?.pileApp.modelInventory}
@@ -40,6 +43,7 @@
 				pileApp={pileSceneRef.pileApp}
 				inventory={pileSceneRef?.pileApp.imageInventory}
 			/>
-		{/if}
+		
 	</div>
 </div>
+{/if}
