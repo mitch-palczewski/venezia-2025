@@ -45,7 +45,7 @@ export class PileObject2D {
 	transform3D: Transform3D;
 	ref: Group<Object3DEventMap> | null = null; 
 	shown: boolean = true;
-	uniformScale: number | null = $state(null);
+	uniformScale: number = $state(1);
 	billboard:boolean = $state(false)
 	
 	constructor(

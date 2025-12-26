@@ -2,21 +2,19 @@
 	import { T } from '@threlte/core';
 	import { Environment, Grid} from '@threlte/extras';
 	import ModelTemplate from './components/modelTemplate.svelte';
-	import type {
-		PileDataPayload,
-		RawDataPayload as RawPayload
-	} from './types';
+	import ImageTemplate from './components/imageTemplate.svelte';
 	import { PileApp } from './util/pileApp';
 	import CameraControls from './components/CameraControls.svelte';
+	
 
-	interface Props {rawPositionData: RawPayload;}
+	interface Props {rawPositionData: object}
 	let { rawPositionData }: Props = $props();
 
 
 	export const pileApp = new PileApp(rawPositionData)
 
 
-	export function getPositions(): PileDataPayload {
+	export function getPositions(): object{
 		return pileApp.getPileObjectPositions()
 	}
 </script> 
@@ -36,7 +34,35 @@
 />
 <Environment url={'/images/environment/yellow.png'} isBackground={true} />
 
-{#each pileApp.state.models as model}
+{#each pileApp.state.objects2D as image}
+	<ImageTemplate
+		pileApp = {pileApp}
+		pileObjectData = {image[1]}
+		oncreate={(ref) => {
+			console.log(image[1])
+			pileApp.state.maxID += 1;
+			image[1].ref = ref;
+		}}
+		position={[
+			image[1].transform3D.translate.x,
+			image[1].transform3D.translate.y,
+			image[1].transform3D.translate.z
+		]}
+		quaternion={[
+			image[1].transform3D.rotation.x,
+			image[1].transform3D.rotation.y,
+			image[1].transform3D.rotation.z,
+			image[1].transform3D.rotation.w
+		]}
+		scale={[
+			image[1].transform3D.scale.x, 
+			image[1].transform3D.scale.y, 
+			image[1].transform3D.scale.z
+		]}
+	/>
+{/each}
+
+{#each pileApp.state.objects3D as model}
 	<ModelTemplate
 		pileApp = {pileApp}
 		pileObjectData = {model}
@@ -62,5 +88,7 @@
 		]}
 	/>
 {/each}
+
+
 
 

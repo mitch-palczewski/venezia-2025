@@ -9,7 +9,7 @@ import {
 	Object2DMapInventory,
 	test2D
 } from './assetsMap';
-import { PileObject3D } from './pileObject.svelte';
+import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
@@ -34,28 +34,82 @@ export class PileApp {
 		this.modelInventory.add(architectureModels);
 	}
 
-
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	public initObjectPositions(rawPositionData:any) {
-		const positionData: PileDataSchema = rawPositionData.data.pile_position_data.objects3D;
-		for (const [key, value] of Object.entries(positionData)) {
+	public initObjectPositions(rawPositionData: any) {
+		const position3DData: PileDataSchema = rawPositionData.data.pile_position_data.objects3D;
+		const position2DData: PileDataSchema = rawPositionData.data.pile_position_data.objects2D;
+		for (const [id, model] of Object.entries(position3DData)) {
+			const inventoryObject = this.modelInventory.get(model.name);
+			if (!inventoryObject) {
+				console.log(`ERROR: ${model.name} does not exist in 3D Model Inventory.`);
+				continue;
+			}
 			const downloadedModel2 = new PileObject3D({
-				name: value.name,
-				id: key,
-				modelPath: this.modelInventory.get(value.name)?.path ?? '',
-				transform3D: value.transform,
+				name: model.name,
+				id: id,
+				modelPath: inventoryObject.path,
+				transform3D: model.transform,
 				uniformScale:
-					(value.transform.scale.x + value.transform.scale.y + value.transform.scale.z) / 3
+					(model.transform.scale.x + model.transform.scale.y + model.transform.scale.z) / 3
 			});
-			this.state.models.push(downloadedModel2);
+			this.state.objects3D.push(downloadedModel2);
+		}
+		for (const [id, image] of Object.entries(position2DData)) {
+			const inventoryObject = this.imageInventory.get(image.name);
+			if (!inventoryObject) {
+				console.log(`ERROR: ${image.name} does not exist in 2D Model Inventory.`);
+				continue;
+			}
+			const downloadedImage = new PileObject2D({
+				name: image.name,
+				id: id,
+				modelPath: inventoryObject.path,
+				transform3D: image.transform,
+				uniformScale:
+					(image.transform.scale.x + image.transform.scale.y + image.transform.scale.z) / 3
+			});
+			this.state.objects2D.set(id, downloadedImage);
 		}
 	}
 
 	public getPileObjectPositions() {
 		const objects3D: Record<string, PileObjectJson> = {};
-
+		const objects2D: Record<string, PileObjectJson> = {};
 		let id = 1001;
-		this.state.models.forEach((model) => {
+		this.state.objects2D.forEach((image) => {
+			try {
+				if (!image.shown) {
+					return;
+				}
+				if (!isInBounds(image)) {
+					return;
+				}
+				console.log(image.ref);
+				const v3Position = new Vector3(0, 0, 0);
+				const quatRotation = new Quaternion(0, 0, 0, 0);
+				const v3Scale = new Vector3(0, 0, 0);
+				image.ref?.children[0].getWorldPosition(v3Position);
+				image.ref?.children[0].getWorldQuaternion(quatRotation);
+				image.ref?.children[0].getWorldScale(v3Scale);
+
+				const transform: Transform3D = {
+					translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
+					rotation: {
+						x: quatRotation.x,
+						y: quatRotation.y,
+						z: quatRotation.z,
+						w: quatRotation.w
+					},
+					scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
+				};
+				objects2D[id] = { transform: transform, name: image.name, animation: null };
+				id += 1;
+			} catch (e) {
+				console.log(e);
+			}
+		});
+
+		this.state.objects3D.forEach((model) => {
 			try {
 				if (!model.shown) {
 					return;
@@ -88,7 +142,7 @@ export class PileApp {
 			}
 		});
 
-		return { pile_position_data: { objects3D, objects2D: null, sky: null } };
+		return { pile_position_data: { objects3D, objects2D, sky: null } };
 	}
 }
 
@@ -97,7 +151,7 @@ export class PileApp {
  * @param model
  * @returns true if within MAX_OBJECT_DISTANCE from the origin
  */
-function isInBounds(model: PileObject3D): boolean {
+function isInBounds(model: PileObject3D | PileObject2D): boolean {
 	const position = new Vector3(0, 0, 0);
 	model.ref?.children[0].getWorldPosition(position);
 	if (

@@ -24,7 +24,7 @@
 				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 				>Rotate</button
 			>
-			<ScaleSlider pileState = {pileSceneRef.pileApp.state}/>
+			<ScaleSlider pileState={pileSceneRef.pileApp.state} />
 			<button
 				onclick={() => deleteSelectedModel(pileSceneRef.pileApp.state)}
 				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
@@ -32,7 +32,14 @@
 			>
 		{/if}
 		{#if pileSceneRef?.pileApp}
-			<AddNewModel pileApp={pileSceneRef.pileApp} />
+			<AddNewModel
+				pileApp={pileSceneRef.pileApp}
+				inventory={pileSceneRef?.pileApp.modelInventory}
+			/>
+			<AddNewModel
+				pileApp={pileSceneRef.pileApp}
+				inventory={pileSceneRef?.pileApp.imageInventory}
+			/>
 		{/if}
 	</div>
 </div>

@@ -9,7 +9,7 @@ interface Object2DMapOptions {
 	fileType: Object2DFileType
 
 }
-class Object2DMap {
+export class Object2DMap {
 	readonly name: string;
 	readonly displayName: string;
 	readonly category: string;
@@ -70,7 +70,11 @@ export class Object2DMapInventory {
 		this.items = [...this.items, ...models];
 	}
 	public get(name: string): Object2DMap | undefined {
-        return this.items.find(m => m.name === name);
+		const foundObject = this.items.find(m => m.name === name);
+		if(!foundObject){
+			console.log(`WARNING: did not find ${name} in Object2DMapInventory`)
+		}
+        return foundObject
     }
 	public getAll(): Object2DMap[] {
         return [...this.items];
@@ -85,7 +89,7 @@ interface Object3DMapOptions {
 	path: string
 	baseScale?: number;
 }
-class Object3DMap {
+export class Object3DMap {
 	readonly name: string;
 	readonly displayName: string;
 	readonly category: string;
