@@ -1,27 +1,11 @@
-/** 
-Defines Types used in Pile
- */
+import type { PileObject3D } from './util/pileObject.svelte';
 
 
-import type { PileObject } from './util/pileObject.svelte';
-
-
-/** For Construction and Parsing of Json Data (to be sent to cloud storage) */
-export type RawDataPayload = {
-	data: PileDataPayload;
-};
-
-export type PileDataPayload = {
-	pile_position_data: ObjectPositionPayload;
-};
-
-/** Defines a Record of a Models made unique by their ID. @remark [x: string] should be the models id */
-export type ObjectPositionPayload = Record<string, { transform: Transform3D; name: string }>;
 
 //Active Model Type
 export type ID = string
 
-export type PileModels = Array<PileObject>;
+export type PileModels = Array<PileObject3D>;
 
 
 export type Vec3 = { x: number; y: number; z: number };

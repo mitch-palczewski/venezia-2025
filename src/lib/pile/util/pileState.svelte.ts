@@ -3,6 +3,8 @@ import type { PileObject3D } from './pileObject.svelte';
 
 export class PileState {
 	selectedObjectID = $state<string | null>(null);
+
+	//consider making this a <Map<string, PileObject3D>> where the string is the ID
 	models = $state<PileObject3D[]>([]);
 	showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');

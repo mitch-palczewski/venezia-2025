@@ -1,21 +1,25 @@
 import { Quaternion, Vector3 } from 'three';
-import type { ObjectPositionPayload, RawDataPayload, Transform3D } from '../types';
+import type { Transform3D } from '../types';
 import {
 	Object3DMapInventory,
 	undertowModels,
 	variousModels,
 	potFace,
-	architectureModels
+	architectureModels,
+	Object2DMapInventory,
+	test2D
 } from './assetsMap';
 import { PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';
+import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
+	imageInventory = new Object2DMapInventory();
 	state = new PileState();
 
-	constructor(rawPositionData?: RawDataPayload) {
+	constructor(rawPositionData?: object) {
 		this.initPileApp();
 		if (rawPositionData) {
 			this.initObjectPositions(rawPositionData);
@@ -23,14 +27,17 @@ export class PileApp {
 	}
 
 	private initPileApp() {
+		this.imageInventory.add(test2D);
 		this.modelInventory.add(undertowModels);
 		this.modelInventory.add(variousModels);
 		this.modelInventory.add(potFace);
 		this.modelInventory.add(architectureModels);
 	}
 
-	public initObjectPositions(rawPositionData: RawDataPayload) {
-		const positionData: ObjectPositionPayload = rawPositionData.data.pile_position_data;
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	public initObjectPositions(rawPositionData:any) {
+		const positionData: PileDataSchema = rawPositionData.data.pile_position_data.objects3D;
 		for (const [key, value] of Object.entries(positionData)) {
 			const downloadedModel2 = new PileObject3D({
 				name: value.name,
@@ -45,7 +52,8 @@ export class PileApp {
 	}
 
 	public getPileObjectPositions() {
-		const objectPositionsPayload: ObjectPositionPayload = {};
+		const objects3D: Record<string, PileObjectJson> = {};
+
 		let id = 1001;
 		this.state.models.forEach((model) => {
 			try {
@@ -73,14 +81,14 @@ export class PileApp {
 					},
 					scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
 				};
-				objectPositionsPayload[id] = { transform: transform, name: model.name };
+				objects3D[id] = { transform: transform, name: model.name, animation: null };
 				id += 1;
 			} catch (e) {
 				console.log(e);
 			}
 		});
 
-		return { pile_position_data: objectPositionsPayload };
+		return { pile_position_data: { objects3D, objects2D: null, sky: null } };
 	}
 }
 

@@ -6,7 +6,6 @@
 import type { Mesh } from 'three';
 import {
 	uploadData,
-	type PileDataPayload,
 	type Transform3D,
 	PileState
 } from '..';
@@ -14,8 +13,8 @@ import { PileObject3D } from './pileObject.svelte';
 import type { PileApp } from './pileApp';
 import { BASE_TRANSFORM } from './transform';
 
-export async function uploadDataFactory(pileSceneRef: { getPositions: () => PileDataPayload }) {
-	const positions: PileDataPayload = pileSceneRef.getPositions();
+export async function uploadDataFactory(pileSceneRef: { getPositions: () => object }) {
+	const positions: object = pileSceneRef.getPositions();
 	uploadData(positions);
 }
 

@@ -2,10 +2,9 @@
 Formats positionData for upload to Vercel Blob Storage
 */
 import { _OBJECT_POSITIONS_FILE_NAME, _PILE_PAGE_PATH } from "$lib/constants";
-import type { PileDataPayload } from "../../types";
 
 
-export async function uploadData(positionsData: PileDataPayload) {
+export async function uploadData(positionsData: object) {
 	const signalTimeoutMs = 10000;
 	const payload = positionsData;
 	const blob = new Blob([JSON.stringify(payload)], { type: 'application/json' });
