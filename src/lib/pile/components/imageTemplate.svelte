@@ -28,7 +28,7 @@
 
 	let shown = $state(pileObjectData.shown);
 	const imageEntry = pileApp.imageInventory.get(pileObjectData.name);
-	console.log(pileObjectData.name);
+	console.log(`2D Object: ${pileObjectData.name}`);
 	let texture: null | AsyncWritable<Texture> = $state(null);
 
 	if (imageEntry?.fileType === 'png') {

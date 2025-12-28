@@ -9,6 +9,7 @@ Pile webpage. Combines PileUI and PileScene.
 
 	//export let data; Where the +page.server.ts returns when the load() function is called
 	export let data; 
+	console.log(`Data Downloaded from Blob. Raw Data:`, data)
 	let pileSceneRef: PileScene;
 
 </script>

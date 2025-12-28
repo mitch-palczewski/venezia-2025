@@ -20,15 +20,18 @@ export class PileApp {
 	imageInventory = new Object2DMapInventory();
 	state = new PileState();
 	lastUploadStatus = $state('Idle');
-	autosave = true
+	autosave = false;
 
 	constructor(rawPositionData?: object) {
 		this.initPileApp();
 		if (rawPositionData) {
 			this.initObjectPositions(rawPositionData);
 		}
-		if (this.autosave){
-			this.startAutoSave()
+		if (this.autosave) {
+			this.startAutoSave();
+			console.log("Autosave Activated")
+		}else{
+			console.log("Autosave Deactiviated")
 		}
 	}
 
@@ -42,16 +45,22 @@ export class PileApp {
 
 	public startAutoSave() {
 		const interval = setInterval(async () => {
-			try {
-				this.lastUploadStatus = 'Uploading...';
-				await uploadData(this.getPileObjectPositions());
-				this.lastUploadStatus = 'Success';
-			} catch (e) {
-				console.error('Auto-save failed', e);
-				this.lastUploadStatus = 'Error';
-			}
+			this.attemptSave();
 		}, 60000);
 		return () => clearInterval(interval);
+	}
+
+	private async attemptSave() {
+		if (this.state.hasChanges) {
+			try {
+				await uploadData(this.getPileObjectPositions());
+				this.state.setAsSaved()
+			} catch (e) {
+				console.error('Auto-save failed', e);
+			}
+		} else {
+			console.log("No changes detected, skipping save.")
+		}
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -104,7 +113,6 @@ export class PileApp {
 				if (!isInBounds(image)) {
 					return;
 				}
-				console.log(image.ref);
 				const v3Position = new Vector3(0, 0, 0);
 				const quatRotation = new Quaternion(0, 0, 0, 0);
 				const v3Scale = new Vector3(0, 0, 0);
@@ -126,7 +134,7 @@ export class PileApp {
 				id += 1;
 			} catch (e) {
 				console.log(e);
-			}
+			} 
 		});
 
 		this.state.objects3D.forEach((model) => {
@@ -137,7 +145,6 @@ export class PileApp {
 				if (!isInBounds(model)) {
 					return;
 				}
-				console.log(model.ref);
 				const v3Position = new Vector3(0, 0, 0);
 				const quatRotation = new Quaternion(0, 0, 0, 0);
 				const v3Scale = new Vector3(0, 0, 0);
@@ -161,8 +168,9 @@ export class PileApp {
 				console.log(e);
 			}
 		});
-
-		return { pile_position_data: { objects3D, objects2D, sky: null } };
+		const pilePositionObject = { pile_position_data: { objects3D, objects2D, sky: null } }
+		console.log('Payload built: ',pilePositionObject)
+		return pilePositionObject;
 	}
 }
 

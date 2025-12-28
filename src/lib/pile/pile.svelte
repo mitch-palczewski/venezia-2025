@@ -79,7 +79,7 @@
 			model.transform3D.rotation.x,
 			model.transform3D.rotation.y,
 			model.transform3D.rotation.z,
-			model.transform3D.rotation.w
+			model.transform3D.rotation.w 
 		]}
 		scale={[
 			model.transform3D.scale.x, 

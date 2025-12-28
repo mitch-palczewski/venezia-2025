@@ -6,11 +6,28 @@ export class PileState {
 	selectedObjectID = $state<string | null>(null);
 
 	//consider making this a <Map<string, PileObject3D>> where the string is the ID
-	objects3D = $state<PileObject3D[]>([]);
 	objects2D = $state(new SvelteMap<string, PileObject2D>());
+	objects3D = $state<PileObject3D[]>([]);
 	showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
 	maxID = $state(1000);
+	ploadStatus = $state('Idle');
+	#stateSnapshot = $derived({
+		objects2DCount: this.objects2D.size,
+		objects3DCount: this.objects3D.length,
+		controlsUsed: this.showTransformControls
+	});
+	#lastSavedSnapshot: null | object = $state(null);
+	hasChanges = $derived(this.#stateSnapshot !== this.#lastSavedSnapshot);
+
+	/**
+	 * For Checking if changes have been made to the Pile.
+	 *
+	 * Sets the Last Saved Snapshot to the current snapshot
+	 */
+	public setAsSaved() {
+		this.#lastSavedSnapshot = { ...this.#stateSnapshot };
+	}
 
 	public isSelected(id: string) {
 		return this.selectedObjectID === id;
@@ -44,14 +61,15 @@ export class PileState {
 	}
 
 	public clearAllModels() {
+		console.log("state.clearAllModels()")
 		this.objects3D = [];
 		this.objects2D?.clear();
 	}
 
-	public getSelectedModelObject(): PileObject3D | PileObject2D | null{
-		if (!this.selectedObjectID){
-			console.log("WARNING: selectedObjectID is null")
-			return null
+	public getSelectedModelObject(): PileObject3D | PileObject2D | null {
+		if (!this.selectedObjectID) {
+			console.log('WARNING: selectedObjectID is null');
+			return null;
 		}
 		for (const model of this.objects3D) {
 			if (model.id === this.selectedObjectID) {
@@ -60,7 +78,7 @@ export class PileState {
 		}
 		const image = this.objects2D.get(this.selectedObjectID);
 		if (image) return image;
-		
+
 		throw Error(
 			`Could not find selectedObjectID ${this.selectedObjectID} in objects3D or objects2D`
 		);

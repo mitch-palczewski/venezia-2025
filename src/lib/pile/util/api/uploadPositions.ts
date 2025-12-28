@@ -4,7 +4,10 @@ Formats positionData for upload to Vercel Blob Storage
 import { _OBJECT_POSITIONS_FILE_NAME, _PILE_PAGE_PATH } from "$lib/constants";
 
 
-export async function uploadData(positionsData: object) {
+export async function uploadData(positionsData: object, uploadStatus?: string) {
+	if(uploadStatus){
+		uploadStatus = "Saving ..."
+	}
 	console.log("Uploading Data ... ")
 	const signalTimeoutMs = 10000;
 	const payload = positionsData;
@@ -38,9 +41,15 @@ export async function uploadData(positionsData: object) {
 
 		const json = await res.json();
 		console.log(json);
+		if(uploadStatus){
+			uploadStatus = "Saved"
+		}
 	} catch (rawErr) {
 		const { name, message } = extractErrorInfo(rawErr);
 		console.error('upload failed', { name, message, rawErr });
+		if(uploadStatus){
+			uploadStatus = "ERROR: Upload Failed!"
+		}
 		if (rawErr instanceof DOMException && rawErr.name === 'AbortError') {
 			return { ok: false, error: 'timeout' };
 		}

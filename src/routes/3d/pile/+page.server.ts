@@ -8,13 +8,15 @@ import { env } from '$env/dynamic/private';
 import type { PageServerLoad } from './$types';
 import { _OBJECT_POSITIONS_FILE_NAME, _OBJECT_POSITIONS_PATH } from '../../../lib/constants';
 
-
-
 export const load: PageServerLoad = async ({ fetch }) => {
-  const res = await fetch(_OBJECT_POSITIONS_PATH);
-  if (!res.ok) throw error(res.status, 'Failed to fetch data');
-  const data = (await res.json());
-  return { data: data };
+	const res = await fetch(_OBJECT_POSITIONS_PATH);
+	console.log(res.status);
+	if (!res.ok) throw error(res.status, 'Failed to fetch data');
+	const data = await res.json();
+	if (!data) {
+		throw error(400, `Recieved Json is empty ${res.status}`);
+	}
+	return { data: data };
 };
 
 export const actions = {
@@ -52,7 +54,8 @@ export const actions = {
 			const { url } = await put(_OBJECT_POSITIONS_FILE_NAME, file, {
 				token: env.BLOB_READ_WRITE_TOKEN,
 				access: 'public',
-				allowOverwrite: true
+				allowOverwrite: true,
+				cacheControlMaxAge: 60
 			});
 			return { success: true, url, parsed: json };
 		} catch (e) {

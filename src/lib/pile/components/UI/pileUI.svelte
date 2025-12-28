@@ -8,7 +8,7 @@
 {#if pileSceneRef?.pileApp}
 <div class="absolute top-[90vh] left-[1vw]">
 	<div>
-		<p>{pileSceneRef.pileApp?.lastUploadStatus}</p>
+		<p>{pileSceneRef.pileApp?.state.uploadStatus}</p>
 	</div>
 	<div class="grid grid-cols-8 gap-3">
 		<button

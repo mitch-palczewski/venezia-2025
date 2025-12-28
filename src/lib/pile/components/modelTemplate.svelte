@@ -29,13 +29,12 @@
 	let shown = $state(pileObjectData.shown);
 	const modelEntry = pileApp.modelInventory.get(pileObjectData.name);
 	const gltf = useGltf(modelEntry?.path ?? '');
-	console.log(pileObjectData.name);
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
 			return [];
 		}
 		const thisSceneChildren = Object.values($gltf.scene.children) as Mesh[];
-		console.log(thisSceneChildren)
+		console.log(`3D Object: ${pileObjectData.name}  `,thisSceneChildren)
 		return thisSceneChildren;
 	});
 

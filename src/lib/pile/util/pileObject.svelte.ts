@@ -10,6 +10,9 @@ interface PileObject3DOptions {
 	uniformScale: number
 }
 
+/**
+ * @public name, id, modelPath, transform3D, ref, shown, uniformScale
+ */
 export class PileObject3D {
 	name: string;
 	id: string;
