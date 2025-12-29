@@ -14,24 +14,27 @@ import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
 import { uploadData } from './api/uploadPositions';
+import { SvelteDate } from 'svelte/reactivity';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	state = new PileState();
 	lastUploadStatus = $state('Idle');
-	autosave = false;
+	autosave = true;
+	#isActivlyWatching:()=> boolean;
 
-	constructor(rawPositionData?: object) {
+	constructor(isActivlyWatching: () => boolean, rawPositionData?: object) {
+		this.#isActivlyWatching = isActivlyWatching;
 		this.initPileApp();
 		if (rawPositionData) {
 			this.initObjectPositions(rawPositionData);
 		}
 		if (this.autosave) {
 			this.startAutoSave();
-			console.log("Autosave Activated")
-		}else{
-			console.log("Autosave Deactiviated")
+			console.log('Autosave Activated');
+		} else {
+			console.log('Autosave Deactiviated');
 		}
 	}
 
@@ -51,15 +54,21 @@ export class PileApp {
 	}
 
 	private async attemptSave() {
-		if (this.state.hasChanges) {
-			try {
-				await uploadData(this.getPileObjectPositions());
-				this.state.setAsSaved()
-			} catch (e) {
-				console.error('Auto-save failed', e);
-			}
-		} else {
-			console.log("No changes detected, skipping save.")
+		const now = new SvelteDate();
+		if (!this.#isActivlyWatching()) {
+			console.log('User Inactive. Skipping Save.', now);
+			return;
+		}
+		if (!this.state.hasChanges) {
+			console.log('No changes detected, skipping save.', now);
+			return;
+		}
+		console.log('Autosaving ... ', now);
+		try {
+			await uploadData(this.getPileObjectPositions());
+			this.state.setAsSaved();
+		} catch (e) {
+			console.error('Auto-save failed', e);
 		}
 	}
 
@@ -134,7 +143,7 @@ export class PileApp {
 				id += 1;
 			} catch (e) {
 				console.log(e);
-			} 
+			}
 		});
 
 		this.state.objects3D.forEach((model) => {
@@ -168,8 +177,8 @@ export class PileApp {
 				console.log(e);
 			}
 		});
-		const pilePositionObject = { pile_position_data: { objects3D, objects2D, sky: null } }
-		console.log('Payload built: ',pilePositionObject)
+		const pilePositionObject = { pile_position_data: { objects3D, objects2D, sky: null } };
+		console.log('Payload built: ', pilePositionObject);
 		return pilePositionObject;
 	}
 }

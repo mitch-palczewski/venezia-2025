@@ -8,17 +8,29 @@ export class PileState {
 	//consider making this a <Map<string, PileObject3D>> where the string is the ID
 	objects2D = $state(new SvelteMap<string, PileObject2D>());
 	objects3D = $state<PileObject3D[]>([]);
-	showTransformControls = $state(false);
+	#showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
 	maxID = $state(1000);
-	ploadStatus = $state('Idle');
-	#stateSnapshot = $derived({
-		objects2DCount: this.objects2D.size,
-		objects3DCount: this.objects3D.length,
-		controlsUsed: this.showTransformControls
-	});
-	#lastSavedSnapshot: null | object = $state(null);
-	hasChanges = $derived(this.#stateSnapshot !== this.#lastSavedSnapshot);
+	uploadStatus = $state('Idle');
+	#changeCount = $state(0);
+	#lastSavedCount = $state(0);
+	hasChanges = $derived(this.#changeCount !== this.#lastSavedCount);
+
+	get showTransformControls() {
+		return this.#showTransformControls;
+	}
+
+	set showTransformControls(value) {
+		if (value !== this.#showTransformControls) {
+			this.#showTransformControls = value;
+			this.#changeCount++; 
+		}
+	}
+
+	constructor() {
+		// eslint-disable-next-line svelte/no-inspect
+		$inspect(this.uploadStatus, this.hasChanges);
+	}
 
 	/**
 	 * For Checking if changes have been made to the Pile.
@@ -26,7 +38,7 @@ export class PileState {
 	 * Sets the Last Saved Snapshot to the current snapshot
 	 */
 	public setAsSaved() {
-		this.#lastSavedSnapshot = { ...this.#stateSnapshot };
+		this.#lastSavedCount = this.#changeCount;
 	}
 
 	public isSelected(id: string) {
@@ -61,7 +73,7 @@ export class PileState {
 	}
 
 	public clearAllModels() {
-		console.log("state.clearAllModels()")
+		console.log('state.clearAllModels()');
 		this.objects3D = [];
 		this.objects2D?.clear();
 	}

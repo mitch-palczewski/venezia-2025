@@ -1,32 +1,44 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { Environment, Grid} from '@threlte/extras';
+	import { Environment, Grid } from '@threlte/extras';
 	import ModelTemplate from './components/modelTemplate.svelte';
 	import ImageTemplate from './components/imageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
 	import CameraControls from './components/CameraControls.svelte';
-	
 
-	interface Props {rawPositionData: object}
+	interface Props {
+		rawPositionData: object;
+	}
 	let { rawPositionData }: Props = $props();
 
+	let isVisible = $state(true);
+	let isFocused = $state(true);
+	const isActivelyWatching = $derived(isVisible && isFocused);
 
-	export const pileApp = new PileApp(rawPositionData)
-
-
-	export function getPositions(): object{
-		return pileApp.getPileObjectPositions()
+	function handleVisibilityChange() {
+		isVisible = document.visibilityState === 'visible';
 	}
-</script> 
 
-<CameraControls/>
+	export const pileApp = new PileApp(() => isActivelyWatching, rawPositionData);
+
+	export function getPositions(): object {
+		return pileApp.getPileObjectPositions();
+	}
+</script>
+
+<svelte:document onvisibilitychange={handleVisibilityChange} />
+<svelte:window
+	onfocus={() => (isFocused = true)}
+	onblur={() => (isFocused = false)}
+/>
+
+<CameraControls />
 
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.08} />
 
-
 <Grid
-	type={"polar"}
+	type={'polar'}
 	cellSize={5}
 	infiniteGrid={true}
 	sectionColor={'#000000'}
@@ -36,10 +48,10 @@
 
 {#each pileApp.state.objects2D as image}
 	<ImageTemplate
-		pileApp = {pileApp}
-		pileObjectData = {image[1]}
+		{pileApp}
+		pileObjectData={image[1]}
 		oncreate={(ref) => {
-			console.log(image[1])
+			console.log(image[1]);
 			pileApp.state.maxID += 1;
 			image[1].ref = ref;
 		}}
@@ -55,8 +67,8 @@
 			image[1].transform3D.rotation.w
 		]}
 		scale={[
-			image[1].transform3D.scale.x, 
-			image[1].transform3D.scale.y, 
+			image[1].transform3D.scale.x,
+			image[1].transform3D.scale.y,
 			image[1].transform3D.scale.z
 		]}
 	/>
@@ -64,8 +76,8 @@
 
 {#each pileApp.state.objects3D as model}
 	<ModelTemplate
-		pileApp = {pileApp}
-		pileObjectData = {model}
+		{pileApp}
+		pileObjectData={model}
 		oncreate={(ref) => {
 			pileApp.state.maxID += 1;
 			model.ref = ref;
@@ -79,16 +91,8 @@
 			model.transform3D.rotation.x,
 			model.transform3D.rotation.y,
 			model.transform3D.rotation.z,
-			model.transform3D.rotation.w 
+			model.transform3D.rotation.w
 		]}
-		scale={[
-			model.transform3D.scale.x, 
-			model.transform3D.scale.y, 
-			model.transform3D.scale.z
-		]}
+		scale={[model.transform3D.scale.x, model.transform3D.scale.y, model.transform3D.scale.z]}
 	/>
 {/each}
-
-
-
-

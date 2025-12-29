@@ -10,7 +10,6 @@ import { _OBJECT_POSITIONS_FILE_NAME, _OBJECT_POSITIONS_PATH } from '../../../li
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	const res = await fetch(_OBJECT_POSITIONS_PATH);
-	console.log(res.status);
 	if (!res.ok) throw error(res.status, 'Failed to fetch data');
 	const data = await res.json();
 	if (!data) {
