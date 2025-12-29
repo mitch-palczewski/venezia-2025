@@ -74,7 +74,6 @@
 			return;
 		} else {
 			if (ref) {
-				console.log(`${pileObjectData.id}`);
 				pileApp.state.selectedObjectID = pileObjectData.id;
 			}
 			pileApp.state.showTransformControls = true;

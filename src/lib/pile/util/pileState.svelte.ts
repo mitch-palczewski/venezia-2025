@@ -27,10 +27,6 @@ export class PileState {
 		}
 	}
 
-	constructor() {
-		// eslint-disable-next-line svelte/no-inspect
-		$inspect(this.uploadStatus, this.hasChanges);
-	}
 
 	/**
 	 * For Checking if changes have been made to the Pile.

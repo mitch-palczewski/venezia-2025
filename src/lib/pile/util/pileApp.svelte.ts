@@ -16,25 +16,20 @@ import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
 import { uploadData } from './api/uploadPositions';
 import { SvelteDate } from 'svelte/reactivity';
 
+
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	state = new PileState();
 	lastUploadStatus = $state('Idle');
 	autosave = true;
-	#isActivlyWatching:()=> boolean;
+	isActivlyWatching: () => boolean;
 
 	constructor(isActivlyWatching: () => boolean, rawPositionData?: object) {
-		this.#isActivlyWatching = isActivlyWatching;
+		this.isActivlyWatching = isActivlyWatching;
 		this.initPileApp();
 		if (rawPositionData) {
 			this.initObjectPositions(rawPositionData);
-		}
-		if (this.autosave) {
-			this.startAutoSave();
-			console.log('Autosave Activated');
-		} else {
-			console.log('Autosave Deactiviated');
 		}
 	}
 
@@ -46,29 +41,18 @@ export class PileApp {
 		this.modelInventory.add(architectureModels);
 	}
 
-	public startAutoSave() {
-		const interval = setInterval(async () => {
-			this.attemptSave();
-		}, 60000);
-		return () => clearInterval(interval);
-	}
-
-	private async attemptSave() {
+	public async attemptSave() {
 		const now = new SvelteDate();
-		if (!this.#isActivlyWatching()) {
-			console.log('User Inactive. Skipping Save.', now);
-			return;
-		}
 		if (!this.state.hasChanges) {
-			console.log('No changes detected, skipping save.', now);
+			console.log(`No changes detected, skipping save.\n${now}`);
 			return;
 		}
-		console.log('Autosaving ... ', now);
+		console.log(`Autosaving ... \n${now}`);
 		try {
-			await uploadData(this.getPileObjectPositions());
+			await uploadData(this.getPileObjectPositions(), this.state.uploadStatus);
 			this.state.setAsSaved();
 		} catch (e) {
-			console.error('Auto-save failed', e);
+			console.error('Auto-save failed', e, now);
 		}
 	}
 
@@ -178,9 +162,42 @@ export class PileApp {
 			}
 		});
 		const pilePositionObject = { pile_position_data: { objects3D, objects2D, sky: null } };
+		if (!isPayloadValid(pilePositionObject)) {
+			throw Error('Data Invalid Stopping Upload');
+		}
 		console.log('Payload built: ', pilePositionObject);
 		return pilePositionObject;
 	}
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isPayloadValid(data: any) {
+	if (!data || typeof data !== 'object') return false;
+	if (!isTransformPayloadValid(data.objects2D)) return false;
+	if (!isTransformPayloadValid(data.objects3D)) return false;
+	return true;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function isTransformPayloadValid(data: any): boolean {
+	const keys = ['position', 'rotation', 'scale'];
+	const axes = ['x', 'y', 'z'];
+	for (const objId in data) {
+		const transform = data[objId].transform;
+		const name = data[objId].name;
+		if (!transform || !name) return false;
+		for (const key of keys) {
+			if (!transform[key]) return false;
+			for (const axis of axes) {
+				const value = transform[key][axis];
+				if (typeof value !== 'number' || isNaN(value)) {
+					console.error(`Invalid data at ${objId}.${key}.${axis}:`, value);
+					return false;
+				}
+			}
+		}
+	}
+	return true;
 }
 
 /**

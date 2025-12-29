@@ -12,7 +12,7 @@
 	</div>
 	<div class="grid grid-cols-8 gap-3">
 		<button
-			onclick={() => uploadDataFactory(pileSceneRef)}
+			onclick={() => pileSceneRef.pileApp?.attemptSave()}
 			class="relative h-auto w-auto rounded bg-red-600 px-1 py-2 text-sm text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 			>Upload Position Data</button
 		>
