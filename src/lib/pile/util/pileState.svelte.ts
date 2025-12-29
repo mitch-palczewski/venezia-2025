@@ -2,6 +2,8 @@ import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 import { PileObject2D, type PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
 
+export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
+
 export class PileState {
 	selectedObjectID = $state<string | null>(null);
 
@@ -11,7 +13,7 @@ export class PileState {
 	#showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
 	maxID = $state(1000);
-	uploadStatus = $state('Idle');
+	uploadStatus: UploadStatus = $state('Idle');
 	#changeCount = $state(0);
 	#lastSavedCount = $state(0);
 	hasChanges = $derived(this.#changeCount !== this.#lastSavedCount);
@@ -23,10 +25,19 @@ export class PileState {
 	set showTransformControls(value) {
 		if (value !== this.#showTransformControls) {
 			this.#showTransformControls = value;
-			this.#changeCount++; 
+			this.#changeCount++;
 		}
 	}
 
+	constructor() {
+		$effect.root(() => {
+			$effect(() => {
+				if (this.hasChanges) {
+					this.uploadStatus = 'Unsaved Changes';
+				}
+			});
+		});
+	}
 
 	/**
 	 * For Checking if changes have been made to the Pile.

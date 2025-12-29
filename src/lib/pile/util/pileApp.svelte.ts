@@ -21,7 +21,6 @@ export class PileApp {
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	state = new PileState();
-	lastUploadStatus = $state('Idle');
 	autosave = true;
 	isActivlyWatching: () => boolean;
 
@@ -41,16 +40,19 @@ export class PileApp {
 		this.modelInventory.add(architectureModels);
 	}
 
-	public async attemptSave() {
+	public attemptSave = () => {
+		this.state.uploadStatus ='Saving'
 		const now = new SvelteDate();
 		if (!this.state.hasChanges) {
 			console.log(`No changes detected, skipping save.\n${now}`);
+			this.state.uploadStatus ='Saved'
 			return;
 		}
 		console.log(`Autosaving ... \n${now}`);
 		try {
-			await uploadData(this.getPileObjectPositions(), this.state.uploadStatus);
+			uploadData(this.getPileObjectPositions(), this.state.uploadStatus);
 			this.state.setAsSaved();
+			this.state.uploadStatus = 'Saved'
 		} catch (e) {
 			console.error('Auto-save failed', e, now);
 		}

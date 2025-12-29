@@ -1,22 +1,26 @@
 <script lang="ts">
-	import { uploadDataFactory, deleteSelectedModel } from '../../util/uiActions';
+	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
+	import type { PileState } from '$lib/pile/util/pileState.svelte';
+	import {deleteSelectedModel } from '../../util/uiActions';
 	import AddNewModel from './AddNewModel.svelte';
+	import SaveStatus from './SaveStatus.svelte';
 	import ScaleSlider from './ScaleSlider.svelte';
 
 	let { pileSceneRef } = $props();
+	const pileApp:PileApp = $derived(pileSceneRef?.pileApp);
+	const pileState: PileState = $derived(pileSceneRef?.pileApp.state)
+
 </script>
-{#if pileSceneRef?.pileApp}
-<div class="absolute top-[90vh] left-[1vw]">
-	<div>
-		<p>{pileSceneRef.pileApp?.state.uploadStatus}</p>
-	</div>
+{#if pileState && pileApp}
+<div class="relative">
+	<SaveStatus 
+		status = {pileState.uploadStatus}
+		onSave = {pileApp.attemptSave}
+	/>
+</div>
+<div class="absolute top-[90vh] left-[3vw]">
 	<div class="grid grid-cols-8 gap-3">
-		<button
-			onclick={() => pileSceneRef.pileApp?.attemptSave()}
-			class="relative h-auto w-auto rounded bg-red-600 px-1 py-2 text-sm text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
-			>Upload Position Data</button
-		>
-		{#if pileSceneRef?.pileApp?.state.selectedObjectID}
+		{#if pileApp.state.selectedObjectID}
 			<button
 				onclick={() => (pileSceneRef.pileApp.state.transformControlsMode = 'translate')}
 				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
@@ -27,21 +31,21 @@
 				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 				>Rotate</button
 			>
-			<ScaleSlider pileState={pileSceneRef.pileApp.state} />
+			<ScaleSlider pileState={pileApp.state} />
 			<button
-				onclick={() => deleteSelectedModel(pileSceneRef.pileApp.state)}
+				onclick={() => deleteSelectedModel(pileApp.state)}
 				class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 				>Delete</button
 			>
 		{/if}
 		
 			<AddNewModel
-				pileApp={pileSceneRef.pileApp}
-				inventory={pileSceneRef?.pileApp.modelInventory}
+				pileApp={pileApp}
+				inventory={pileApp.modelInventory}
 			/>
 			<AddNewModel
-				pileApp={pileSceneRef.pileApp}
-				inventory={pileSceneRef?.pileApp.imageInventory}
+				pileApp={pileApp}
+				inventory={pileApp.imageInventory}
 			/>
 		
 	</div>
