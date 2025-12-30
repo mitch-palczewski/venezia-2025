@@ -8,7 +8,7 @@ import {
 	architectureModels,
 	Object2DMapInventory,
 	test2D
-} from './assetsMap';
+} from './assetInventory/assetsMap';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';

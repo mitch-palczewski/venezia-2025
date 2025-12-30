@@ -56,7 +56,19 @@ export function deleteSelectedModel(pileState: PileState) {
 		}
 		tfrom?.clear();
 		tfrom?.remove();
-		console.log(model.ref);
+		console.log(`Removed Model: ${model.name}`);
 	}
+	pileState.objects2D.forEach((object2D, id) => {
+		if(id != pileState.selectedObjectID) return;
+		const tform = object2D.ref?.children[0]; 
+		const mesh = object2D.ref?.children[0].children[0] as Mesh
+		object2D.shown = false
+		if(mesh.isMesh){
+			mesh.geometry.dispose();
+		}
+		tform?.clear();
+		tform?.remove();
+		console.log(`Reomved Image ${object2D.name}`)
+	})
 	pileState.showTransformControls = false;
 }

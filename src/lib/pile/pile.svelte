@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { Environment, Grid } from '@threlte/extras';
+	import {  Grid } from '@threlte/extras';
 	import ModelTemplate from './components/modelTemplate.svelte';
 	import ImageTemplate from './components/imageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
 	import CameraControls from './components/CameraControls.svelte';
 	import { AutoSaver } from './util/pileSaving.svelte';
 	import { onMount } from 'svelte';
+	import PileEnvironment from './components/PileEnvironment.svelte';
 
 	interface Props {
 		rawPositionData: object;
@@ -22,17 +23,15 @@
 
 	export const pileApp = new PileApp(() => isActivelyWatching, rawPositionData);
 
-	console.log("Autosave Activated")
-	const autoSaver = new AutoSaver(pileApp,() => isActivelyWatching);
+	console.log('Autosave Activated');
+	const autoSaver = new AutoSaver(pileApp, () => isActivelyWatching);
 
 	onMount(() => {
-		autoSaver.start(60000)
+		autoSaver.start(60000);
 		return () => {
-			autoSaver.stop()
-		}
-	})
-
-
+			autoSaver.stop();
+		};
+	});
 
 	//OBSOLETE
 	export function getPositions(): object {
@@ -41,10 +40,7 @@
 </script>
 
 <svelte:document onvisibilitychange={handleVisibilityChange} />
-<svelte:window
-	onfocus={() => (isFocused = true)}
-	onblur={() => (isFocused = false)}
-/>
+<svelte:window onfocus={() => (isFocused = true)} onblur={() => (isFocused = false)} />
 
 <CameraControls />
 
@@ -58,7 +54,7 @@
 	sectionColor={'#000000'}
 	sectionThickness={1}
 />
-<Environment url={'/images/environment/yellow.png'} isBackground={true} />
+<PileEnvironment/>
 
 {#each pileApp.state.objects2D as image}
 	<ImageTemplate
