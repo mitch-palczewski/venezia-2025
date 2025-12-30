@@ -15,29 +15,32 @@ import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
 import { uploadData } from './api/uploadPositions';
 import { SvelteDate } from 'svelte/reactivity';
+import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
 
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
+	environmentInventory = new EnvironmentMapInventory();
 	state = new PileState();
 	autosave = true;
 	isActivlyWatching: () => boolean;
 
 	constructor(isActivlyWatching: () => boolean, rawPositionData?: object) {
 		this.isActivlyWatching = isActivlyWatching;
-		this.initPileApp();
+		this.initInventories();
 		if (rawPositionData) {
 			this.initObjectPositions(rawPositionData);
 		}
 	}
 
-	private initPileApp() {
+	private initInventories() {
 		this.imageInventory.add(test2D);
 		this.modelInventory.add(undertowModels);
 		this.modelInventory.add(variousModels);
 		this.modelInventory.add(potFace);
 		this.modelInventory.add(architectureModels);
+		this.environmentInventory.add(testEnvironments)
 	}
 
 	public attemptSave = () => {

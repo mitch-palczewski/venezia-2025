@@ -3,13 +3,12 @@
 	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
 	import { addNewModel } from '../../util/uiActions';
 
-	let selectedModel: Object2DMap | Object3DMap | null = $state(null);
-
 	interface Props {
 		pileApp: PileApp;
 		inventory: Object2DMapInventory | Object3DMapInventory;
 	}
 	let { pileApp, inventory }: Props = $props();
+	let selectedModel: Object2DMap | Object3DMap | null = $state(null);
 
 	function handleAdd() {
 		if (selectedModel) {

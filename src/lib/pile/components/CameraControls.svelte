@@ -13,7 +13,7 @@
   })
 
   // Adjusted speed (units per second)
-  const baseSpeed = 5
+  const baseSpeed = 10
   const direction = new Vector3()
   const tempVector = new Vector3()
 
