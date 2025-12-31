@@ -1,5 +1,5 @@
 import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
-import { PileObject2D, type PileObject3D } from './pileObject.svelte';
+import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
@@ -7,13 +7,12 @@ export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 export class PileState {
 	selectedObjectID = $state<string | null>(null);
 
-	//consider making this a <Map<string, PileObject3D>> where the string is the ID
 	objects2D = $state(new SvelteMap<string, PileObject2D>());
-	objects3D = $state<PileObject3D[]>([]);
+	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
 
-	//need to fix 
+	//need to fix
 	maxID = $state(1000);
 	uploadStatus: UploadStatus = $state('Idle');
 	#changeCount = $state(0);
@@ -56,7 +55,7 @@ export class PileState {
 
 	public add3DModel(model: PileObject3D) {
 		this.maxID += 1;
-		this.objects3D.push(model);
+		this.objects3D.set(model.id, model);
 	}
 
 	public add2DImage(image: PileObject2D) {
@@ -65,12 +64,12 @@ export class PileState {
 	}
 
 	public getUniqueID() {
-		for (const model of this.objects3D) {
-			const idNum = parseInt(model.id, 10);
+		this.objects3D?.forEach((model, id) => {
+			const idNum = parseInt(id, 10);
 			if (idNum > this.maxID) {
 				this.maxID = idNum + 1;
 			}
-		}
+		});
 		this.objects2D?.forEach((image, id) => {
 			const idNum = parseInt(id, 10);
 			if (idNum > this.maxID) {
@@ -83,7 +82,7 @@ export class PileState {
 
 	public clearAllModels() {
 		console.log('state.clearAllModels()');
-		this.objects3D = [];
+		this.objects3D?.clear();
 		this.objects2D?.clear();
 	}
 
@@ -92,11 +91,8 @@ export class PileState {
 			console.log('WARNING: selectedObjectID is null');
 			return null;
 		}
-		for (const model of this.objects3D) {
-			if (model.id === this.selectedObjectID) {
-				return model;
-			}
-		}
+		const model = this.objects3D.get(this.selectedObjectID);
+		if (model) return model;
 		const image = this.objects2D.get(this.selectedObjectID);
 		if (image) return image;
 

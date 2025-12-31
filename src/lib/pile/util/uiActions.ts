@@ -10,6 +10,7 @@ import type { PileApp } from './pileApp.svelte';
 import { BASE_TRANSFORM } from './transform';
 import type { Object2DMap } from './assetInventory/object2DMap';
 import type { Object3DMap } from './assetInventory/object3DMap';
+import type { SvelteMap } from 'svelte/reactivity';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => object }) {
 	const positions: object = pileSceneRef.getPositions();
@@ -30,7 +31,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
-		pileApp.state.objects3D.push(model);
+		pileApp.state.objects3D.set(model.id, model);
 	}
 	if (modelMap.objectType === '2D') {
 		const image = new PileObject2D({
@@ -46,31 +47,22 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 }
 
 export function deleteSelectedModel(pileState: PileState) {
-	for (let i = pileState.objects3D.length - 1; i >= 0; i--) {
-		if (pileState.objects3D[i].id != pileState.selectedObjectID) continue;
-		const model = pileState.objects3D[i];
-		const tfrom = model.ref?.children[0];
-		const mesh = model.ref?.children[0].children[0] as Mesh;
+	deleteObject(pileState.objects3D, pileState.selectedObjectID)
+	deleteObject(pileState.objects2D, pileState.selectedObjectID)
+	pileState.showTransformControls = false;
+}
 
-		model.shown = false;
-		if (mesh.isMesh) {
-			mesh.geometry.dispose();
-		}
-		tfrom?.clear();
-		tfrom?.remove();
-		console.log(`Removed Model: ${model.name}`);
-	}
-	pileState.objects2D.forEach((object2D, id) => {
-		if(id != pileState.selectedObjectID) return;
-		const tform = object2D.ref?.children[0]; 
-		const mesh = object2D.ref?.children[0].children[0] as Mesh
-		object2D.shown = false
+function deleteObject(inventory: SvelteMap<string, PileObject3D | PileObject2D>, selectedObjectID: string | null){
+	inventory.forEach((object, id) => {
+		if(id != selectedObjectID) return;
+		const tform = object.ref?.children[0]; 
+		const mesh = object.ref?.children[0].children[0] as Mesh
+		object.shown = false
 		if(mesh.isMesh){
 			mesh.geometry.dispose();
 		}
 		tform?.clear();
 		tform?.remove();
-		console.log(`Reomved Image ${object2D.name}`)
+		console.log(`Reomved Object ${object.name}`)
 	})
-	pileState.showTransformControls = false;
 }

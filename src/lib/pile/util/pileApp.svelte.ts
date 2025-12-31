@@ -86,7 +86,7 @@ export class PileApp {
 			payloadObjects3D,
 			this.modelInventory,
 			(obj) => {
-				this.state.objects3D.push(new PileObject3D(obj));
+				this.state.objects3D.set(obj.id, new PileObject3D(obj));
 			},
 			'3D Model'
 		);
@@ -128,7 +128,7 @@ function initObjects(
 	}
 }
 
-function getObjectsPayload(objects: SvelteMap<string, PileObject2D> | PileObject3D[]) {
+function getObjectsPayload(objects: SvelteMap<string, PileObject2D> | SvelteMap<string, PileObject3D>) {
 	const objectsTransform: Record<string, PileObjectPayload> = {};
 	const _pos = new Vector3();
 	const _quat = new Quaternion();
