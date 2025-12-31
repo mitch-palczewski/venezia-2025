@@ -16,22 +16,31 @@ import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
 import { uploadData } from './api/uploadPositions';
 import { SvelteDate } from 'svelte/reactivity';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
-
+import { PileEnvironment } from './pileEnvironment.svelte';
+import { useThrelte } from '@threlte/core';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	environmentInventory = new EnvironmentMapInventory();
 	state = new PileState();
+	environment: PileEnvironment;
 	autosave = true;
 	isActivlyWatching: () => boolean;
 
-	constructor(isActivlyWatching: () => boolean, rawPositionData?: object) {
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	constructor(isActivlyWatching: () => boolean, rawPositionData?: any) {
 		this.isActivlyWatching = isActivlyWatching;
 		this.initInventories();
 		if (rawPositionData) {
 			this.initObjectPositions(rawPositionData);
 		}
+		const { scene, renderer } = useThrelte();
+		this.environment = new PileEnvironment(
+			scene,
+			renderer,
+			this.environmentInventory.get(rawPositionData?.data.pile_position_data.sky)
+		);
 	}
 
 	private initInventories() {
@@ -40,26 +49,26 @@ export class PileApp {
 		this.modelInventory.add(variousModels);
 		this.modelInventory.add(potFace);
 		this.modelInventory.add(architectureModels);
-		this.environmentInventory.add(testEnvironments)
+		this.environmentInventory.add(testEnvironments);
 	}
 
 	public attemptSave = () => {
-		this.state.uploadStatus ='Saving'
+		this.state.uploadStatus = 'Saving';
 		const now = new SvelteDate();
 		if (!this.state.hasChanges) {
 			console.log(`No changes detected, skipping save.\n${now}`);
-			this.state.uploadStatus ='Saved'
+			this.state.uploadStatus = 'Saved';
 			return;
 		}
 		console.log(`Autosaving ... \n${now}`);
 		try {
 			uploadData(this.getPileObjectPositions(), this.state.uploadStatus);
 			this.state.setAsSaved();
-			this.state.uploadStatus = 'Saved'
+			this.state.uploadStatus = 'Saved';
 		} catch (e) {
 			console.error('Auto-save failed', e, now);
 		}
-	}
+	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public initObjectPositions(rawPositionData: any) {
@@ -104,69 +113,63 @@ export class PileApp {
 		const objects2D: Record<string, PileObjectJson> = {};
 		let id = 1001;
 		this.state.objects2D.forEach((image) => {
-			try {
-				if (!image.shown) {
-					return;
-				}
-				if (!isInBounds(image)) {
-					return;
-				}
-				const v3Position = new Vector3(0, 0, 0);
-				const quatRotation = new Quaternion(0, 0, 0, 0);
-				const v3Scale = new Vector3(0, 0, 0);
-				image.ref?.children[0].getWorldPosition(v3Position);
-				image.ref?.children[0].getWorldQuaternion(quatRotation);
-				image.ref?.children[0].getWorldScale(v3Scale);
-
-				const transform: Transform3D = {
-					translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
-					rotation: {
-						x: quatRotation.x,
-						y: quatRotation.y,
-						z: quatRotation.z,
-						w: quatRotation.w
-					},
-					scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
-				};
-				objects2D[id] = { transform: transform, name: image.name, animation: null };
-				id += 1;
-			} catch (e) {
-				console.log(e);
+			if (!image.shown) {
+				return;
 			}
+			if (!isInBounds(image)) {
+				return;
+			}
+			const v3Position = new Vector3(0, 0, 0);
+			const quatRotation = new Quaternion(0, 0, 0, 0);
+			const v3Scale = new Vector3(0, 0, 0);
+			image.ref?.children[0].getWorldPosition(v3Position);
+			image.ref?.children[0].getWorldQuaternion(quatRotation);
+			image.ref?.children[0].getWorldScale(v3Scale);
+
+			const transform: Transform3D = {
+				translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
+				rotation: {
+					x: quatRotation.x,
+					y: quatRotation.y,
+					z: quatRotation.z,
+					w: quatRotation.w
+				},
+				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
+			};
+			objects2D[id] = { transform: transform, name: image.name, animation: null };
+			id += 1;
 		});
 
 		this.state.objects3D.forEach((model) => {
-			try {
-				if (!model.shown) {
-					return;
-				}
-				if (!isInBounds(model)) {
-					return;
-				}
-				const v3Position = new Vector3(0, 0, 0);
-				const quatRotation = new Quaternion(0, 0, 0, 0);
-				const v3Scale = new Vector3(0, 0, 0);
-				model.ref?.children[0].getWorldPosition(v3Position);
-				model.ref?.children[0].getWorldQuaternion(quatRotation);
-				model.ref?.children[0].getWorldScale(v3Scale);
-
-				const transform: Transform3D = {
-					translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
-					rotation: {
-						x: quatRotation.x,
-						y: quatRotation.y,
-						z: quatRotation.z,
-						w: quatRotation.w
-					},
-					scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
-				};
-				objects3D[id] = { transform: transform, name: model.name, animation: null };
-				id += 1;
-			} catch (e) {
-				console.log(e);
+			if (!model.shown) {
+				return;
 			}
+			if (!isInBounds(model)) {
+				return;
+			}
+			const v3Position = new Vector3(0, 0, 0);
+			const quatRotation = new Quaternion(0, 0, 0, 0);
+			const v3Scale = new Vector3(0, 0, 0);
+			model.ref?.children[0].getWorldPosition(v3Position);
+			model.ref?.children[0].getWorldQuaternion(quatRotation);
+			model.ref?.children[0].getWorldScale(v3Scale);
+
+			const transform: Transform3D = {
+				translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
+				rotation: {
+					x: quatRotation.x,
+					y: quatRotation.y,
+					z: quatRotation.z,
+					w: quatRotation.w
+				},
+				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
+			};
+			objects3D[id] = { transform: transform, name: model.name, animation: null };
+			id += 1;
 		});
-		const pilePositionObject = { pile_position_data: { objects3D, objects2D, sky: null } };
+		const pilePositionObject = {
+			pile_position_data: { objects3D, objects2D, sky: this.environment.selectedEnvironment.name }
+		};
 		if (!isPayloadValid(pilePositionObject)) {
 			throw Error('Data Invalid Stopping Upload');
 		}

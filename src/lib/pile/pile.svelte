@@ -7,7 +7,7 @@
 	import CameraControls from './components/CameraControls.svelte';
 	import { AutoSaver } from './util/pileSaving.svelte';
 	import { onMount } from 'svelte';
-	import PileEnvironment from './components/PileEnvironment.svelte';
+	import { PileEnvironment } from './util/pileEnvironment.svelte';
 
 	interface Props {
 		rawPositionData: object;
@@ -17,12 +17,7 @@
 	let isVisible = $state(true);
 	let isFocused = $state(true);
 	const isActivelyWatching = $derived(isVisible && isFocused);
-	function handleVisibilityChange() {
-		isVisible = document.visibilityState === 'visible';
-	}
-
 	export const pileApp = new PileApp(() => isActivelyWatching, rawPositionData);
-
 	console.log('Autosave Activated');
 	const autoSaver = new AutoSaver(pileApp, () => isActivelyWatching);
 
@@ -33,6 +28,9 @@
 		};
 	});
 
+	function handleVisibilityChange() {
+		isVisible = document.visibilityState === 'visible';
+	}
 	//OBSOLETE
 	export function getPositions(): object {
 		return pileApp.getPileObjectPositions();
@@ -54,7 +52,6 @@
 	sectionColor={'#000000'}
 	sectionThickness={1}
 />
-<PileEnvironment/>
 
 {#each pileApp.state.objects2D as image}
 	<ImageTemplate

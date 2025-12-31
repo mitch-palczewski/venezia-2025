@@ -65,7 +65,8 @@ export class EnvironmentMapInventory {
 	public get(name: string): EnvironmentMap | undefined {
 		const foundObject = this.items.find((m) => m.name === name);
 		if (!foundObject) {
-			console.log(`WARNING: did not find ${name} in Object2DMapInventory`);
+			console.log(`WARNING: did not find ${name} in EnvironmentMapInventory`);
+            return this.items[0]
 		}
 		return foundObject;
 	}

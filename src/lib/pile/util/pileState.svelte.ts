@@ -12,6 +12,8 @@ export class PileState {
 	objects3D = $state<PileObject3D[]>([]);
 	#showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
+
+	//need to fix 
 	maxID = $state(1000);
 	uploadStatus: UploadStatus = $state('Idle');
 	#changeCount = $state(0);

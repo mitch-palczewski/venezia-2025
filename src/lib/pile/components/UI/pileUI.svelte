@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
+	import type { PileEnvironment } from '$lib/pile/util/pileEnvironment.svelte';
 	import type { PileState } from '$lib/pile/util/pileState.svelte';
 	import { deleteSelectedModel } from '../../util/uiActions';
 	import AddNewModel from './AddNewModel.svelte';
@@ -10,22 +11,23 @@
 	let { pileSceneRef } = $props();
 	const pileApp: PileApp = $derived(pileSceneRef?.pileApp);
 	const pileState: PileState = $derived(pileSceneRef?.pileApp.state);
+	const pileEnvironment: PileEnvironment = $derived(pileSceneRef?.pileApp.environment)
 </script>
 
-{#if pileState && pileApp}
+{#if pileApp && pileState}
 	<div class="relative">
 		<SaveStatus status={pileState.uploadStatus} onSave={pileApp.attemptSave} />
 	</div>
 	<div class="absolute top-[90vh] left-[3vw]">
 		<div class="grid grid-cols-8 gap-3">
-			{#if pileApp.state.selectedObjectID}
+			{#if pileState.selectedObjectID}
 				<button
-					onclick={() => (pileSceneRef.pileApp.state.transformControlsMode = 'translate')}
+					onclick={() => (pileState.transformControlsMode = 'translate')}
 					class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 					>Translate</button
 				>
 				<button
-					onclick={() => (pileSceneRef.pileApp.state.transformControlsMode = 'rotate')}
+					onclick={() => (pileState.transformControlsMode = 'rotate')}
 					class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 					>Rotate</button
 				>

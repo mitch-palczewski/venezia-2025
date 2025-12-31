@@ -11,7 +11,7 @@
 
 	function handleEnvironmentSelection() {
 		if (selectedEnvironment) {
-			console.log("TODO: ChooseEnvironment.svelte add handleEnvironmentSelection")
+            pileApp.environment.selectedEnvironment = selectedEnvironment
 		}
 	}
 </script>
