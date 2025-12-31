@@ -31,8 +31,8 @@
 	console.log(`2D Object: ${pileObjectData.name}`);
 	let texture: null | AsyncWritable<Texture> = $state(null);
 
-	if (imageEntry?.fileType === 'png') {
-		texture = useTexture(imageEntry.path);
+	if (pileObjectData.objectMap.fileType === 'png') {
+		texture = useTexture(pileObjectData.objectMap.path);
 	}
 
 	let showThisTransformControls = $derived.by(() => {
@@ -62,9 +62,6 @@
 		return transform;
 	}
 
-	/**
-	 * Modifies the pile state showTransformControls and selectedObjectID
-	 */
 	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
 		if (!pileObjectData.id) return;

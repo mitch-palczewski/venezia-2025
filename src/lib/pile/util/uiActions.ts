@@ -24,7 +24,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 		const model = new PileObject3D({
 			name: modelMap.name,
 			id: pileApp.state.getUniqueID(),
-			modelPath: modelMap?.path ?? '',
+			objectMap: modelMap,
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
@@ -34,7 +34,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 		const image = new PileObject2D({
 			name: modelMap.name,
 			id: pileApp.state.getUniqueID(),
-			modelPath: modelMap?.path ?? '',
+			objectMap: modelMap,
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});

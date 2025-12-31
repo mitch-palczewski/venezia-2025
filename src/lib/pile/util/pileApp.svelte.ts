@@ -74,7 +74,6 @@ export class PileApp {
 	public initObjectPositions(rawPositionData: any) {
 		const payloadObjects2D: PileDataSchema = rawPositionData.data[PILE_PAYLOAD_NAME].objects2D;
 		const payloadObjects3D: PileDataSchema = rawPositionData.data[PILE_PAYLOAD_NAME].objects3D;
-
 		initObjects(
 			payloadObjects2D,
 			this.imageInventory,
@@ -113,8 +112,8 @@ function initObjects(
 	context: string
 ) {
 	for (const [id, item] of Object.entries(data)) {
-		const inventoryObject = inventory.get(item.name);
-		if (!inventoryObject) {
+		const objectMap = inventory.get(item.name);
+		if (!objectMap) {
 			console.warn(`[${context} Inventory] Missing item: ${item.name}`);
 			continue;
 		}
@@ -122,7 +121,7 @@ function initObjects(
 		onCreated({
 			name: item.name,
 			id: id,
-			modelPath: inventoryObject.path,
+			objectMap: objectMap,
 			transform3D: item.transform,
 			uniformScale: (x + y + z) / 3
 		});

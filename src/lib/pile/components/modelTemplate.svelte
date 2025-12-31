@@ -27,8 +27,7 @@
 	interactivity();
 
 	let shown = $state(pileObjectData.shown);
-	const modelEntry = pileApp.modelInventory.get(pileObjectData.name);
-	const gltf = useGltf(modelEntry?.path ?? '');
+	const gltf = useGltf(pileObjectData.objectMap.path ?? '');
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
 			return [];

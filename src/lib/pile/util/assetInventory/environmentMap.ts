@@ -1,3 +1,5 @@
+import { BaseInventory, BaseMap } from './abstractAssetMap';
+
 type EnvironmentFileType = 'jpg' | 'hdr' | 'png';
 
 interface EnvironmentMapOptions {
@@ -7,93 +9,45 @@ interface EnvironmentMapOptions {
 	fileType: EnvironmentFileType;
 }
 
-export class EnvironmentMap {
-	readonly name: string;
-	readonly displayName: string;
-	readonly path: string;
+export class EnvironmentMap extends BaseMap {
 	readonly fileType: EnvironmentFileType;
+
 	constructor({ name, displayName, path, fileType }: EnvironmentMapOptions) {
-		this.name = name;
-		this.path = path;
-		this.displayName = displayName ?? name;
+		super(name, path, displayName);
 		this.fileType = fileType;
 	}
 }
 
-export class EnvironmentMapInventory {
-	private items: EnvironmentMap[] = [];
-	constructor(environments?: EnvironmentMap[]) {
-		if (environments) {
-			this.items = environments;
-		}
-	}
-	public validate(): void {
-		const names = new Set<string>();
-		const displayNames = new Set<string>();
-		const paths = new Set<string>();
-
-		this.items.forEach((environment) => {
-			if (
-				!environment.path.toLowerCase().endsWith('.png') ||
-				!environment.path.toLowerCase().endsWith('.svg')
-			) {
-				console.log(
-					`WARNING: Unexpected Model suffix. ${environment.name} with path: ${environment.path}`
-				);
-			}
-			if (names.has(environment.name)) {
-				throw new Error(`Duplicate Name: "${environment.name}"`);
-			}
-			if (displayNames.has(environment.displayName)) {
-				throw new Error(`Duplicate Display Name: "${environment.displayName}"`);
-			}
-			if (paths.has(environment.path)) {
-				throw new Error(`Duplicate Path: "${environment.path}"`);
-			}
-
-			names.add(environment.name);
-			displayNames.add(environment.displayName);
-			paths.add(environment.path);
-		});
-	}
-	public exists(name: string): boolean {
-		return this.items.some((m) => m.name === name);
-	}
-	public add(models: EnvironmentMap[]): void {
-		this.items = [...this.items, ...models];
-	}
-	public get(name: string): EnvironmentMap | undefined {
-		const foundObject = this.items.find((m) => m.name === name);
-		if (!foundObject) {
-			console.log(`WARNING: did not find ${name} in EnvironmentMapInventory`);
-            return this.items[0]
-		}
-		return foundObject;
-	}
-	public getAll(): EnvironmentMap[] {
-		return [...this.items];
-	}
+export class EnvironmentMapInventory extends BaseInventory<EnvironmentMap> {
+    public validate(): void {
+        this.validateDuplicates();
+        this.items.forEach(item => {
+            if (!item.path.toLowerCase().endsWith('.jpg') || !item.path.toLowerCase().endsWith('.png')) {
+                throw new Error(`WARNING: Unexpected environment suffix for ${item.name}: ${item.path}`);
+            }
+        });
+        console.log(`✅ Object3D Validated: ${this.items.length} models.`);
+    }
 }
 
 
-
 export const testEnvironments: EnvironmentMap[] = [
-    new EnvironmentMap({
-        name: 'world',
-        displayName: 'Marseille',
-        path: '/images/environment/world.jpg',
-        fileType: 'jpg'
-    }),
-     new EnvironmentMap({
-        name: 'trees',
-        displayName: 'Trees',
-        path: '/images/environment/trees.jpg',
-        fileType: 'jpg'
-    }),
-     new EnvironmentMap({
-        name: 'yellow',
-        displayName: 'Yellow',
-        path: '/images/environment/yellow.png',
-        fileType: 'png'
-    })
-]
+	new EnvironmentMap({
+		name: 'world',
+		displayName: 'Marseille',
+		path: '/images/environment/world.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'trees',
+		displayName: 'Trees',
+		path: '/images/environment/trees.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'yellow',
+		displayName: 'Yellow',
+		path: '/images/environment/yellow.png',
+		fileType: 'png'
+	})
+];

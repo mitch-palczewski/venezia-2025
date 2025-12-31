@@ -1,66 +1,48 @@
 import { type Group, type Object3DEventMap } from 'three';
-import type { Transform3D} from '..';
+import type { Object2DMap, Object3DMap, Transform3D} from '..';
 
 
-interface PileObject3DOptions {
-	name: string,
-	id: string,
-	modelPath: string,
-	transform3D: Transform3D,
-	uniformScale: number
-}
-
-/**
- * @public name, id, modelPath, transform3D, ref, shown, uniformScale
- */
-export class PileObject3D {
-	name: string;
+interface BasePileObjectOptions<T>{
+	name:string;
 	id: string;
-	modelPath: string;
+	objectMap: T;
 	transform3D: Transform3D;
-	ref: Group<Object3DEventMap> | null = null; 
-	shown: boolean = true;
-	uniformScale: number | null = $state(null);
-	
-	constructor(
-        {name, id, modelPath, transform3D, uniformScale = 1}: PileObject3DOptions
-    ) {
-		this.name = name;
-		this.id = id;
-		this.modelPath = modelPath;
-		this.transform3D = transform3D;
-		this.uniformScale = uniformScale
+	uniformScale?: number;
+}
+abstract class BasePileObject<T> {
+	name: string;
+    id: string;
+    objectMap: T;
+    transform3D: Transform3D;
+    ref: Group<Object3DEventMap> | null = null;
+    shown: boolean = true;
+    uniformScale: number = $state(1);
+
+	constructor(options: BasePileObjectOptions<T>){
+		this.name = options.name
+		this.id = options.id
+		this.objectMap = options.objectMap
+		this.transform3D = options.transform3D
+		this.uniformScale = options.uniformScale ?? 1;
 	}
 }
 
-interface PileObject2DOptions {
-	name: string,
-	id: string,
-	modelPath: string,
-	transform3D: Transform3D,
-	uniformScale: number
-	billboard?: boolean
-}
-
-export class PileObject2D {
-	name: string;
-	id: string;
-	transform3D: Transform3D;
-	ref: Group<Object3DEventMap> | null = null; 
-	shown: boolean = true;
-	uniformScale: number = $state(1);
-	billboard:boolean = $state(false)
-	
-	constructor(
-        {name, id, transform3D, uniformScale = 1, billboard = false}: PileObject2DOptions
-    ) {
-		this.name = name;
-		this.id = id;
-		this.transform3D = transform3D;
-		this.uniformScale = uniformScale
-		this.billboard = billboard
+export class PileObject3D extends BasePileObject<Object3DMap> {
+	constructor(options: BasePileObjectOptions<Object3DMap>){
+		super(options)
 	}
 }
 
+interface PileObject2DOptions extends BasePileObjectOptions<Object2DMap> {
+	billboard?: boolean;
+}
 
+export class PileObject2D extends BasePileObject<Object2DMap> {
+	billboard: boolean = $state(false);
+
+	constructor(options: PileObject2DOptions){
+		super(options);
+		this.billboard = options.billboard ?? false;
+	}
+}
 

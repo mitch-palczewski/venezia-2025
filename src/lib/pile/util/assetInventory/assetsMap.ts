@@ -1,3 +1,5 @@
+//RENAME pileAssetMap.ts
+
 type Object2DFileType = "svg" | "png"
 
 interface Object2DMapOptions {
