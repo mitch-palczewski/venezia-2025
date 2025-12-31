@@ -109,8 +109,8 @@ export class PileApp {
 	}
 
 	public getPileObjectPositions() {
-		const objects3D: Record<string, PileObjectJson> = getPileObjectJson(this.state.objects3D)
-		const objects2D: Record<string, PileObjectJson> = getPileObjectJson(this.state.objects2D)	
+		const objects3D: Record<string, PileObjectJson> = getPileObjectJson(this.state.objects3D);
+		const objects2D: Record<string, PileObjectJson> = getPileObjectJson(this.state.objects2D);
 		const pilePositionObject = {
 			pile_position_data: { objects3D, objects2D, sky: this.environment.selectedEnvironment.name }
 		};
@@ -124,29 +124,27 @@ export class PileApp {
 
 function getPileObjectJson(objects: SvelteMap<string, PileObject2D> | PileObject3D[]) {
 	const objectsTransform: Record<string, PileObjectJson> = {};
+	const _pos = new Vector3();
+	const _quat = new Quaternion();
+	const _scale = new Vector3();
 	objects.forEach((object) => {
-		if (!object.shown) {
-			return;
-		}
-		if (!isInBounds(object)) {
-			return;
-		}
-		const v3Position = new Vector3(0, 0, 0);
-		const quatRotation = new Quaternion(0, 0, 0, 0);
-		const v3Scale = new Vector3(0, 0, 0);
+		if (!object.shown || !isInBounds(object)) return;
 		const mesh = object.ref?.children[0];
-		mesh?.getWorldPosition(v3Position);
-		mesh?.getWorldQuaternion(quatRotation);
-		mesh?.getWorldScale(v3Scale);
+		if(!mesh) {
+			throw Error(`Object ${object.name} has no Mesh`)
+		};
+		mesh?.getWorldPosition(_pos);
+		mesh?.getWorldQuaternion(_quat);
+		mesh?.getWorldScale(_scale);
 		const transform: Transform3D = {
-			translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
+			translate: { x: _pos.x, y: _pos.y, z: _pos.z },
 			rotation: {
-				x: quatRotation.x,
-				y: quatRotation.y,
-				z: quatRotation.z,
-				w: quatRotation.w
+				x: _quat.x,
+				y: _quat.y,
+				z: _quat.z,
+				w: _quat.w
 			},
-			scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
+			scale: { x: _scale.x, y: _scale.y, z: _scale.z }
 		};
 		objectsTransform[object.id] = { transform: transform, name: object.name, animation: null };
 	});
@@ -183,12 +181,8 @@ function isTransformPayloadValid(data: any): boolean {
 	return true;
 }
 
-/**
- *
- * @param model
- * @returns true if within MAX_OBJECT_DISTANCE from the origin
- */
 function isInBounds(model: PileObject3D | PileObject2D): boolean {
+	//Consider Making This based on Scale to Distance Ration instead of just distance
 	const position = new Vector3(0, 0, 0);
 	model.ref?.children[0].getWorldPosition(position);
 	if (
@@ -202,6 +196,7 @@ function isInBounds(model: PileObject3D | PileObject2D): boolean {
 		console.log(
 			`Warning: Model ${model.name} is out of bounds. Model Cords ... x: ${position.x}, y: ${position.y}, z: ${position.z}. The maximum distance from origin is ${MAX_OBJECT_DISTANCE}`
 		);
+		console.log('TODO: Notify the user model is out of bounds.');
 		return false;
 	}
 	return true;
