@@ -4,10 +4,12 @@
  */
 
 import type { Mesh } from 'three';
-import { uploadData, type Transform3D, PileState, Object2DMap, Object3DMap } from '..';
+import { uploadData, type Transform3D, PileState } from '..';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import type { PileApp } from './pileApp.svelte';
 import { BASE_TRANSFORM } from './transform';
+import type { Object2DMap } from './assetInventory/object2DMap';
+import type { Object3DMap } from './assetInventory/object3DMap';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => object }) {
 	const positions: object = pileSceneRef.getPositions();

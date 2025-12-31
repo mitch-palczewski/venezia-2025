@@ -1,5 +1,7 @@
 import { type Group, type Object3DEventMap } from 'three';
-import type { Object2DMap, Object3DMap, Transform3D} from '..';
+import type {Transform3D} from '..';
+import type { Object3DMap } from './assetInventory/object3DMap';
+import type { Object2DMap } from './assetInventory/object2DMap';
 
 
 interface BasePileObjectOptions<T>{

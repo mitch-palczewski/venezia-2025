@@ -2,12 +2,10 @@
 import { Quaternion, Vector3 } from 'three';
 import type { Transform3D } from '../types';
 import {
-	Object3DMapInventory,
 	undertowModels,
 	variousModels,
 	potFace,
 	architectureModels,
-	Object2DMapInventory,
 	test2D
 } from './assetInventory/assetsMap';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
@@ -19,6 +17,8 @@ import { SvelteDate, SvelteMap } from 'svelte/reactivity';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
 import { PileEnvironment } from './pileEnvironment.svelte';
 import { useThrelte } from '@threlte/core';
+import { Object3DMapInventory } from './assetInventory/object3DMap';
+import { Object2DMapInventory } from './assetInventory/object2DMap';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
