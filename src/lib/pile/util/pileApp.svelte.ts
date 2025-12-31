@@ -14,7 +14,7 @@ import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
 import { uploadData } from './api/uploadPositions';
-import { SvelteDate } from 'svelte/reactivity';
+import { SvelteDate, SvelteMap } from 'svelte/reactivity';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
 import { PileEnvironment } from './pileEnvironment.svelte';
 import { useThrelte } from '@threlte/core';
@@ -109,64 +109,8 @@ export class PileApp {
 	}
 
 	public getPileObjectPositions() {
-		const objects3D: Record<string, PileObjectJson> = {};
-		const objects2D: Record<string, PileObjectJson> = {};
-		let id = 1001;
-		this.state.objects2D.forEach((image) => {
-			if (!image.shown) {
-				return;
-			}
-			if (!isInBounds(image)) {
-				return;
-			}
-			const v3Position = new Vector3(0, 0, 0);
-			const quatRotation = new Quaternion(0, 0, 0, 0);
-			const v3Scale = new Vector3(0, 0, 0);
-			image.ref?.children[0].getWorldPosition(v3Position);
-			image.ref?.children[0].getWorldQuaternion(quatRotation);
-			image.ref?.children[0].getWorldScale(v3Scale);
-
-			const transform: Transform3D = {
-				translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
-				rotation: {
-					x: quatRotation.x,
-					y: quatRotation.y,
-					z: quatRotation.z,
-					w: quatRotation.w
-				},
-				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
-			};
-			objects2D[id] = { transform: transform, name: image.name, animation: null };
-			id += 1;
-		});
-
-		this.state.objects3D.forEach((model) => {
-			if (!model.shown) {
-				return;
-			}
-			if (!isInBounds(model)) {
-				return;
-			}
-			const v3Position = new Vector3(0, 0, 0);
-			const quatRotation = new Quaternion(0, 0, 0, 0);
-			const v3Scale = new Vector3(0, 0, 0);
-			model.ref?.children[0].getWorldPosition(v3Position);
-			model.ref?.children[0].getWorldQuaternion(quatRotation);
-			model.ref?.children[0].getWorldScale(v3Scale);
-
-			const transform: Transform3D = {
-				translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
-				rotation: {
-					x: quatRotation.x,
-					y: quatRotation.y,
-					z: quatRotation.z,
-					w: quatRotation.w
-				},
-				scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
-			};
-			objects3D[id] = { transform: transform, name: model.name, animation: null };
-			id += 1;
-		});
+		const objects3D: Record<string, PileObjectJson> = getPileObjectJson(this.state.objects3D)
+		const objects2D: Record<string, PileObjectJson> = getPileObjectJson(this.state.objects2D)	
 		const pilePositionObject = {
 			pile_position_data: { objects3D, objects2D, sky: this.environment.selectedEnvironment.name }
 		};
@@ -176,6 +120,37 @@ export class PileApp {
 		console.log('Payload built: ', pilePositionObject);
 		return pilePositionObject;
 	}
+}
+
+function getPileObjectJson(objects: SvelteMap<string, PileObject2D> | PileObject3D[]) {
+	const objectsTransform: Record<string, PileObjectJson> = {};
+	objects.forEach((object) => {
+		if (!object.shown) {
+			return;
+		}
+		if (!isInBounds(object)) {
+			return;
+		}
+		const v3Position = new Vector3(0, 0, 0);
+		const quatRotation = new Quaternion(0, 0, 0, 0);
+		const v3Scale = new Vector3(0, 0, 0);
+		const mesh = object.ref?.children[0];
+		mesh?.getWorldPosition(v3Position);
+		mesh?.getWorldQuaternion(quatRotation);
+		mesh?.getWorldScale(v3Scale);
+		const transform: Transform3D = {
+			translate: { x: v3Position.x, y: v3Position.y, z: v3Position.z },
+			rotation: {
+				x: quatRotation.x,
+				y: quatRotation.y,
+				z: quatRotation.z,
+				w: quatRotation.w
+			},
+			scale: { x: v3Scale.x, y: v3Scale.y, z: v3Scale.z }
+		};
+		objectsTransform[object.id] = { transform: transform, name: object.name, animation: null };
+	});
+	return objectsTransform;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
