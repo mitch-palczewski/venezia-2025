@@ -7,7 +7,6 @@
 	import CameraControls from './components/CameraControls.svelte';
 	import { AutoSaver } from './util/pileSaving.svelte';
 	import { onMount } from 'svelte';
-	import { PileEnvironment } from './util/pileEnvironment.svelte';
 
 	interface Props {
 		rawPositionData: object;
@@ -33,7 +32,7 @@
 	}
 	//OBSOLETE
 	export function getPositions(): object {
-		return pileApp.getPileObjectPositions();
+		return pileApp.getPilePayload();
 	}
 </script>
 

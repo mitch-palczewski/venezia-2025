@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
-	import type { PileEnvironment } from '$lib/pile/util/pileEnvironment.svelte';
+	
 	import type { PileState } from '$lib/pile/util/pileState.svelte';
 	import { deleteSelectedModel } from '../../util/uiActions';
 	import AddNewModel from './AddNewModel.svelte';
@@ -11,7 +11,6 @@
 	let { pileSceneRef } = $props();
 	const pileApp: PileApp = $derived(pileSceneRef?.pileApp);
 	const pileState: PileState = $derived(pileSceneRef?.pileApp.state);
-	const pileEnvironment: PileEnvironment = $derived(pileSceneRef?.pileApp.environment)
 </script>
 
 {#if pileApp && pileState}

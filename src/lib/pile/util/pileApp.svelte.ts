@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Quaternion, Vector3 } from 'three';
 import type { Transform3D } from '../types';
 import {
@@ -11,8 +12,8 @@ import {
 } from './assetInventory/assetsMap';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
-import { MAX_OBJECT_DISTANCE } from '$lib/constants';
-import { type PileDataSchema, type PileObjectJson } from './api/pilePayload';
+import { MAX_OBJECT_DISTANCE, PILE_PAYLOAD_NAME } from '$lib/constants';
+import { type PileDataSchema, type PileObjectPayload } from './api/pilePayload';
 import { uploadData } from './api/uploadPositions';
 import { SvelteDate, SvelteMap } from 'svelte/reactivity';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
@@ -28,7 +29,6 @@ export class PileApp {
 	autosave = true;
 	isActivlyWatching: () => boolean;
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	constructor(isActivlyWatching: () => boolean, rawPositionData?: any) {
 		this.isActivlyWatching = isActivlyWatching;
 		this.initInventories();
@@ -39,7 +39,7 @@ export class PileApp {
 		this.environment = new PileEnvironment(
 			scene,
 			renderer,
-			this.environmentInventory.get(rawPositionData?.data.pile_position_data.sky)
+			this.environmentInventory.get(rawPositionData?.data[PILE_PAYLOAD_NAME].sky)
 		);
 	}
 
@@ -62,77 +62,84 @@ export class PileApp {
 		}
 		console.log(`Autosaving ... \n${now}`);
 		try {
-			uploadData(this.getPileObjectPositions(), this.state.uploadStatus);
+			uploadData(this.getPilePayload(), this.state.uploadStatus);
 			this.state.setAsSaved();
 			this.state.uploadStatus = 'Saved';
+			//TODO: Add seperate upload of DateTime and a SessionID  (Would this be better to add as meta data. That depends on the size of fileIO)
 		} catch (e) {
 			console.error('Auto-save failed', e, now);
 		}
 	};
 
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public initObjectPositions(rawPositionData: any) {
-		const position3DData: PileDataSchema = rawPositionData.data.pile_position_data.objects3D;
-		const position2DData: PileDataSchema = rawPositionData.data.pile_position_data.objects2D;
-		for (const [id, model] of Object.entries(position3DData)) {
-			const inventoryObject = this.modelInventory.get(model.name);
-			if (!inventoryObject) {
-				console.log(`ERROR: ${model.name} does not exist in 3D Model Inventory.`);
-				continue;
-			}
-			const downloadedModel2 = new PileObject3D({
-				name: model.name,
-				id: id,
-				modelPath: inventoryObject.path,
-				transform3D: model.transform,
-				uniformScale:
-					(model.transform.scale.x + model.transform.scale.y + model.transform.scale.z) / 3
-			});
-			this.state.objects3D.push(downloadedModel2);
-		}
-		for (const [id, image] of Object.entries(position2DData)) {
-			const inventoryObject = this.imageInventory.get(image.name);
-			if (!inventoryObject) {
-				console.log(`ERROR: ${image.name} does not exist in 2D Model Inventory.`);
-				continue;
-			}
-			const downloadedImage = new PileObject2D({
-				name: image.name,
-				id: id,
-				modelPath: inventoryObject.path,
-				transform3D: image.transform,
-				uniformScale:
-					(image.transform.scale.x + image.transform.scale.y + image.transform.scale.z) / 3
-			});
-			this.state.objects2D.set(id, downloadedImage);
-		}
+		const payloadObjects2D: PileDataSchema = rawPositionData.data[PILE_PAYLOAD_NAME].objects2D;
+		const payloadObjects3D: PileDataSchema = rawPositionData.data[PILE_PAYLOAD_NAME].objects3D;
+
+		initObjects(
+			payloadObjects2D,
+			this.imageInventory,
+			(obj) => {
+				this.state.objects2D.set(obj.id, new PileObject2D(obj));
+			},
+			'2D Model'
+		);
+		initObjects(
+			payloadObjects3D,
+			this.modelInventory,
+			(obj) => {
+				this.state.objects3D.push(new PileObject3D(obj));
+			},
+			'3D Model'
+		);
 	}
 
-	public getPileObjectPositions() {
-		const objects3D: Record<string, PileObjectJson> = getPileObjectJson(this.state.objects3D);
-		const objects2D: Record<string, PileObjectJson> = getPileObjectJson(this.state.objects2D);
-		const pilePositionObject = {
-			pile_position_data: { objects3D, objects2D, sky: this.environment.selectedEnvironment.name }
+	public getPilePayload() {
+		const objects3D: Record<string, PileObjectPayload> = getObjectsPayload(this.state.objects3D);
+		const objects2D: Record<string, PileObjectPayload> = getObjectsPayload(this.state.objects2D);
+		const pilePayload = {
+			[PILE_PAYLOAD_NAME]: { objects3D, objects2D, sky: this.environment.selectedEnvironment.name }
 		};
-		if (!isPayloadValid(pilePositionObject)) {
+		if (!isPayloadValid(pilePayload)) {
 			throw Error('Data Invalid Stopping Upload');
 		}
-		console.log('Payload built: ', pilePositionObject);
-		return pilePositionObject;
+		console.log('Payload built: ', pilePayload);
+		return pilePayload;
+	}
+}
+function initObjects(
+	data: PileDataSchema,
+	inventory: Object2DMapInventory | Object3DMapInventory,
+	onCreated: (params: any) => void,
+	context: string
+) {
+	for (const [id, item] of Object.entries(data)) {
+		const inventoryObject = inventory.get(item.name);
+		if (!inventoryObject) {
+			console.warn(`[${context} Inventory] Missing item: ${item.name}`);
+			continue;
+		}
+		const { x, y, z } = item.transform.scale;
+		onCreated({
+			name: item.name,
+			id: id,
+			modelPath: inventoryObject.path,
+			transform3D: item.transform,
+			uniformScale: (x + y + z) / 3
+		});
 	}
 }
 
-function getPileObjectJson(objects: SvelteMap<string, PileObject2D> | PileObject3D[]) {
-	const objectsTransform: Record<string, PileObjectJson> = {};
+function getObjectsPayload(objects: SvelteMap<string, PileObject2D> | PileObject3D[]) {
+	const objectsTransform: Record<string, PileObjectPayload> = {};
 	const _pos = new Vector3();
 	const _quat = new Quaternion();
 	const _scale = new Vector3();
 	objects.forEach((object) => {
 		if (!object.shown || !isInBounds(object)) return;
 		const mesh = object.ref?.children[0];
-		if(!mesh) {
-			throw Error(`Object ${object.name} has no Mesh`)
-		};
+		if (!mesh) {
+			throw Error(`Object ${object.name} has no Mesh`);
+		}
 		mesh?.getWorldPosition(_pos);
 		mesh?.getWorldQuaternion(_quat);
 		mesh?.getWorldScale(_scale);
@@ -151,7 +158,6 @@ function getPileObjectJson(objects: SvelteMap<string, PileObject2D> | PileObject
 	return objectsTransform;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isPayloadValid(data: any) {
 	if (!data || typeof data !== 'object') return false;
 	if (!isTransformPayloadValid(data.objects2D)) return false;
@@ -159,7 +165,6 @@ function isPayloadValid(data: any) {
 	return true;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function isTransformPayloadValid(data: any): boolean {
 	const keys = ['position', 'rotation', 'scale'];
 	const axes = ['x', 'y', 'z'];

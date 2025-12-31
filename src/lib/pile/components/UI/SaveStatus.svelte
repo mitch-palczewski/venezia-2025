@@ -1,10 +1,8 @@
 <script lang="ts">
-	import type { PileState, UploadStatus } from '$lib/pile/util/pileState.svelte';
+	import type { UploadStatus } from '$lib/pile/util/pileState.svelte';
 	import { fade, slide } from 'svelte/transition';
-	// Props using runes
-	let { status, onSave}: { status: UploadStatus; onSave: () => void} = $props();
 
-	// Map statuses to visual properties
+	let { status, onSave}: { status: UploadStatus; onSave: () => void} = $props();
 	const config = $derived.by(() => {
 		switch (status) {
 			case 'Saving':
