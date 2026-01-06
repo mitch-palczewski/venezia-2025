@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Quaternion, Vector3 } from 'three';
-import type { PilePayloadObject as SupabaseObject, Transform3D } from '../types';
+import type { PilePayloadObject, PilePayloadObject as SupabaseObject, Transform3D } from '../types';
 import {
 	undertowModels,
 	variousModels,
@@ -19,6 +19,8 @@ import { PileEnvironment } from './pileEnvironment.svelte';
 import { useThrelte } from '@threlte/core';
 import { Object3DMapInventory } from './assetInventory/object3DMap';
 import { Object2DMapInventory } from './assetInventory/object2DMap';
+import { supabase } from '$lib/api/supabaseClient.svelte';
+import { SupabaseNetworkManager } from '$lib/api/networkManager.svelte';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -26,12 +28,14 @@ export class PileApp {
 	environmentInventory = new EnvironmentMapInventory();
 	state = new PileState();
 	environment: PileEnvironment;
+	networkManager = new SupabaseNetworkManager<PilePayloadObject>(supabase, 'pile_objects', this.addSupabaseObject);
 	autosave = true;
 	isActivlyWatching: () => boolean;
 
 	constructor(isActivlyWatching: () => boolean, rawPositionData?: any) {
 		this.isActivlyWatching = isActivlyWatching;
 		this.initInventories();
+		this.networkManager.subscribe();
 		if (rawPositionData) {
 			this.initObjectPositions(rawPositionData);
 		}
@@ -105,9 +109,7 @@ export class PileApp {
 		return pilePayload;
 	}
 
-	public addSupabaseObject(
-		object: SupabaseObject
-	) {
+	public addSupabaseObject(object: SupabaseObject) {
 		if (object.type === 'object2D') {
 			initSupabaseObject(
 				object,
@@ -128,7 +130,6 @@ export class PileApp {
 				'3D Model'
 			);
 		}
-		
 	}
 }
 
@@ -156,6 +157,7 @@ function initSupabaseObject(
 		uniformScale: (i.scale_x + i.scale_y + i.scale_z) / 3
 	});
 }
+
 function initObjects(
 	data: PileDataSchema,
 	inventory: Object2DMapInventory | Object3DMapInventory,

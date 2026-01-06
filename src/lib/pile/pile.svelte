@@ -6,7 +6,7 @@
 	import { PileApp } from './util/pileApp.svelte';
 	import CameraControls from './components/CameraControls.svelte';
 	import { AutoSaver } from './util/pileSaving.svelte';
-	import { onMount } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	interface Props {
 		rawPositionData: object;
@@ -26,6 +26,9 @@
 			autoSaver.stop();
 		};
 	});
+	onDestroy(() => {
+		pileApp.networkManager.destroy()
+	})
 
 	function handleVisibilityChange() {
 		isVisible = document.visibilityState === 'visible';
