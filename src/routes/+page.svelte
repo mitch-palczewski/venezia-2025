@@ -47,6 +47,7 @@
 	<div class="p-5">
 		<h1 class="font-bold text-3xl p-8"> DEBUG </h1>
 		<a class="hover:bg-blue-500" href="/3d/debug/dynamicLoadedModels">Dynamic Loaded Models</a>
-
+		<br>
+		<a class="hover:bg-blue-500" href="/3d/debug/supabase">Supabase</a>
 	</div>
 </div>

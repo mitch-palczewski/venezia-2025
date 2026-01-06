@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Quaternion, Vector3 } from 'three';
-import type { Transform3D } from '../types';
+import type { PilePayloadObject as SupabaseObject, Transform3D } from '../types';
 import {
 	undertowModels,
 	variousModels,
@@ -104,6 +104,57 @@ export class PileApp {
 		console.log('Payload built: ', pilePayload);
 		return pilePayload;
 	}
+
+	public addSupabaseObject(
+		object: SupabaseObject
+	) {
+		if (object.type === 'object2D') {
+			initSupabaseObject(
+				object,
+				this.imageInventory,
+				(obj) => {
+					this.state.objects2D.set(obj.id, new PileObject2D(obj));
+				},
+				'2D Model'
+			);
+		}
+		if (object.type === 'object3D') {
+			initSupabaseObject(
+				object,
+				this.modelInventory,
+				(obj) => {
+					this.state.objects3D.set(obj.id, new PileObject3D(obj));
+				},
+				'3D Model'
+			);
+		}
+		
+	}
+}
+
+function initSupabaseObject(
+	i: SupabaseObject,
+	inventory: Object2DMapInventory | Object3DMapInventory,
+	onCreated: (params: any) => void,
+	context: string
+) {
+	const objectMap = inventory.get(i.name);
+	if (!objectMap) {
+		console.warn(`[${context} Inventory] Missing item: ${i.name}`);
+		return null;
+	}
+	const transform: Transform3D = {
+		translate: { x: i.pos_x, y: i.pos_y, z: i.pos_z },
+		rotation: { x: i.rot_x, y: i.rot_y, z: i.rot_z, w: i.rot_w },
+		scale: { x: i.scale_x, y: i.scale_y, z: i.scale_z }
+	};
+	onCreated({
+		name: i.name,
+		id: i.id,
+		objectMap: objectMap,
+		transform3D: transform,
+		uniformScale: (i.scale_x + i.scale_y + i.scale_z) / 3
+	});
 }
 function initObjects(
 	data: PileDataSchema,
@@ -128,7 +179,9 @@ function initObjects(
 	}
 }
 
-function getObjectsPayload(objects: SvelteMap<string, PileObject2D> | SvelteMap<string, PileObject3D>) {
+function getObjectsPayload(
+	objects: SvelteMap<string, PileObject2D> | SvelteMap<string, PileObject3D>
+) {
 	const objectsTransform: Record<string, PileObjectPayload> = {};
 	const _pos = new Vector3();
 	const _quat = new Quaternion();

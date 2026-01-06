@@ -6,7 +6,6 @@ export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
 export class PileState {
 	selectedObjectID = $state<string | null>(null);
-
 	objects2D = $state(new SvelteMap<string, PileObject2D>());
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
