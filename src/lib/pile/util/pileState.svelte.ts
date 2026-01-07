@@ -1,6 +1,7 @@
 import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
+import type { PileDatabase } from './api/pileDatabase';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -10,6 +11,7 @@ export class PileState {
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
+	database: PileDatabase;
 
 	//need to fix
 	maxID = $state(1000);
@@ -27,9 +29,19 @@ export class PileState {
 			this.#showTransformControls = value;
 			this.#changeCount++;
 		}
+		//Updates Database When transformcontrols are turned off
+		if (value === false) {
+			const selectedObject = this.getSelectedModelObject();
+			if (selectedObject) {
+				this.database.updateObject(selectedObject);
+			}else{
+				console.error("Could not get selected Model")
+			}
+		}
 	}
 
-	constructor() {
+	constructor(database: PileDatabase) {
+		this.database = database;
 		$effect.root(() => {
 			$effect(() => {
 				if (this.hasChanges) {

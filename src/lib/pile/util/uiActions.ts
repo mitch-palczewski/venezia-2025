@@ -24,32 +24,36 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => obje
 export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileApp) {
 	const baseTrandform: Transform3D = BASE_TRANSFORM;
 	if (modelMap.objectType === '3D') {
-		const model = new PileObject3D({
+		const object3D = new PileObject3D({
 			name: modelMap.name,
-			id: pileApp.state.getUniqueID(),
+			id: crypto.randomUUID(),
 			objectMap: modelMap,
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
-		pileApp.state.objects3D.set(model.id, model);
+		pileApp.state.objects3D.set(object3D.id, object3D);
+		pileApp.database.addObject(object3D)
 	}
 	if (modelMap.objectType === '2D') {
-		const image = new PileObject2D({
+		const object2D = new PileObject2D({
 			name: modelMap.name,
-			id: pileApp.state.getUniqueID(),
+			id: crypto.randomUUID(),
 			objectMap: modelMap,
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
-		pileApp.state.add2DImage(image);
+		pileApp.state.add2DImage(object2D);
+		pileApp.database.addObject(object2D);
 	}
 
 }
 
 export function deleteSelectedModel(pileState: PileState) {
+	pileState.database.deleteObject(pileState.selectedObjectID!)
 	deleteObject(pileState.objects3D, pileState.selectedObjectID)
 	deleteObject(pileState.objects2D, pileState.selectedObjectID)
 	pileState.showTransformControls = false;
+
 }
 
 function deleteObject(inventory: SvelteMap<string, PileObject3D | PileObject2D>, selectedObjectID: string | null){

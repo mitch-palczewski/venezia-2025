@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { SupabaseClient } from '@supabase/supabase-js';
-import { SvelteDate } from 'svelte/reactivity';
 
 interface BaseRecord {
-    id: string;
-    [key: string]: any; 
+	id: string;
+	[key: string]: any;
 }
 
+/**
+ * A manager class to synchronize a local Svelte state array with a Supabase table.
+ * @template T - A type extending BaseRecord (must have an 'id' field).
+ */
 export class SupabaseNetworkManager<T extends BaseRecord> {
 	public testInventory = $state<T[]>([]);
 	private supabase: SupabaseClient;
@@ -36,6 +39,10 @@ export class SupabaseNetworkManager<T extends BaseRecord> {
 		}
 	}
 
+	/**
+	 * Opens a WebSocket connection via Supabase Realtime.
+	 * Listens for ALL ('*') changes (INSERT, UPDATE, DELETE) on the specified table.
+	 */
 	public subscribe() {
 		this.channel = this.supabase
 			.channel(`${this.tableName}-changes`)
@@ -51,11 +58,75 @@ export class SupabaseNetworkManager<T extends BaseRecord> {
 			.subscribe();
 	}
 
+	/**
+	 * Fetches all records from the table and updates the local state.
+	 * @returns The array of records
+	 */
+	public async getAllRecords(): Promise<T[]> {
+		const { data, error } = await this.supabase.from(this.tableName).select('*');
+
+		if (error) {
+			console.error(`Error fetching all from ${this.tableName}:`, error);
+			return [];
+		}
+		return data;
+	}
+
+	/**
+	 * Fetches a single record by its ID.
+	 * @param id - The unique identifier of the record
+	 * @returns The record object or null if not found
+	 */
+	public async getRecord(id: T['id']): Promise<T | null> {
+		const { data, error } = await this.supabase
+			.from(this.tableName)
+			.select('*')
+			.eq('id', id)
+			.single(); // Use .single() because IDs are unique
+
+		if (error) {
+			console.error(`Error fetching record ${id} from ${this.tableName}:`, error);
+			return null;
+		}
+
+		return data as T;
+	}
+
+	/**
+	 * Cleans up the WebSocket connection.
+	 * Should be called when the component is unmounted to prevent memory leaks.
+	 */
 	public destroy() {
 		if (this.channel) {
 			this.supabase.removeChannel(this.channel);
-            this.channel = null;
+			this.channel = null;
 		}
+	}
+
+	/**
+	 * Adds a new record to the database.
+	 * @param obj - The data to insert (id is omitted as DB usually generates it).
+	 */
+	public async insert(obj: Partial<T>) {
+		const { error } = await this.supabase.from(this.tableName).insert(obj);
+		if (error) console.error('Error adding object:', error);
+	}
+
+	/**
+	 * Updates an existing record by ID.
+	 */
+	public async update(id: T['id'], changes: Partial<T>) {
+		const { error } = await this.supabase.from(this.tableName).update(changes).eq('id', id);
+		if (error) console.error('Error updating object:', error);
+	}
+
+	/**
+	 * Removes a record from the database by its ID.
+	 */
+	public async delete(id: T['id']) {
+		console.log('Deleting id: ', id);
+		const { error } = await this.supabase.from(this.tableName).delete().eq('id', id);
+		if (error) console.error('Error deleting object:', error);
 	}
 
 	private handleRealtimeEvent(payload: any) {
@@ -76,23 +147,6 @@ export class SupabaseNetworkManager<T extends BaseRecord> {
 		}
 	}
 
-	public async insert(obj: Omit<T, 'id'> | Partial<T>) {
-		const { error } = await this.supabase.from(this.tableName).insert(obj);
-		if (error) console.error('Error adding object:', error);
-	}
-
-	public async update(id: T['id'], changes: Partial<T>) {
-		const payload = { ...changes, updated_at: new SvelteDate().toISOString() };
-		const { error } = await this.supabase.from(this.tableName).update(payload).eq('id', id);
-		if (error) console.error('Error updating object:', error);
-	}
-
-	public async delete(id: T['id']) {
-		console.log('Deleting id: ', id);
-		const { error } = await this.supabase.from(this.tableName).delete().eq('id', id);
-		if (error) console.error('Error deleting object:', error);
-	}
-
 	private defaultOnInsertObject(newRecord: T) {
 		this.testInventory.unshift(newRecord);
 		console.warn(
@@ -100,6 +154,7 @@ export class SupabaseNetworkManager<T extends BaseRecord> {
 			newRecord
 		);
 	}
+
 	private defaultOnUpdateObject(newRecord: T) {
 		const index = this.testInventory.findIndex((item) => item.id === newRecord.id);
 		if (index !== -1) {
@@ -110,6 +165,7 @@ export class SupabaseNetworkManager<T extends BaseRecord> {
 			newRecord
 		);
 	}
+
 	private defaultOnDeleteObject(oldRecord: Partial<T>) {
 		this.testInventory = this.testInventory.filter((item) => item.id !== oldRecord.id);
 		console.warn(
