@@ -1,7 +1,7 @@
 import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
-import type { PileDatabase } from './api/pileDatabase';
+import type { PileDatabase} from './api/pileDatabase';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -33,7 +33,7 @@ export class PileState {
 		if (value === false) {
 			const selectedObject = this.getSelectedModelObject();
 			if (selectedObject) {
-				this.database.updateObject(selectedObject);
+				this.database.update(selectedObject);
 			}else{
 				console.error("Could not get selected Model")
 			}

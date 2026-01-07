@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SupabaseClient } from '@supabase/supabase-js';
+import { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js';
 
-interface BaseRecord {
+export interface BaseRecord {
 	id: string;
 	[key: string]: any;
 }
@@ -13,7 +13,7 @@ interface BaseRecord {
 export class SupabaseNetworkManager<T extends BaseRecord> {
 	public testInventory = $state<T[]>([]);
 	private supabase: SupabaseClient;
-	private channel: any = null;
+	private channel: RealtimeChannel | null = null;
 	private tableName: string;
 	private onInsertAction: (newRecord: T) => void = this.defaultOnInsertObject;
 	private onUpdateAction: (newRecord: T) => void = this.defaultOnUpdateObject;

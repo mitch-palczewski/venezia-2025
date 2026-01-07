@@ -27,7 +27,7 @@
 		};
 	});
 	onDestroy(() => {
-		pileApp.database.networkManager.destroy()
+		pileApp.database.destroy()
 	})
 
 	function handleVisibilityChange() {

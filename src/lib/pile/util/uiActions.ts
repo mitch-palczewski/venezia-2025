@@ -32,7 +32,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			uniformScale: 1
 		});
 		pileApp.state.objects3D.set(object3D.id, object3D);
-		pileApp.database.addObject(object3D)
+		pileApp.database.add(object3D)
 	}
 	if (modelMap.objectType === '2D') {
 		const object2D = new PileObject2D({
@@ -43,13 +43,13 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			uniformScale: 1
 		});
 		pileApp.state.add2DImage(object2D);
-		pileApp.database.addObject(object2D);
+		pileApp.database.add(object2D);
 	}
 
 }
 
 export function deleteSelectedModel(pileState: PileState) {
-	pileState.database.deleteObject(pileState.selectedObjectID!)
+	pileState.database.delete(pileState.selectedObjectID!)
 	deleteObject(pileState.objects3D, pileState.selectedObjectID)
 	deleteObject(pileState.objects2D, pileState.selectedObjectID)
 	pileState.showTransformControls = false;

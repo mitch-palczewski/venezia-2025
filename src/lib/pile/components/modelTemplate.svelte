@@ -7,6 +7,7 @@
 	import type { Transform3D } from '../types';
 	import type { PileObject3D } from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp.svelte';
+	import Pile from '../pile.svelte';
 
 	let {
 		fallback,
@@ -27,13 +28,16 @@
 	interactivity();
 
 	let shown = $state(pileObjectData.shown);
-	const gltf = useGltf(pileObjectData.objectMap.path ?? '');
+	if (!pileObjectData.objectMap) {
+		pileObjectData.objectMap = pileApp.modelInventory.get(pileObjectData.name);
+	}
+	const gltf = useGltf(pileObjectData.objectMap!.path);
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
 			return [];
 		}
 		const thisSceneChildren = Object.values($gltf.scene.children) as Mesh[];
-		console.log(`3D Object: ${pileObjectData.name}  `,thisSceneChildren)
+		console.log(`3D Object: ${pileObjectData.name}  `, thisSceneChildren);
 		return thisSceneChildren;
 	});
 
@@ -64,10 +68,9 @@
 		return transform;
 	}
 
-
 	/**
 	 * Modifies the pile state showTransformControls and selectedObjectID
-	*/
+	 */
 	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
 		if (!pileObjectData.id) return;
@@ -91,7 +94,7 @@
  -->
 {#snippet sceneBuilder(sceneChildren: Object3D[])}
 	{#each sceneChildren as child}
-		{#if child.type == 'Group' && child.children || child.type == 'Object3D' && child.children}
+		{#if (child.type == 'Group' && child.children) || (child.type == 'Object3D' && child.children)}
 			<T.Group
 				position={[child.position.x, child.position.y, child.position.z]}
 				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
@@ -126,7 +129,7 @@
 				showZ={showThisTransformControls}
 				mode={pileApp.state.transformControlsMode}
 			>
-				<T.Group >
+				<T.Group>
 					{@render sceneBuilder(sceneChildren)}
 				</T.Group>
 			</TransformControls>

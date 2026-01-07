@@ -7,14 +7,14 @@ import type { Object2DMap } from './assetInventory/object2DMap';
 interface BasePileObjectOptions<T>{
 	name:string;
 	id: string;
-	objectMap: T;
+	objectMap: T | undefined;
 	transform3D: Transform3D;
 	uniformScale?: number;
 }
 abstract class BasePileObject<T> {
 	name: string;
     id: string;
-    objectMap: T;
+    objectMap: T | undefined;
     transform3D: Transform3D;
     ref: Group<Object3DEventMap> | null = null;
     shown: boolean = true;
@@ -24,7 +24,7 @@ abstract class BasePileObject<T> {
 	constructor(options: BasePileObjectOptions<T>){
 		this.name = options.name
 		this.id = options.id
-		this.objectMap = options.objectMap
+		this.objectMap = options.objectMap!
 		this.transform3D = options.transform3D
 		this.uniformScale = options.uniformScale ?? 1;
 	}
