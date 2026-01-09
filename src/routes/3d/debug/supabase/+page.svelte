@@ -1,6 +1,50 @@
 <script lang="ts">
-	import { TestPileNetwork } from '$lib/api/networkManager.test.svelte.js';
+	import { SupabaseNetworkManager } from '$lib/api/networkManager.svelte.js';
+	import { supabase } from '$lib/api/supabaseClient.svelte.js';
+
+
   import { onDestroy, onMount } from 'svelte';
+  
+export class TestPileNetwork {
+	testInventory = $state<any[]>([]);
+    network = new SupabaseNetworkManager(supabase, 'pile_objects')
+    primaryKeyFeildName = 'id'
+
+    constructor(){
+        this.network.onDeleteAction = this.defaultOnDeleteObject
+        this.network.onInsertAction = this.defaultOnInsertObject
+        this.network.onUpdateAction = this.defaultOnUpdateObject
+    }
+
+	public defaultOnInsertObject = (newRecord: any) => {
+		this.testInventory.unshift(newRecord);
+		console.warn(
+			`Attemping to handle INSERT of new Record. Set NetworkManager onInsertObject(newRecord:any) => void`,
+			newRecord
+		);
+	}
+
+	public defaultOnUpdateObject = (newRecord: any) => {
+		const pk = this.primaryKeyFeildName as keyof any;
+		const index = this.testInventory.findIndex((item) => item[pk] === newRecord[pk]);
+		if (index !== -1) {
+			this.testInventory[index] = newRecord;
+		}
+		console.warn(
+			`Attemping to handle UPDATE of Record. Set NetworkManager onUpdateObject(newRecord:any) => void`,
+			newRecord
+		);
+	}
+
+	public defaultOnDeleteObject= (oldRecord: Partial<any>) => {
+		const pk = this.primaryKeyFeildName;
+		this.testInventory = this.testInventory.filter((item) => item[pk] !== oldRecord[pk]);
+		console.warn(
+			`Attemping to handle Delete of Record. Set NetworkManager onDeleteObject(newRecord:any) => void`,
+			oldRecord
+		);
+	}
+}
 
   let { data } = $props();
   const pileManager = new TestPileNetwork()
