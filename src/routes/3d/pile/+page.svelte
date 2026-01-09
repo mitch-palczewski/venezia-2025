@@ -8,8 +8,7 @@ Pile webpage. Combines PileUI and PileScene.
 	import PileUI from '$lib/pile/components/UI/pileUI.svelte';
 
 	//export let data; Where the +page.server.ts returns when the load() function is called
-	export let data; 
-	console.log(`Data Downloaded from Blob. Raw Data:`, data)
+	export let data;
 	let pileSceneRef: PileScene;
 
 </script>
@@ -19,7 +18,7 @@ Pile webpage. Combines PileUI and PileScene.
 <CanvasPortal>
 		<PileScene 
 			bind:this={pileSceneRef} 
-			rawPositionData = {data}
+			data = {data}
 		/>
 </CanvasPortal>
 <PileUI pileSceneRef={pileSceneRef}/>

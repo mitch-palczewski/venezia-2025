@@ -5,42 +5,27 @@
 	import ImageTemplate from './components/imageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
 	import CameraControls from './components/CameraControls.svelte';
-	import { AutoSaver } from './util/pileSaving.svelte';
-	import { onDestroy, onMount } from 'svelte';
+	import { onDestroy} from 'svelte';
 
-	interface Props {
-		rawPositionData: object;
-	}
-	let { rawPositionData }: Props = $props();
 
-	let isVisible = $state(true);
-	let isFocused = $state(true);
-	const isActivelyWatching = $derived(isVisible && isFocused);
-	export const pileApp = new PileApp(() => isActivelyWatching, rawPositionData);
-	console.log('Autosave Activated');
-	const autoSaver = new AutoSaver(pileApp, () => isActivelyWatching);
+	let { data }= $props();
 
-	onMount(() => {
-		autoSaver.start(60000);
-		return () => {
-			autoSaver.stop();
-		};
-	});
+	let windowIsVisible = $state(true);
+	let windowIsFocused = $state(true);
+	const isActivelyWatching = $derived(windowIsVisible && windowIsFocused);
+	export const pileApp = new PileApp(() => isActivelyWatching, data);
+
 	onDestroy(() => {
 		pileApp.database.destroy()
 	})
 
 	function handleVisibilityChange() {
-		isVisible = document.visibilityState === 'visible';
-	}
-	//OBSOLETE
-	export function getPositions(): object {
-		return pileApp.getPilePayload();
+		windowIsVisible = document.visibilityState === 'visible';
 	}
 </script>
 
 <svelte:document onvisibilitychange={handleVisibilityChange} />
-<svelte:window onfocus={() => (isFocused = true)} onblur={() => (isFocused = false)} />
+<svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
 
 <CameraControls />
 

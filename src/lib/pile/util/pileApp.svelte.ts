@@ -11,7 +11,7 @@ import {
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE, PILE_PAYLOAD_NAME } from '$lib/constants';
-import { type PileDataSchema, type PileObjectPayload } from './api/pilePayload';
+import { type PileObjectPayload } from './api/pilePayload';
 import { uploadData } from './api/uploadPositions';
 import { SvelteDate, SvelteMap } from 'svelte/reactivity';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
@@ -31,17 +31,17 @@ export class PileApp {
 	autosave = true;
 	isActivlyWatching: () => boolean;
 
-	constructor(isActivlyWatching: () => boolean, rawPositionData?: any) {
+	constructor(isActivlyWatching: () => boolean, initalDatabaseObjects?: any) {
 		this.isActivlyWatching = isActivlyWatching;
 		this.initInventories();
-		if (rawPositionData) {
-			this.initObjectPositions(rawPositionData);
+		if (initalDatabaseObjects) {
+			this.initObjectPositions(initalDatabaseObjects);
 		}
 		const { scene, renderer } = useThrelte();
 		this.environment = new PileEnvironment(
 			scene,
 			renderer,
-			this.environmentInventory.get(rawPositionData?.data[PILE_PAYLOAD_NAME].sky)
+			
 		);
 	}
 
@@ -74,24 +74,15 @@ export class PileApp {
 	};
 
 	public initObjectPositions(rawPositionData: any) {
-		const payloadObjects2D: PileDataSchema = rawPositionData.data[PILE_PAYLOAD_NAME].objects2D;
-		const payloadObjects3D: PileDataSchema = rawPositionData.data[PILE_PAYLOAD_NAME].objects3D;
-		initObjects(
-			payloadObjects2D,
-			this.imageInventory,
-			(obj) => {
-				this.state.objects2D.set(obj.id, new PileObject2D(obj));
-			},
-			'2D Model'
-		);
-		initObjects(
-			payloadObjects3D,
-			this.modelInventory,
-			(obj) => {
-				this.state.objects3D.set(obj.id, new PileObject3D(obj));
-			},
-			'3D Model'
-		);
+		console.log(rawPositionData)
+		const pileDatabaseObjects  = rawPositionData.pileObjects as PileDatabaseObject[]
+		pileDatabaseObjects.forEach((object) => {
+			const pileObject = PileDatabase.convertDatabaseObjToPileObj(object)
+			console.log(pileObject)
+			if(pileObject.objectType === 'object2D') this.state.objects2D.set(pileObject.id, pileObject as PileObject2D)
+			if(pileObject.objectType === 'object3D') this.state.objects3D.set(pileObject.id, pileObject as PileObject3D)
+		})
+
 	}
 
 	public getPilePayload() {
@@ -156,28 +147,6 @@ function initSupabaseObject(
 	});
 }
 
-function initObjects(
-	data: PileDataSchema,
-	inventory: Object2DMapInventory | Object3DMapInventory,
-	onCreated: (params: any) => void,
-	context: string
-) {
-	for (const [id, item] of Object.entries(data)) {
-		const objectMap = inventory.get(item.name);
-		if (!objectMap) {
-			console.warn(`[${context} Inventory] Missing item: ${item.name}`);
-			continue;
-		}
-		const { x, y, z } = item.transform.scale;
-		onCreated({
-			name: item.name,
-			id: id,
-			objectMap: objectMap,
-			transform3D: item.transform,
-			uniformScale: (x + y + z) / 3
-		});
-	}
-}
 
 function getObjectsPayload(
 	objects: SvelteMap<string, PileObject2D> | SvelteMap<string, PileObject3D>
