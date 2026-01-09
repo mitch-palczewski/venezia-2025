@@ -1,7 +1,8 @@
 import { supabase } from '$lib/api/supabaseClient.svelte';
 import { Group, Quaternion, Vector3, type Object3DEventMap } from 'three';
 import { PileObject2D, PileObject3D } from '../pileObject.svelte';
-import { DatabaseMap } from '$lib/api/database';
+import { DatabaseMap } from '$lib/api/databaseMap';
+import { SupabaseNetworkManager } from '$lib/api/networkManager.svelte';
 
 export interface PileDatabaseObject {
 	id: string;
@@ -29,39 +30,32 @@ export interface PileDatabaseObject {
 export type AcceptedPileObjects = PileObject2D | PileObject3D;
 
 export class PileDatabase {
+	public networkManager = new SupabaseNetworkManager<PileDatabaseObject>(supabase, 'pile_objects');
 	private database = new DatabaseMap<PileDatabaseObject, AcceptedPileObjects>(
-		supabase,
-		'pile_objects',
-		this.todoFunction,
-		this.todoFunction,
-		this.todoFunction,
+		this.networkManager,
 		PileDatabase.convertDatabaseObjToPileObj,
 		PileDatabase.convertPileObjToDatabaseObj,
-        'last_edited_by'
+		'last_edited_by'
 	);
 
-    public add(obj: AcceptedPileObjects){
-        if(!this.isShown(obj)) return;
-        this.database.addObject(obj)
-    }
-    public update(obj: AcceptedPileObjects){
-        if(!this.isShown(obj)) return;
-        this.database.updateObject(obj)
-    }
-    public delete(id: AcceptedPileObjects['id']){
-        this.database.deleteObject(id)
-    }
-    public destroy(){
-        this.database.destroy()
-    }
-
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	private todoFunction(temp: any) {
-		console.log('TODO', temp);
+	public add(obj: AcceptedPileObjects) {
+		if (!this.isShown(obj)) return;
+		this.database.addObject(obj);
 	}
-    private isShown(obj: PileObject2D | PileObject3D): boolean {
+	public update(obj: AcceptedPileObjects) {
+		if (!this.isShown(obj)) return;
+		this.database.updateObject(obj);
+	}
+	public delete(id: AcceptedPileObjects['id']) {
+		this.database.deleteObject(id);
+	}
+	public destroy() {
+		this.networkManager.destroy();
+	}
+
+	private isShown(obj: PileObject2D | PileObject3D): boolean {
 		if (obj.shown) return true;
-        this.database.deleteObject(obj.id)
+		this.database.deleteObject(obj.id);
 		return false;
 	}
 
@@ -102,7 +96,7 @@ export class PileDatabase {
 	 * @param obj
 	 * @returns
 	 */
-	public static convertDatabaseObjToPileObj(obj: PileDatabaseObject): AcceptedPileObjects  {
+	public static convertDatabaseObjToPileObj(obj: PileDatabaseObject): AcceptedPileObjects {
 		if (obj.type === 'object2D') {
 			const obj2D = new PileObject2D({
 				name: obj.name,
@@ -117,7 +111,7 @@ export class PileDatabase {
 			});
 			return obj2D;
 		}
-        if (obj.type === 'object3D') {
+		if (obj.type === 'object3D') {
 			const obj3D = new PileObject3D({
 				name: obj.name,
 				id: obj.id,
@@ -131,7 +125,7 @@ export class PileDatabase {
 			});
 			return obj3D;
 		}
-        throw Error(`Invalid obj ${obj.name} type: ${obj.type}, ${obj}`)
+		throw Error(`Invalid obj ${obj.name} type: ${obj.type}, ${obj}`);
 	}
 
 	public static getTransfrom(ref?: Group<Object3DEventMap>) {

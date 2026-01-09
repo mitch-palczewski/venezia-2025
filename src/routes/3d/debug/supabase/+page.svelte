@@ -1,19 +1,16 @@
 <script lang="ts">
-	import { SupabaseNetworkManager } from '$lib/api/networkManager.svelte.js';
-  import {  supabase} from '$lib/api/supabaseClient.svelte.js';
-		import type { PilePayloadObject } from '$lib/pile/types.js';
-	import { PileApp } from '$lib/pile/util/pileApp.svelte.js';
+	import { TestPileNetwork } from '$lib/api/networkManager.test.svelte.js';
   import { onDestroy, onMount } from 'svelte';
 
   let { data } = $props();
-  const pileManager = new SupabaseNetworkManager<PilePayloadObject>(supabase, 'pile_objects');
+  const pileManager = new TestPileNetwork()
   pileManager.testInventory = data.pileObjects
 
-  onMount(() => pileManager.subscribe());
-  onDestroy(() => pileManager.destroy());
+  onMount(() => pileManager.network.subscribe());
+  onDestroy(() => pileManager.network.destroy());
 
   async function addFakeObject() {
-    await pileManager.insert({
+    await pileManager.network.insert({
       id: crypto.randomUUID(),
       name: `New Object ${Math.floor(Math.random() * 100)}`,
       type: 'test',
@@ -25,7 +22,7 @@
 
   // Generic updater for any field
   async function updateField(id: string, field: string, value: string | number) {
-    await pileManager.update(id, { [field]: value });
+    await pileManager.network.update(id, { [field]: value });
   }
 </script>
 
@@ -125,7 +122,7 @@
 
             <td class="p-3 text-right align-middle">
               <button 
-                onclick={() => pileManager.delete(obj.id)}
+                onclick={() => pileManager.network.delete(obj.id)}
                 class="p-2 text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-all"
                 title="Delete Object"
               >

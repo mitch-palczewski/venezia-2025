@@ -1,33 +1,37 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { RealtimeChannel, SupabaseClient } from '@supabase/supabase-js';
 
-export interface BaseRecord {
-	id: string;
+export type BaseRecord<K extends string = 'id'> = {
+	[P in K]: string | number;
+} & {
 	[key: string]: any;
-}
+};
 
 /**
  * A manager class to synchronize a local Svelte state array with a Supabase table.
- * @template T - A type extending BaseRecord (must have an 'id' field).
+ * @template T - The record type
+ * @template K - The name of the primary key property (defaults to 'id')
  */
-export class SupabaseNetworkManager<T extends BaseRecord> {
-	public testInventory = $state<T[]>([]);
+export class SupabaseNetworkManager<T extends BaseRecord<K>, K extends string = 'id'> {
+	public onInsertAction?: (newRecord: T) => void;
+	public onUpdateAction?: (newRecord: T) => void;
+	public onDeleteAction?: (oldRecord: Partial<T>) => void;
+	public primaryKeyFeildName: K;
 	private supabase: SupabaseClient;
 	private channel: RealtimeChannel | null = null;
 	private tableName: string;
-	private onInsertAction: (newRecord: T) => void = this.defaultOnInsertObject;
-	private onUpdateAction: (newRecord: T) => void = this.defaultOnUpdateObject;
-	private onDeleteAction: (oldRecord: Partial<T>) => void = this.defaultOnDeleteObject;
 
 	constructor(
 		supabase: SupabaseClient,
 		tableName: string,
+		primaryKeyFeildName: K = 'id' as K,
 		onInsertAction?: (newRecord: T) => void,
 		onUpdateAction?: (newRecord: T) => void,
 		onDeleteAction?: (oldRecord: Partial<T>) => void
 	) {
 		this.supabase = supabase;
 		this.tableName = tableName;
+		this.primaryKeyFeildName = primaryKeyFeildName;
 		if (onInsertAction) {
 			this.onInsertAction = onInsertAction;
 		}
@@ -77,12 +81,13 @@ export class SupabaseNetworkManager<T extends BaseRecord> {
 	 * @param id - The unique identifier of the record
 	 * @returns The record object or null if not found
 	 */
-	public async getRecord(id: T['id']): Promise<T | null> {
+	public async getRecord(id: T[K]): Promise<T | null> {
+		const pk = this.primaryKeyFeildName;
 		const { data, error } = await this.supabase
 			.from(this.tableName)
 			.select('*')
-			.eq('id', id)
-			.single(); // Use .single() because IDs are unique
+			.eq(pk, id)
+			.single();
 
 		if (error) {
 			console.error(`Error fetching record ${id} from ${this.tableName}:`, error);
@@ -115,62 +120,25 @@ export class SupabaseNetworkManager<T extends BaseRecord> {
 	/**
 	 * Updates an existing record by ID.
 	 */
-	public async update(id: T['id'], changes: Partial<T>) {
-		const { error } = await this.supabase.from(this.tableName).update(changes).eq('id', id);
+	public async update(id: T[K], changes: Partial<T>) {
+		const pk = this.primaryKeyFeildName;
+		const { error } = await this.supabase.from(this.tableName).update(changes).eq(pk, id);
 		if (error) console.error('Error updating object:', error);
 	}
 
 	/**
 	 * Removes a record from the database by its ID.
 	 */
-	public async delete(id: T['id']) {
-		console.log('Deleting id: ', id);
-		const { error } = await this.supabase.from(this.tableName).delete().eq('id', id);
+	public async delete(id: T[K]) {
+		const pk = this.primaryKeyFeildName;
+		const { error } = await this.supabase.from(this.tableName).delete().eq(pk, id);
 		if (error) console.error('Error deleting object:', error);
 	}
 
 	private handleRealtimeEvent(payload: any) {
 		const { eventType, new: newRecord, old: oldRecord } = payload;
-		switch (eventType) {
-			case 'INSERT':
-				this.onInsertAction(newRecord as T);
-				break;
-
-			case 'UPDATE': {
-				this.onUpdateAction(newRecord as T);
-				break;
-			}
-
-			case 'DELETE':
-				this.onDeleteAction(oldRecord as Partial<T>);
-				break;
-		}
-	}
-
-	private defaultOnInsertObject(newRecord: T) {
-		this.testInventory.unshift(newRecord);
-		console.warn(
-			`Attemping to handle INSERT of new Record. Set NetworkManager onInsertObject(newRecord:any) => void`,
-			newRecord
-		);
-	}
-
-	private defaultOnUpdateObject(newRecord: T) {
-		const index = this.testInventory.findIndex((item) => item.id === newRecord.id);
-		if (index !== -1) {
-			this.testInventory[index] = newRecord;
-		}
-		console.warn(
-			`Attemping to handle UPDATE of Record. Set NetworkManager onUpdateObject(newRecord:any) => void`,
-			newRecord
-		);
-	}
-
-	private defaultOnDeleteObject(oldRecord: Partial<T>) {
-		this.testInventory = this.testInventory.filter((item) => item.id !== oldRecord.id);
-		console.warn(
-			`Attemping to handle Delete of Record. Set NetworkManager onDeleteObject(newRecord:any) => void`,
-			oldRecord
-		);
+		if (eventType === 'INSERT') this.onInsertAction?.(newRecord as T);
+		if (eventType === 'UPDATE') this.onUpdateAction?.(newRecord as T);
+		if (eventType === 'DELETE') this.onDeleteAction?.(oldRecord as Partial<T>);
 	}
 }
