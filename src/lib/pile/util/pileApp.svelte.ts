@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Quaternion, Vector3 } from 'three';
-import type {Transform3D } from '../types';
+import type { Transform3D } from '../types';
 import {
 	undertowModels,
 	variousModels,
@@ -10,16 +10,15 @@ import {
 } from './assetInventory/assetsMap';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
-import { MAX_OBJECT_DISTANCE, PILE_PAYLOAD_NAME } from '$lib/constants';
+import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 import { type PileObjectPayload } from './api/pilePayload';
-import { uploadData } from './api/uploadPositions';
-import { SvelteDate, SvelteMap } from 'svelte/reactivity';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
 import { PileEnvironment } from './pileEnvironment.svelte';
 import { useThrelte } from '@threlte/core';
 import { Object3DMapInventory } from './assetInventory/object3DMap';
 import { Object2DMapInventory } from './assetInventory/object2DMap';
 import { PileDatabase, type PileDatabaseObject } from './api/pileDatabase';
+import type { SvelteMap } from 'svelte/reactivity';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -35,14 +34,10 @@ export class PileApp {
 		this.isActivlyWatching = isActivlyWatching;
 		this.initInventories();
 		if (initalDatabaseObjects) {
-			this.initObjectPositions(initalDatabaseObjects);
+			this.initPileObjects(initalDatabaseObjects);
 		}
 		const { scene, renderer } = useThrelte();
-		this.environment = new PileEnvironment(
-			scene,
-			renderer,
-			
-		);
+		this.environment = new PileEnvironment(scene, renderer);
 	}
 
 	private initInventories() {
@@ -54,49 +49,18 @@ export class PileApp {
 		this.environmentInventory.add(testEnvironments);
 	}
 
-	public attemptSave = () => {
-		this.state.uploadStatus = 'Saving';
-		const now = new SvelteDate();
-		if (!this.state.hasChanges) {
-			console.log(`No changes detected, skipping save.\n${now}`);
-			this.state.uploadStatus = 'Saved';
-			return;
-		}
-		console.log(`Autosaving ... \n${now}`);
-		try {
-			uploadData(this.getPilePayload(), this.state.uploadStatus);
-			this.state.setAsSaved();
-			this.state.uploadStatus = 'Saved';
-			//TODO: Add seperate upload of DateTime and a SessionID  (Would this be better to add as meta data. That depends on the size of fileIO)
-		} catch (e) {
-			console.error('Auto-save failed', e, now);
-		}
-	};
-
-	public initObjectPositions(rawPositionData: any) {
-		console.log(rawPositionData)
-		const pileDatabaseObjects  = rawPositionData.pileObjects as PileDatabaseObject[]
+	public initPileObjects(rawPositionData: any) {
+		const pileDatabaseObjects = rawPositionData.pileObjects as PileDatabaseObject[];
 		pileDatabaseObjects.forEach((object) => {
-			const pileObject = PileDatabase.convertDatabaseObjToPileObj(object)
-			console.log(pileObject)
-			if(pileObject.objectType === 'object2D') this.state.objects2D.set(pileObject.id, pileObject as PileObject2D)
-			if(pileObject.objectType === 'object3D') this.state.objects3D.set(pileObject.id, pileObject as PileObject3D)
-		})
-
+			const pileObject = PileDatabase.convertDatabaseObjToPileObj(object);
+			if (pileObject.isObject2D())
+				this.state.objects2D.set(pileObject.id, pileObject as PileObject2D);
+			if (pileObject.isObject3D())
+				this.state.objects3D.set(pileObject.id, pileObject as PileObject3D);
+		});
 	}
 
-	public getPilePayload() {
-		const objects3D: Record<string, PileObjectPayload> = getObjectsPayload(this.state.objects3D);
-		const objects2D: Record<string, PileObjectPayload> = getObjectsPayload(this.state.objects2D);
-		const pilePayload = {
-			[PILE_PAYLOAD_NAME]: { objects3D, objects2D, sky: this.environment.selectedEnvironment.name }
-		};
-		if (!isPayloadValid(pilePayload)) {
-			throw Error('Data Invalid Stopping Upload');
-		}
-		console.log('Payload built: ', pilePayload);
-		return pilePayload;
-	}
+
 
 	public addSupabaseObject(object: PileDatabaseObject) {
 		if (object.type === 'object2D') {
@@ -147,7 +111,7 @@ function initSupabaseObject(
 	});
 }
 
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function getObjectsPayload(
 	objects: SvelteMap<string, PileObject2D> | SvelteMap<string, PileObject3D>
 ) {
@@ -179,6 +143,7 @@ function getObjectsPayload(
 	return objectsTransform;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isPayloadValid(data: any) {
 	if (!data || typeof data !== 'object') return false;
 	if (!isTransformPayloadValid(data.objects2D)) return false;

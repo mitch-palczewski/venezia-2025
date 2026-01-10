@@ -49,7 +49,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 }
 
 export function deleteSelectedModel(pileState: PileState) {
-	pileState.database.delete(pileState.selectedObjectID!)
+	pileState.pileDatabase.delete(pileState.selectedObjectID!)
 	deleteObject(pileState.objects3D, pileState.selectedObjectID)
 	deleteObject(pileState.objects2D, pileState.selectedObjectID)
 	pileState.showTransformControls = false;

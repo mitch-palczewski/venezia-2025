@@ -7,36 +7,37 @@ import { SupabaseNetworkManager } from '$lib/api/networkManager.svelte';
 export interface PileDatabaseObject {
 	id: string;
 	name: string;
-	type: string;
+	type: 'object2D' | 'object3D';
 	animation: string | null;
-	// Position
 	pos_x: number;
 	pos_y: number;
 	pos_z: number;
-	// Rotation (Quaternion)
 	rot_x: number;
 	rot_y: number;
 	rot_z: number;
 	rot_w: number;
-	// Scale
 	scale_x: number;
 	scale_y: number;
 	scale_z: number;
-	// Metadata
 	updated_at: string;
 	last_edited_by: string | null;
 }
 
 export type AcceptedPileObjects = PileObject2D | PileObject3D;
 
+
 export class PileDatabase {
 	public networkManager = new SupabaseNetworkManager<PileDatabaseObject>(supabase, 'pile_objects');
-	private database = new DatabaseMap<PileDatabaseObject, AcceptedPileObjects>(
+	public database = new DatabaseMap<PileDatabaseObject, AcceptedPileObjects>(
 		this.networkManager,
 		PileDatabase.convertDatabaseObjToPileObj,
 		PileDatabase.convertPileObjToDatabaseObj,
 		'last_edited_by'
 	);
+
+	public destroy() {
+		this.networkManager.destroy();
+	}
 
 	public add(obj: AcceptedPileObjects) {
 		if (!this.isShown(obj)) return;
@@ -49,9 +50,7 @@ export class PileDatabase {
 	public delete(id: AcceptedPileObjects['id']) {
 		this.database.deleteObject(id);
 	}
-	public destroy() {
-		this.networkManager.destroy();
-	}
+	
 
 	private isShown(obj: PileObject2D | PileObject3D): boolean {
 		if (obj.shown) return true;
@@ -59,11 +58,6 @@ export class PileDatabase {
 		return false;
 	}
 
-	/**
-	 * Transforms a Pile Object into Database Object
-	 * @param obj A Pile Object
-	 * @returns
-	 */
 	public static convertPileObjToDatabaseObj(obj: AcceptedPileObjects): Partial<PileDatabaseObject> {
 		if (!obj.ref) {
 			console.warn(
@@ -76,7 +70,7 @@ export class PileDatabase {
 		const dbObject: Partial<PileDatabaseObject> = {
 			id: id,
 			name: obj.name,
-			type: obj.objectType,
+			type: obj.objectType as 'object2D' | 'object3D',
 			pos_x: t.pos.x,
 			pos_y: t.pos.y,
 			pos_z: t.pos.z,
@@ -91,11 +85,6 @@ export class PileDatabase {
 		return dbObject;
 	}
 
-	/**
-	 * Transforms a Database Object into a Pile Object
-	 * @param obj
-	 * @returns
-	 */
 	public static convertDatabaseObjToPileObj(obj: PileDatabaseObject): AcceptedPileObjects {
 		if (obj.type === 'object2D') {
 			const obj2D = new PileObject2D({

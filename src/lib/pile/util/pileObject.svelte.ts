@@ -28,12 +28,22 @@ abstract class BasePileObject<T> {
 		this.transform3D = options.transform3D
 		this.uniformScale = options.uniformScale ?? 1;
 	}
+	public isObject2D(){
+		return false;
+	}
+	public isObject3D(){
+		return false;
+	}
 }
 
 export class PileObject3D extends BasePileObject<Object3DMap> {
 	objectType: string = 'object3D';
 	constructor(options: BasePileObjectOptions<Object3DMap>){
 		super(options)
+	}
+
+	public isObject3D(){
+		return true;
 	}
 }
 
@@ -48,6 +58,10 @@ export class PileObject2D extends BasePileObject<Object2DMap> {
 	constructor(options: PileObject2DOptions){
 		super(options);
 		this.billboard = options.billboard ?? false;
+	}
+
+	public isObject2D(){
+		return true;
 	}
 }
 

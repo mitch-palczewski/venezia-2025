@@ -5,19 +5,17 @@
 	import ImageTemplate from './components/imageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
 	import CameraControls from './components/CameraControls.svelte';
-	import { onDestroy} from 'svelte';
+	import { onDestroy } from 'svelte';
 
-
-	let { data }= $props();
+	let { data } = $props();
 
 	let windowIsVisible = $state(true);
 	let windowIsFocused = $state(true);
 	const isActivelyWatching = $derived(windowIsVisible && windowIsFocused);
 	export const pileApp = new PileApp(() => isActivelyWatching, data);
-
 	onDestroy(() => {
-		pileApp.database.destroy()
-	})
+		pileApp.database.destroy();
+	});
 
 	function handleVisibilityChange() {
 		windowIsVisible = document.visibilityState === 'visible';
@@ -46,7 +44,6 @@
 		{pileApp}
 		pileObjectData={image}
 		oncreate={(ref) => {
-			pileApp.state.maxID += 1;
 			image.ref = ref;
 		}}
 		position={[translate.x, translate.y, translate.z]}
@@ -62,7 +59,6 @@
 		{pileApp}
 		pileObjectData={model}
 		oncreate={(ref) => {
-			pileApp.state.maxID += 1;
 			model.ref = ref;
 		}}
 		position={[translate.x, translate.y, translate.z]}

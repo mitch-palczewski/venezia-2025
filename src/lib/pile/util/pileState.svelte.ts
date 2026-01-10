@@ -1,7 +1,7 @@
 import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
-import type { PileDatabase} from './api/pileDatabase';
+import type { AcceptedPileObjects, PileDatabase } from './api/pileDatabase';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -11,37 +11,20 @@ export class PileState {
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
-	database: PileDatabase;
+	pileDatabase: PileDatabase;
 
-	//need to fix
-	maxID = $state(1000);
+	//DELETE
 	uploadStatus: UploadStatus = $state('Idle');
 	#changeCount = $state(0);
 	#lastSavedCount = $state(0);
 	hasChanges = $derived(this.#changeCount !== this.#lastSavedCount);
 
-	get showTransformControls() {
-		return this.#showTransformControls;
-	}
-
-	set showTransformControls(value) {
-		if (value !== this.#showTransformControls) {
-			this.#showTransformControls = value;
-			this.#changeCount++;
-		}
-		//Updates Database When transformcontrols are turned off
-		if (value === false) {
-			const selectedObject = this.getSelectedModelObject();
-			if (selectedObject) {
-				this.database.update(selectedObject);
-			}else{
-				console.error("Could not get selected Model")
-			}
-		}
-	}
-
 	constructor(database: PileDatabase) {
-		this.database = database;
+		this.pileDatabase = database;
+		this.pileDatabase.database.onAppObjInserted = this.addObject
+		this.pileDatabase.database.onAppObjUpdated = this.updateObject
+		this.pileDatabase.database.onAppObjDeleted = this.deleteObject
+
 		$effect.root(() => {
 			$effect(() => {
 				if (this.hasChanges) {
@@ -51,11 +34,28 @@ export class PileState {
 		});
 	}
 
-	/**
-	 * For Checking if changes have been made to the Pile.
-	 *
-	 * Sets the Last Saved Snapshot to the current snapshot
-	 */
+	get showTransformControls() {
+		return this.#showTransformControls;
+	}
+
+	set showTransformControls(value) {
+		//DELETE
+		if (value !== this.#showTransformControls) {
+			this.#showTransformControls = value;
+			this.#changeCount++;
+		}
+		//Updates Database When transformcontrols are turned off
+		if (value === false) {
+			const selectedObject = this.getSelectedObject();
+			if (selectedObject) {
+				this.pileDatabase.update(selectedObject);
+			} else {
+				console.error('Could not get selected Model');
+			}
+		}
+	}
+
+	//DELETE
 	public setAsSaved() {
 		this.#lastSavedCount = this.#changeCount;
 	}
@@ -64,31 +64,30 @@ export class PileState {
 		return this.selectedObjectID === id;
 	}
 
-	public add3DModel(model: PileObject3D) {
-		this.maxID += 1;
-		this.objects3D.set(model.id, model);
+	public addObject = (obj: AcceptedPileObjects) => {
+		console.log(obj)
+		if (obj.isObject2D()) {
+			this.objects2D.set(obj.id, obj as PileObject2D);
+		}
+		if (obj.isObject3D()) {
+			this.objects3D.set(obj.id, obj as PileObject3D);
+		}
+		console.error(obj);
+		throw Error(`Object must be object2D or object3D. This object type is ${obj.objectType}`);
 	}
 
-	public add2DImage(image: PileObject2D) {
-		this.maxID += 1;
-		this.objects2D?.set(image.id, image);
+	public updateObject = (newObj: PileObject2D | PileObject3D) => {
+		if (newObj.isObject2D() && this.objects2D.has(newObj.id)) {
+			this.objects2D.set(newObj.id, newObj as PileObject2D);
+		}
+		if (newObj.isObject3D() && this.objects3D.has(newObj.id)) {
+			this.objects3D.set(newObj.id, newObj as PileObject3D);
+		}
 	}
 
-	public getUniqueID() {
-		this.objects3D?.forEach((model, id) => {
-			const idNum = parseInt(id, 10);
-			if (idNum > this.maxID) {
-				this.maxID = idNum + 1;
-			}
-		});
-		this.objects2D?.forEach((image, id) => {
-			const idNum = parseInt(id, 10);
-			if (idNum > this.maxID) {
-				this.maxID = idNum + 1;
-			}
-		});
-		this.maxID += 1;
-		return this.maxID.toString();
+	public deleteObject = (id: string) => {
+		this.objects2D.delete(id);
+		this.objects3D.delete(id);
 	}
 
 	public clearAllModels() {
@@ -97,9 +96,9 @@ export class PileState {
 		this.objects2D?.clear();
 	}
 
-	public getSelectedModelObject(): PileObject3D | PileObject2D | null {
+	public getSelectedObject(): PileObject3D | PileObject2D | null {
 		if (!this.selectedObjectID) {
-			console.log('WARNING: selectedObjectID is null');
+			console.warn('WARNING: selectedObjectID is null');
 			return null;
 		}
 		const model = this.objects3D.get(this.selectedObjectID);
