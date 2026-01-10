@@ -1,13 +1,16 @@
-<script>
-	let { pileState } = $props();
-	let count = $derived(pileState.getSelectedModelObject().uniformScale);
+<script lang="ts">
+	import type { PileState } from "$lib/pile/util/pileState.svelte";
+
+
+	let { pileState }: {pileState:PileState} = $props();
+	let count = $derived(pileState.getSelectedObject()?.uniformScale);
 
 	$effect(() => {
 		if (!count) {
 			count = 1;
 		}
-    //console.log(`${count}`)
-		pileState.getSelectedModelObject().uniformScale = count;
+		const selectedObject = pileState.getSelectedObject()
+		if (selectedObject) selectedObject.uniformScale = count;
 	});
 </script>
 
