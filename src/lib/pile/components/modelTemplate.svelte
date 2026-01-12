@@ -7,7 +7,6 @@
 	import type { Transform3D } from '../types';
 	import type { PileObject3D } from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp.svelte';
-	import Pile from '../pile.svelte';
 
 	let {
 		fallback,
@@ -42,16 +41,18 @@
 	});
 
 	let showThisTransformControls = $derived.by(() => {
-		if (
-			pileObjectData.id &&
-			pileObjectData.id != '' &&
-			pileApp.state.isSelected(pileObjectData.id)
-		) {
+		if (!pileObjectData.id || pileObjectData.id === '')
+			throw Error(`Pile Object has no id ${pileObjectData}`);
+		if (pileApp.state.selectedObjectID === pileObjectData.id) {
 			return pileApp.state.showTransformControls;
+
 		} else {
 			return false;
 		}
+		
 	});
+
+	
 
 	export function getTransform(): Transform3D {
 		const positionVec = new Vector3(0, 0, 0);
@@ -73,8 +74,8 @@
 	 */
 	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
-		if (!pileObjectData.id) return;
-		if (pileApp.state.isSelected(pileObjectData.id)) {
+		if (!pileObjectData.id) throw Error(`PileObject Has No ID ${pileObjectData}`);
+		if (pileApp.state.isSelectedObject(pileObjectData.id)) {
 			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;
 			pileApp.state.selectedObjectID = null;
 			return;

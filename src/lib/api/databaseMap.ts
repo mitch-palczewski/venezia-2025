@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { SupabaseNetworkManager, type BaseRecord } from '$lib/api/networkManager.svelte';
 import type { UUID } from 'crypto';
 
@@ -14,7 +13,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 	public convertDatabaseObjToAppObj: (databaseObj: DatabaseObj) => AppObj;
 	public convertAppObjToDatabaseObj: (appObj: AppObj) => Partial<DatabaseObj>;
 	public sessionID: UUID;
-	public sessionFeildName?: keyof DatabaseObj;
+	public sessionFieldName?: keyof DatabaseObj;
 	private networkManager: SupabaseNetworkManager<DatabaseObj, K>;
 
 	constructor(
@@ -33,7 +32,8 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 		this.convertAppObjToDatabaseObj = convertAppObjToDatabaseObj;
 		this.convertDatabaseObjToAppObj = convertDatabaseObjToAppObj;
 		this.sessionID = sessionID ?? crypto.randomUUID();
-		this.sessionFeildName = sessionFeildName;
+
+		this.sessionFieldName = sessionFeildName;
 
 		this.networkManager = networkManager;
 		this.networkManager.onInsertAction = this.onDatabaseObjInserted;
@@ -50,7 +50,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 	}
 
 	public updateObject(appObj: AppObj) {
-		const dbObject = this.convertAppObjToDatabaseObj(appObj);
+		let dbObject = this.convertAppObjToDatabaseObj(appObj);
 		if (!dbObject)
 			throw Error(
 				`Converting AppObj into databaseObject returned null. Check Logic for ${this.convertAppObjToDatabaseObj}`
@@ -59,7 +59,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 		const idValue = dbObject[pk];
 		if (!idValue)
 			throw Error(`Database object ${dbObject.name} must have a primary key: ${pk}`, dbObject);
-		this.appendSessionID(dbObject);
+		dbObject = this.appendSessionID(dbObject);
 		this.networkManager.update(idValue, dbObject);
 	}
 
@@ -68,28 +68,30 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 	}
 
 	private onDatabaseObjInserted = (databaseObj: DatabaseObj) => {
-		if (databaseObj.sessionID === this.sessionID) return;
+		if (this.sessionFieldName && databaseObj[this.sessionFieldName] === this.sessionID) return;
 		const appObject = this.convertDatabaseObjToAppObj(databaseObj);
 		if (!appObject) return;
 		this.onAppObjInserted?.(appObject);
 	};
 	private onDatabaseObjUpdated = (databaseObj: DatabaseObj) => {
-		if (databaseObj.sessionID === this.sessionID) return;
+		if (this.sessionFieldName && databaseObj[this.sessionFieldName] === this.sessionID) return;
 		const appObject = this.convertDatabaseObjToAppObj(databaseObj);
 		if (!appObject) return;
 		this.onAppObjUpdated?.(appObject);
 	};
 	private onDatabaseObjDeleted = (databaseObj: Partial<DatabaseObj>) => {
-		if (databaseObj.sessionID === this.sessionID) return;
+		if (this.sessionFieldName && databaseObj[this.sessionFieldName] === this.sessionID) return;
 		const pk = this.networkManager.primaryKeyFeildName;
 		const idValue = databaseObj[pk];
 		if (!idValue) return;
 		this.onAppObjDeleted?.(idValue);
 	};
 
-	private appendSessionID(dbObject: Partial<DatabaseObj>) {
-		if (this.sessionFeildName && dbObject[this.sessionFeildName]) {
-			dbObject[this.sessionFeildName] = this.sessionID as any;
-		}
-	}
+	private appendSessionID = (dbObject: Partial<DatabaseObj>) => {
+		if (!this.sessionFieldName) return dbObject;
+		return {
+			...dbObject,
+			[this.sessionFieldName]: this.sessionID
+		};
+	};
 }

@@ -14,4 +14,4 @@
 	});
 </script>
 
-<input bind:value={count} type="number" min=".1" step=".5" />
+<input bind:value={count} type="number" min=".01" step=".5" />

@@ -31,7 +31,7 @@
 	console.log(`2D Object: ${pileObjectData.name}`);
 	let texture: null | AsyncWritable<Texture> = $state(null);
 
-	if (pileObjectData.objectMap.fileType === 'png') {
+	if (pileObjectData.objectMap && pileObjectData.objectMap.fileType === 'png') {
 		texture = useTexture(pileObjectData.objectMap.path);
 	}
 
@@ -39,7 +39,7 @@
 		if (
 			pileObjectData.id &&
 			pileObjectData.id != '' &&
-			pileApp.state.isSelected(pileObjectData.id)
+			pileApp.state.isSelectedObject(pileObjectData.id)
 		) {
 			return pileApp.state.showTransformControls;
 		} else {
@@ -65,7 +65,7 @@
 	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
 		if (!pileObjectData.id) return;
-		if (pileApp.state.isSelected(pileObjectData.id)) {
+		if (pileApp.state.isSelectedObject(pileObjectData.id)) {
 			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;
 			pileApp.state.selectedObjectID = null;
 			return;

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Quaternion, Vector3 } from 'three';
+import {  Vector3 } from 'three';
 import type { Transform3D } from '../types';
 import {
 	undertowModels,
@@ -11,14 +11,12 @@ import {
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { MAX_OBJECT_DISTANCE } from '$lib/constants';
-import { type PileObjectPayload } from './api/pilePayload';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
 import { PileEnvironment } from './pileEnvironment.svelte';
 import { useThrelte } from '@threlte/core';
 import { Object3DMapInventory } from './assetInventory/object3DMap';
 import { Object2DMapInventory } from './assetInventory/object2DMap';
 import { PileDatabase, type PileDatabaseObject } from './api/pileDatabase';
-import type { SvelteMap } from 'svelte/reactivity';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -111,67 +109,10 @@ function initSupabaseObject(
 	});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function getObjectsPayload(
-	objects: SvelteMap<string, PileObject2D> | SvelteMap<string, PileObject3D>
-) {
-	const objectsTransform: Record<string, PileObjectPayload> = {};
-	const _pos = new Vector3();
-	const _quat = new Quaternion();
-	const _scale = new Vector3();
-	objects.forEach((object) => {
-		if (!object.shown || !isInBounds(object)) return;
-		const mesh = object.ref?.children[0];
-		if (!mesh) {
-			throw Error(`Object ${object.name} has no Mesh`);
-		}
-		mesh?.getWorldPosition(_pos);
-		mesh?.getWorldQuaternion(_quat);
-		mesh?.getWorldScale(_scale);
-		const transform: Transform3D = {
-			translate: { x: _pos.x, y: _pos.y, z: _pos.z },
-			rotation: {
-				x: _quat.x,
-				y: _quat.y,
-				z: _quat.z,
-				w: _quat.w
-			},
-			scale: { x: _scale.x, y: _scale.y, z: _scale.z }
-		};
-		objectsTransform[object.id] = { transform: transform, name: object.name, animation: null };
-	});
-	return objectsTransform;
-}
+
+
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function isPayloadValid(data: any) {
-	if (!data || typeof data !== 'object') return false;
-	if (!isTransformPayloadValid(data.objects2D)) return false;
-	if (!isTransformPayloadValid(data.objects3D)) return false;
-	return true;
-}
-
-function isTransformPayloadValid(data: any): boolean {
-	const keys = ['position', 'rotation', 'scale'];
-	const axes = ['x', 'y', 'z'];
-	for (const objId in data) {
-		const transform = data[objId].transform;
-		const name = data[objId].name;
-		if (!transform || !name) return false;
-		for (const key of keys) {
-			if (!transform[key]) return false;
-			for (const axis of axes) {
-				const value = transform[key][axis];
-				if (typeof value !== 'number' || isNaN(value)) {
-					console.error(`Invalid data at ${objId}.${key}.${axis}:`, value);
-					return false;
-				}
-			}
-		}
-	}
-	return true;
-}
-
 function isInBounds(model: PileObject3D | PileObject2D): boolean {
 	//Consider Making This based on Scale to Distance Ration instead of just distance
 	const position = new Vector3(0, 0, 0);

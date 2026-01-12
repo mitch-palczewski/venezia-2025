@@ -5,7 +5,6 @@
 	import { deleteSelectedModel } from '../../util/uiActions';
 	import AddNewModel from './AddNewModel.svelte';
 	import ChooseEnvironment from './ChooseEnvironment.svelte';
-	import SaveStatus from './SaveStatus.svelte';
 	import ScaleSlider from './ScaleSlider.svelte';
 
 	let { pileSceneRef } = $props();
@@ -14,9 +13,6 @@
 </script>
 
 {#if pileApp && pileState}
-	<div class="relative">
-		<SaveStatus status={pileState.uploadStatus} onSave={pileApp.attemptSave} />
-	</div>
 	<div class="absolute top-[90vh] left-[3vw]">
 		<div class="grid grid-cols-8 gap-3">
 			{#if pileState.selectedObjectID}

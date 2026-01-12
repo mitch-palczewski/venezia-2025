@@ -2,6 +2,8 @@ import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
 import type { AcceptedPileObjects, PileDatabase } from './api/pileDatabase';
+import type { Transform3D } from '../types';
+import type { Group, Object3DEventMap } from 'three';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -13,25 +15,12 @@ export class PileState {
 	transformControlsMode = $state<TransformControlsMode>('translate');
 	pileDatabase: PileDatabase;
 
-	//DELETE
-	uploadStatus: UploadStatus = $state('Idle');
-	#changeCount = $state(0);
-	#lastSavedCount = $state(0);
-	hasChanges = $derived(this.#changeCount !== this.#lastSavedCount);
 
 	constructor(database: PileDatabase) {
 		this.pileDatabase = database;
-		this.pileDatabase.database.onAppObjInserted = this.addObject
-		this.pileDatabase.database.onAppObjUpdated = this.updateObject
-		this.pileDatabase.database.onAppObjDeleted = this.deleteObject
-
-		$effect.root(() => {
-			$effect(() => {
-				if (this.hasChanges) {
-					this.uploadStatus = 'Unsaved Changes';
-				}
-			});
-		});
+		this.pileDatabase.database.onAppObjInserted = this.addObject;
+		this.pileDatabase.database.onAppObjUpdated = this.updateObject;
+		this.pileDatabase.database.onAppObjDeleted = this.deleteObject;
 	}
 
 	get showTransformControls() {
@@ -39,14 +28,13 @@ export class PileState {
 	}
 
 	set showTransformControls(value) {
-		//DELETE
 		if (value !== this.#showTransformControls) {
 			this.#showTransformControls = value;
-			this.#changeCount++;
 		}
 		//Updates Database When transformcontrols are turned off
 		if (value === false) {
 			const selectedObject = this.getSelectedObject();
+			//console.log(selectedObject);
 			if (selectedObject) {
 				this.pileDatabase.update(selectedObject);
 			} else {
@@ -55,17 +43,15 @@ export class PileState {
 		}
 	}
 
-	//DELETE
-	public setAsSaved() {
-		this.#lastSavedCount = this.#changeCount;
-	}
 
-	public isSelected(id: string) {
+	public isSelectedObject(id: string) {
 		return this.selectedObjectID === id;
 	}
 
 	public addObject = (obj: AcceptedPileObjects) => {
-		console.log(obj)
+		console.log(
+			`Adding obj ${obj.name} of type ${obj.objectType} to pileApp. Is Object 2D = ${obj.isObject2D()}. Is Object 3D = ${obj.isObject3D()}`
+		);
 		if (obj.isObject2D()) {
 			this.objects2D.set(obj.id, obj as PileObject2D);
 		}
@@ -74,21 +60,34 @@ export class PileState {
 		}
 		console.error(obj);
 		throw Error(`Object must be object2D or object3D. This object type is ${obj.objectType}`);
-	}
+	};
 
 	public updateObject = (newObj: PileObject2D | PileObject3D) => {
+		if (this.selectedObjectID === newObj.id) return;
+		console.log(
+			`Adding obj ${newObj.name} of type ${newObj.objectType} to pileApp. Is Object 2D = ${newObj.isObject2D()}. Is Object 3D = ${newObj.isObject3D()}`
+		);
+		const newTransform = newObj.transform3D;
 		if (newObj.isObject2D() && this.objects2D.has(newObj.id)) {
-			this.objects2D.set(newObj.id, newObj as PileObject2D);
+			const oldObj = this.objects2D.get(newObj.id);
+			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
+			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
+			oldObj.uniformScale = (newTransform.scale.x + newTransform.scale.y + newTransform.scale.z)/3
+			PileState.setObjectsTransform(oldObj?.ref, newTransform);
 		}
 		if (newObj.isObject3D() && this.objects3D.has(newObj.id)) {
-			this.objects3D.set(newObj.id, newObj as PileObject3D);
+			const oldObj = this.objects3D.get(newObj.id);
+			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
+			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
+			oldObj.uniformScale = (newTransform.scale.x + newTransform.scale.y + newTransform.scale.z)/3
+			PileState.setObjectsTransform(oldObj?.ref, newTransform);
 		}
-	}
+	};
 
 	public deleteObject = (id: string) => {
 		this.objects2D.delete(id);
 		this.objects3D.delete(id);
-	}
+	};
 
 	public clearAllModels() {
 		console.log('state.clearAllModels()');
@@ -109,5 +108,14 @@ export class PileState {
 		throw Error(
 			`Could not find selectedObjectID ${this.selectedObjectID} in objects3D or objects2D`
 		);
+	}
+
+	public static setObjectsTransform(objectRef: Group<Object3DEventMap>, newTransform: Transform3D) {
+		const new_pos = newTransform.translate;
+		const new_quat = newTransform.rotation;
+		const new_scale = newTransform.scale;
+		objectRef.position.set(new_pos.x, new_pos.y, new_pos.z);
+		objectRef.quaternion.set(new_quat.x, new_quat.y, new_quat.z, new_quat.w);
+		objectRef.scale.set(new_scale.x, new_scale.y, new_scale.z);
 	}
 }
