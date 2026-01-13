@@ -121,7 +121,8 @@ export class PileDatabase {
 		const _pos = new Vector3();
 		const _quat = new Quaternion();
 		const _scale = new Vector3(1, 1, 1);
-		const mesh = ref?.children[0];
+		_quat.normalize()
+		const mesh = ref?.children[0].children[0];
 		mesh?.getWorldPosition(_pos);
 		mesh?.getWorldQuaternion(_quat);
 		mesh?.getWorldScale(_scale);
