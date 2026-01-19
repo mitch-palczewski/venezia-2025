@@ -21,7 +21,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 		obj1Text: string,
 		obj2: Partial<DatabaseObj>,
 		obj2Text: string
-	) => void;
+	) => boolean;
 
 	constructor(
 		networkManager: SupabaseNetworkManager<DatabaseObj, K>,
@@ -53,7 +53,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 		const dbObject = this.convertAppObjToDatabaseObj(appObj);
 		if (!dbObject) return;
 		this.appendSessionID(dbObject);
-		this.lastUpdatedObj = dbObject;
+		if(this.compareObjs)this.lastUpdatedObj = dbObject;
 		this.networkManager.insert(dbObject);
 	}
 
@@ -68,7 +68,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 		if (!idValue)
 			throw Error(`Database object ${dbObject.name} must have a primary key: ${pk}`, dbObject);
 		dbObject = this.appendSessionID(dbObject);
-		this.lastUpdatedObj = dbObject;
+		if(this.compareObjs) this.lastUpdatedObj = dbObject;
 		this.networkManager.update(idValue, dbObject);
 	}
 

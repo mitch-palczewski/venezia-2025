@@ -3,7 +3,7 @@ import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
 import type { AcceptedPileObjects, PileDatabase } from './api/pileDatabase';
 import type { Transform3D } from '../types';
-import type { Group, Object3DEventMap } from 'three';
+import { Quaternion, Vector3, type Object3D } from 'three';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -14,7 +14,6 @@ export class PileState {
 	#showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
 	pileDatabase: PileDatabase;
-
 
 	constructor(database: PileDatabase) {
 		this.pileDatabase = database;
@@ -43,7 +42,6 @@ export class PileState {
 		}
 	}
 
-
 	public isSelectedObject(id: string) {
 		return this.selectedObjectID === id;
 	}
@@ -63,23 +61,23 @@ export class PileState {
 	};
 
 	public updateObject = (newObj: PileObject2D | PileObject3D) => {
+		console.log("Updating Obj from realtime: ", newObj)
 		if (this.selectedObjectID === newObj.id) return;
-		console.log(
-			`Adding obj ${newObj.name} of type ${newObj.objectType} to pileApp. Is Object 2D = ${newObj.isObject2D()}. Is Object 3D = ${newObj.isObject3D()}`
-		);
 		const newTransform = newObj.transform3D;
 		if (newObj.isObject2D() && this.objects2D.has(newObj.id)) {
 			const oldObj = this.objects2D.get(newObj.id);
 			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
 			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
-			oldObj.uniformScale = (newTransform.scale.x + newTransform.scale.y + newTransform.scale.z)/3
+			oldObj.uniformScale =
+				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
 			PileState.setObjectsTransform(oldObj?.ref, newTransform);
 		}
 		if (newObj.isObject3D() && this.objects3D.has(newObj.id)) {
 			const oldObj = this.objects3D.get(newObj.id);
 			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
 			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
-			oldObj.uniformScale = (newTransform.scale.x + newTransform.scale.y + newTransform.scale.z)/3
+			oldObj.uniformScale =
+				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
 			PileState.setObjectsTransform(oldObj?.ref, newTransform);
 		}
 	};
@@ -110,12 +108,44 @@ export class PileState {
 		);
 	}
 
-	public static setObjectsTransform(objectRef: Group<Object3DEventMap>, newTransform: Transform3D) {
-		const new_pos = newTransform.translate;
-		const new_quat = newTransform.rotation;
-		const new_scale = newTransform.scale;
-		objectRef.position.set(new_pos.x, new_pos.y, new_pos.z);
-		objectRef.quaternion.set(new_quat.x, new_quat.y, new_quat.z, new_quat.w);
-		objectRef.scale.set(new_scale.x, new_scale.y, new_scale.z);
+	public static setObjectsTransform(objectRef: Object3D, newTransform: Transform3D) {
+		// 1. Create temporary objects to hold the incoming data
+		const worldPos = new Vector3(
+			newTransform.translate.x,
+			newTransform.translate.y,
+			newTransform.translate.z
+		);
+		const worldQuat = new Quaternion(
+			newTransform.rotation.x,
+			newTransform.rotation.y,
+			newTransform.rotation.z,
+			newTransform.rotation.w
+		);
+		const worldScale = new Vector3(
+			newTransform.scale.x,
+			newTransform.scale.y,
+			newTransform.scale.z
+		);
+
+		worldQuat.normalize();
+
+		if (objectRef.parent) {
+			objectRef.parent.worldToLocal(worldPos);
+
+			// For rotation, we multiply by the inverse of the parent's world quaternion
+			const parentWorldQuat = new Quaternion();
+			objectRef.parent.getWorldQuaternion(parentWorldQuat);
+			worldQuat.premultiply(parentWorldQuat.invert());
+
+			// For scale, we divide by the parent's world scale
+			const parentWorldScale = new Vector3();
+			objectRef.parent.getWorldScale(parentWorldScale);
+			worldScale.divide(parentWorldScale);
+		}
+
+		// 4. Apply the calculated local values
+		objectRef.position.copy(worldPos);
+		objectRef.quaternion.copy(worldQuat);
+		objectRef.scale.copy(worldScale);
 	}
 }

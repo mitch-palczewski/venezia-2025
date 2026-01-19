@@ -34,8 +34,8 @@ export class PileDatabase {
 		'last_edited_by'
 	);
 
-	constructor(){
-		this.database.compareObjs = this.compareObjs
+	constructor() {
+		this.database.compareObjs = this.databaseObjsMatch;
 	}
 
 	public destroy() {
@@ -48,6 +48,7 @@ export class PileDatabase {
 	}
 	public update(obj: AcceptedPileObjects) {
 		if (!this.isShown(obj)) return;
+		console.log("Updating Obj (sending to db): ", obj)
 		this.database.updateObject(obj);
 	}
 	public delete(id: AcceptedPileObjects['id']) {
@@ -88,35 +89,21 @@ export class PileDatabase {
 	}
 
 	public static convertDatabaseObjToPileObj(obj: PileDatabaseObj): AcceptedPileObjects {
-		if (obj.type === 'object2D') {
-			const obj2D = new PileObject2D({
-				name: obj.name,
-				id: obj.id,
-				objectMap: undefined,
-				transform3D: {
-					translate: { x: obj.pos_x, y: obj.pos_y, z: obj.pos_z },
-					rotation: { x: obj.rot_x, y: obj.rot_y, z: obj.rot_z, w: obj.rot_w },
-					scale: { x: obj.scale_x, y: obj.scale_y, z: obj.scale_z }
-				},
-				uniformScale: (obj.scale_x + obj.scale_y + obj.scale_z) / 3
-			});
-			return obj2D;
-		}
-		if (obj.type === 'object3D') {
-			const obj3D = new PileObject3D({
-				name: obj.name,
-				id: obj.id,
-				objectMap: undefined,
-				transform3D: {
-					translate: { x: obj.pos_x, y: obj.pos_y, z: obj.pos_z },
-					rotation: { x: obj.rot_x, y: obj.rot_y, z: obj.rot_z, w: obj.rot_w },
-					scale: { x: obj.scale_x, y: obj.scale_y, z: obj.scale_z }
-				},
-				uniformScale: (obj.scale_x + obj.scale_y + obj.scale_z) / 3
-			});
-			return obj3D;
-		}
-		throw Error(`Invalid obj ${obj.name} type: ${obj.type}, ${obj}`);
+		const config = {
+			name: obj.name,
+			id: obj.id,
+			objectMap: undefined,
+			transform3D: {
+				translate: { x: obj.pos_x, y: obj.pos_y, z: obj.pos_z },
+				rotation: { x: obj.rot_x, y: obj.rot_y, z: obj.rot_z, w: obj.rot_w },
+				scale: { x: obj.scale_x, y: obj.scale_y, z: obj.scale_z }
+			},
+			uniformScale: (obj.scale_x + obj.scale_y + obj.scale_z) / 3
+		};
+		if (obj.type === 'object2D') return new PileObject2D(config);
+		if (obj.type === 'object3D') return new PileObject3D(config);
+
+		throw Error(`Invalid obj ${obj.name} type: ${obj.type}`);
 	}
 
 	public static getTransfrom(ref?: Group<Object3DEventMap>) {
@@ -125,9 +112,9 @@ export class PileDatabase {
 		const _scale = new Vector3(1, 1, 1);
 		_quat.normalize();
 		//SLOPPY
-		const mesh = ref?.children[0].children[0];
+		const mesh = ref?.children[0];
 		if (!mesh) throw Error(`Could not find Mesh at Ref`);
-
+		mesh.updateWorldMatrix(true, false);
 		mesh?.getWorldPosition(_pos);
 		mesh?.getWorldQuaternion(_quat);
 		mesh?.getWorldScale(_scale);
@@ -163,15 +150,24 @@ export class PileDatabase {
 		return uuidRegex.test(input);
 	}
 
-	private compareObjs = (
+	/**
+	 * Compares two database objects
+	 * @param obj1
+	 * @param obj1Text
+	 * @param obj2
+	 * @param obj2Text
+	 * @returns true if the objects match else false
+	 */
+	private databaseObjsMatch = (
 		obj1: Partial<PileDatabaseObj>,
 		obj1Text: string,
 		obj2: Partial<PileDatabaseObj>,
 		obj2Text: string
 	) => {
-		console.log(obj1Text, obj1, obj2Text, obj2);
+		let result = true;
 		if (obj1.pos_x != obj2.pos_x || obj1.pos_y != obj2.pos_y || obj1.pos_z != obj2.pos_z) {
 			console.error(`Position does not match`, obj1Text, obj1, obj2Text, obj2);
+			result = false;
 		}
 		if (
 			obj1.rot_x != obj2.rot_x ||
@@ -180,6 +176,7 @@ export class PileDatabase {
 			obj1.rot_w != obj2.rot_w
 		) {
 			console.error(`Rotation does not match`, obj1Text, obj1, obj2Text, obj2);
+			result = false;
 		}
 		if (
 			obj1.scale_x != obj2.scale_x ||
@@ -187,16 +184,21 @@ export class PileDatabase {
 			obj1.scale_z != obj2.scale_z
 		) {
 			console.error(`Scale does not match`, obj1Text, obj1, obj2Text, obj2);
+			result = false;
 		}
 		if (obj1.id != obj2.id) {
 			console.error("Id's do not Match");
+			result = false;
 		}
 		if (obj1.name != obj2.name) {
 			console.error('Names do not match');
+			result = false;
 		}
 		if (obj1.type != obj2.type) {
 			console.error('Type Does not match');
+			result = false;
 		}
+		return result;
 	};
 }
 
