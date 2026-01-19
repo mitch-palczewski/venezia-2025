@@ -123,7 +123,7 @@ export class PileDatabase {
 		const _scale = new Vector3(1, 1, 1);
 		_quat.normalize();
 		//SLOPPY
-		const mesh = ref?.children[0].children[0];
+		const mesh = ref?.children[0];
 		console.log('ref: ', ref);
 		if (!mesh) console.warn(`Could not find Mesh at Ref`);
 

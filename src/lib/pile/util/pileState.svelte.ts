@@ -42,6 +42,14 @@ export class PileState {
 		}
 	}
 
+	public overrideShowTransformControls(value:boolean){
+		if(value === false){
+			this.selectedObjectID = null
+		}
+		this.#showTransformControls = value
+
+	}
+
 	public isSelectedObject(id: string) {
 		return this.selectedObjectID === id;
 	}

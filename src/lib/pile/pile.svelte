@@ -57,10 +57,10 @@
 
 	<ModelTemplate
 		{pileApp}
-		pileObjectData={model}
 		oncreate={(ref) => {
 			model.ref = ref;
 		}}
+		pileObjectData={model}
 		position={[translate.x, translate.y, translate.z]}
 		quaternion={[quaternion.x, quaternion.y, quaternion.z, quaternion.w]}
 		scale={[scale.x, scale.y, scale.z]}
