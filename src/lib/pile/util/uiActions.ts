@@ -31,7 +31,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
-		pileApp.state.objects3D.set(object3D.id, object3D);
+		pileApp.state.addObject(object3D);
 		pileApp.database.add(object3D)
 	}
 	if (modelMap.objectType === '2D') {
@@ -42,8 +42,8 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
-		pileApp.state.add2DImage(object2D);
-		pileApp.database.add(object2D);
+		pileApp.state.addObject(object2D);
+		//pileApp.database.add(object2D);
 	}
 
 }

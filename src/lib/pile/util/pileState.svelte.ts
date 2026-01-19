@@ -49,28 +49,37 @@ export class PileState {
 	public addObject = (obj: AcceptedPileObjects) => {
 		if (obj.isObject2D()) {
 			this.objects2D.set(obj.id, obj as PileObject2D);
+			this.pileDatabase.add(obj)
+			return;
 		}
 		if (obj.isObject3D()) {
 			this.objects3D.set(obj.id, obj as PileObject3D);
+			this.pileDatabase.add(obj)
+			return;
 		}
 		console.error(obj);
 		throw Error(`Object must be object2D or object3D. This object type is ${obj.objectType}`);
 	};
 
 	public updateObject = (newObj: PileObject2D | PileObject3D) => {
-		if (this.selectedObjectID === newObj.id) return;
-
-		const map = newObj.isObject2D() ? this.objects2D : this.objects3D;
-		const oldObj = map.get(newObj.id);
-
-		if (!oldObj || !oldObj.ref) {
-			console.warn(`Update ignored: Could not find object or ref for ${newObj.id}`);
-			return;
-		}
+		if (this.selectedObjectID === newObj.id) console.warn("Skipping object update. Object is selected.");
 		const newTransform = newObj.transform3D;
-		oldObj.uniformScale = (newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
-		PileState.setObjectsTransform(oldObj.ref, newTransform);
-		console.log('Updating Obj from realtime: ', newObj);
+		if (newObj.isObject2D() && this.objects2D.has(newObj.id)) {
+			const oldObj = this.objects2D.get(newObj.id);
+			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
+			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
+			oldObj.uniformScale =
+				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
+			PileState.setObjectsTransform(oldObj?.ref, newTransform);
+		}
+		if (newObj.isObject3D() && this.objects3D.has(newObj.id)) {
+			const oldObj = this.objects3D.get(newObj.id);
+			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
+			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
+			oldObj.uniformScale =
+				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
+			PileState.setObjectsTransform(oldObj?.ref, newTransform);
+		}
 	};
 
 	public deleteObject = (id: string) => {

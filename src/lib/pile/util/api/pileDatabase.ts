@@ -43,12 +43,15 @@ export class PileDatabase {
 	}
 
 	public add(obj: AcceptedPileObjects) {
-		if (!this.isShown(obj)) return;
+		if (!this.isShown(obj)) {
+			console.warn('Object is not shown. Skipping adding to database', obj);
+			return;
+		}
 		this.database.addObject(obj);
 	}
 	public update(obj: AcceptedPileObjects) {
 		if (!this.isShown(obj)) return;
-		console.log("Updating Obj (sending to db): ", obj)
+		console.log('Updating Obj (sending to db): ', obj);
 		this.database.updateObject(obj);
 	}
 	public delete(id: AcceptedPileObjects['id']) {
@@ -62,16 +65,24 @@ export class PileDatabase {
 	}
 
 	public static convertPileObjToDatabaseObj(obj: AcceptedPileObjects): Partial<PileDatabaseObj> {
+		let t = null;
 		if (!obj.ref) {
-			console.warn(
+			console.log(
 				`Did not find a ref for ${obj.objectType} ${obj.name}. Objects Transform will be defaulted.`
 			);
+			t = {
+				pos: {x: 0, y: 0, z: 0},
+				rot: {x: 0, y: 0, z: 0, w: 1},
+				scale: {x: 1, y: 1, z: 1}
+			};
+		} else {
+			t = PileDatabase.getTransfrom(obj.ref!);
 		}
-		const t = PileDatabase.getTransfrom(obj.ref!);
-		const id = PileDatabase.validateID(obj.id);
+
+		//const id = PileDatabase.validateID(obj.id);
 
 		const dbObject: Partial<PileDatabaseObj> = {
-			id: id,
+			id: obj.id,
 			name: obj.name,
 			type: obj.objectType as 'object2D' | 'object3D',
 			pos_x: t.pos.x,
@@ -112,10 +123,11 @@ export class PileDatabase {
 		const _scale = new Vector3(1, 1, 1);
 		_quat.normalize();
 		//SLOPPY
-		const mesh = ref?.children[0];
-		if (!mesh) throw Error(`Could not find Mesh at Ref`);
+		const mesh = ref?.children[0].children[0];
+		console.log('Getting Objects Transform', mesh);
+		if (!mesh) console.warn(`Could not find Mesh at Ref`);
 
-		mesh.updateWorldMatrix(true, false);
+		mesh?.updateWorldMatrix(true, false);
 		mesh?.getWorldPosition(_pos);
 		mesh?.getWorldQuaternion(_quat);
 		mesh?.getWorldScale(_scale);
