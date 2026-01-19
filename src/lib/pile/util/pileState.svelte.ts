@@ -58,25 +58,19 @@ export class PileState {
 	};
 
 	public updateObject = (newObj: PileObject2D | PileObject3D) => {
-		console.log("Updating Obj from realtime: ", newObj)
 		if (this.selectedObjectID === newObj.id) return;
+
+		const map = newObj.isObject2D() ? this.objects2D : this.objects3D;
+		const oldObj = map.get(newObj.id);
+
+		if (!oldObj || !oldObj.ref) {
+			console.warn(`Update ignored: Could not find object or ref for ${newObj.id}`);
+			return;
+		}
 		const newTransform = newObj.transform3D;
-		if (newObj.isObject2D() && this.objects2D.has(newObj.id)) {
-			const oldObj = this.objects2D.get(newObj.id);
-			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
-			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
-			oldObj.uniformScale =
-				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
-			PileState.setObjectsTransform(oldObj?.ref, newTransform);
-		}
-		if (newObj.isObject3D() && this.objects3D.has(newObj.id)) {
-			const oldObj = this.objects3D.get(newObj.id);
-			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
-			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
-			oldObj.uniformScale =
-				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
-			PileState.setObjectsTransform(oldObj?.ref, newTransform);
-		}
+		oldObj.uniformScale = (newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
+		PileState.setObjectsTransform(oldObj.ref, newTransform);
+		console.log('Updating Obj from realtime: ', newObj);
 	};
 
 	public deleteObject = (id: string) => {
@@ -106,7 +100,6 @@ export class PileState {
 	}
 
 	public static setObjectsTransform(objectRef: Object3D, newTransform: Transform3D) {
-		// 1. Create temporary objects to hold the incoming data
 		const worldPos = new Vector3(
 			newTransform.translate.x,
 			newTransform.translate.y,
@@ -129,20 +122,19 @@ export class PileState {
 		if (objectRef.parent) {
 			objectRef.parent.worldToLocal(worldPos);
 
-			// For rotation, we multiply by the inverse of the parent's world quaternion
 			const parentWorldQuat = new Quaternion();
 			objectRef.parent.getWorldQuaternion(parentWorldQuat);
 			worldQuat.premultiply(parentWorldQuat.invert());
 
-			// For scale, we divide by the parent's world scale
 			const parentWorldScale = new Vector3();
 			objectRef.parent.getWorldScale(parentWorldScale);
 			worldScale.divide(parentWorldScale);
 		}
 
-		// 4. Apply the calculated local values
 		objectRef.position.copy(worldPos);
 		objectRef.quaternion.copy(worldQuat);
 		objectRef.scale.copy(worldScale);
+
+		objectRef.updateMatrixWorld(true);
 	}
 }

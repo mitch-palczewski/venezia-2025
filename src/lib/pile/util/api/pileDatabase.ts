@@ -115,7 +115,7 @@ export class PileDatabase {
 		const mesh = ref?.children[0];
 		if (!mesh) throw Error(`Could not find Mesh at Ref`);
 
-		mesh.updateWorldMatrix(true, true);
+		mesh.updateWorldMatrix(true, false);
 		mesh?.getWorldPosition(_pos);
 		mesh?.getWorldQuaternion(_quat);
 		mesh?.getWorldScale(_scale);
