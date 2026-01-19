@@ -119,7 +119,7 @@
 {/snippet}
 
 <!-- MAIN EXECUTION -->
-<T.Group bind:ref dispose={true} {name} {...props} scale={pileObjectData.uniformScale!}>
+<T.Group bind:ref dispose={true} {name} {...props}>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}

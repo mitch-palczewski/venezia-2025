@@ -3,7 +3,7 @@ import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
 import type { AcceptedPileObjects, PileDatabase } from './api/pileDatabase';
 import type { Transform3D } from '../types';
-import { Quaternion, Vector3, type Object3D } from 'three';
+import { Matrix4, Quaternion, Vector3, type Object3D } from 'three';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -49,12 +49,12 @@ export class PileState {
 	public addObject = (obj: AcceptedPileObjects) => {
 		if (obj.isObject2D()) {
 			this.objects2D.set(obj.id, obj as PileObject2D);
-			this.pileDatabase.add(obj)
+			this.pileDatabase.add(obj);
 			return;
 		}
 		if (obj.isObject3D()) {
 			this.objects3D.set(obj.id, obj as PileObject3D);
-			this.pileDatabase.add(obj)
+			this.pileDatabase.add(obj);
 			return;
 		}
 		console.error(obj);
@@ -62,7 +62,8 @@ export class PileState {
 	};
 
 	public updateObject = (newObj: PileObject2D | PileObject3D) => {
-		if (this.selectedObjectID === newObj.id) console.warn("Skipping object update. Object is selected.");
+		if (this.selectedObjectID === newObj.id)
+			console.warn('Skipping object update. Object is selected.');
 		const newTransform = newObj.transform3D;
 		if (newObj.isObject2D() && this.objects2D.has(newObj.id)) {
 			const oldObj = this.objects2D.get(newObj.id);
@@ -109,41 +110,43 @@ export class PileState {
 	}
 
 	public static setObjectsTransform(objectRef: Object3D, newTransform: Transform3D) {
-		const worldPos = new Vector3(
-			newTransform.translate.x,
-			newTransform.translate.y,
-			newTransform.translate.z
+		const target = objectRef.children[0];
+		if (!target) return;
+
+		const worldMatrix = new Matrix4().compose(
+			new Vector3(newTransform.translate.x, newTransform.translate.y, newTransform.translate.z),
+			new Quaternion(
+				newTransform.rotation.x,
+				newTransform.rotation.y,
+				newTransform.rotation.z,
+				newTransform.rotation.w
+			).normalize(),
+			new Vector3(newTransform.scale.x, newTransform.scale.y, newTransform.scale.z)
 		);
-		const worldQuat = new Quaternion(
-			newTransform.rotation.x,
-			newTransform.rotation.y,
-			newTransform.rotation.z,
-			newTransform.rotation.w
-		);
-		const worldScale = new Vector3(
-			newTransform.scale.x,
-			newTransform.scale.y,
-			newTransform.scale.z
-		);
-
-		worldQuat.normalize();
-
-		if (objectRef.parent) {
-			objectRef.parent.worldToLocal(worldPos);
-
-			const parentWorldQuat = new Quaternion();
-			objectRef.parent.getWorldQuaternion(parentWorldQuat);
-			worldQuat.premultiply(parentWorldQuat.invert());
-
-			const parentWorldScale = new Vector3();
-			objectRef.parent.getWorldScale(parentWorldScale);
-			worldScale.divide(parentWorldScale);
-		}
-
-		objectRef.position.copy(worldPos);
-		objectRef.quaternion.copy(worldQuat);
-		objectRef.scale.copy(worldScale);
 
 		objectRef.updateMatrixWorld(true);
+		const parentInverse = new Matrix4().copy(objectRef.matrixWorld).invert();
+		const localMatrix = new Matrix4().multiplyMatrices(parentInverse, worldMatrix);
+		localMatrix.decompose(target.position, target.quaternion, target.scale);
+		target.updateMatrixWorld(true);
+	}
+
+	public static setScale(objectRef: Object3D, newScale: number) {
+		const target = objectRef.children[0];
+		if (!target) return;
+		target.scale.set(newScale, newScale, newScale);
+		target.updateMatrixWorld(true);
+	}
+	public static getObjScale(objectRef: Object3D): Vector3 {
+		const target = objectRef.children[0];
+		if (!target) return new Vector3(1, 1, 1);
+
+		// Ensure the world matrix is updated so the scale is accurate
+		target.updateWorldMatrix(true, false);
+
+		const worldScale = new Vector3();
+		target.getWorldScale(worldScale);
+
+		return worldScale;
 	}
 }

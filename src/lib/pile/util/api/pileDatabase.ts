@@ -124,14 +124,14 @@ export class PileDatabase {
 		_quat.normalize();
 		//SLOPPY
 		const mesh = ref?.children[0].children[0];
-		console.log('Getting Objects Transform', mesh);
+		console.log('ref: ', ref);
 		if (!mesh) console.warn(`Could not find Mesh at Ref`);
 
 		mesh?.updateWorldMatrix(true, false);
 		mesh?.getWorldPosition(_pos);
 		mesh?.getWorldQuaternion(_quat);
 		mesh?.getWorldScale(_scale);
-		return {
+		const result = {
 			pos: {
 				x: roundTo(_pos.x),
 				y: roundTo(_pos.y),
@@ -149,6 +149,8 @@ export class PileDatabase {
 				z: roundTo(_scale.z)
 			}
 		};
+		console.log("Uploading following transform: ", result.pos, result.rot, result.scale)
+		return result
 	}
 
 	public static validateID(id: string) {
