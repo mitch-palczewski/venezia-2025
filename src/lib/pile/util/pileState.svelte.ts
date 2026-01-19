@@ -47,9 +47,6 @@ export class PileState {
 	}
 
 	public addObject = (obj: AcceptedPileObjects) => {
-		console.log(
-			`Adding obj ${obj.name} of type ${obj.objectType} to pileApp. Is Object 2D = ${obj.isObject2D()}. Is Object 3D = ${obj.isObject3D()}`
-		);
 		if (obj.isObject2D()) {
 			this.objects2D.set(obj.id, obj as PileObject2D);
 		}
