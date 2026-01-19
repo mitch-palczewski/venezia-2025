@@ -4,7 +4,7 @@ import { PileObject2D, PileObject3D } from '../pileObject.svelte';
 import { DatabaseMap } from '$lib/api/databaseMap';
 import { SupabaseNetworkManager } from '$lib/api/networkManager.svelte';
 
-export interface PileDatabaseObject {
+export interface PileDatabaseObj {
 	id: string;
 	name: string;
 	type: 'object2D' | 'object3D';
@@ -25,15 +25,18 @@ export interface PileDatabaseObject {
 
 export type AcceptedPileObjects = PileObject2D | PileObject3D;
 
-
 export class PileDatabase {
-	public networkManager = new SupabaseNetworkManager<PileDatabaseObject>(supabase, 'pile_objects');
-	public database = new DatabaseMap<PileDatabaseObject, AcceptedPileObjects>(
+	public networkManager = new SupabaseNetworkManager<PileDatabaseObj>(supabase, 'pile_objects');
+	public database = new DatabaseMap<PileDatabaseObj, AcceptedPileObjects>(
 		this.networkManager,
 		PileDatabase.convertDatabaseObjToPileObj,
 		PileDatabase.convertPileObjToDatabaseObj,
 		'last_edited_by'
 	);
+
+	constructor(){
+		this.database.compareObjs = this.compareObjs
+	}
 
 	public destroy() {
 		this.networkManager.destroy();
@@ -50,7 +53,6 @@ export class PileDatabase {
 	public delete(id: AcceptedPileObjects['id']) {
 		this.database.deleteObject(id);
 	}
-	
 
 	private isShown(obj: PileObject2D | PileObject3D): boolean {
 		if (obj.shown) return true;
@@ -58,7 +60,7 @@ export class PileDatabase {
 		return false;
 	}
 
-	public static convertPileObjToDatabaseObj(obj: AcceptedPileObjects): Partial<PileDatabaseObject> {
+	public static convertPileObjToDatabaseObj(obj: AcceptedPileObjects): Partial<PileDatabaseObj> {
 		if (!obj.ref) {
 			console.warn(
 				`Did not find a ref for ${obj.objectType} ${obj.name}. Objects Transform will be defaulted.`
@@ -67,7 +69,7 @@ export class PileDatabase {
 		const t = PileDatabase.getTransfrom(obj.ref!);
 		const id = PileDatabase.validateID(obj.id);
 
-		const dbObject: Partial<PileDatabaseObject> = {
+		const dbObject: Partial<PileDatabaseObj> = {
 			id: id,
 			name: obj.name,
 			type: obj.objectType as 'object2D' | 'object3D',
@@ -85,7 +87,7 @@ export class PileDatabase {
 		return dbObject;
 	}
 
-	public static convertDatabaseObjToPileObj(obj: PileDatabaseObject): AcceptedPileObjects {
+	public static convertDatabaseObjToPileObj(obj: PileDatabaseObj): AcceptedPileObjects {
 		if (obj.type === 'object2D') {
 			const obj2D = new PileObject2D({
 				name: obj.name,
@@ -121,12 +123,32 @@ export class PileDatabase {
 		const _pos = new Vector3();
 		const _quat = new Quaternion();
 		const _scale = new Vector3(1, 1, 1);
-		_quat.normalize()
+		_quat.normalize();
+		//SLOPPY
 		const mesh = ref?.children[0].children[0];
+		if (!mesh) throw Error(`Could not find Mesh at Ref`);
+
 		mesh?.getWorldPosition(_pos);
 		mesh?.getWorldQuaternion(_quat);
 		mesh?.getWorldScale(_scale);
-		return { pos: _pos, rot: _quat, scale: _scale };
+		return {
+			pos: {
+				x: roundTo(_pos.x),
+				y: roundTo(_pos.y),
+				z: roundTo(_pos.z)
+			},
+			rot: {
+				x: roundTo(_quat.x),
+				y: roundTo(_quat.y),
+				z: roundTo(_quat.z),
+				w: roundTo(_quat.w)
+			},
+			scale: {
+				x: roundTo(_scale.x),
+				y: roundTo(_scale.y),
+				z: roundTo(_scale.z)
+			}
+		};
 	}
 
 	public static validateID(id: string) {
@@ -140,4 +162,45 @@ export class PileDatabase {
 		const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 		return uuidRegex.test(input);
 	}
+
+	private compareObjs = (
+		obj1: Partial<PileDatabaseObj>,
+		obj1Text: string,
+		obj2: Partial<PileDatabaseObj>,
+		obj2Text: string
+	) => {
+		console.log(obj1Text, obj1, obj2Text, obj2);
+		if (obj1.pos_x != obj2.pos_x || obj1.pos_y != obj2.pos_y || obj1.pos_z != obj2.pos_z) {
+			console.error(`Position does not match`, obj1Text, obj1, obj2Text, obj2);
+		}
+		if (
+			obj1.rot_x != obj2.rot_x ||
+			obj1.rot_y != obj2.rot_y ||
+			obj1.rot_z != obj2.rot_z ||
+			obj1.rot_w != obj2.rot_w
+		) {
+			console.error(`Rotation does not match`, obj1Text, obj1, obj2Text, obj2);
+		}
+		if (
+			obj1.scale_x != obj2.scale_x ||
+			obj1.scale_y != obj2.scale_y ||
+			obj1.scale_z != obj2.scale_z
+		) {
+			console.error(`Scale does not match`, obj1Text, obj1, obj2Text, obj2);
+		}
+		if (obj1.id != obj2.id) {
+			console.error("Id's do not Match");
+		}
+		if (obj1.name != obj2.name) {
+			console.error('Names do not match');
+		}
+		if (obj1.type != obj2.type) {
+			console.error('Type Does not match');
+		}
+	};
+}
+
+function roundTo(num: number, places: number = 4) {
+	const factor = Math.pow(10, places);
+	return Math.round(num * factor) / factor;
 }

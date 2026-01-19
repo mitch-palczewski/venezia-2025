@@ -16,7 +16,7 @@ import { PileEnvironment } from './pileEnvironment.svelte';
 import { useThrelte } from '@threlte/core';
 import { Object3DMapInventory } from './assetInventory/object3DMap';
 import { Object2DMapInventory } from './assetInventory/object2DMap';
-import { PileDatabase, type PileDatabaseObject } from './api/pileDatabase';
+import { PileDatabase, type PileDatabaseObj } from './api/pileDatabase';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -48,7 +48,7 @@ export class PileApp {
 	}
 
 	public initPileObjects(rawPositionData: any) {
-		const pileDatabaseObjects = rawPositionData.pileObjects as PileDatabaseObject[];
+		const pileDatabaseObjects = rawPositionData.pileObjects as PileDatabaseObj[];
 		pileDatabaseObjects.forEach((object) => {
 			const pileObject = PileDatabase.convertDatabaseObjToPileObj(object);
 			if (pileObject.isObject2D())
@@ -60,7 +60,7 @@ export class PileApp {
 
 
 
-	public addSupabaseObject(object: PileDatabaseObject) {
+	public addSupabaseObject(object: PileDatabaseObj) {
 		if (object.type === 'object2D') {
 			initSupabaseObject(
 				object,
@@ -85,7 +85,7 @@ export class PileApp {
 }
 
 function initSupabaseObject(
-	i: PileDatabaseObject,
+	i: PileDatabaseObj,
 	inventory: Object2DMapInventory | Object3DMapInventory,
 	onCreated: (params: any) => void,
 	context: string

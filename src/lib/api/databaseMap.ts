@@ -15,6 +15,13 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 	public sessionID: UUID;
 	public sessionFieldName?: keyof DatabaseObj;
 	private networkManager: SupabaseNetworkManager<DatabaseObj, K>;
+	private lastUpdatedObj: Partial<DatabaseObj> | null = null;
+	public compareObjs?: (
+		obj1: Partial<DatabaseObj>,
+		obj1Text: string,
+		obj2: Partial<DatabaseObj>,
+		obj2Text: string
+	) => void;
 
 	constructor(
 		networkManager: SupabaseNetworkManager<DatabaseObj, K>,
@@ -46,6 +53,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 		const dbObject = this.convertAppObjToDatabaseObj(appObj);
 		if (!dbObject) return;
 		this.appendSessionID(dbObject);
+		this.lastUpdatedObj = dbObject;
 		this.networkManager.insert(dbObject);
 	}
 
@@ -60,6 +68,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 		if (!idValue)
 			throw Error(`Database object ${dbObject.name} must have a primary key: ${pk}`, dbObject);
 		dbObject = this.appendSessionID(dbObject);
+		this.lastUpdatedObj = dbObject;
 		this.networkManager.update(idValue, dbObject);
 	}
 
@@ -68,13 +77,19 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 	}
 
 	private onDatabaseObjInserted = (databaseObj: DatabaseObj) => {
-		if (this.sessionFieldName && databaseObj[this.sessionFieldName] === this.sessionID) return;
+		if (this.sessionFieldName && databaseObj[this.sessionFieldName] === this.sessionID) {
+			if(this.compareObjs) this.compareObjs(this.lastUpdatedObj!, 'Last Updated Obj: ', databaseObj, 'Downloaded Obj:');
+			return;
+		}
 		const appObject = this.convertDatabaseObjToAppObj(databaseObj);
 		if (!appObject) return;
 		this.onAppObjInserted?.(appObject);
 	};
 	private onDatabaseObjUpdated = (databaseObj: DatabaseObj) => {
-		if (this.sessionFieldName && databaseObj[this.sessionFieldName] === this.sessionID) return;
+		if (this.sessionFieldName && databaseObj[this.sessionFieldName] === this.sessionID) {
+			if(this.compareObjs) this.compareObjs(this.lastUpdatedObj!, 'Last Updated Obj: ', databaseObj, 'Downloaded Obj:');
+			return;
+		}
 		const appObject = this.convertDatabaseObjToAppObj(databaseObj);
 		if (!appObject) return;
 		this.onAppObjUpdated?.(appObject);
