@@ -1,4 +1,4 @@
-import { type Group, type Object3DEventMap } from 'three';
+import { type Group} from 'three';
 import type { Transform3D } from '..';
 import type { Object3DMap } from './assetInventory/object3DMap';
 import type { Object2DMap } from './assetInventory/object2DMap';
@@ -15,7 +15,7 @@ abstract class BasePileObject<T> {
 	id: string;
 	objectMap: T | undefined;
 	transform3D: Transform3D;
-	ref: Group<Object3DEventMap> | undefined;
+	ref= $state<Group | undefined>(undefined);
 	shown: boolean = true;
 	uniformScale: number = $state(1);
 	objectType: string = '';
