@@ -15,10 +15,11 @@ abstract class BasePileObject<T> {
 	id: string;
 	objectMap: T | undefined;
 	transform3D: Transform3D;
-	ref: Group<Object3DEventMap> | null = null;
+	ref: Group<Object3DEventMap> | undefined;
 	shown: boolean = true;
 	uniformScale: number = $state(1);
 	objectType: string = '';
+	newObject: boolean = false;
 
 	constructor(options: BasePileObjectOptions<T>) {
 		this.name = options.name;

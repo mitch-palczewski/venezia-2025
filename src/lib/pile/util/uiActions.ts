@@ -31,8 +31,8 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
-		pileApp.state.addObject(object3D);
-		pileApp.database.add(object3D)
+		object3D.newObject = true
+		pileApp.state.addObject(object3D)
 	}
 	if (modelMap.objectType === '2D') {
 		const object2D = new PileObject2D({
@@ -42,15 +42,13 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
+		object2D.newObject = true
 		pileApp.state.addObject(object2D);
-		//pileApp.database.add(object2D);
 	}
-
 }
 
 export function deleteSelectedModel(pileState: PileState) {
 	const id = pileState.selectedObjectID!
-
 	pileState.pileDatabase.delete(id)
 	deleteObject(pileState.objects3D, id)
 	deleteObject(pileState.objects2D, id)

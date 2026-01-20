@@ -57,12 +57,12 @@ export class PileState {
 	public addObject = (obj: AcceptedPileObjects) => {
 		if (obj.isObject2D()) {
 			this.objects2D.set(obj.id, obj as PileObject2D);
-			this.pileDatabase.add(obj);
+			//this.pileDatabase.add(obj);
 			return;
 		}
 		if (obj.isObject3D()) {
 			this.objects3D.set(obj.id, obj as PileObject3D);
-			this.pileDatabase.add(obj);
+			//this.pileDatabase.add(obj);
 			return;
 		}
 		console.error(obj);
