@@ -67,20 +67,17 @@ export class PileDatabase {
 	public static convertPileObjToDatabaseObj(obj: AcceptedPileObjects): Partial<PileDatabaseObj> {
 		let t = null;
 		if (!obj.ref) {
-			console.log(
+			console.warn(
 				`Did not find a ref for ${obj.objectType} ${obj.name}. Objects Transform will be defaulted.`
 			);
 			t = {
-				pos: {x: 0, y: 0, z: 0},
-				rot: {x: 0, y: 0, z: 0, w: 1},
-				scale: {x: 1, y: 1, z: 1}
+				pos: { x: 0, y: 0, z: 0 },
+				rot: { x: 0, y: 0, z: 0, w: 1 },
+				scale: { x: 1, y: 1, z: 1 }
 			};
 		} else {
-			t = PileDatabase.getTransfrom(obj.ref!);
+			t = PileDatabase.getTransfrom(obj.ref!, obj.name);
 		}
-
-		//const id = PileDatabase.validateID(obj.id);
-
 		const dbObject: Partial<PileDatabaseObj> = {
 			id: obj.id,
 			name: obj.name,
@@ -117,14 +114,13 @@ export class PileDatabase {
 		throw Error(`Invalid obj ${obj.name} type: ${obj.type}`);
 	}
 
-	public static getTransfrom(ref?: Group<Object3DEventMap>) {
+	public static getTransfrom(ref?: Group<Object3DEventMap>, name: string | null = null) {
 		const _pos = new Vector3();
 		const _quat = new Quaternion();
 		const _scale = new Vector3(1, 1, 1);
 		_quat.normalize();
-		//SLOPPY
+		//SLOPPY?
 		const mesh = ref?.children[0];
-		console.log('ref: ', ref);
 		if (!mesh) console.warn(`Could not find Mesh at Ref`);
 
 		mesh?.updateWorldMatrix(true, false);
@@ -149,8 +145,8 @@ export class PileDatabase {
 				z: roundTo(_scale.z)
 			}
 		};
-		console.log("Uploading following transform: ", result.pos, result.rot, result.scale)
-		return result
+		console.log('Uploading following transform: ', name!, result.pos, result.rot, result.scale);
+		return result;
 	}
 
 	public static validateID(id: string) {

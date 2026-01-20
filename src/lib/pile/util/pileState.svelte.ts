@@ -42,12 +42,11 @@ export class PileState {
 		}
 	}
 
-	public overrideShowTransformControls(value:boolean){
-		if(value === false){
-			this.selectedObjectID = null
+	public overrideShowTransformControls(value: boolean) {
+		if (value === false) {
+			this.selectedObjectID = null;
 		}
-		this.#showTransformControls = value
-
+		this.#showTransformControls = value;
 	}
 
 	public isSelectedObject(id: string) {
@@ -55,14 +54,12 @@ export class PileState {
 	}
 
 	public addObject = (obj: AcceptedPileObjects) => {
-		if (obj.isObject2D()) {
+		if (obj.objectType === "object2D") {
 			this.objects2D.set(obj.id, obj as PileObject2D);
-			//this.pileDatabase.add(obj);
 			return;
 		}
-		if (obj.isObject3D()) {
+		if (obj.objectType === "object3D") {
 			this.objects3D.set(obj.id, obj as PileObject3D);
-			//this.pileDatabase.add(obj);
 			return;
 		}
 		console.error(obj);
@@ -142,16 +139,21 @@ export class PileState {
 	public static setScale(objectRef: Object3D, newScale: number) {
 		const target = objectRef.children[0];
 		if (!target) return;
-		target.scale.set(newScale, newScale, newScale);
+		const roundedScale = Math.round(newScale * 10000) / 10000;
+
+		const parentWorldScale = new Vector3();
+		objectRef.getWorldScale(parentWorldScale);
+
+		const localX = parentWorldScale.x !== 0 ? roundedScale / parentWorldScale.x : 0;
+		const localY = parentWorldScale.y !== 0 ? roundedScale / parentWorldScale.y : 0;
+		const localZ = parentWorldScale.z !== 0 ? roundedScale / parentWorldScale.z : 0;
+		target.scale.set(localX, localY, localZ);
 		target.updateMatrixWorld(true);
 	}
 	public static getObjScale(objectRef: Object3D): Vector3 {
 		const target = objectRef.children[0];
 		if (!target) return new Vector3(1, 1, 1);
-
-		// Ensure the world matrix is updated so the scale is accurate
 		target.updateWorldMatrix(true, false);
-
 		const worldScale = new Vector3();
 		target.getWorldScale(worldScale);
 

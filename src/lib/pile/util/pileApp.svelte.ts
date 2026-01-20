@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {  Vector3 } from 'three';
+import { Vector3 } from 'three';
 import type { Transform3D } from '../types';
 import {
 	undertowModels,
@@ -51,14 +51,14 @@ export class PileApp {
 		const pileDatabaseObjects = rawPositionData.pileObjects as PileDatabaseObj[];
 		pileDatabaseObjects.forEach((object) => {
 			const pileObject = PileDatabase.convertDatabaseObjToPileObj(object);
-			if (pileObject.isObject2D())
+			if (object.type === 'object2D') {
 				this.state.objects2D.set(pileObject.id, pileObject as PileObject2D);
-			if (pileObject.isObject3D())
+			}
+			if (object.type === 'object3D') {
 				this.state.objects3D.set(pileObject.id, pileObject as PileObject3D);
+			}
 		});
 	}
-
-
 
 	public addSupabaseObject(object: PileDatabaseObj) {
 		if (object.type === 'object2D') {
@@ -108,9 +108,6 @@ function initSupabaseObject(
 		uniformScale: (i.scale_x + i.scale_y + i.scale_z) / 3
 	});
 }
-
-
-
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function isInBounds(model: PileObject3D | PileObject2D): boolean {

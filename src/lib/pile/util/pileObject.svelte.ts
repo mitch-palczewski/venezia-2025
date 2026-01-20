@@ -43,6 +43,9 @@ export class PileObject3D extends BasePileObject<Object3DMap> {
 	}
 
 	public isObject3D = () => {
+		if(this.objectType !== "object3D"){
+			console.warn("Object Type missmatch. Should have objectType = 'object3D'", this)
+		}
 		return true;
 	}
 }
@@ -61,6 +64,9 @@ export class PileObject2D extends BasePileObject<Object2DMap> {
 	}
 
 	public isObject2D = () => {
+		if(this.objectType !== "object2D"){
+			console.warn("Object Type missmatch. Should have objectType = 'object2D'", this)
+		}
 		return true;
 	}
 }

@@ -27,8 +27,10 @@
 	interactivity();
 
 	let shown = $state(pileObjectData.shown);
-	const imageEntry = pileApp.imageInventory.get(pileObjectData.name);
-	console.log(`2D Object: ${pileObjectData.name}`);
+	if (!pileObjectData.objectMap) {
+		pileObjectData.objectMap = pileApp.imageInventory.get(pileObjectData.name);
+	}
+	console.log(`2D Object: ${pileObjectData.name}`, pileObjectData);
 	let texture: null | AsyncWritable<Texture> = $state(null);
 
 	if (pileObjectData.objectMap && pileObjectData.objectMap.fileType === 'png') {
@@ -64,7 +66,7 @@
 
 	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
-		if (!pileObjectData.id) return;
+		if (!pileObjectData.id) throw Error(`PileObject Has No ID ${pileObjectData}`);
 		if (pileApp.state.isSelectedObject(pileObjectData.id)) {
 			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;
 			pileApp.state.selectedObjectID = null;
@@ -79,8 +81,8 @@
 </script>
 
 <!-- MAIN EXECUTION -->
-<T.Group bind:ref dispose={true} {name} {...props} scale={pileObjectData.uniformScale!}>
-	{#await imageEntry?.path}
+<T.Group bind:ref dispose={true} {name} {...props}>
+	{#await pileObjectData.objectMap?.path}
 		{@render fallback?.()}
 	{:then}
 		{#if shown}
@@ -90,21 +92,30 @@
 				showZ={showThisTransformControls}
 				mode={pileApp.state.transformControlsMode}
 			>
-				{#if imageEntry?.fileType === 'svg'}
-					<SVG
-						src={imageEntry.path}
-						fillMeshProps={{ onclick: handleModelClick }}
-						raycast={meshBounds}
-						
-					/>
-				{:else if imageEntry?.fileType === 'png'}
-					{#await texture then map}
-						<T.Mesh onclick={handleModelClick} raycast={meshBounds}>
-							<T.PlaneGeometry args={[1, map?.image.height / map?.image.width]} />
-							<T.MeshBasicMaterial {map} transparent={true} side={2} alphaTest={0.5} />
-						</T.Mesh>
-					{/await}
-				{/if}
+				<T.Group>
+					{#if pileObjectData.objectMap?.fileType === 'svg'}
+						<SVG
+							src={pileObjectData.objectMap?.path}
+							fillMeshProps={{ onclick: handleModelClick, depthWrite:false, depthTest:true }}
+							raycast={meshBounds}
+						/>
+					{:else if pileObjectData.objectMap?.fileType === 'png'}
+						{#await texture then map}
+							<T.Mesh onclick={handleModelClick} raycast={meshBounds}>
+								<T.PlaneGeometry args={[1, map?.image.height / map?.image.width]} />
+								<T.MeshBasicMaterial
+									{map}
+									transparent={true}
+									side={2}
+									alphaTest={0.2}
+									depthTest={true}
+									depthWrite={false}
+									
+								/>
+							</T.Mesh>
+						{/await}
+					{/if}
+				</T.Group>
 			</TransformControls>
 		{/if}
 	{:catch err}

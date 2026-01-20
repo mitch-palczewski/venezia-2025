@@ -6,6 +6,17 @@
 	import { PileApp } from './util/pileApp.svelte';
 	import CameraControls from './components/CameraControls.svelte';
 	import { onDestroy } from 'svelte';
+	import { interactivity } from '@threlte/extras';
+    
+    // This ensures that for every click, Threlte only 
+    // fires the event for the FIRST (closest) object hit.
+    interactivity({
+        filter: (hits) => {
+            // Hits are already sorted by distance by Three.js
+            // We only return the first one (the closest)
+            return hits.slice(0, 1);
+        }
+    });
 
 	let { data } = $props();
 
