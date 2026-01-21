@@ -22,6 +22,7 @@ export async function uploadDataFactory(pileSceneRef: { getPositions: () => obje
  * @param modelName A valid model name with corresponding .glb file
  */
 export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileApp) {
+	pileApp.state.showTransformControls = false
 	const baseTrandform: Transform3D = BASE_TRANSFORM;
 	if (modelMap.objectType === '3D') {
 		const object3D = new PileObject3D({
