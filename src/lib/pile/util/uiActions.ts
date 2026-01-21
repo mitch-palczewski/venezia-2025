@@ -32,7 +32,9 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			uniformScale: 1
 		});
 		object3D.newObject = true
+		pileApp.database.add(object3D);
 		pileApp.state.addObject(object3D)
+		
 	}
 	if (modelMap.objectType === '2D') {
 		const object2D = new PileObject2D({
@@ -44,6 +46,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 		});
 		object2D.newObject = true
 		pileApp.state.addObject(object2D);
+		pileApp.database.add(object2D);
 	}
 }
 

@@ -29,12 +29,16 @@
 	let shown = $state(pileObjectData.shown);
 	if (!pileObjectData.objectMap) {
 		pileObjectData.objectMap = pileApp.imageInventory.get(pileObjectData.name);
+		if (!pileObjectData.objectMap) throw Error('Could not find object name');
 	}
 	console.log(`2D Object: ${pileObjectData.name}`, pileObjectData);
-	let texture: null | AsyncWritable<Texture> = $state(null);
 
-	if (pileObjectData.objectMap && pileObjectData.objectMap.fileType === 'png') {
-		texture = useTexture(pileObjectData.objectMap.path);
+	const path = pileObjectData.objectMap?.path as string;
+	const fileType = pileObjectData.objectMap?.fileType as string;
+
+	let texture: null | AsyncWritable<Texture> = $state(null);
+	if (pileObjectData.objectMap && fileType === 'png') {
+		texture = useTexture(path);
 	}
 
 	let showThisTransformControls = $derived.by(() => {
@@ -84,7 +88,7 @@
 <T.Group bind:ref dispose={true} {name} {...props}>
 	{#await pileObjectData.objectMap?.path}
 		{@render fallback?.()}
-	{:then}
+	{:then path}
 		{#if shown}
 			<TransformControls
 				showX={showThisTransformControls}
@@ -96,7 +100,7 @@
 					{#if pileObjectData.objectMap?.fileType === 'svg'}
 						<SVG
 							src={pileObjectData.objectMap?.path}
-							fillMeshProps={{ onclick: handleModelClick, depthWrite:false, depthTest:true }}
+							fillMeshProps={{ onclick: handleModelClick, depthWrite: false, depthTest: true }}
 							raycast={meshBounds}
 						/>
 					{:else if pileObjectData.objectMap?.fileType === 'png'}
@@ -110,9 +114,10 @@
 									alphaTest={0.2}
 									depthTest={true}
 									depthWrite={false}
-									
 								/>
 							</T.Mesh>
+						{:catch err}
+							{@render error?.({ error: err })}
 						{/await}
 					{/if}
 				</T.Group>

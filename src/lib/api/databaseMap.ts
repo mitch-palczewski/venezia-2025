@@ -50,9 +50,9 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 	}
 
 	public addObject(appObj: AppObj) {
-		const dbObject = this.convertAppObjToDatabaseObj(appObj);
+		let dbObject = this.convertAppObjToDatabaseObj(appObj);
 		if (!dbObject) return;
-		this.appendSessionID(dbObject);
+		dbObject = this.appendSessionID(dbObject);
 		if(this.compareObjs)this.lastUpdatedObj = dbObject;
 		this.networkManager.insert(dbObject);
 	}

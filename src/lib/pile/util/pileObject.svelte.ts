@@ -21,6 +21,8 @@ abstract class BasePileObject<T> {
 	objectType: string = '';
 	newObject: boolean = false;
 
+	
+
 	constructor(options: BasePileObjectOptions<T>) {
 		this.name = options.name;
 		this.id = options.id;

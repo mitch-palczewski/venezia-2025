@@ -55,11 +55,6 @@
 		{pileApp}
 		pileObjectData={image}
 		bind:ref={image.ref}
-		oncreate={() => {
-			if (image.newObject) {
-				pileApp.database.add(image);
-			}
-		}}
 		position={[translate.x, translate.y, translate.z]}
 		quaternion={[quaternion.x, quaternion.y, quaternion.z, quaternion.w]}
 		scale={[scale.x, scale.y, scale.z]}
@@ -71,11 +66,6 @@
 
 	<ModelTemplate
 		{pileApp}
-		oncreate={() => {
-			if (model.newObject) {
-				pileApp.database.add(model);
-			}
-		}}
 		bind:ref={model.ref}
 		pileObjectData={model}
 		position={[translate.x, translate.y, translate.z]}

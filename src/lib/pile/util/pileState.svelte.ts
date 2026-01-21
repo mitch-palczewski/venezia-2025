@@ -54,6 +54,7 @@ export class PileState {
 	}
 
 	public addObject = (obj: AcceptedPileObjects) => {
+		console.log("adding object")
 		if (obj.objectType === "object2D") {
 			this.objects2D.set(obj.id, obj as PileObject2D);
 			return;
