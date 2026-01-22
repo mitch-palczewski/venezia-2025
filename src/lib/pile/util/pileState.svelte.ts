@@ -8,7 +8,8 @@ import { Matrix4, Quaternion, Vector3, type Object3D } from 'three';
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
 export class PileState {
-	selectedObjectID = $state<string | null>(null);
+	#selectedObjectID = $state<string | null>(null);
+	selectedObjectUploaded = $state(true)
 	objects2D = $state(new SvelteMap<string, PileObject2D>());
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
@@ -22,6 +23,19 @@ export class PileState {
 		this.pileDatabase.database.onAppObjDeleted = this.deleteObject;
 	}
 
+	get selectedObjectID() {
+		return this.#selectedObjectID;
+	}
+
+	set selectedObjectID(value) {
+		if (!this.selectedObjectUploaded && this.showTransformControls) {
+			//If moving from a selected object to a new object
+			this.updateSelectedObject()
+		}
+		this.#selectedObjectID = value;
+		this.selectedObjectUploaded = false
+	}
+
 	get showTransformControls() {
 		return this.#showTransformControls;
 	}
@@ -30,15 +44,18 @@ export class PileState {
 		if (value !== this.#showTransformControls) {
 			this.#showTransformControls = value;
 		}
-		//Updates Database When transformcontrols are turned off
 		if (value === false) {
-			const selectedObject = this.getSelectedObject();
-			//console.log(selectedObject);
-			if (selectedObject) {
-				this.pileDatabase.update(selectedObject);
-			} else {
-				console.error('Could not get selected Model');
-			}
+			this.updateSelectedObject()
+		}
+	}
+
+	private updateSelectedObject() {
+		const selectedObject = this.getSelectedObject();
+		if (selectedObject) {
+			this.pileDatabase.update(selectedObject);
+			this.selectedObjectUploaded = true
+		} else {
+			console.error('Could not get selected Model');
 		}
 	}
 
@@ -54,12 +71,12 @@ export class PileState {
 	}
 
 	public addObject = (obj: AcceptedPileObjects) => {
-		console.log("adding object")
-		if (obj.objectType === "object2D") {
+		console.log('adding object');
+		if (obj.objectType === 'object2D') {
 			this.objects2D.set(obj.id, obj as PileObject2D);
 			return;
 		}
-		if (obj.objectType === "object3D") {
+		if (obj.objectType === 'object3D') {
 			this.objects3D.set(obj.id, obj as PileObject3D);
 			return;
 		}
