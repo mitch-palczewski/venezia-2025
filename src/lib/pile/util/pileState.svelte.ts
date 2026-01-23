@@ -9,7 +9,7 @@ export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
 export class PileState {
 	#selectedObjectID = $state<string | null>(null);
-	selectedObjectUploaded = $state(true)
+	selectedObjectUploaded = $state(true);
 	objects2D = $state(new SvelteMap<string, PileObject2D>());
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
@@ -30,10 +30,10 @@ export class PileState {
 	set selectedObjectID(value) {
 		if (!this.selectedObjectUploaded && this.showTransformControls) {
 			//If moving from a selected object to a new object
-			this.updateSelectedObject()
+			this.updateSelectedObject();
 		}
 		this.#selectedObjectID = value;
-		this.selectedObjectUploaded = false
+		this.selectedObjectUploaded = false;
 	}
 
 	get showTransformControls() {
@@ -45,7 +45,7 @@ export class PileState {
 			this.#showTransformControls = value;
 		}
 		if (value === false) {
-			this.updateSelectedObject()
+			this.updateSelectedObject();
 		}
 	}
 
@@ -53,7 +53,7 @@ export class PileState {
 		const selectedObject = this.getSelectedObject();
 		if (selectedObject) {
 			this.pileDatabase.update(selectedObject);
-			this.selectedObjectUploaded = true
+			this.selectedObjectUploaded = true;
 		} else {
 			console.error('Could not get selected Model');
 		}
@@ -84,9 +84,25 @@ export class PileState {
 		throw Error(`Object must be object2D or object3D. This object type is ${obj.objectType}`);
 	};
 
-	public updateObject = (newObj: PileObject2D | PileObject3D) => {
-		if (this.selectedObjectID === newObj.id)
+	public updateObject = (newObj: AcceptedPileObjects) => {
+		if (this.selectedObjectID === newObj.id) {
 			console.warn('Skipping object update. Object is selected.');
+			console.log('should i return here i am not currently');
+		}
+		if (newObj.objectType === 'object2D') {
+			this.update2DObject(newObj as PileObject2D);
+			return;
+		}
+		if (newObj.objectType === 'object3D') {
+			this.update3DObject(newObj as PileObject3D);
+			return;
+		}
+		if (newObj.objectType === 'environment') {
+			console.log('TODO: update environment function');
+		}
+	};
+
+	private update2DObject(newObj: PileObject2D) {
 		const newTransform = newObj.transform3D;
 		if (newObj.isObject2D() && this.objects2D.has(newObj.id)) {
 			const oldObj = this.objects2D.get(newObj.id);
@@ -96,6 +112,10 @@ export class PileState {
 				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
 			PileState.setObjectsTransform(oldObj?.ref, newTransform);
 		}
+	}
+
+	private update3DObject(newObj: PileObject3D) {
+		const newTransform = newObj.transform3D;
 		if (newObj.isObject3D() && this.objects3D.has(newObj.id)) {
 			const oldObj = this.objects3D.get(newObj.id);
 			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
@@ -104,7 +124,7 @@ export class PileState {
 				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
 			PileState.setObjectsTransform(oldObj?.ref, newTransform);
 		}
-	};
+	}
 
 	public deleteObject = (id: string) => {
 		this.objects2D.delete(id);

@@ -11,6 +11,7 @@ import { BASE_TRANSFORM } from './transform';
 import type { Object2DMap } from './assetInventory/object2DMap';
 import type { Object3DMap } from './assetInventory/object3DMap';
 import type { SvelteMap } from 'svelte/reactivity';
+import type { EnvironmentMap } from './assetInventory/environmentMap';
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => object }) {
 	const positions: object = pileSceneRef.getPositions();
@@ -73,4 +74,10 @@ function deleteObject(inventory: SvelteMap<string, PileObject3D | PileObject2D>,
 		tform?.remove();
 		console.log(`Reomved Object ${object.name}`)
 	})
+}
+
+export function changeEnvironment(selectedEnvironment: EnvironmentMap, pileApp:PileApp){
+	pileApp.environment.selectedEnvironment = selectedEnvironment
+	pileApp.environment.uploadEnvironment()
+
 }

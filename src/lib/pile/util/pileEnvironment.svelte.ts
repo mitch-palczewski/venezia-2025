@@ -8,23 +8,27 @@
 		WebGLRenderer,
 		Texture
 	} from 'three';
-import { EnvironmentMap, testEnvironments } from './assetInventory/environmentMap';
+import { EnvironmentMap, EnvironmentMapInventory, EnvironmentPayload, testEnvironments } from './assetInventory/environmentMap';
+import type { PileDatabase, PileDatabaseObj } from './api/pileDatabase';
 
 export class PileEnvironment{
 	selectedEnvironment = $state<EnvironmentMap>(testEnvironments[0])
 	private scene: Scene;
     private renderer: WebGLRenderer;
+    private database: PileDatabase | undefined;
+    public inventory: EnvironmentMapInventory;
 
-	constructor(scene: Scene, renderer: WebGLRenderer, selectedEnvironment?: EnvironmentMap){
+	constructor(scene: Scene, renderer: WebGLRenderer, inventory: EnvironmentMapInventory, selectedEnvironment?: EnvironmentMap, database?: PileDatabase){
 		this.scene = scene;
         this.renderer = renderer;
-		if (selectedEnvironment){
-			this.selectedEnvironment = selectedEnvironment
-		}
+        this.inventory = inventory;
+        if (database) this.database = database
+		if (selectedEnvironment) this.selectedEnvironment = selectedEnvironment
 		$effect.pre(() => {
             this.applyEnvironment();
         });
 	}
+
 	get textureStore() {
         return useTexture(this.selectedEnvironment.path, {
             transform: (t: Texture) => {
@@ -46,5 +50,31 @@ export class PileEnvironment{
         });
         return () => unsubscribe();
     }
+
+    public uploadEnvironment(){
+        const payload = new EnvironmentPayload(this.selectedEnvironment)
+        this.database?.update(payload)
+    }
+
+    public static convertEnvironmentPayloadToDatabaseObj(payload: EnvironmentPayload): Partial<PileDatabaseObj>{
+        const dbObject: Partial<PileDatabaseObj> = {
+			id: payload.id,
+			name: payload.map?.name,
+			type: payload.objectType as "environment",
+			pos_x: 0,
+			pos_y: 0,
+			pos_z: 0,
+			rot_x: 0,
+			rot_y: 0,
+			rot_z: 0,
+			rot_w: 0,
+			scale_x: 0,
+			scale_y: 0,
+			scale_z: 0
+		};
+        return dbObject
+    }
+
+
 }
 

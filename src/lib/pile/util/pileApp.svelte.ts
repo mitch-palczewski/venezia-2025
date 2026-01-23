@@ -22,9 +22,9 @@ export class PileApp {
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	environmentInventory = new EnvironmentMapInventory();
-	environment: PileEnvironment;
 	database = new PileDatabase();
 	state = new PileState(this.database);
+	environment: PileEnvironment;
 	autosave = true;
 	isActivlyWatching: () => boolean;
 
@@ -35,7 +35,7 @@ export class PileApp {
 			this.initPileObjects(initalDatabaseObjects);
 		}
 		const { scene, renderer } = useThrelte();
-		this.environment = new PileEnvironment(scene, renderer);
+		this.environment = new PileEnvironment(scene, renderer, this.environmentInventory,undefined, this.database);
 	}
 
 	private initInventories() {

@@ -30,6 +30,34 @@ export class EnvironmentMapInventory extends BaseInventory<EnvironmentMap> {
     }
 }
 
+export class EnvironmentPayload {
+	map: EnvironmentMap | undefined;
+	shown = true;
+	id = "e919bac9-766e-48d8-b721-0552aba9c834";
+	objectType = "environment";
+	name = "world"
+
+	constructor(map?:EnvironmentMap, name?:string){
+		if (map){
+			this.map = map
+			this.name = map.name
+		}
+		if(name){
+			this.name = name
+		}
+	}
+
+	public isObject2D(){
+		return false
+	}
+	public isObject3D(){
+		return false
+	}
+	public isEnvironment(){
+		return true
+	}
+}
+
 
 export const testEnvironments: EnvironmentMap[] = [
 	new EnvironmentMap({
