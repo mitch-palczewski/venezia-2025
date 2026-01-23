@@ -1,10 +1,10 @@
 import { supabase } from '$lib/api/supabaseClient.svelte';
-import { Group, Quaternion, Vector3, type Object3DEventMap } from 'three';
 import { PileObject2D, PileObject3D } from '../pileObject.svelte';
 import { DatabaseMap } from '$lib/api/databaseMap';
 import { SupabaseNetworkManager } from '$lib/api/networkManager.svelte';
 import { EnvironmentPayload } from '../assetInventory/environmentMap';
-import { PileEnvironment } from '../pileEnvironment.svelte';
+
+import { toDatabaseObj, toPileObj } from './pileMapper';
 
 export type AcceptedDbTypes = 'object2D' | 'object3D' | 'environment';
 export type AcceptedPileObjects = PileObject2D | PileObject3D | EnvironmentPayload;
@@ -32,8 +32,8 @@ export class PileDatabase {
 	public networkManager = new SupabaseNetworkManager<PileDatabaseObj>(supabase, 'pile_objects');
 	public database = new DatabaseMap<PileDatabaseObj, AcceptedPileObjects>(
 		this.networkManager,
-		PileDatabase.convertDatabaseObjToPileObj,
-		PileDatabase.convertPileObjToDatabaseObj,
+		toPileObj,
+		toDatabaseObj,
 		'last_edited_by'
 	);
 
@@ -67,117 +67,14 @@ export class PileDatabase {
 		return false;
 	}
 
-	public static convertPileObjToDatabaseObj(obj: AcceptedPileObjects): Partial<PileDatabaseObj> {
-		if (obj.objectType === 'object2D' || obj.objectType === 'object3D') {
-			return this.convert2Dor3DObjToDatabaseObj(obj as PileObject2D | PileObject3D);
-		}
-		if (obj.objectType === 'environment') {
-			return PileEnvironment.convertEnvironmentPayloadToDatabaseObj(obj as EnvironmentPayload);
-		}
-		throw Error('Could not identify objectType and convert it to a Database Obj');
-	}
 
-	private static convert2Dor3DObjToDatabaseObj(
-		obj: PileObject2D | PileObject3D
-	): Partial<PileDatabaseObj> {
-		let t = null;
-		if (!obj.ref) {
-			console.warn(
-				`Did not find a ref for ${obj.objectType} ${obj.name}. Objects Transform will be defaulted.`
-			);
-			t = {
-				pos: { x: 0, y: 0, z: 0 },
-				rot: { x: 0, y: 0, z: 0, w: 1 },
-				scale: { x: 1, y: 1, z: 1 }
-			};
-		} else {
-			t = PileDatabase.getTransfrom(obj.ref!, obj.name);
-		}
-		const dbObject: Partial<PileDatabaseObj> = {
-			id: obj.id,
-			name: obj.name,
-			type: obj.objectType as 'object2D' | 'object3D',
-			pos_x: t.pos.x,
-			pos_y: t.pos.y,
-			pos_z: t.pos.z,
-			rot_x: t.rot.x,
-			rot_y: t.rot.y,
-			rot_z: t.rot.z,
-			rot_w: t.rot.w,
-			scale_x: t.scale.x,
-			scale_y: t.scale.y,
-			scale_z: t.scale.z
-		};
-		return dbObject;
-	}
 
-	public static convertDatabaseObjToPileObj(obj: PileDatabaseObj): AcceptedPileObjects {
-		const config = {
-			name: obj.name,
-			id: obj.id,
-			objectMap: undefined,
-			transform3D: {
-				translate: { x: obj.pos_x, y: obj.pos_y, z: obj.pos_z },
-				rotation: { x: obj.rot_x, y: obj.rot_y, z: obj.rot_z, w: obj.rot_w },
-				scale: { x: obj.scale_x, y: obj.scale_y, z: obj.scale_z }
-			},
-			uniformScale: (obj.scale_x + obj.scale_y + obj.scale_z) / 3
-		};
-		if (obj.type === 'object2D') return new PileObject2D(config);
-		if (obj.type === 'object3D') return new PileObject3D(config);
-		if (obj.type === 'environment') return new EnvironmentPayload();
+	
 
-		throw Error(`Invalid obj ${obj.name} type: ${obj.type}`);
-	}
+	
 
-	public static getTransfrom(ref?: Group<Object3DEventMap>, name: string | null = null) {
-		const _pos = new Vector3();
-		const _quat = new Quaternion();
-		const _scale = new Vector3(1, 1, 1);
-		_quat.normalize();
-		//SLOPPY?
-		const mesh = ref?.children[0];
-		if (!mesh) console.warn(`Could not find Mesh at Ref`);
 
-		mesh?.updateWorldMatrix(true, false);
-		mesh?.getWorldPosition(_pos);
-		mesh?.getWorldQuaternion(_quat);
-		mesh?.getWorldScale(_scale);
-		const result = {
-			pos: {
-				x: roundTo(_pos.x),
-				y: roundTo(_pos.y),
-				z: roundTo(_pos.z)
-			},
-			rot: {
-				x: roundTo(_quat.x),
-				y: roundTo(_quat.y),
-				z: roundTo(_quat.z),
-				w: roundTo(_quat.w)
-			},
-			scale: {
-				x: roundTo(_scale.x),
-				y: roundTo(_scale.y),
-				z: roundTo(_scale.z)
-			}
-		};
-		console.log('Uploading following transform: ', name!, result.pos, result.rot, result.scale);
-		return result;
-	}
-
-	//not sure if this is used? ??
-	public static validateID(id: string) {
-		if (PileDatabase.isValidUUID(id)) {
-			return id;
-		}
-		return crypto.randomUUID();
-	}
-
-	public static isValidUUID(input: string): boolean {
-		const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
-		return uuidRegex.test(input);
-	}
-
+	
 	/**
 	 * Compares two database objects
 	 * @param obj1
@@ -230,8 +127,5 @@ export class PileDatabase {
 	};
 }
 
-function roundTo(num: number, places: number = 4) {
-	const factor = Math.pow(10, places);
-	return Math.round(num * factor) / factor;
-}
+
 

@@ -10,8 +10,8 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 	public onAppObjInserted?: (newRecord: AppObj) => void;
 	public onAppObjUpdated?: (newRecord: AppObj) => void;
 	public onAppObjDeleted?: (id: DatabaseObj[K]) => void;
-	public convertDatabaseObjToAppObj: (databaseObj: DatabaseObj) => AppObj;
-	public convertAppObjToDatabaseObj: (appObj: AppObj) => Partial<DatabaseObj>;
+	public convertDatabaseObjToAppObj: (databaseObj: DatabaseObj) => AppObj | undefined;
+	public convertAppObjToDatabaseObj: (appObj: AppObj) => Partial<DatabaseObj> | undefined;
 	public sessionID: UUID;
 	public sessionFieldName?: keyof DatabaseObj;
 	private networkManager: SupabaseNetworkManager<DatabaseObj, K>;
@@ -25,8 +25,8 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 
 	constructor(
 		networkManager: SupabaseNetworkManager<DatabaseObj, K>,
-		convertDatabaseObjToAppObj: (databaseObj: DatabaseObj) => AppObj,
-		convertAppObjToDatabaseObj: (appObj: AppObj) => Partial<DatabaseObj>,
+		convertDatabaseObjToAppObj: (databaseObj: DatabaseObj) => AppObj | undefined,
+		convertAppObjToDatabaseObj: (appObj: AppObj) => Partial<DatabaseObj> | undefined,
 		sessionFeildName?: keyof DatabaseObj,
 		sessionID?: UUID,
 		onAppObjInserted?: (newRecord: AppObj) => void,
@@ -59,10 +59,7 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 
 	public updateObject(appObj: AppObj) {
 		let dbObject = this.convertAppObjToDatabaseObj(appObj);
-		if (!dbObject)
-			throw Error(
-				`Converting AppObj into databaseObject returned null. Check Logic for ${this.convertAppObjToDatabaseObj}`
-			);
+		if (!dbObject) return;
 		const pk = this.networkManager.primaryKeyFeildName;
 		const idValue = dbObject[pk];
 		if (!idValue)

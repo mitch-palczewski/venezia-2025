@@ -17,6 +17,7 @@ import { useThrelte } from '@threlte/core';
 import { Object3DMapInventory } from './assetInventory/object3DMap';
 import { Object2DMapInventory } from './assetInventory/object2DMap';
 import { PileDatabase, type PileDatabaseObj } from './api/pileDatabase';
+import { toPileObj } from './api/pileMapper';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -50,7 +51,10 @@ export class PileApp {
 	public initPileObjects(rawPositionData: any) {
 		const pileDatabaseObjects = rawPositionData.pileObjects as PileDatabaseObj[];
 		pileDatabaseObjects.forEach((object) => {
-			const pileObject = PileDatabase.convertDatabaseObjToPileObj(object);
+			const pileObject = toPileObj(object);
+			if(!pileObject){
+				return
+			}
 			if (object.type === 'object2D') {
 				this.state.objects2D.set(pileObject.id, pileObject as PileObject2D);
 			}
