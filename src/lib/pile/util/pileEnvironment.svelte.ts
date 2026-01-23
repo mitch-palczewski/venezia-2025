@@ -11,12 +11,16 @@
 import { EnvironmentMap, EnvironmentMapInventory, EnvironmentPayload, testEnvironments } from './assetInventory/environmentMap';
 import type { PileDatabase, PileDatabaseObj } from './api/pileDatabase';
 
+export const PileEnvironmentID = "e919bac9-766e-48d8-b721-0552aba9c834"
+export const PileEnvironmentType = "environment"
+
 export class PileEnvironment{
 	selectedEnvironment = $state<EnvironmentMap>(testEnvironments[0])
 	private scene: Scene;
     private renderer: WebGLRenderer;
     private database: PileDatabase | undefined;
     public inventory: EnvironmentMapInventory;
+    public objectType = PileEnvironmentType
 
 	constructor(scene: Scene, renderer: WebGLRenderer, inventory: EnvironmentMapInventory, selectedEnvironment?: EnvironmentMap, database?: PileDatabase){
 		this.scene = scene;

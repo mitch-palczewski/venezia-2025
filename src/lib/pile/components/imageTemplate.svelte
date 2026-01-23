@@ -31,7 +31,7 @@
 		pileObjectData.objectMap = pileApp.imageInventory.get(pileObjectData.name);
 		if (!pileObjectData.objectMap) throw Error('Could not find object name');
 	}
-	console.log(`2D Object: ${pileObjectData.name}`, pileObjectData);
+	console.log(`2D Object: ${pileObjectData.name} `);
 
 	const path = pileObjectData.objectMap?.path as string;
 	const fileType = pileObjectData.objectMap?.fileType as string;

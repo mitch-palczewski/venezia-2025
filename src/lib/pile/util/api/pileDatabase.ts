@@ -6,10 +6,13 @@ import { SupabaseNetworkManager } from '$lib/api/networkManager.svelte';
 import { EnvironmentPayload } from '../assetInventory/environmentMap';
 import { PileEnvironment } from '../pileEnvironment.svelte';
 
+export type AcceptedDbTypes = 'object2D' | 'object3D' | 'environment';
+export type AcceptedPileObjects = PileObject2D | PileObject3D | EnvironmentPayload;
+
 export interface PileDatabaseObj {
 	id: string;
 	name: string;
-	type: 'object2D' | 'object3D' | "environment";
+	type: AcceptedDbTypes;
 	animation: string | null;
 	pos_x: number;
 	pos_y: number;
@@ -24,8 +27,6 @@ export interface PileDatabaseObj {
 	updated_at: string;
 	last_edited_by: string | null;
 }
-
-export type AcceptedPileObjects = PileObject2D | PileObject3D | EnvironmentPayload ;
 
 export class PileDatabase {
 	public networkManager = new SupabaseNetworkManager<PileDatabaseObj>(supabase, 'pile_objects');
@@ -67,17 +68,18 @@ export class PileDatabase {
 	}
 
 	public static convertPileObjToDatabaseObj(obj: AcceptedPileObjects): Partial<PileDatabaseObj> {
-
-		if (obj.objectType === 'object2D' || obj.objectType === 'object3D'){
-			return this.convert2Dor3DObjToDatabaseObj(obj as PileObject2D | PileObject3D)
+		if (obj.objectType === 'object2D' || obj.objectType === 'object3D') {
+			return this.convert2Dor3DObjToDatabaseObj(obj as PileObject2D | PileObject3D);
 		}
-		if(obj.objectType === 'environment'){
-			return PileEnvironment.convertEnvironmentPayloadToDatabaseObj(obj as EnvironmentPayload)
+		if (obj.objectType === 'environment') {
+			return PileEnvironment.convertEnvironmentPayloadToDatabaseObj(obj as EnvironmentPayload);
 		}
-		throw Error ("Could not identify objectType and convert it to a Database Obj")
+		throw Error('Could not identify objectType and convert it to a Database Obj');
 	}
 
-	private static convert2Dor3DObjToDatabaseObj(obj: PileObject2D | PileObject3D): Partial<PileDatabaseObj>{
+	private static convert2Dor3DObjToDatabaseObj(
+		obj: PileObject2D | PileObject3D
+	): Partial<PileDatabaseObj> {
 		let t = null;
 		if (!obj.ref) {
 			console.warn(
@@ -109,8 +111,6 @@ export class PileDatabase {
 		return dbObject;
 	}
 
-	
-
 	public static convertDatabaseObjToPileObj(obj: PileDatabaseObj): AcceptedPileObjects {
 		const config = {
 			name: obj.name,
@@ -125,7 +125,7 @@ export class PileDatabase {
 		};
 		if (obj.type === 'object2D') return new PileObject2D(config);
 		if (obj.type === 'object3D') return new PileObject3D(config);
-		if (obj.type === 'environment') return new EnvironmentPayload()
+		if (obj.type === 'environment') return new EnvironmentPayload();
 
 		throw Error(`Invalid obj ${obj.name} type: ${obj.type}`);
 	}
@@ -165,9 +165,7 @@ export class PileDatabase {
 		return result;
 	}
 
-
-
-	//not sure if this is used? ?? 
+	//not sure if this is used? ??
 	public static validateID(id: string) {
 		if (PileDatabase.isValidUUID(id)) {
 			return id;
@@ -236,3 +234,4 @@ function roundTo(num: number, places: number = 4) {
 	const factor = Math.pow(10, places);
 	return Math.round(num * factor) / factor;
 }
+
