@@ -67,13 +67,6 @@ export class PileDatabase {
 		return false;
 	}
 
-
-
-	
-
-	
-
-
 	
 	/**
 	 * Compares two database objects

@@ -32,11 +32,13 @@ export class PileApp {
 	constructor(isActivlyWatching: () => boolean, initalDatabaseObjects?: any) {
 		this.isActivlyWatching = isActivlyWatching;
 		this.initInventories();
+		const { scene, renderer } = useThrelte();
+		this.environment = new PileEnvironment(scene, renderer, this.environmentInventory,undefined, this.database);
+		this.state.app = this
 		if (initalDatabaseObjects) {
 			this.initPileObjects(initalDatabaseObjects);
 		}
-		const { scene, renderer } = useThrelte();
-		this.environment = new PileEnvironment(scene, renderer, this.environmentInventory,undefined, this.database);
+		
 	}
 
 	private initInventories() {
@@ -60,6 +62,10 @@ export class PileApp {
 			}
 			if (object.type === 'object3D') {
 				this.state.objects3D.set(pileObject.id, pileObject as PileObject3D);
+			}
+			if(object.type === 'environment') {
+				const environmentMap = this.environmentInventory.get(object.name)
+				if (environmentMap) this.environment.setEnvironement(environmentMap)
 			}
 		});
 	}

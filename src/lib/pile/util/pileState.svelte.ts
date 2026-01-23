@@ -4,6 +4,7 @@ import { SvelteMap } from 'svelte/reactivity';
 import type { AcceptedPileObjects, PileDatabase } from './api/pileDatabase';
 import type { Transform3D } from '../types';
 import { Matrix4, Quaternion, Vector3, type Object3D } from 'three';
+import type { PileApp } from './pileApp.svelte';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -15,6 +16,7 @@ export class PileState {
 	#showTransformControls = $state(false);
 	transformControlsMode = $state<TransformControlsMode>('translate');
 	pileDatabase: PileDatabase;
+	app: PileApp | undefined
 
 	constructor(database: PileDatabase) {
 		this.pileDatabase = database;
@@ -97,8 +99,9 @@ export class PileState {
 			this.update3DObject(newObj as PileObject3D);
 			return;
 		}
-		if (newObj.objectType === 'environment') {
-			console.log('TODO: update environment function');
+		if (newObj.objectType === 'environment' && this.app) {
+			const environmentMap = this.app.environmentInventory.get(newObj.name)
+			if(environmentMap) this.app.environment.setEnvironement(environmentMap)
 		}
 	};
 
