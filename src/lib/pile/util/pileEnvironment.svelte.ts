@@ -19,12 +19,12 @@ export const PileEnvironmentID = 'e919bac9-766e-48d8-b721-0552aba9c834';
 export const PileEnvironmentType = 'environment';
 
 export class PileEnvironment {
-	selectedEnvironment = $state<EnvironmentMap>(testEnvironments[0]);
+	public selectedEnvironment = $state<EnvironmentMap>(testEnvironments[0]);
+	public inventory: EnvironmentMapInventory;
+	public objectType = PileEnvironmentType;
 	private scene: Scene;
 	private renderer: WebGLRenderer;
 	private database: PileDatabase | undefined;
-	public inventory: EnvironmentMapInventory;
-	public objectType = PileEnvironmentType;
 	private textureStore;
 
 	constructor(

@@ -2,7 +2,8 @@
 	import type { Object2DMap, Object2DMapInventory } from '$lib/pile/util/assetInventory/object2DMap';
 	import { Object3DMap, Object3DMapInventory } from '$lib/pile/util/assetInventory/object3DMap';
 	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
-	import { addNewModel } from '../../util/uiActions';
+	import { addNewModel } from '$lib/pile/util/ui/uiActions';
+
 
 	interface Props {
 		pileApp: PileApp;

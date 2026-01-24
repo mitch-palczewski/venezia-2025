@@ -4,14 +4,17 @@
  */
 
 import type { Mesh } from 'three';
-import { uploadData, type Transform3D, PileState } from '..';
-import { PileObject2D, PileObject3D } from './pileObject.svelte';
-import type { PileApp } from './pileApp.svelte';
-import { BASE_TRANSFORM } from './transform';
-import type { Object2DMap } from './assetInventory/object2DMap';
-import type { Object3DMap } from './assetInventory/object3DMap';
+import { uploadData } from '../api/uploadPositions';
+import type { Object2DMap } from '../assetInventory/object2DMap';
+import type { Object3DMap } from '../assetInventory/object3DMap';
+import type { PileApp } from '../pileApp.svelte';
+import type { Transform3D } from '$lib/pile/types';
+import { BASE_TRANSFORM } from '../transform';
+import { PileObject2D, PileObject3D } from '../pileObject.svelte';
+import type { PileState } from '../pileState.svelte';
 import type { SvelteMap } from 'svelte/reactivity';
-import type { EnvironmentMap } from './assetInventory/environmentMap';
+import type { EnvironmentMap } from '../assetInventory/environmentMap';
+
 
 export async function uploadDataFactory(pileSceneRef: { getPositions: () => object }) {
 	const positions: object = pileSceneRef.getPositions();

@@ -2,7 +2,8 @@
 	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
 	
 	import type { PileState } from '$lib/pile/util/pileState.svelte';
-	import { deleteSelectedModel } from '../../util/uiActions';
+	import { deleteSelectedModel } from '$lib/pile/util/ui/uiActions';
+
 	import AddNewModel from './AddNewModel.svelte';
 	import ChooseEnvironment from './ChooseEnvironment.svelte';
 	import ScaleSlider from './ScaleSlider.svelte';

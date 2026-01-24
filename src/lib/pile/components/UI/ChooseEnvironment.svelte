@@ -2,7 +2,7 @@
 	import Pile from '$lib/pile/pile.svelte';
 	import type { EnvironmentMap, EnvironmentMapInventory } from '$lib/pile/util/assetInventory/environmentMap';
 	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
-	import { changeEnvironment } from '$lib/pile/util/uiActions';
+	import { changeEnvironment } from '$lib/pile/util/ui/uiActions';
 
 	interface Props {
 		pileApp: PileApp;

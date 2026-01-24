@@ -154,3 +154,16 @@ export const architectureModels: Object3DMap[]=[
 		path: '/models/architecture/Optimize_02.glb'
 	}),
 ]
+
+export const variousMP: Object3DMap[]=[
+	new Object3DMap({
+		name: 'Courtyard_01',
+		displayName: 'Courtyard',
+		path: '/models/various-mp/Courtyard_01.gltf'
+	}),
+	new Object3DMap({
+		name: 'shape_01',
+		displayName: 'shape 01',
+		path: '/models/various-mp/shape3D_01.gltf'
+	}),
+]

@@ -7,23 +7,26 @@
 	import CameraControls from './components/CameraControls.svelte';
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
-    
-    // This ensures that for every click, Threlte only 
-    // fires the event for the FIRST (closest) object hit.
-    interactivity({
-        filter: (hits) => {
-            // Hits are already sorted by distance by Three.js
-            // We only return the first one (the closest)
-            return hits.slice(0, 1);
-        }
-    });
+	import Settings from './components/UI/Settings.svelte';
+	import { SettingsState } from './util/ui/settingsState.svelte';
+
+	// This ensures that for every click, Threlte only
+	// fires the event for the FIRST (closest) object hit.
+	interactivity({
+		filter: (hits) => {
+			// Hits are already sorted by distance by Three.js
+			// We only return the first one (the closest)
+			return hits.slice(0, 1);
+		}
+	});
 
 	let { data } = $props();
 
 	let windowIsVisible = $state(true);
 	let windowIsFocused = $state(true);
 	const isActivelyWatching = $derived(windowIsVisible && windowIsFocused);
-	export const pileApp = new PileApp(() => isActivelyWatching, data);
+	const pileApp = new PileApp(() => isActivelyWatching, data);
+	const settingsState = new SettingsState({ showGrid: true });
 	onDestroy(() => {
 		pileApp.database.destroy();
 	});
@@ -36,18 +39,22 @@
 <svelte:document onvisibilitychange={handleVisibilityChange} />
 <svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
 
+<Settings settingState={settingsState} />
+
 <CameraControls />
 
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.08} />
 
-<Grid
-	type={'polar'}
-	cellSize={5}
-	infiniteGrid={true}
-	sectionColor={'#000000'}
-	sectionThickness={1}
-/>
+{#if settingsState.showGrid}
+	<Grid
+		type={'polar'}
+		cellSize={5}
+		infiniteGrid={true}
+		sectionColor={'#000000'}
+		sectionThickness={1}
+	/>
+{/if}
 
 {#each pileApp.state.objects2D as [id, image] (id)}
 	{@const { translate: translate, rotation: quaternion, scale: scale } = image.transform3D}

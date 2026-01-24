@@ -3,6 +3,9 @@ import type { Transform3D } from '..';
 import type { Object3DMap } from './assetInventory/object3DMap';
 import type { Object2DMap } from './assetInventory/object2DMap';
 
+export const object2DType = 'object2D'
+export const object3DType = 'object3D'
+
 export interface BasePileObjectOptions<T> {
 	name: string;
 	id: string;
@@ -39,13 +42,13 @@ abstract class BasePileObject<T> {
 }
 
 export class PileObject3D extends BasePileObject<Object3DMap> {
-	objectType: string = 'object3D';
+	objectType: string = object3DType;
 	constructor(options: BasePileObjectOptions<Object3DMap>) {
 		super(options);
 	}
 
 	public isObject3D = () => {
-		if(this.objectType !== "object3D"){
+		if(this.objectType !== object3DType){
 			console.warn("Object Type missmatch. Should have objectType = 'object3D'", this)
 		}
 		return true;
@@ -58,7 +61,7 @@ interface PileObject2DOptions extends BasePileObjectOptions<Object2DMap> {
 
 export class PileObject2D extends BasePileObject<Object2DMap> {
 	billboard: boolean = $state(false);
-	objectType: string = 'object2D';
+	objectType: string = object2DType;
 
 	constructor(options: PileObject2DOptions) {
 		super(options);
@@ -66,7 +69,7 @@ export class PileObject2D extends BasePileObject<Object2DMap> {
 	}
 
 	public isObject2D = () => {
-		if(this.objectType !== "object2D"){
+		if(this.objectType !== object2DType){
 			console.warn("Object Type missmatch. Should have objectType = 'object2D'", this)
 		}
 		return true;
