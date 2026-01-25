@@ -10,22 +10,18 @@
 	import Settings from './components/UI/Settings.svelte';
 	import { SettingsState } from './util/ui/settingsState.svelte';
 
-	// This ensures that for every click, Threlte only
-	// fires the event for the FIRST (closest) object hit.
 	interactivity({
 		filter: (hits) => {
-			// Hits are already sorted by distance by Three.js
-			// We only return the first one (the closest)
 			return hits.slice(0, 1);
 		}
 	});
 
-	let { data } = $props();
+	let { data, uiSettings } = $props();
 
 	let windowIsVisible = $state(true);
 	let windowIsFocused = $state(true);
 	const isActivelyWatching = $derived(windowIsVisible && windowIsFocused);
-	const pileApp = new PileApp(() => isActivelyWatching, data);
+	export const pileApp = new PileApp(() => isActivelyWatching, data);
 	const settingsState = new SettingsState({ showGrid: true });
 	onDestroy(() => {
 		pileApp.database.destroy();
@@ -40,19 +36,19 @@
 <svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
 
 <Settings settingState={settingsState} />
-
 <CameraControls />
-
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.08} />
 
 {#if settingsState.showGrid}
 	<Grid
 		type={'polar'}
-		cellSize={5}
+		cellSize={10}
+		sectionSize={20}
 		infiniteGrid={true}
-		sectionColor={'#000000'}
+		sectionColor={'#FFFFFF'}
 		sectionThickness={1}
+		fadeDistance={500}
 	/>
 {/if}
 

@@ -12,12 +12,16 @@ export class SettingsState {
 		return this.#presentationMode;
 	}
 	set presentationMode(value) {
-        this.showGrid = this.defaultShowGrid;
-		this.showUI = true;
 		if (value === true) {
 			this.showGrid = false;
 			this.showUI = false;
 		}
+		if(value === false){
+			console.log("setting false")
+			this.showGrid = this.defaultShowGrid
+			this.showUI = true
+		}
+		this.#presentationMode = value
 	}
 
 	constructor(config: SettingsStateConfig) {

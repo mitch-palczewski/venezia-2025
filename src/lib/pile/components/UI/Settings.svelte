@@ -10,6 +10,9 @@
 		if (event.key === 'p') {
 			settingState.presentationMode = !settingState.presentationMode
 		}
+		if (event.key === 'g') {
+			settingState.showGrid = !settingState.showGrid
+		}
 	}
 </script>
 

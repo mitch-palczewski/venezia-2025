@@ -160,7 +160,7 @@ export const variousMP: Object3DMap[]=[
 		name: 'Courtyard_01',
 		displayName: 'Courtyard',
 		path: '/models/various-mp/Courtyard_01.gltf',
-		useMeshBounds: false
+		useMeshBounds: true
 	}),
 	new Object3DMap({
 		name: 'shape_01',
