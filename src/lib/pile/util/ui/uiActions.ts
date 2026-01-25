@@ -4,7 +4,6 @@
  */
 
 import type { Mesh } from 'three';
-import { uploadData } from '../api/uploadPositions';
 import type { Object2DMap } from '../assetInventory/object2DMap';
 import type { Object3DMap } from '../assetInventory/object3DMap';
 import type { PileApp } from '../pileApp.svelte';
@@ -16,10 +15,7 @@ import type { SvelteMap } from 'svelte/reactivity';
 import type { EnvironmentMap } from '../assetInventory/environmentMap';
 
 
-export async function uploadDataFactory(pileSceneRef: { getPositions: () => object }) {
-	const positions: object = pileSceneRef.getPositions();
-	uploadData(positions);
-}
+
 
 /**
  * Creates a new PileObject and adds it to pileModels[].

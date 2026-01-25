@@ -28,7 +28,7 @@ export class AutoSaver {
 
 	private initiateSave() {
 		if (this.isActivelyWatching()) {
-			this.pileApp.attemptSave()
+			console.error("REMOVED Attempt Save")
 		} else {
 			console.log(`Inactive User. Skipping Auto Save`);
 		}
