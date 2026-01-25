@@ -101,11 +101,10 @@
 						<SVG
 							src={pileObjectData.objectMap?.path}
 							fillMeshProps={{ onclick: handleModelClick, depthWrite: false, depthTest: true }}
-							raycast={meshBounds}
 						/>
 					{:else if pileObjectData.objectMap?.fileType === 'png'}
 						{#await texture then map}
-							<T.Mesh onclick={handleModelClick} raycast={meshBounds}>
+							<T.Mesh onclick={handleModelClick}>
 								<T.PlaneGeometry args={[1, map?.image.height / map?.image.width]} />
 								<T.MeshBasicMaterial
 									{map}

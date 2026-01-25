@@ -12,16 +12,17 @@ export class DatabaseMap<DatabaseObj extends BaseRecord<K>, AppObj, K extends st
 	public onAppObjDeleted?: (id: DatabaseObj[K]) => void;
 	public convertDatabaseObjToAppObj: (databaseObj: DatabaseObj) => AppObj | undefined;
 	public convertAppObjToDatabaseObj: (appObj: AppObj) => Partial<DatabaseObj> | undefined;
-	public sessionID: UUID;
-	public sessionFieldName?: keyof DatabaseObj;
-	private networkManager: SupabaseNetworkManager<DatabaseObj, K>;
-	private lastUpdatedObj: Partial<DatabaseObj> | null = null;
 	public compareObjs?: (
 		obj1: Partial<DatabaseObj>,
 		obj1Text: string,
 		obj2: Partial<DatabaseObj>,
 		obj2Text: string
 	) => boolean;
+	public sessionID: UUID;
+	public sessionFieldName?: keyof DatabaseObj;
+	private networkManager: SupabaseNetworkManager<DatabaseObj, K>;
+	private lastUpdatedObj: Partial<DatabaseObj> | null = null;
+	
 
 	constructor(
 		networkManager: SupabaseNetworkManager<DatabaseObj, K>,

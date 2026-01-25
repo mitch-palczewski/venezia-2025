@@ -1,8 +1,10 @@
 import { Quaternion, Vector3 } from 'three';
-import { PileObject2D, PileObject3D } from '../pileObject.svelte';
+import {  PileObject2D, PileObject3D, type BasePileObjectOptions} from '../pileObject.svelte';
 import type { AcceptedDbTypes, AcceptedPileObjects, PileDatabaseObj } from './pileDatabase';
 import { PileEnvironmentID, PileEnvironmentType } from '../pileEnvironment.svelte';
 import { EnvironmentPayload } from '../assetInventory/environmentMap';
+import type { Object2DMap } from '../assetInventory/object2DMap';
+import type { Object3DMap } from '../assetInventory/object3DMap';
 
 export type DbTransform3D = {
 	pos: {
@@ -25,10 +27,10 @@ export type DbTransform3D = {
 
 export const toPileObj = (dbObj: PileDatabaseObj): AcceptedPileObjects | undefined => {
 	if (dbObj.type === 'object2D') {
-		return new PileObject2D(constructPileObj(dbObj));
+		return new PileObject2D(constructPileObj(dbObj) as BasePileObjectOptions<Object2DMap>);
 	}
 	if (dbObj.type === 'object3D') {
-		return new PileObject3D(constructPileObj(dbObj));
+		return new PileObject3D(constructPileObj(dbObj) as BasePileObjectOptions<Object3DMap>);
 	}
     if (dbObj.type === PileEnvironmentType){
         return new EnvironmentPayload(undefined, dbObj.name)
@@ -84,7 +86,7 @@ function mapEnvironmentToDb(environmentName: string): Partial<PileDatabaseObj> {
 	return dbObject;
 }
 
-function constructPileObj(obj: PileDatabaseObj) {
+function constructPileObj(obj: PileDatabaseObj): BasePileObjectOptions<Object2DMap | Object3DMap>{
 	return {
 		name: obj.name,
 		id: obj.id,

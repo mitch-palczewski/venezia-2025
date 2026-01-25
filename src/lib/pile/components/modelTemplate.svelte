@@ -111,7 +111,7 @@
 				position={[child.position.x, child.position.y, child.position.z]}
 				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
-				raycast={meshBounds}
+				raycast={pileObjectData.objectMap?.useMeshBounds ? meshBounds : undefined}
 				onclick={handleModelClick}
 			/>
 		{/if}

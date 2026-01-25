@@ -81,7 +81,7 @@ export class PileDatabase {
 		obj1Text: string,
 		obj2: Partial<PileDatabaseObj>,
 		obj2Text: string
-	) => {
+	): boolean => {
 		let result = true;
 		if (obj1.pos_x != obj2.pos_x || obj1.pos_y != obj2.pos_y || obj1.pos_z != obj2.pos_z) {
 			console.error(`Position does not match`, obj1Text, obj1, obj2Text, obj2);
