@@ -4,7 +4,6 @@
 
 export {default as PileScene} from './pile.svelte'
 export * from './types';
-export * from './util/api/uploadPositions';
 export * from './util/pileState.svelte';
 export * from './components/UI/pileUI.svelte';
 export * from './util/assetInventory/assetsMap';
