@@ -129,7 +129,7 @@
 				showX={showThisTransformControls}
 				showY={showThisTransformControls}
 				showZ={showThisTransformControls}
-				mode={pileApp.state.transformControlsMode}
+				mode={pileApp.uiSettings.transformControlsMode}
 			>
 				<T.Group>
 					{@render sceneBuilder(sceneChildren)}

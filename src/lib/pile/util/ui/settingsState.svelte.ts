@@ -1,3 +1,5 @@
+import type { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
+
 export interface SettingsStateConfig {
 	showGrid?: boolean;
 }
@@ -14,6 +16,7 @@ export class SettingsState {
 	public showGrid: boolean = $state(false);
 	public showUI = $state(true);
 	public showCursor = $state(true);
+	public transformControlsMode = $state<TransformControlsMode>('translate');
 	
 	public lastState = $state<TrackedStates>({lastShowCursor: this.showCursor})
 

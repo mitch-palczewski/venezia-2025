@@ -27,12 +27,12 @@
 			<div class="grid grid-cols-8 gap-3">
 				{#if pileState.selectedObjectID}
 					<button
-						onclick={() => (pileState.transformControlsMode = 'translate')}
+						onclick={() => (pileApp.uiSettings.transformControlsMode = 'translate')}
 						class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 						>Translate</button
 					>
 					<button
-						onclick={() => (pileState.transformControlsMode = 'rotate')}
+						onclick={() => (pileApp.uiSettings.transformControlsMode = 'rotate')}
 						class="relative h-auto w-auto rounded bg-red-600 px-4 py-2 text-white hover:bg-red-100 focus:ring-2 focus:ring-red-300 focus:outline-none"
 						>Rotate</button
 					>

@@ -1,10 +1,10 @@
-import type { TransformControlsMode } from 'three/examples/jsm/Addons.js';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { SvelteMap } from 'svelte/reactivity';
 import type { AcceptedPileObjects, PileDatabase } from './api/pileDatabase';
 import type { Transform3D } from '../types';
 import { Matrix4, Quaternion, Vector3, type Object3D } from 'three';
 import type { PileApp } from './pileApp.svelte';
+import type { SettingsState } from './ui/settingsState.svelte';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -14,8 +14,8 @@ export class PileState {
 	objects2D = $state(new SvelteMap<string, PileObject2D>());
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
-	transformControlsMode = $state<TransformControlsMode>('translate');
 	pileDatabase: PileDatabase;
+	uiSettings: SettingsState | undefined
 	app: PileApp | undefined
 
 	constructor(database: PileDatabase) {

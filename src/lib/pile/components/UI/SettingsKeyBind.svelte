@@ -20,6 +20,12 @@
 		if(event.key === 'Escape'){
 			settingState.escape()
 		}
+		if(event.key === 'r' || event.key === 'R'){
+			settingState.transformControlsMode = 'rotate'
+		}
+		if(event.key === 't' || event.key === 'T'){
+			settingState.transformControlsMode = 'translate'
+		}
 	}
 
 	
