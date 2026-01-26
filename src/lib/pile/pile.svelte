@@ -32,9 +32,11 @@
 <svelte:document onvisibilitychange={handleVisibilityChange} />
 <svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
 
-<CameraControls />
-<T.DirectionalLight position={[0, 10, 10]} />
-<T.AmbientLight intensity={0.08} />
+{#if uiSettings}
+	<CameraControls {uiSettings} />
+	<T.DirectionalLight position={[0, 10, 10]} />
+	<T.AmbientLight intensity={0.08} />
+{/if}
 
 {#if uiSettings.showGrid}
 	<Grid

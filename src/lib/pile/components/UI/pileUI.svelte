@@ -9,7 +9,7 @@
 	import AddNewModel from './AddNewModel.svelte';
 	import ChooseEnvironment from './ChooseEnvironment.svelte';
 	import ScaleSlider from './ScaleSlider.svelte';
-	import Settings from './Settings.svelte';
+	import Settings from './SettingsKeyBind.svelte';
 
 	interface Props {
 		pileSceneRef: PileScene;

@@ -3,7 +3,12 @@
   import { OrbitControls } from '@threlte/extras'
   import { Vector3, type PerspectiveCamera } from 'three'
   import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+	import type { SettingsState } from '../util/ui/settingsState.svelte';
 
+  interface Props {
+    uiSettings: SettingsState
+  }
+  let {uiSettings}:Props = $props()
   let cameraRef = $state<PerspectiveCamera>()
   let controlsRef = $state<ThreeOrbitControls>()
 
@@ -12,8 +17,6 @@
     space: false, shift: false
   })
 
-  // Adjusted speed (units per second)
-  const baseSpeed = 5
   const direction = new Vector3()
   const tempVector = new Vector3()
 
@@ -48,7 +51,7 @@
     if (keys.shift) direction.y -= 1
 
     if (direction.length() > 0) {
-      const moveStep = direction.multiplyScalar(baseSpeed * delta)
+      const moveStep = direction.multiplyScalar(uiSettings.movementSpeed * delta)
       
       cameraRef.position.add(moveStep)
       controlsRef.target.add(moveStep)
