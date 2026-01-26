@@ -74,6 +74,7 @@
 	 */
 	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
+		if(pileApp.uiSettings.presentationMode) return;
 		if (!pileObjectData.id) throw Error(`PileObject Has No ID ${pileObjectData}`);
 		if (pileApp.state.isSelectedObject(pileObjectData.id)) {
 			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;

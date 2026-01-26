@@ -14,6 +14,9 @@
 			settingState.showGrid = !settingState.showGrid
 		}
 	}
+
+	
 </script>
 
 <svelte:window onkeydown={handleKeydown} />
+

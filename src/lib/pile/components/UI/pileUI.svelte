@@ -15,10 +15,9 @@
 		pileSceneRef: PileScene;
 		uiSettings: SettingsState;
 	}
-	let { pileSceneRef, uiSettings }: Props = $props();
+	let { pileSceneRef, uiSettings}: Props = $props();
 	const pileApp: PileApp = $derived(pileSceneRef?.pileApp);
 	const pileState: PileState = $derived(pileSceneRef?.pileApp?.state);
-	$inspect(pileSceneRef);
 </script>
 
 {#if pileApp && pileState}

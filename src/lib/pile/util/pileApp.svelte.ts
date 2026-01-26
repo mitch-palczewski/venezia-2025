@@ -19,6 +19,7 @@ import { Object3DMapInventory } from './assetInventory/object3DMap';
 import { Object2DMapInventory } from './assetInventory/object2DMap';
 import { PileDatabase, type PileDatabaseObj } from './api/pileDatabase';
 import { toPileObj } from './api/pileMapper';
+import type { SettingsState } from './ui/settingsState.svelte';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -28,9 +29,11 @@ export class PileApp {
 	state = new PileState(this.database);
 	environment: PileEnvironment;
 	autosave = true;
+	uiSettings
 	isActivlyWatching: () => boolean;
 
-	constructor(isActivlyWatching: () => boolean, initalDatabaseObjects?: any) {
+	constructor(isActivlyWatching: () => boolean,  uiSettings: SettingsState, initalDatabaseObjects?: any) {
+		this.uiSettings = uiSettings
 		this.isActivlyWatching = isActivlyWatching;
 		this.initInventories();
 		const { scene, renderer } = useThrelte();

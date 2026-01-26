@@ -1,20 +1,41 @@
 <script lang="ts">
-    import CanvasPortal from '$lib/components/3d-core/CanvasPortal.svelte';
-    import { PileScene } from '$lib/pile';
-    import PileUI from '$lib/pile/components/UI/pileUI.svelte';
+	import CanvasPortal from '$lib/components/3d-core/CanvasPortal.svelte';
+	import { PileScene } from '$lib/pile';
+	import PileUI from '$lib/pile/components/UI/pileUI.svelte';
 	import { SettingsState } from '$lib/pile/util/ui/settingsState.svelte.js';
 
-    let { data } = $props(); // Using Svelte 5 props syntax
-    let pileSceneRef = $state<PileScene>(); 
+	let { data } = $props();
+	let pileSceneRef = $state<PileScene>();
+	let canvasContainer = $state<HTMLDivElement>();
 	const uiSettings = new SettingsState({ showGrid: true });
+		
+
+
+	$effect(() => {
+		if (canvasContainer) {
+			uiSettings.canvasContainer = canvasContainer;
+		}
+	});
 </script>
 
-<CanvasPortal>
-    <PileScene bind:this={pileSceneRef} {data} {uiSettings} />
-</CanvasPortal>
+
+<div bind:this={canvasContainer}>
+	<CanvasPortal>
+		<PileScene bind:this={pileSceneRef} {data} {uiSettings} />
+	</CanvasPortal>
+</div>
 
 {#if pileSceneRef}
-    <PileUI {pileSceneRef} {uiSettings} />
+	<PileUI {pileSceneRef} {uiSettings} />
 {:else}
 	<p class="absolute">Initializing Scene ...</p>
 {/if}
+
+<style>
+	:global(body.no-cursor) {
+        cursor: none !important;
+    }
+    :global(body.no-cursor *) {
+        cursor: none !important;
+    }
+</style>

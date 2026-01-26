@@ -7,8 +7,6 @@
 	import CameraControls from './components/CameraControls.svelte';
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
-	import Settings from './components/UI/Settings.svelte';
-	import { SettingsState } from './util/ui/settingsState.svelte';
 
 	interactivity({
 		filter: (hits) => {
@@ -21,8 +19,7 @@
 	let windowIsVisible = $state(true);
 	let windowIsFocused = $state(true);
 	const isActivelyWatching = $derived(windowIsVisible && windowIsFocused);
-	export const pileApp = new PileApp(() => isActivelyWatching, data);
-	const settingsState = new SettingsState({ showGrid: true });
+	export const pileApp = new PileApp(() => isActivelyWatching, uiSettings, data);
 	onDestroy(() => {
 		pileApp.database.destroy();
 	});
@@ -35,12 +32,11 @@
 <svelte:document onvisibilitychange={handleVisibilityChange} />
 <svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
 
-<Settings settingState={settingsState} />
 <CameraControls />
 <T.DirectionalLight position={[0, 10, 10]} />
 <T.AmbientLight intensity={0.08} />
 
-{#if settingsState.showGrid}
+{#if uiSettings.showGrid}
 	<Grid
 		type={'polar'}
 		cellSize={10}

@@ -9,7 +9,6 @@ export const load: PageServerLoad = async () => {
 	console.error('Error loading pile_objects:', error.message);
 	return { pileObjects: [] };
   }
-  console.log(data)
   return {
 	pileObjects: data ?? [],
   };
