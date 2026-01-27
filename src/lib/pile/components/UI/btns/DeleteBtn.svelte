@@ -1,8 +1,9 @@
 <script lang="ts">
 	import type { PileState } from "$lib/pile/util/pileState.svelte";
+	import type { SettingsState } from "$lib/pile/util/ui/settingsState.svelte";
 	import { deleteSelectedModel } from "$lib/pile/util/ui/uiActions";
 
-	let { pileState }: { pileState: PileState } = $props();
+	let { pileState, uiSettings }: { pileState: PileState, uiSettings: SettingsState } = $props();
 
 
 	const deleteItem = () => {
@@ -10,7 +11,7 @@
 	};
 </script>
 
-<div class="flex items-center rounded-xl border border-white/10 bg-zinc-900/80 p-1 backdrop-blur-sm" use:pileState.uiSettings.hudTooltip={"delete : Delete Object"}>
+<div class="flex items-center rounded-xl border border-white/10 bg-zinc-900/80 p-1 backdrop-blur-sm" use:uiSettings.hudTooltip={"delete : Delete Object"}>
 	<button
 		onclick={deleteItem}
 		class="group flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all text-zinc-400 hover:bg-red-500 hover:text-white hover:shadow-[0_0_15px_rgba(239,68,68,0.4)] active:scale-95"

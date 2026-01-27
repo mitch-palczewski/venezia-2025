@@ -14,8 +14,10 @@ export class SettingsState {
 	#showSettingsMenu = $state(false)
 	public defaultShowGrid;
 	public movementSpeed = $state(10)
+	public scaleSliderMax = $state(15)
 	public showGrid: boolean = $state(false);
 	public showUI = $state(true);
+	public showAddMenu = $state(false);
 	public showCursor = $state(true);
 	public transformControlsMode = $state<TransformControlsMode>('translate');
 	public app: PileApp | undefined

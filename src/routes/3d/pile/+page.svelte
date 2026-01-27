@@ -2,7 +2,7 @@
 	import CanvasPortal from '$lib/components/3d-core/CanvasPortal.svelte';
 	import { PileScene } from '$lib/pile';
 	import PileUI from '$lib/pile/components/UI/pileUI.svelte';
-	import SettingsMenu from '$lib/pile/components/UI/menu/Menu.svelte';
+	import SettingsMenu from '$lib/pile/components/UI/settings-menu/Menu.svelte';
 	import { SettingsState } from '$lib/pile/util/ui/settingsState.svelte.js';
 	import { onDestroy } from 'svelte';
 
