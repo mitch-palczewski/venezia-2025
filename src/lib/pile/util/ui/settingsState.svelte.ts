@@ -1,4 +1,5 @@
 import type { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
+import type { PileApp } from "../pileApp.svelte";
 
 export interface SettingsStateConfig {
 	showGrid?: boolean;
@@ -17,8 +18,10 @@ export class SettingsState {
 	public showUI = $state(true);
 	public showCursor = $state(true);
 	public transformControlsMode = $state<TransformControlsMode>('translate');
-	
+	public app: PileApp | undefined
 	public lastState = $state<TrackedStates>({lastShowCursor: this.showCursor})
+	public showTooltip = $state(true)
+	public tooltipText = $state<string | null>(null)
 
 	//deleteMaybe
 	public doubleClick = $state(false)
@@ -89,8 +92,6 @@ export class SettingsState {
 		
 	}
 
-
-
 	public static setPointerLock(element: HTMLElement | null, state: boolean) {
 		if (!element) return;
 
@@ -99,5 +100,25 @@ export class SettingsState {
 		} else {
 			element.requestPointerLock();
 		}
+	}
+
+	public hudTooltip(node: HTMLElement, text: string) {
+		const show = () => (this.tooltipText = text);
+		const hide = () => (this.tooltipText = "");
+
+		node.addEventListener('mouseenter', show);
+		node.addEventListener('mouseleave', hide);
+		node.addEventListener('focusin', show);
+		node.addEventListener('focusout', hide);
+
+		return {
+			update(newText: string) {
+				text = newText;
+			},
+			destroy() {
+				node.removeEventListener('mouseenter', show);
+				node.removeEventListener('mouseleave', hide);
+			}
+		};
 	}
 }

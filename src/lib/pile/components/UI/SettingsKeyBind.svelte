@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { SettingsState } from "$lib/pile/util/ui/settingsState.svelte";
+	import { deleteSelectedModel } from "$lib/pile/util/ui/uiActions";
 
     interface Props {
         settingState: SettingsState 
@@ -25,6 +26,9 @@
 		}
 		if(event.key === 't' || event.key === 'T'){
 			settingState.transformControlsMode = 'translate'
+		}
+		if(event.key === 'Delete' && settingState.app?.state){
+			deleteSelectedModel(settingState.app.state)
 		}
 	}
 

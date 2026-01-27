@@ -40,6 +40,7 @@ export class PileApp {
 		this.environment = new PileEnvironment(scene, renderer, this.environmentInventory,undefined, this.database);
 		this.state.app = this
 		this.state.uiSettings = uiSettings
+		this.uiSettings.app = this
 		if (initalDatabaseObjects) {
 			this.initPileObjects(initalDatabaseObjects);
 		}

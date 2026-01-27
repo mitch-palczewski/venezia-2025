@@ -16,7 +16,6 @@ import type { EnvironmentMap } from '../assetInventory/environmentMap';
 
 
 
-
 /**
  * Creates a new PileObject and adds it to pileModels[].
  * @param modelName A valid model name with corresponding .glb file

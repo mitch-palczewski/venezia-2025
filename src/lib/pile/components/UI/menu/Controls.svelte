@@ -19,29 +19,38 @@
 			]
 		},
 		{
-			title: 'Movement',
+			title: 'Player Movement',
 			bindings: [
 				{ label: 'Move Forward', key: 'w' },
-				{ label: 'Move Backward', key: 's' },
 				{ label: 'Move Left', key: 'a' },
+				{ label: 'Move Backward', key: 's' },
+
 				{ label: 'Move Right', key: 'd' },
 				{ label: 'Move Up', key: 'space' },
 				{ label: 'Move Down', key: 'shift' }
+			]
+		},
+		{
+			title: 'Models',
+			bindings: [
+				{ label: 'Rotate Mode', key: 'r' },
+				{ label: 'Translate Mode', key: 't' },
+				{ label: 'Delete Model', key: 'delete' }
 			]
 		}
 	];
 </script>
 
-<div class="p-8 text-white ">
+<div class="p-8 text-white">
 	<h1 class="mb-6 text-2xl font-bold tracking-tight">Key Bindings</h1>
 
 	<div class="flex flex-wrap gap-12">
 		{#each groups as group}
 			<section>
-				<h2 class="mb-4 text-sm font-semibold uppercase tracking-widest text-gray-400">
+				<h2 class="mb-4 text-sm font-semibold tracking-widest text-gray-400 uppercase">
 					{group.title}
 				</h2>
-				<div class="grid grid-cols-[1fr_auto] items-center gap-x-8 gap-y-3">
+				<div class="grid grid-cols-[2fr_auto] items-center gap-x-8 gap-y-3">
 					{#each group.bindings as { label, key }}
 						<span class="text-gray-300">{label}</span>
 						<kbd

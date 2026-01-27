@@ -9,9 +9,9 @@
 	const tabs = ['settings', 'controls'] as const;
 </script>
 
-<div class="fixed inset-0 z-50 flex items-start justify-center bg-black/50 p-12 backdrop-blur-sm">
+<div class="fixed inset-0 z-50 flex items-start justify-center bg-black/20 p-8 backdrop-blur-xs">
 	<div
-		class="relative w-full max-w-2xl rounded-xl border border-white/10 bg-zinc-900/40 p-6 shadow-2xl h-full"
+		class="relative w-full h-full border border-white/10 bg-black/40 p-2 shadow-2xl "
 	>
 		<div class="mb-6 flex items-center justify-between">
 			<h2 class="text-lg font-semibold text-zinc-100">Pile Configuration</h2>
