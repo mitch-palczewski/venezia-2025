@@ -2,6 +2,7 @@ import { type Group} from 'three';
 import type { Transform3D } from '..';
 import type { Object3DMap } from './assetInventory/object3DMap';
 import type { Object2DMap } from './assetInventory/object2DMap';
+import type { PileApp } from './pileApp.svelte';
 
 export const object2DType = 'object2D'
 export const object3DType = 'object3D'
@@ -75,3 +76,33 @@ export class PileObject2D extends BasePileObject<Object2DMap> {
 		return true;
 	}
 }
+
+
+export function setObjectMapIfNull(app: PileApp, pileObject: PileObject2D | PileObject3D) {
+		if (!pileObject.objectMap) {
+			if (pileObject.objectType == 'object2D') {
+				pileObject.objectMap = app.imageInventory.get(pileObject.name);
+			}
+			if (pileObject.objectType == 'object3D') {
+				pileObject.objectMap = app.modelInventory.get(pileObject.name);
+			}
+		}
+	}
+
+export function handleModelClick(e: MouseEvent, app: PileApp, pileObject: PileObject2D | PileObject3D) {
+		e.stopPropagation();
+		const uiSettings = app.uiSettings;
+		const state = app.state;
+
+		if (uiSettings.presentationMode) return;
+
+
+        //if object is all ready selected ... 
+		if (state.isSelectedObject(pileObject.id)) {
+			state.showTransformControls = false;
+			state.selectedObjectID = null;
+		} else {
+			state.selectedObjectID = pileObject.id;
+			state.showTransformControls = true;
+		}
+	}

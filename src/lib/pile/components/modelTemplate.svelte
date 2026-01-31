@@ -1,11 +1,14 @@
 <script lang="ts">
 	import { isInstanceOf, T } from '@threlte/core';
-	import { interactivity, meshBounds, TransformControls, useGltf } from '@threlte/extras';
-	import { Group, Vector3, Quaternion, Mesh, Object3D } from 'three';
+	import { bvh, BVHSplitStrategy, interactivity, meshBounds, TransformControls, useGltf, type BVHOptions } from '@threlte/extras';
+	import { Group, Mesh, Object3D } from 'three';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
-	import type { Transform3D } from '../types';
-	import type { PileObject3D } from '../util/pileObject.svelte';
+	import {
+		handleModelClick,
+		setObjectMapIfNull,
+		type PileObject3D
+	} from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp.svelte';
 
 	let {
@@ -27,9 +30,7 @@
 	interactivity();
 
 	let shown = $state(pileObjectData.shown);
-	if (!pileObjectData.objectMap) {
-		pileObjectData.objectMap = pileApp.modelInventory.get(pileObjectData.name);
-	}
+	setObjectMapIfNull(pileApp, pileObjectData);
 	const gltf = useGltf(pileObjectData.objectMap!.path);
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
@@ -45,48 +46,23 @@
 			throw Error(`Pile Object has no id ${pileObjectData}`);
 		if (pileApp.state.selectedObjectID === pileObjectData.id) {
 			return pileApp.state.showTransformControls;
-
 		} else {
 			return false;
 		}
-		
 	});
 
-	
+	const options: BVHOptions ={
+    enabled: true,
+    helper: false,
+    strategy: BVHSplitStrategy.SAH,
+    indirect: true,
+    verbose: false,
+    maxDepth: 20,
+    maxLeafTris: 15,
+    setBoundingBox: true
+  }
 
-	export function getTransform(): Transform3D {
-		const positionVec = new Vector3(0, 0, 0);
-		const quaternionVec = new Quaternion(0, 0, 0, 0);
-		const scaleVec = new Vector3(0, 0, 0);
-		ref?.children[0].getWorldPosition(positionVec);
-		ref?.children[0].getWorldQuaternion(quaternionVec);
-		ref?.children[0].getWorldScale(scaleVec);
-		const transform: Transform3D = {
-			translate: { x: positionVec.x, y: positionVec.y, z: positionVec.z },
-			rotation: { x: quaternionVec.x, y: quaternionVec.y, z: quaternionVec.z, w: quaternionVec.w },
-			scale: { x: scaleVec.x, y: scaleVec.y, z: scaleVec.z }
-		};
-		return transform;
-	}
-
-	/**
-	 * Modifies the pile state showTransformControls and selectedObjectID
-	 */
-	function handleModelClick(e: MouseEvent) {
-		e.stopPropagation();
-		if(pileApp.uiSettings.presentationMode) return;
-		if (!pileObjectData.id) throw Error(`PileObject Has No ID ${pileObjectData}`);
-		if (pileApp.state.isSelectedObject(pileObjectData.id)) {
-			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;
-			pileApp.state.selectedObjectID = null;
-			return;
-		} else {
-			if (ref) {
-				pileApp.state.selectedObjectID = pileObjectData.id;
-			}
-			pileApp.state.showTransformControls = true;
-		}
-	}
+  //bvh(() => options)
 </script>
 
 <!-- 
@@ -112,14 +88,15 @@
 				position={[child.position.x, child.position.y, child.position.z]}
 				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
-				raycast={pileObjectData.objectMap?.useMeshBounds ? meshBounds : undefined}
-				onclick={handleModelClick}
+				raycast={meshBounds}
+				onclick={(e: MouseEvent) => handleModelClick(e, pileApp, pileObjectData)}
 			/>
 		{/if}
 	{/each}
 {/snippet}
 
 <!-- MAIN EXECUTION -->
+
 <T.Group bind:ref dispose={true} {name} {...props}>
 	{#await gltf}
 		{@render fallback?.()}
