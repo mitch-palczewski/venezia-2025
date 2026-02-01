@@ -1,11 +1,12 @@
-import { type Group} from 'three';
+import { type Group } from 'three';
 import type { Transform3D } from '..';
 import type { Object3DMap } from './assetInventory/object3DMap';
 import type { Object2DMap } from './assetInventory/object2DMap';
 import type { PileApp } from './pileApp.svelte';
+import type { MoveTo } from './animator.svelte';
 
-export const object2DType = 'object2D'
-export const object3DType = 'object3D'
+export const object2DType = 'object2D';
+export const object3DType = 'object3D';
 
 export interface BasePileObjectOptions<T> {
 	name: string;
@@ -19,13 +20,12 @@ abstract class BasePileObject<T> {
 	id: string;
 	objectMap: T | undefined;
 	transform3D: Transform3D;
-	ref= $state<Group | undefined>(undefined);
+	ref = $state<Group | undefined>(undefined);
 	shown: boolean = true;
 	uniformScale: number = $state(1);
 	objectType: string = '';
 	newObject: boolean = false;
-
-	
+	moveTo?: MoveTo
 
 	constructor(options: BasePileObjectOptions<T>) {
 		this.name = options.name;
@@ -49,11 +49,11 @@ export class PileObject3D extends BasePileObject<Object3DMap> {
 	}
 
 	public isObject3D = () => {
-		if(this.objectType !== object3DType){
-			console.warn("Object Type missmatch. Should have objectType = 'object3D'", this)
+		if (this.objectType !== object3DType) {
+			console.warn("Object Type missmatch. Should have objectType = 'object3D'", this);
 		}
 		return true;
-	}
+	};
 }
 
 interface PileObject2DOptions extends BasePileObjectOptions<Object2DMap> {
@@ -70,39 +70,41 @@ export class PileObject2D extends BasePileObject<Object2DMap> {
 	}
 
 	public isObject2D = () => {
-		if(this.objectType !== object2DType){
-			console.warn("Object Type missmatch. Should have objectType = 'object2D'", this)
+		if (this.objectType !== object2DType) {
+			console.warn("Object Type missmatch. Should have objectType = 'object2D'", this);
 		}
 		return true;
+	};
+}
+
+export function setObjectMapIfNull(app: PileApp, pileObject: PileObject2D | PileObject3D) {
+	if (!pileObject.objectMap) {
+		if (pileObject.objectType == 'object2D') {
+			pileObject.objectMap = app.imageInventory.get(pileObject.name);
+		}
+		if (pileObject.objectType == 'object3D') {
+			pileObject.objectMap = app.modelInventory.get(pileObject.name);
+		}
 	}
 }
 
+export function handleModelClick(
+	e: MouseEvent,
+	app: PileApp,
+	pileObject: PileObject2D | PileObject3D
+) {
+	e.stopPropagation();
+	const uiSettings = app.uiSettings;
+	const state = app.state;
 
-export function setObjectMapIfNull(app: PileApp, pileObject: PileObject2D | PileObject3D) {
-		if (!pileObject.objectMap) {
-			if (pileObject.objectType == 'object2D') {
-				pileObject.objectMap = app.imageInventory.get(pileObject.name);
-			}
-			if (pileObject.objectType == 'object3D') {
-				pileObject.objectMap = app.modelInventory.get(pileObject.name);
-			}
-		}
+	if (uiSettings.presentationMode) return;
+
+	//if object is all ready selected ...
+	if (state.isSelectedObject(pileObject.id)) {
+		state.showTransformControls = false;
+		state.selectedObjectID = null;
+	} else {
+		state.selectedObjectID = pileObject.id;
+		state.showTransformControls = true;
 	}
-
-export function handleModelClick(e: MouseEvent, app: PileApp, pileObject: PileObject2D | PileObject3D) {
-		e.stopPropagation();
-		const uiSettings = app.uiSettings;
-		const state = app.state;
-
-		if (uiSettings.presentationMode) return;
-
-
-        //if object is all ready selected ... 
-		if (state.isSelectedObject(pileObject.id)) {
-			state.showTransformControls = false;
-			state.selectedObjectID = null;
-		} else {
-			state.selectedObjectID = pileObject.id;
-			state.showTransformControls = true;
-		}
-	}
+}

@@ -15,8 +15,8 @@ export class PileState {
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
 	pileDatabase: PileDatabase;
-	uiSettings: SettingsState | undefined
-	app: PileApp | undefined
+	uiSettings: SettingsState | undefined;
+	app: PileApp | undefined;
 
 	constructor(database: PileDatabase) {
 		this.pileDatabase = database;
@@ -100,8 +100,8 @@ export class PileState {
 			return;
 		}
 		if (newObj.objectType === 'environment' && this.app) {
-			const environmentMap = this.app.environmentInventory.get(newObj.name)
-			if(environmentMap) this.app.environment.setEnvironement(environmentMap)
+			const environmentMap = this.app.environmentInventory.get(newObj.name);
+			if (environmentMap) this.app.environment.setEnvironement(environmentMap);
 		}
 	};
 
@@ -125,7 +125,14 @@ export class PileState {
 			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
 			oldObj.uniformScale =
 				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
-			PileState.setObjectsTransform(oldObj?.ref, newTransform);
+			//PileState.setObjectsTransform(oldObj?.ref, newTransform);
+			if (oldObj.moveTo) {
+				oldObj.moveTo(
+					{x: newTransform.translate.x, y: newTransform.translate.y, z: newTransform.translate.z},
+					{x: newTransform.rotation.x, y: newTransform.rotation.y, z: newTransform.rotation.z, w: newTransform.rotation.w},
+					{x: newTransform.scale.x, y: newTransform.scale.y, z: newTransform.scale.z},
+				);
+			}
 		}
 	}
 

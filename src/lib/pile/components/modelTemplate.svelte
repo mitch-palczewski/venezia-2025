@@ -1,7 +1,15 @@
 <script lang="ts">
-	import { isInstanceOf, T } from '@threlte/core';
-	import { bvh, BVHSplitStrategy, interactivity, meshBounds, TransformControls, useGltf, type BVHOptions } from '@threlte/extras';
-	import { Group, Mesh, Object3D } from 'three';
+	import { isInstanceOf, T, useTask } from '@threlte/core';
+	import {
+		bvh,
+		BVHSplitStrategy,
+		interactivity,
+		meshBounds,
+		TransformControls,
+		useGltf,
+		type BVHOptions
+	} from '@threlte/extras';
+	import { Group, Mesh, Object3D, Vector3 } from 'three';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import {
@@ -10,6 +18,7 @@
 		type PileObject3D
 	} from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp.svelte';
+	import { createMover } from '../util/animator.svelte';
 
 	let {
 		fallback,
@@ -51,18 +60,28 @@
 		}
 	});
 
-	const options: BVHOptions ={
-    enabled: true,
-    helper: false,
-    strategy: BVHSplitStrategy.SAH,
-    indirect: true,
-    verbose: false,
-    maxDepth: 20,
-    maxLeafTris: 15,
-    setBoundingBox: true
-  }
+	const options: BVHOptions = {
+		enabled: true,
+		helper: false,
+		strategy: BVHSplitStrategy.SAH,
+		indirect: true,
+		verbose: false,
+		maxDepth: 20,
+		maxLeafTris: 15,
+		setBoundingBox: true
+	};
 
-  //bvh(() => options)
+	//bvh(() => options)
+	let targetPosition = $state(new Vector3());
+	let isAnimating = $state(false);
+	let lerpFactor = $state(0.1); // This acts as your 'speed'
+	let isUserInteracting = $state(false); // Guard for TransformControls
+
+	const mover = createMover(() => ref);
+
+	$effect(() => {
+		pileObjectData.moveTo = mover.moveTo;
+	});
 </script>
 
 <!-- 
