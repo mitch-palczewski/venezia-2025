@@ -91,6 +91,7 @@ export class SettingsState {
 			this.presentationMode = false
 			return
 		}
+		this.showSettingsMenu = true
 		
 	}
 
