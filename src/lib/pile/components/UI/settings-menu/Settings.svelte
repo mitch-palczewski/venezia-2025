@@ -8,9 +8,6 @@
 	let { uiSettings }: Props = $props();
 </script>
 
-
-
-
 		<div class="space-y-6">
 			<div class="flex flex-col gap-2">
 				<label for="speed" class="text-xs font-medium tracking-wider text-zinc-400 uppercase">
@@ -25,7 +22,7 @@
 					class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-2 text-white outline-none focus:ring-2 focus:ring-indigo-500"
 				/>
 			</div>
-
+			
 			<div class="flex flex-col gap-2">
 				<span class="text-xs font-medium tracking-wider text-zinc-400 uppercase"
 					>Click Interaction</span

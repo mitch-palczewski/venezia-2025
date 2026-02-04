@@ -25,7 +25,6 @@ export class SettingsState {
 	public showTooltip = $state(true)
 	public tooltipText = $state<string | null>(null)
 
-	//deleteMaybe
 	public doubleClick = $state(false)
 	public canvasContainer: HTMLDivElement | undefined;
 

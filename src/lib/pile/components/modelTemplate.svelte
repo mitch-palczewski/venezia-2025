@@ -108,7 +108,8 @@
 				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
 				raycast={meshBounds}
-				onclick={(e: MouseEvent) => handleModelClick(e, pileApp, pileObjectData)}
+				onclick={(e: MouseEvent) => pileApp.uiSettings.doubleClick ? null : handleModelClick(e, pileApp, pileObjectData)}
+				ondblclick={(e: MouseEvent) => pileApp.uiSettings.doubleClick ?  handleModelClick(e, pileApp, pileObjectData) : null}
 			/>
 		{/if}
 	{/each}

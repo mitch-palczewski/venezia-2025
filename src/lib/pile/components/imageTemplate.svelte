@@ -70,7 +70,7 @@
 
 	function handleModelClick(e: MouseEvent) {
 		e.stopPropagation();
-		if(pileApp.uiSettings.presentationMode) return;
+		if (pileApp.uiSettings.presentationMode) return;
 		if (!pileObjectData.id) throw Error(`PileObject Has No ID ${pileObjectData}`);
 		if (pileApp.state.isSelectedObject(pileObjectData.id)) {
 			pileApp.state.showTransformControls = !pileApp.state.showTransformControls;
@@ -101,11 +101,19 @@
 					{#if pileObjectData.objectMap?.fileType === 'svg'}
 						<SVG
 							src={pileObjectData.objectMap?.path}
-							fillMeshProps={{ onclick: handleModelClick, depthWrite: false, depthTest: true }}
+							fillMeshProps={{
+								onclick: pileApp.uiSettings.doubleClick ?  null : handleModelClick ,
+								ondblclick: pileApp.uiSettings.doubleClick ? handleModelClick : null,
+								depthWrite: false,
+								depthTest: true
+							}}
 						/>
 					{:else if pileObjectData.objectMap?.fileType === 'png'}
 						{#await texture then map}
-							<T.Mesh onclick={handleModelClick}>
+							<T.Mesh
+								onclick={pileApp.uiSettings.doubleClick ? null :  handleModelClick}
+								ondblclick={pileApp.uiSettings.doubleClick ? handleModelClick : null}
+							>
 								<T.PlaneGeometry args={[1, map?.image.height / map?.image.width]} />
 								<T.MeshBasicMaterial
 									{map}

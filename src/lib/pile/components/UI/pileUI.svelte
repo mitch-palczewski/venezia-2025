@@ -43,13 +43,6 @@
 						<SettingsBtn {uiSettings} />
 					</div>
 				</div>
-				<div class="absolute top-[90vh] left-[3vw]">
-					<div class="grid grid-cols-8 gap-3">
-						<ChooseEnvironment {pileApp} inventory={pileApp.environmentInventory} />
-						<AddNewModel {pileApp} inventory={pileApp.modelInventory} />
-						<AddNewModel {pileApp} inventory={pileApp.imageInventory} />
-					</div>
-				</div>
 			</div>
 			{#if uiSettings.showAddMenu}
 				<div>
