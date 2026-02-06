@@ -23,6 +23,7 @@
 		"@tailwindcss/typography": "^0.5.15",
 		"@tailwindcss/vite": "^4.0.0",
 		"@types/node": "^22",
+		"@types/papaparse": "^5.5.2",
 		"eslint": "^9.22.0",
 		"eslint-config-prettier": "^10.0.1",
 		"eslint-plugin-svelte": "^3.0.0",
@@ -50,6 +51,7 @@
 		"@threlte/extras": "^9.5.4",
 		"@types/three": "^0.180.0",
 		"@vercel/blob": "^2.0.0",
+		"papaparse": "^5.5.3",
 		"three": "^0.180.0"
 	}
 }

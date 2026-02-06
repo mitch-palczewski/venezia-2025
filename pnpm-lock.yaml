@@ -23,6 +23,9 @@ importers:
       '@vercel/blob':
         specifier: ^2.0.0
         version: 2.0.0
+      papaparse:
+        specifier: ^5.5.3
+        version: 5.5.3
       three:
         specifier: ^0.180.0
         version: 0.180.0
@@ -54,6 +57,9 @@ importers:
       '@types/node':
         specifier: ^22
         version: 22.18.12
+      '@types/papaparse':
+        specifier: ^5.5.2
+        version: 5.5.2
       eslint:
         specifier: ^9.22.0
         version: 9.38.0(jiti@2.6.1)
@@ -671,6 +677,9 @@ packages:
 
   '@types/node@22.18.12':
     resolution: {integrity: sha512-BICHQ67iqxQGFSzfCFTT7MRQ5XcBjG5aeKh5Ok38UBbPe5fxTyE+aHFxwVrGyr8GNlqFMLKD1D3P2K/1ks8tog==}
+
+  '@types/papaparse@5.5.2':
+    resolution: {integrity: sha512-gFnFp/JMzLHCwRf7tQHrNnfhN4eYBVYYI897CGX4MY1tzY9l2aLkVyx2IlKZ/SAqDbB3I1AOZW5gTMGGsqWliA==}
 
   '@types/phoenix@1.6.7':
     resolution: {integrity: sha512-oN9ive//QSBkf19rfDv45M7eZPi0eEXylht2OLEXicu5b4KoQ1OzXIw+xDSGWxSxe1JmepRR/ZH283vsu518/Q==}
@@ -1305,6 +1314,9 @@ packages:
   p-locate@5.0.0:
     resolution: {integrity: sha512-LaNjtRWUBY++zB5nE/NwcaoMylSPk+S+ZHNB1TzdbMJMny6dynpAGt7X/tl/QYq3TIeE6nxHppbo2LGymrG5Pw==}
     engines: {node: '>=10'}
+
+  papaparse@5.5.3:
+    resolution: {integrity: sha512-5QvjGxYVjxO59MGU2lHVYpRWBBtKHnlIAcSe1uNFCkkptUh63NFRj0FJQm7nR67puEruUci/ZkjmEFrjCAyP4A==}
 
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
@@ -2239,6 +2251,10 @@ snapshots:
     dependencies:
       undici-types: 6.21.0
 
+  '@types/papaparse@5.5.2':
+    dependencies:
+      '@types/node': 22.18.12
+
   '@types/phoenix@1.6.7': {}
 
   '@types/stats.js@0.17.4': {}
@@ -2882,6 +2898,8 @@ snapshots:
   p-locate@5.0.0:
     dependencies:
       p-limit: 3.1.0
+
+  papaparse@5.5.3: {}
 
   parent-module@1.0.1:
     dependencies:

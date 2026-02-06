@@ -1,4 +1,6 @@
-//RENAME pileAssetMap.ts
+
+
+import Papa from 'papaparse';
 
 import { Object2DMap } from "./object2DMap"
 import { Object3DMap } from "./object3DMap"
@@ -167,4 +169,100 @@ export const variousMP: Object3DMap[]=[
 		displayName: 'shape 01',
 		path: '/models/various-mp/shape3D_01.gltf'
 	}),
+	new Object3DMap({
+		name: 'Ibix_01',
+		displayName: 'Ibix',
+		path: '/models/various-mp/Ibix_01_LOD1.glb'
+	}),
 ]
+
+
+
+export const allModels:Object3DMap[]= await initializeModels()
+console.log(allModels)
+
+
+export async function initializeModels(): Promise<Object3DMap[]> {
+    // Step 1: Get files from glob
+    const allFiles = import.meta.glob('$lib/assets/3D/**/*.*', {
+        eager: true,
+        query: '?url',
+        import: 'default'
+    });
+
+    // Step 2 & 3: Iterate and Group
+    const groupedAssets = groupFilesByFolder(allFiles);
+
+    // Step 4, 5 & 6: Open CSVs and create the Object3DMap array
+    const modelPromises = Object.entries(groupedAssets).map(async ([folderName, assets]) => {
+        
+        // Default to folder name if CSV is missing
+        let displayName = folderName; 
+        
+        if (assets.csv) {
+            displayName = await getDisplayNameFromCSV(assets.csv) || folderName;
+        }
+		
+
+        return new Object3DMap({
+            name: folderName,
+            displayName: displayName,
+            path: assets.glb || "" // The path to the 3D file
+        });
+    });
+
+    // Wait for all fetches to finish and return the final array
+    return await Promise.all(modelPromises);
+}
+
+
+type AssetGroup = { glb?: string; csv?: string; png?: string };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function groupFilesByFolder(allFiles: Record<string, any>) {
+    const groups: Record<string, AssetGroup> = {};
+
+    for (const path in allFiles) {
+        const url = allFiles[path] as string;
+        const parts = path.split('/');
+        const folderName = parts[parts.length - 2];
+
+        if (!groups[folderName]) groups[folderName] = {};
+
+        if (path.endsWith('.glb') || path.endsWith('.gltf')) groups[folderName].glb = url;
+        if (path.endsWith('.csv')) groups[folderName].csv = url;
+        if (path.endsWith('.png')) groups[folderName].png = url;
+    }
+    return groups;
+}
+
+interface MetadataRow {
+    Header: string;
+	Value: string;
+	Notes: string;
+    // Add other columns here if needed, e.g., description: string;
+}
+
+async function getDisplayNameFromCSV(url: string): Promise<string | null> {
+    try {
+        const response = await fetch(url);
+        const text = await response.text();
+        const parsed = Papa.parse<MetadataRow>(text, { 
+            header: true, 
+            skipEmptyLines: true 
+        });
+        
+		let displayName = null
+        // Return the display_name column from the first row
+		parsed.data.forEach((row) => {
+			if (row.Header === "name_display"){
+				displayName = row.Value
+			}
+		})
+			
+		
+        return displayName;
+    } catch (err) {
+        console.error("CSV Parse Error:", err);
+        return "Error Loading Name";
+    }
+}

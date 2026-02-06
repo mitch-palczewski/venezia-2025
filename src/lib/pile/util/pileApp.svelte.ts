@@ -2,12 +2,7 @@
 import { Vector3 } from 'three';
 import type { Transform3D } from '../types';
 import {
-	undertowModels,
-	variousModels,
-	potFace,
-	architectureModels,
-	test2D,
-	variousMP
+	allModels
 } from './assetInventory/assetsMap';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
@@ -48,12 +43,15 @@ export class PileApp {
 	}
 
 	private initInventories() {
+		this.modelInventory.add(allModels)
+		/*
 		this.imageInventory.add(test2D);
 		this.modelInventory.add(undertowModels);
 		this.modelInventory.add(variousModels);
 		this.modelInventory.add(variousMP)
 		this.modelInventory.add(potFace);
 		this.modelInventory.add(architectureModels);
+		*/
 		this.environmentInventory.add(testEnvironments);
 	}
 
