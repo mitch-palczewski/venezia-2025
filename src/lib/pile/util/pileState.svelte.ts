@@ -127,32 +127,42 @@ export class PileState {
 				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
 			//PileState.setObjectsTransform(oldObj?.ref, newTransform);
 			if (oldObj.moveTo) {
-				//Items are offset buy the transformcontrols
-				const targetQuat = new Quaternion(
-					newTransform.rotation.x,
-					newTransform.rotation.y,
-					newTransform.rotation.z,
-					newTransform.rotation.w
-				).normalize()
-				const currentTFormQuat = oldObj.ref.children[0].quaternion.clone()
-				const relativeQuat = targetQuat.clone().multiply(currentTFormQuat.invert())
-				oldObj.moveTo(
-					{	x: newTransform.translate.x - oldObj.ref.children[0].position.x, 
-						y: newTransform.translate.y - oldObj.ref.children[0].position.y, 
-						z: newTransform.translate.z - oldObj.ref.children[0].position.z},
-					{	x: relativeQuat.x , 
-						y: relativeQuat.y , 
-						z: relativeQuat.z , 
-						w: relativeQuat.w },
-					{	x: newTransform.scale.x , 
-						y: newTransform.scale.y , 
-						z: newTransform.scale.z },
+				const targetMatrix = new Matrix4().compose(
+					new Vector3(newTransform.translate.x, newTransform.translate.y, newTransform.translate.z),
+					new Quaternion(
+						newTransform.rotation.x,
+						newTransform.rotation.y,
+						newTransform.rotation.z,
+						newTransform.rotation.w
+					),
+					new Vector3(newTransform.scale.x, newTransform.scale.y, newTransform.scale.z)
 				);
-			}else{
-				console.warn("moveTo is undefined")
-			}
-			console.log("PreUpdate", {...oldObj.ref.position}, {...oldObj.ref.children[0].position}, {...oldObj.ref.children[0].children[0].position})
+				const transformControls = oldObj.ref.children[0];
 
+				const transformControlsMatrixInverse = transformControls.matrix.clone().invert();
+				const parentTargetMatrix = new Matrix4().multiplyMatrices(
+					targetMatrix,
+					transformControlsMatrixInverse
+				);
+
+				const finalPos = new Vector3();
+				const finalQuat = new Quaternion();
+				const finalScale = new Vector3();
+				parentTargetMatrix.decompose(finalPos, finalQuat, finalScale);
+				oldObj.moveTo(
+					{ x: finalPos.x, y: finalPos.y, z: finalPos.z },
+					{ x: finalQuat.x, y: finalQuat.y, z: finalQuat.z, w: finalQuat.w },
+					{ x: finalScale.x, y: finalScale.y, z: finalScale.z }
+				);
+			} else {
+				console.warn('moveTo is undefined');
+			}
+			console.log(
+				'PreUpdate',
+				{ ...oldObj.ref.position },
+				{ ...oldObj.ref.children[0].position },
+				{ ...oldObj.ref.children[0].children[0].position }
+			);
 		}
 	}
 
