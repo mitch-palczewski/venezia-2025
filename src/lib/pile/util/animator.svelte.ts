@@ -39,6 +39,9 @@ export function createMover(getRef: () => any) {
         const scaleDist = ref.scale.distanceTo(targetScale); 
 
         if (posDist < 0.001 && rotDist < 0.001 && scaleDist < 0.001) {
+            console.log("update3DObject Position", {...ref.position}, {...ref.children[0].position}, {...ref.children[0].children[0].position}, ref.getWorldPosition(new Vector3()))
+            console.log("update3DObject", {...ref.quaternion}, {...ref.children[0].quaternion}, {...ref.children[0].children[0].quaternion}, ref.getWorldQuaternion(new Quaternion()))
+
             ref.position.copy(targetPosition);
             ref.scale.copy(targetScale);
             ref.quaternion.copy(targetQuaternion);

@@ -87,6 +87,7 @@ function mapEnvironmentToDb(environmentName: string): Partial<PileDatabaseObj> {
 }
 
 function constructPileObj(obj: PileDatabaseObj): BasePileObjectOptions<Object2DMap | Object3DMap>{
+	console.log(`Uploading ${obj.name} from database`, obj)
 	return {
 		name: obj.name,
 		id: obj.id,
