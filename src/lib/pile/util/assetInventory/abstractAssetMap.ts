@@ -2,11 +2,13 @@ export abstract class BaseMap {
 	readonly name: string;
 	readonly displayName: string;
 	readonly path: string;
+	preview?: string;
 
-	constructor(name: string, path: string, displayName?: string) {
+	constructor(name: string, path: string, displayName?: string, preview?: string) {
 		this.name = name;
 		this.path = path;
 		this.displayName = displayName ?? name;
+		this.preview = preview
 	}
 }
 

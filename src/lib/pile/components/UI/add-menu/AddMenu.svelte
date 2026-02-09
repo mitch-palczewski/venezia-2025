@@ -19,7 +19,7 @@
 
 	const categories = [
 		{ id: 'object3D', label: '3D', hint: 'Add 3D Meshes' },
-		{ id: 'object2D', label: '2D', hint: 'Add Sprites & UI' },
+		//{ id: 'object2D', label: '2D', hint: 'Add Sprites & UI' },      REMOVING 2D for now
 		{ id: 'environment', label: 'Env', hint: 'World Settings' }
 	] as const;
 
@@ -66,13 +66,16 @@
 	>
 		<div class="grid grid-cols-2 gap-2">
 			{#if addMenuState === 'object3D'}
+				
 				{#each uiSettings.app?.modelInventory.getAll() as item}
 					<ElementBtn
 						{item}
 						isSelected={selectedElement?.name === item.name}
 						onclick={() => (selectedElement = item)}
+						image = {item.preview}
 					/>
 				{/each}
+			<!--
 			{:else if addMenuState === 'object2D'}
 				{#each uiSettings.app?.imageInventory.getAll() as item}
 					<ElementBtn
@@ -81,6 +84,7 @@
 						onclick={() => (selectedElement = item)}
 					/>
 				{/each}
+			-->
 			{:else if addMenuState === 'environment'}
 				{#each uiSettings.app?.environmentInventory.getAll() as item}
 					<ElementBtn

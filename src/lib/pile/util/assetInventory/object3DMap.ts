@@ -3,6 +3,7 @@ import { BaseInventory, BaseMap } from "./abstractAssetMap";
 interface Object3DMapOptions {
 	name: string,
 	displayName?: string,
+    preview?:string,
 	category?: string,
 	path: string
 	baseScale?: number;
@@ -14,8 +15,8 @@ export class Object3DMap extends BaseMap {
     readonly objectType = "3D";
     readonly useMeshBounds: boolean
 
-    constructor({ name, displayName, category = "misc", path, baseScale = 1, useMeshBounds = true}: Object3DMapOptions) {
-        super(name, path, displayName); 
+    constructor({ name, displayName, preview, category = "misc", path, baseScale = 1, useMeshBounds = true}: Object3DMapOptions) {
+        super(name, path, displayName, preview); 
         this.category = category;
         this.baseScale = baseScale;
         this.useMeshBounds = useMeshBounds
