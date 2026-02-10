@@ -71,12 +71,6 @@
 		setBoundingBox: true
 	};
 
-	//bvh(() => options)
-	let targetPosition = $state(new Vector3());
-	let isAnimating = $state(false);
-	let lerpFactor = $state(0.1); // This acts as your 'speed'
-	let isUserInteracting = $state(false); // Guard for TransformControls
-
 	const mover = createMover(() => ref);
 
 	$effect(() => {
@@ -93,6 +87,7 @@
 	{#each sceneChildren as child}
 		{#if (child.type == 'Group' && child.children) || (child.type == 'Object3D' && child.children)}
 			<T.Group
+	
 				position={[child.position.x, child.position.y, child.position.z]}
 				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}

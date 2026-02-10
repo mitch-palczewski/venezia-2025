@@ -30,6 +30,7 @@ export class PileState {
 	}
 
 	set selectedObjectID(value) {
+		if (value === this.#selectedObjectID) return;
 		if (!this.selectedObjectUploaded && this.showTransformControls) {
 			//If moving from a selected object to a new object
 			this.updateSelectedObject();
@@ -43,6 +44,7 @@ export class PileState {
 	}
 
 	set showTransformControls(value) {
+		if (value === this.#showTransformControls) return;
 		if (value !== this.#showTransformControls) {
 			this.#showTransformControls = value;
 		}
@@ -118,14 +120,18 @@ export class PileState {
 	}
 
 	private update3DObject(newObj: PileObject3D) {
+		if (newObj.transform3D.translate.x === 0 && newObj.transform3D.translate.y === 0) {
+			console.warn(`Object ${newObj.id} is reporting origin position. Source:`, newObj);
+		}
 		const newTransform = newObj.transform3D;
 		if (newObj.isObject3D() && this.objects3D.has(newObj.id)) {
 			const oldObj = this.objects3D.get(newObj.id);
 			if (!oldObj) throw Error(`Could not find obj ${newObj}`);
 			if (!oldObj?.ref) throw Error(`Could not find ref on object ${oldObj}`);
+			if (!oldObj?.ref.children[0]) throw Error(`Could not find ref on object ${oldObj}`);
+
 			oldObj.uniformScale =
 				(newTransform.scale.x + newTransform.scale.y + newTransform.scale.z) / 3;
-			//PileState.setObjectsTransform(oldObj?.ref, newTransform);
 			if (oldObj.moveTo) {
 				const targetMatrix = new Matrix4().compose(
 					new Vector3(newTransform.translate.x, newTransform.translate.y, newTransform.translate.z),
@@ -157,12 +163,6 @@ export class PileState {
 			} else {
 				console.warn('moveTo is undefined');
 			}
-			console.log(
-				'PreUpdate',
-				{ ...oldObj.ref.position },
-				{ ...oldObj.ref.children[0].position },
-				{ ...oldObj.ref.children[0].children[0].position }
-			);
 		}
 	}
 

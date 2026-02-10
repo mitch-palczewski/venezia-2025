@@ -8,13 +8,16 @@ import type { Object2DMap } from '../assetInventory/object2DMap';
 import type { Object3DMap } from '../assetInventory/object3DMap';
 import type { PileApp } from '../pileApp.svelte';
 import type { Transform3D } from '$lib/pile/types';
-import { BASE_TRANSFORM } from '../transform';
 import { PileObject2D, PileObject3D } from '../pileObject.svelte';
 import type { PileState } from '../pileState.svelte';
 import type { SvelteMap } from 'svelte/reactivity';
 import type { EnvironmentMap } from '../assetInventory/environmentMap';
 
-
+const BASE_TRANSFORM: Transform3D = {
+    translate: { x: 0, y: 0, z: 0 },
+    rotation: { x: 0, y: 0, z: 0, w: 1 },
+    scale: { x: 1, y: 1, z: 1 }
+};
 
 /**
  * Creates a new PileObject and adds it to pileModels[].

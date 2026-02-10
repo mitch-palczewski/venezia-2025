@@ -41,7 +41,7 @@ export function createMover(getRef: () => any) {
 	useTask(
 		() => {
 			const ref = getRef();
-			if (!ref || !isAnimating || isUserInteracting) return;
+			if (!ref || !isAnimating || isUserInteracting || !ref.children[0]) return;
 
 			ref.position.lerp(targetPosition, lerpFactor);
 			ref.scale.lerp(targetScale, lerpFactor);
