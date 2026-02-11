@@ -14,9 +14,9 @@ import type { SvelteMap } from 'svelte/reactivity';
 import type { EnvironmentMap } from '../assetInventory/environmentMap';
 
 const BASE_TRANSFORM: Transform3D = {
-    translate: { x: 0, y: 0, z: 0 },
-    rotation: { x: 0, y: 0, z: 0, w: 1 },
-    scale: { x: 1, y: 1, z: 1 }
+	translate: { x: 0, y: 0, z: 0 },
+	rotation: { x: 0, y: 0, z: 0, w: 1 },
+	scale: { x: 1, y: 1, z: 1 }
 };
 
 /**
@@ -24,8 +24,8 @@ const BASE_TRANSFORM: Transform3D = {
  * @param modelName A valid model name with corresponding .glb file
  */
 export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileApp) {
-	pileApp.state.showTransformControls = false
-	const baseTrandform: Transform3D = BASE_TRANSFORM;
+	pileApp.state.showTransformControls = false;
+	const baseTrandform: Transform3D = JSON.parse(JSON.stringify(BASE_TRANSFORM));
 	if (modelMap.objectType === '3D') {
 		const object3D = new PileObject3D({
 			name: modelMap.name,
@@ -34,10 +34,10 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
-		object3D.newObject = true
+		console.log(object3D.ref);
+		object3D.newObject = true;
+		pileApp.state.addObject(object3D);
 		pileApp.database.add(object3D);
-		pileApp.state.addObject(object3D)
-		
 	}
 	if (modelMap.objectType === '2D') {
 		const object2D = new PileObject2D({
@@ -47,38 +47,39 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			transform3D: baseTrandform,
 			uniformScale: 1
 		});
-		object2D.newObject = true
+		object2D.newObject = true;
 		pileApp.state.addObject(object2D);
 		pileApp.database.add(object2D);
 	}
 }
 
 export function deleteSelectedModel(pileState: PileState) {
-	const id = pileState.selectedObjectID!
-	pileState.pileDatabase.delete(id)
-	deleteObject(pileState.objects3D, id)
-	deleteObject(pileState.objects2D, id)
-	pileState.overrideShowTransformControls(false)
-
+	const id = pileState.selectedObjectID!;
+	pileState.pileDatabase.delete(id);
+	deleteObject(pileState.objects3D, id);
+	deleteObject(pileState.objects2D, id);
+	pileState.overrideShowTransformControls(false);
 }
 
-function deleteObject(inventory: SvelteMap<string, PileObject3D | PileObject2D>, selectedObjectID: string | null){
+function deleteObject(
+	inventory: SvelteMap<string, PileObject3D | PileObject2D>,
+	selectedObjectID: string | null
+) {
 	inventory.forEach((object, id) => {
-		if(id != selectedObjectID) return;
-		const tform = object.ref?.children[0]; 
-		const mesh = object.ref?.children[0].children[0] as Mesh
-		object.shown = false
-		if(mesh.isMesh){
+		if (id != selectedObjectID) return;
+		const tform = object.ref?.children[0];
+		const mesh = object.ref?.children[0].children[0] as Mesh;
+		object.shown = false;
+		if (mesh.isMesh) {
 			mesh.geometry.dispose();
 		}
 		tform?.clear();
 		tform?.remove();
-		console.log(`Reomved Object ${object.name}`)
-	})
+		console.log(`Reomved Object ${object.name}`);
+	});
 }
 
-export function changeEnvironment(selectedEnvironment: EnvironmentMap, pileApp:PileApp){
-	pileApp.environment.selectedEnvironment = selectedEnvironment
-	pileApp.environment.uploadEnvironment()
-
+export function changeEnvironment(selectedEnvironment: EnvironmentMap, pileApp: PileApp) {
+	pileApp.environment.selectedEnvironment = selectedEnvironment;
+	pileApp.environment.uploadEnvironment();
 }

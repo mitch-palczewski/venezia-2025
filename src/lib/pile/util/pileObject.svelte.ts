@@ -25,7 +25,8 @@ abstract class BasePileObject<T> {
 	uniformScale: number = $state(1);
 	objectType: string = '';
 	newObject: boolean = false;
-	moveTo?: MoveTo
+	moveTo?: MoveTo 
+	//moveTo? = $state<MoveTo>() 
 
 	constructor(options: BasePileObjectOptions<T>) {
 		this.name = options.name;
@@ -94,17 +95,14 @@ export function handleModelClick(
 	pileObject: PileObject2D | PileObject3D
 ) {
 	e.stopPropagation();
-	const uiSettings = app.uiSettings;
-	const state = app.state;
-
-	if (uiSettings.presentationMode) return;
+	if (app.uiSettings.presentationMode) return;
 
 	//if object is all ready selected ...
-	if (state.isSelectedObject(pileObject.id)) {
-		state.showTransformControls = false;
-		state.selectedObjectID = null;
+	if (app.state.isSelectedObject(pileObject.id)) {
+		app.state.showTransformControls = false;
+		app.state.selectedObjectID = null;
 	} else {
-		state.selectedObjectID = pileObject.id;
-		state.showTransformControls = true;
+		app.state.selectedObjectID = pileObject.id;
+		app.state.showTransformControls = true;
 	}
 }

@@ -75,13 +75,14 @@ export class PileState {
 	}
 
 	public addObject = (obj: AcceptedPileObjects) => {
-		console.log('adding object');
+		console.log(`Adding Object`, obj);
 		if (obj.objectType === 'object2D') {
 			this.objects2D.set(obj.id, obj as PileObject2D);
 			return;
 		}
 		if (obj.objectType === 'object3D') {
 			this.objects3D.set(obj.id, obj as PileObject3D);
+			console.log(this.objects3D)
 			return;
 		}
 		console.error(obj);

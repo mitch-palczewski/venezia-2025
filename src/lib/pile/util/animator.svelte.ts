@@ -37,11 +37,23 @@ export function createMover(getRef: () => any) {
 	let isAnimating = $state(false);
 	let lerpFactor = 0.1;
 	let isUserInteracting = $state(false);
+	let initialized = $state(false);
+
+	const syncToCurrent = (ref: any) => {
+		targetPosition.copy(ref.position);
+		targetQuaternion.copy(ref.quaternion);
+		targetScale.copy(ref.scale);
+		initialized = true;
+	};
 
 	useTask(
 		() => {
 			const ref = getRef();
-			if (!ref || !isAnimating || isUserInteracting || !ref.children[0]) return;
+			if (!ref) return;
+			if (!initialized) {
+				syncToCurrent(ref);
+			}
+			if (!isAnimating || isUserInteracting) return;
 
 			ref.position.lerp(targetPosition, lerpFactor);
 			ref.scale.lerp(targetScale, lerpFactor);
@@ -52,32 +64,17 @@ export function createMover(getRef: () => any) {
 			const scaleDist = ref.scale.distanceTo(targetScale);
 
 			if (posDist < 0.001 && rotDist < 0.001 && scaleDist < 0.001) {
-				
-
 				ref.position.copy(targetPosition);
 				ref.scale.copy(targetScale);
 				ref.quaternion.copy(targetQuaternion);
 				isAnimating = false;
 			}
-            console.log(
-					'update3DObject Position',
-					{ ...ref.position },
-					{ ...ref.children[0].position },
-					{ ...ref.children[0].children[0].position },
-					ref.getWorldPosition(new Vector3())
-				);
-				console.log(
-					'update3DObject',
-					{ ...ref.quaternion },
-					{ ...ref.children[0].quaternion },
-					{ ...ref.children[0].children[0].quaternion },
-					ref.getWorldQuaternion(new Quaternion())
-				);
 		},
 		{ autoStart: true }
 	);
 
 	return {
+		get initialized() { return initialized; },
 		moveTo(
 			pos?: { x?: number; y?: number; z?: number },
 			quat?: { x?: number; y?: number; z?: number; w?: number },
@@ -86,6 +83,9 @@ export function createMover(getRef: () => any) {
 		) {
 			const ref = getRef();
 			if (!ref) return;
+			if (!initialized) {
+				syncToCurrent(ref);
+			}
 
 			if (pos) {
 				targetPosition.set(
@@ -93,22 +93,16 @@ export function createMover(getRef: () => any) {
 					pos.y ?? ref.position.y,
 					pos.z ?? ref.position.z
 				);
-			} else {
-				targetPosition.copy(ref.position);
 			}
 
 			if (quat) {
-				targetQuaternion.set(quat.x ?? 0, quat.y ?? 0, quat.z ?? 0, quat.w ?? 1);
-			} else {
-				targetQuaternion.copy(ref.quaternion);
+				targetQuaternion.set(quat.x ?? ref.quaternion.x, quat.y ?? ref.quaternion.y, quat.z ?? ref.quaternion.z, quat.w ?? ref.quaternion.w);
 			}
 
 			if (typeof scale === 'number') {
 				targetScale.set(scale, scale, scale);
 			} else if (scale) {
 				targetScale.set(scale.x ?? ref.scale.x, scale.y ?? ref.scale.y, scale.z ?? ref.scale.z);
-			} else {
-				targetScale.copy(ref.scale);
 			}
 
 			lerpFactor = speed;
@@ -118,11 +112,7 @@ export function createMover(getRef: () => any) {
 		resume: () => {
 			isUserInteracting = false;
 			const ref = getRef();
-			if (ref) {
-				targetPosition.copy(ref.position);
-				targetQuaternion.copy(ref.quaternion);
-				targetScale.copy(ref.scale);
-			}
+			if (ref) syncToCurrent(ref)
 		}
 	};
 }

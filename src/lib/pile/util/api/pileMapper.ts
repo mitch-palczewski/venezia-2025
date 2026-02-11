@@ -126,20 +126,21 @@ function constructDbObj(
 }
 
 function getTransfrom(obj: PileObject2D | PileObject3D): DbTransform3D {
-	if (!obj.ref) {
-		console.warn(
-			`${obj.name} (Type: ${obj.objectType}) ref is null.`,
-			'Objects transform will be defaulted.'
-		);
+	if (!obj.ref && obj.newObject) {
+		console.log("Init pile object in database")
+		obj.newObject = false
 		const result = getDefaultTransform();
 		logUpload(obj.name, obj.objectType, result.pos, result.rot, result.scale);
 		return result;
 	}
+	if (!obj.ref) throw Error("No ref")
+	if (!obj.ref.children[0]) throw Error("No transform controls")
+	
 	const _pos = new Vector3();
 	const _quat = new Quaternion();
 	const _scale = new Vector3(1, 1, 1);
 	_quat.normalize();
-	const mesh = obj.ref.children[0];
+	const mesh = obj.ref?.children[0];
 	if (!mesh) {
 		console.warn(
 			`${obj.name} (Type: ${obj.objectType}) mesh is null. Could not access obj.ref.children[0].`,
