@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,aca6387e-6ba7-4e21-b616-85d2c60b735b,
 name_primary,Misc_02,
-name_display,,
+name_display,Cranial Gala,
 name_historical,Misc_02,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

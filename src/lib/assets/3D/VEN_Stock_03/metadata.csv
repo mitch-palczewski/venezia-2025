@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,4c3f954f-0d80-4ae2-9563-2e94b5158c7e,
 name_primary,VEN_Stock_03,
-name_display,,
+name_display,Ribbed Dome,
 name_historical,VEN_Stock_03,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

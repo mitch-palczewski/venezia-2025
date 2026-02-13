@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,afe8db40-8395-48d6-aacb-994b36be247e,
 name_primary,BT_07,
-name_display,,
+name_display,Flooded Closet,
 name_historical,BT_07,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

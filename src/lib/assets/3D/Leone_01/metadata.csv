@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,4ecd50bc-f7fc-4c47-8796-35cf1fac8e1c,
 name_primary,Leone_01,
-name_display,Leone,
+name_display,Leone 01,
 name_historical,Leone_01,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

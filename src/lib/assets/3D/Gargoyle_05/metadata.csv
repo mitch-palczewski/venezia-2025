@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,8650e41b-0aed-4804-acd0-3ff5f06cdef1,
 name_primary,Gargoyle_05,
-name_display,Gargoyle,
+name_display,Gargoyle 05,
 name_historical,Gargoyle_05,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

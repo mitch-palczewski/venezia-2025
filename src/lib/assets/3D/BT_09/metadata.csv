@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,ed2e60cd-3901-4aed-8bb0-55804ee83938,
 name_primary,BT_09,
-name_display,,
+name_display,Brick Spire,
 name_historical,BT_09,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

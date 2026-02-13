@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,0a629d86-14f2-452e-bbaa-8e80a787f498,
 name_primary,BT_10,
-name_display,,
+name_display,Mysterious Hand ,
 name_historical,BT_10,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

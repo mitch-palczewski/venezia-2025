@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,94511bc1-0c3d-433a-b3cc-722d410cf671,
 name_primary,GEO_Stock_05,
-name_display,,
+name_display,Bowing Cube ,
 name_historical,GEO_Stock_05,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

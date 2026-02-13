@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,4219cbac-327f-4439-926e-8a8ea4a70046,
 name_primary,AJ_07,
-name_display,,
+name_display,Conchs Drill,
 name_historical,AJ_07,
 author_name,Aude Jomini,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,

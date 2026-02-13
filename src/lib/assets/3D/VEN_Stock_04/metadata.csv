@@ -1,7 +1,7 @@
 Header,Value,Notes
 asset_id,cbd0ca05-fc95-46c2-adcf-0954b52314f8,
 name_primary,VEN_Stock_04,
-name_display,,
+name_display,Spire,
 name_historical,VEN_Stock_04,
 author_name,Eben Kling,
 license_type,CC-BY 4.0,
@@ -9,3 +9,4 @@ poly_tris,,
 lod_levels,,
 unit_scale,Meters,
 tags,,
+project_pile,,
