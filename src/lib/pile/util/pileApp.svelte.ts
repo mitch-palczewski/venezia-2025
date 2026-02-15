@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Vector3 } from 'three';
+import { PerspectiveCamera, Vector3 } from 'three';
 import type { Transform3D } from '../types';
 import {
 	allModels
@@ -15,6 +15,8 @@ import { Object2DMapInventory } from './assetInventory/object2DMap';
 import { PileDatabase, type PileDatabaseObj } from './api/pileDatabase';
 import { toPileObj } from './api/pileMapper';
 import type { SettingsState } from './ui/settingsState.svelte';
+  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -23,6 +25,8 @@ export class PileApp {
 	database = new PileDatabase();
 	state = new PileState(this.database);
 	environment: PileEnvironment;
+	cameraRef = $state<PerspectiveCamera>()
+	controlsRef = $state<ThreeOrbitControls>()
 	autosave = true;
 	uiSettings
 	isActivlyWatching: () => boolean;

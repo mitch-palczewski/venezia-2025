@@ -32,8 +32,8 @@
 <svelte:document onvisibilitychange={handleVisibilityChange} />
 <svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
 
-{#if uiSettings}
-	<CameraControls {uiSettings} />
+{#if uiSettings && pileApp}
+	<CameraControls {uiSettings} app={pileApp}/>
 	<T.DirectionalLight position={[0, 10, 10]} />
 	<T.AmbientLight intensity={0.08} />
 {/if}

@@ -1,6 +1,5 @@
 import type { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
 import type { PileApp } from "../pileApp.svelte";
-import { Vector3 } from "three";
 
 export interface SettingsStateConfig {
 	showGrid?: boolean;
@@ -15,7 +14,7 @@ export class SettingsState {
 	#showSettingsMenu = $state(false)
 	public defaultShowGrid;
 	public movementSpeed = $state(10)
-	public scaleSliderMax = $state(15)
+	public scaleSliderMax = $state(30)
 	public showGrid: boolean = $state(false);
 	public showUI = $state(true);
 	public showAddMenu = $state(false);
@@ -28,7 +27,8 @@ export class SettingsState {
 
 	public doubleClick = $state(false)
 	public canvasContainer: HTMLDivElement | undefined;
-	public cameraLocation= new Vector3()
+	
+
 
 	constructor(config: SettingsStateConfig) {
 		this.defaultShowGrid = config.showGrid || false;

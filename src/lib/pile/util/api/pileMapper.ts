@@ -127,9 +127,9 @@ function constructDbObj(
 
 function getTransfrom(obj: PileObject2D | PileObject3D): DbTransform3D {
 	if (!obj.ref && obj.newObject) {
-		console.log("Init pile object in database")
+		console.log(`Init ${obj.name} as new pile object in database`)
 		obj.newObject = false
-		const result = getDefaultTransform();
+		const result = getDefaultTransform(obj);
 		logUpload(obj.name, obj.objectType, result.pos, result.rot, result.scale);
 		return result;
 	}
@@ -147,7 +147,7 @@ function getTransfrom(obj: PileObject2D | PileObject3D): DbTransform3D {
 			'Objects transform will be defaulted.',
 			obj.ref
 		);
-		const result = getDefaultTransform();
+		const result = getDefaultTransform(obj);
 		logUpload(obj.name, obj.objectType, result.pos, result.rot, result.scale);
 		return result;
 	}
@@ -181,15 +181,23 @@ function logUpload(name: string, type: string, pos: object, rot: object, scale: 
 	console.log(`Uploading ${name} (Type: ${type}): `, pos, rot, scale);
 }
 
-function roundTo(num: number, places: number = 4) {
+export function roundTo(num: number, places: number = 4) {
 	const factor = Math.pow(10, places);
 	return Math.round(num * factor) / factor;
 }
 
-function getDefaultTransform(): DbTransform3D {
-	return {
+function getDefaultTransform(obj:PileObject3D | PileObject2D): DbTransform3D {
+	if(obj.transform3D.scale.x === 0 || obj.transform3D.scale.y  === 0 || obj.transform3D.scale.z === 0 ){
+		console.error("ERROR: scale is 0", obj.transform3D.scale, obj)
+		return {
 		pos: { x: 0, y: 0, z: 0 },
-		rot: { x: 0, y: 0, z: 0, w: 1 },
-		scale: { x: 1, y: 1, z: 1 }
+		rot: { x: 0, y: 0, z: 0, w:0},
+		scale: { x: 1, y: 1, z: 1}
+	};
+	}
+	return {
+		pos: { x: obj.transform3D.translate.x, y: obj.transform3D.translate.y, z: obj.transform3D.translate.z },
+		rot: { x: obj.transform3D.rotation.x, y: obj.transform3D.rotation.y, z: obj.transform3D.rotation.z, w: obj.transform3D.rotation.w},
+		scale: { x: obj.transform3D.scale.x, y: obj.transform3D.scale.y, z: obj.transform3D.scale.z }
 	};
 }
