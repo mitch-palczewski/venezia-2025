@@ -16,7 +16,7 @@ import type { EnvironmentMap } from '../assetInventory/environmentMap';
 const BASE_TRANSFORM: Transform3D = {
 	translate: { x: 0, y: 0, z: 0 },
 	rotation: { x: 0, y: 0, z: 0, w: 1 },
-	scale: { x: 1, y: 1, z: 1 }
+	scale: { x: 10, y: 10, z: 10 }
 };
 
 /**
@@ -32,7 +32,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			id: crypto.randomUUID(),
 			objectMap: modelMap,
 			transform3D: baseTrandform,
-			uniformScale: 1
+			uniformScale: 10
 		});
 		console.log(object3D.ref);
 		object3D.newObject = true;

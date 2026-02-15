@@ -1,5 +1,6 @@
 import type { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
 import type { PileApp } from "../pileApp.svelte";
+import { Vector3 } from "three";
 
 export interface SettingsStateConfig {
 	showGrid?: boolean;
@@ -27,10 +28,12 @@ export class SettingsState {
 
 	public doubleClick = $state(false)
 	public canvasContainer: HTMLDivElement | undefined;
+	public cameraLocation= new Vector3()
 
 	constructor(config: SettingsStateConfig) {
 		this.defaultShowGrid = config.showGrid || false;
 		this.showGrid = this.defaultShowGrid;
+	
 		$effect.root(() => {
         $effect(() => {
             if (!this.showCursor) {

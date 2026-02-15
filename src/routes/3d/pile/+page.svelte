@@ -9,7 +9,7 @@
 	let { data } = $props();
 	let pileSceneRef = $state<PileScene>();
 	let canvasContainer = $state<HTMLDivElement>();
-	const uiSettings = new SettingsState({ showGrid: true });
+	const uiSettings = new SettingsState({ showGrid: false });
 		
 
 

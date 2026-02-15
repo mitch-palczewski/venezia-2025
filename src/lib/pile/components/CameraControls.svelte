@@ -17,9 +17,6 @@
     space: false, shift: false
   })
 
-  const direction = new Vector3()
-  const tempVector = new Vector3()
-
   const onKey = (e: KeyboardEvent, isPressed: boolean) => {
     const key = e.key.toLowerCase()
     const keyMap = e.code === 'Space' ? 'space' : key
@@ -29,7 +26,7 @@
   useTask((delta) => {
     if (!cameraRef || !controlsRef) return
 
-    direction.set(0, 0, 0)
+    uiSettings.cameraLocation.set(0, 0, 0)
 
 
     const forward = new Vector3()
@@ -39,19 +36,19 @@
 
     const side = new Vector3().crossVectors(cameraRef.up, forward).normalize()
 
-    if (keys.w) direction.add(forward)
-    if (keys.s) direction.sub(forward)
-    if (keys.a) direction.add(side)
-    if (keys.d) direction.sub(side)
+    if (keys.w) uiSettings.cameraLocation.add(forward)
+    if (keys.s) uiSettings.cameraLocation.sub(forward)
+    if (keys.a) uiSettings.cameraLocation.add(side)
+    if (keys.d) uiSettings.cameraLocation.sub(side)
 
-    if (direction.length() > 0) direction.normalize()
+    if (uiSettings.cameraLocation.length() > 0) uiSettings.cameraLocation.normalize()
 
 
-    if (keys.space) direction.y += 1
-    if (keys.shift) direction.y -= 1
+    if (keys.space) uiSettings.cameraLocation.y += 1
+    if (keys.shift) uiSettings.cameraLocation.y -= 1
 
-    if (direction.length() > 0) {
-      const moveStep = direction.multiplyScalar(uiSettings.movementSpeed * delta)
+    if (uiSettings.cameraLocation.length() > 0) {
+      const moveStep = uiSettings.cameraLocation.multiplyScalar(uiSettings.movementSpeed * delta)
       
       cameraRef.position.add(moveStep)
       controlsRef.target.add(moveStep)
@@ -68,7 +65,7 @@
 <T.PerspectiveCamera
   bind:ref={cameraRef}
   makeDefault
-  far={10000}
+  far={100000}
   position={[5, 5, 10]}
   oncreate={(ref) => ref.lookAt(0, 0, 0)}
 >
