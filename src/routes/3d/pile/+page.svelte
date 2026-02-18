@@ -10,8 +10,6 @@
 	let pileSceneRef = $state<PileScene>();
 	let canvasContainer = $state<HTMLDivElement>();
 	const uiSettings = new SettingsState({ showGrid: false });
-		
-
 
 	$effect(() => {
 		if (canvasContainer) {
@@ -20,11 +18,9 @@
 	});
 
 	onDestroy(() => {
-		uiSettings.showCursor = true
-	})
+		uiSettings.showCursor = true;
+	});
 </script>
-
-
 
 <div bind:this={canvasContainer}>
 	<CanvasPortal>
@@ -39,14 +35,14 @@
 {/if}
 
 {#if uiSettings.showSettingsMenu}
-	<SettingsMenu {uiSettings}/>
+	<SettingsMenu {uiSettings} />
 {/if}
 
 <style>
 	:global(body.no-cursor) {
-        cursor: none !important;
-    }
-    :global(body.no-cursor *) {
-        cursor: none !important;
-    }
+		cursor: none !important;
+	}
+	:global(body.no-cursor *) {
+		cursor: none !important;
+	}
 </style>

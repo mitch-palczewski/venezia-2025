@@ -74,3 +74,4 @@
 		scale={[scale.x, scale.y, scale.z]}
 	/>
 {/each}
+

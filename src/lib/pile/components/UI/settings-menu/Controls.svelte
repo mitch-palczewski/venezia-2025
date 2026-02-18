@@ -41,7 +41,7 @@
 	];
 </script>
 
-<div class="p-8 text-white">
+<div class="p-8 text-white md:px-30">
 	<h1 class="mb-6 text-2xl font-bold tracking-tight">Key Bindings</h1>
 
 	<div class="flex flex-wrap gap-12">
