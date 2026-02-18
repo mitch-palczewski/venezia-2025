@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic&family=Sorts+Mill+Goudy:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Italiana&family=League+Gothic&family=Sorts+Mill+Goudy:ital@0;1&display=swap');
 @import 'tailwindcss';
 @plugin '@tailwindcss/forms';
 @plugin '@tailwindcss/typography';
+
+@theme {
+  --font-sans: "Sorts Mill Goudy", ui-sans-serif, system-ui;
+}
