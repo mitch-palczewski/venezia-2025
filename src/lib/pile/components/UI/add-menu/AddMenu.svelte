@@ -50,7 +50,7 @@
 		{#each categories as { id, label, hint }}
 			<button
 				onclick={() => (addMenuState = id)}
-				use:uiSettings.hudTooltip={`${addMenuState} ${hint}`}
+				use:uiSettings.hudTooltip={`${hint}`}
 				class="flex-1 rounded py-1.5 text-[10px] font-bold uppercase transition-all
                 {addMenuState === id
 					? 'bg-zinc-700 text-white shadow'

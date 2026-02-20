@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+	import GeneralButton from './GeneralButton.svelte';
 
 
 	let { uiSettings }: { uiSettings: SettingsState } = $props();
@@ -11,19 +12,21 @@
 	] as const;
 </script>
 
-<div class="flex items-center gap-1 rounded-xl border border-white/10 bg-zinc-900/80 p-1 backdrop-blur-sm">
+<div class="flex items-center gap-1 rounded-xl border border-white/10 bg-zinc-900/60 p-1 h-10 backdrop-blur-sm">
 	{#each modes as { id, label, shortcut }}
 		{@const isActive = uiSettings.transformControlsMode === id}
 		
-		<button
+		<GeneralButton
 			onclick={() => (uiSettings.transformControlsMode = id)}
-			use:uiSettings.hudTooltip={`${shortcut} : ${label} Mode` }
-			class="group flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs font-medium transition-all
-            {isActive 
-                ? 'bg-zinc-100 text-zinc-900 shadow-lg' 
-                : 'text-zinc-400 hover:bg-white/5 hover:text-zinc-200'}"
+			active={isActive}
+			tooltip={uiSettings.hudTooltip}
+			tooltipText={`${shortcut} : ${label} Mode`}
+			class="px-3 h-7 "
 		>
-			<span>{label}</span>
+		 <span class="hidden sm:block">
+            {label}
+        </span>
+
 
 			{#if id === 'translate'}
 				<svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -37,6 +40,6 @@
 					<polyline points="21 3 21 8 16 8" />
 				</svg>
 			{/if}
-		</button>
+		</GeneralButton>
 	{/each}
 </div>

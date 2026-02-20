@@ -4,51 +4,69 @@
 
 	import type { PileState } from '$lib/pile/util/pileState.svelte';
 	import { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+	import { draw, fade, fly } from 'svelte/transition';
 	import AddMenu from './add-menu/AddMenu.svelte';
 
-	import AddNewModel from './AddNewModel.svelte';
 	import AddBtn from './btns/AddBtn.svelte';
 	import DeleteBtn from './btns/DeleteBtn.svelte';
 	import SettingsBtn from './btns/SettingsBtn.svelte';
 	import TransformModeBtn from './btns/TransformModeBtn.svelte';
-	import ChooseEnvironment from './ChooseEnvironment.svelte';
 	import ScaleSlider from './ScaleSlider.svelte';
 	import Settings from './SettingsKeyBind.svelte';
 	import Tooltip from './Tooltip.svelte';
+	import { cubicOut } from 'svelte/easing';
 
 	interface Props {
 		pileSceneRef: PileScene;
 		uiSettings: SettingsState;
 	}
 	let { pileSceneRef, uiSettings }: Props = $props();
+
+	let windowWidth = $state(0);
+	const isVertical = $derived(windowWidth < 640);
 	const pileApp: PileApp = $derived(pileSceneRef?.pileApp);
 	const pileState: PileState = $derived(pileSceneRef?.pileApp?.state);
 </script>
 
-{#if pileApp && pileState}
-	<Settings settingState={uiSettings} />
+<svelte:window bind:innerWidth={windowWidth} />
+{#if uiSettings.showUI}
+	<div class="flex w-full justify-end overflow-hidden">
+		<div class="P-3 mx-2 mt-2 flex flex-col items-end gap-3">
+			<Tooltip settingsState={uiSettings} />
 
-	{#if uiSettings.showUI}
-		<div class="flex flex-row w-full justify-end ">
-			<div>
-				<Tooltip settingsState={uiSettings} />
-				<div class="flex justify-end p-3">
-					<div class="flex flex-row gap-3">
-						{#if pileState.selectedObjectID}
-							<ScaleSlider pileState={pileApp.state} {uiSettings} />
+			<div class="flex flex-row items-start gap-3">
+				{#if pileState.selectedObjectID}
+					<div
+						class="flex flex-row items-center gap-3 overflow-hidden"
+						transition:fly={{ x: 20, duration: 200, opacity: 0 }}
+					>
+						{#if !isVertical}
+							<ScaleSlider pileState={pileApp.state} {uiSettings} vertical={false} />
+						{/if}
+						{#if (!uiSettings.showAddMenu && isVertical) || !isVertical}
 							<TransformModeBtn {uiSettings} />
 							<DeleteBtn {pileState} {uiSettings} />
 						{/if}
-						<AddBtn {uiSettings} />
-						<SettingsBtn {uiSettings} />
 					</div>
+				{/if}
+
+				<AddBtn {uiSettings} />
+
+				<div class="flex flex-col items-center gap-3">
+					<SettingsBtn {uiSettings} />
+
+					{#if isVertical && pileState.selectedObjectID && !uiSettings.showAddMenu}
+						<div class="overflow-hidden" transition:fly={{ x: 20, duration: 200, opacity: 0 }}>
+							<ScaleSlider pileState={pileApp.state} {uiSettings} vertical={true} />
+						</div>
+					{/if}
 				</div>
 			</div>
-			{#if uiSettings.showAddMenu}
-				<div>
-					<AddMenu {uiSettings}/>
-				</div>
-			{/if}
 		</div>
-	{/if}
+		{#if uiSettings.showAddMenu}
+			<div class="overflow-hidden">
+				<AddMenu {uiSettings} />
+			</div>
+		{/if}
+	</div>
 {/if}

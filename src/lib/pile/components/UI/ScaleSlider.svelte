@@ -1,70 +1,94 @@
 <script lang="ts">
-	import { PileState } from '$lib/pile/util/pileState.svelte';
-	import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+    import { PileState } from '$lib/pile/util/pileState.svelte';
+    import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
 
-	let { pileState, uiSettings }: { pileState: PileState; uiSettings: SettingsState } = $props();
+    interface Props {
+        pileState: PileState;
+        uiSettings: SettingsState;
+        vertical?: boolean;
+    }
 
-	let localScale = $state(1);
+    let { pileState, uiSettings, vertical = false }: Props = $props();
+    let localScale = $state(1);
 
-	$effect(() => {
-		const selectedObj = pileState.getSelectedObject();
-		if (selectedObj?.ref) {
-			const scale = PileState.getObjScale(selectedObj.ref);
-			// Syncing to X for uniform scale
-			localScale = Math.round(scale.x * 1000) / 1000;
-		}
-	});
+    $effect(() => {
+        const selectedObj = pileState.getSelectedObject();
+        if (selectedObj?.ref) {
+            const scale = PileState.getObjScale(selectedObj.ref);
+            localScale = Math.round(scale.x * 1000) / 1000;
+        }
+    });
 
-	function applyScale(val: number) {
-		// Clamp to your minimum, but allow "infinity" upward
-		const sanitized = Math.max(0.01, val);
-		const selectedObj = pileState.getSelectedObject();
-		if (selectedObj?.ref) {
-			PileState.setScale(selectedObj.ref, sanitized);
-			localScale = sanitized;
-		}
-	}
+    function applyScale(val: number) {
+        const sanitized = Math.max(0.01, val);
+        const selectedObj = pileState.getSelectedObject();
+        if (selectedObj?.ref) {
+            PileState.setScale(selectedObj.ref, sanitized);
+            localScale = sanitized;
+        }
+    }
 </script>
 
 <div
-	class="flex flex-row gap-3 rounded-xl border border-white/10 bg-zinc-900/80 px-4 backdrop-blur-sm"
+    class="flex items-center rounded-xl border border-white/10 bg-stone-900/50 backdrop-blur-sm transition-all
+    {vertical 
+        ? 'h-48 w-10 flex-col py-4 justify-center' 
+        : 'h-10 w-full flex-row px-3 gap-4'}"
 >
-	<div class="flex items-center justify-between">
-		<span class="text-[10px] font-bold tracking-widest text-zinc-500 uppercase">Scale</span>
-	</div>
+    {#if !vertical}
+        <span class="text-md font-bold hidden lg:block text-stone-200 ">Scale</span>
+    {/if}
 
-	<div class="flex items-center gap-3">
-		<input
-			type="range"
-			min="0.01"
-			max={uiSettings.scaleSliderMax}
-			step="0.01"
-			bind:value={localScale}
-			oninput={() => applyScale(localScale)}
-			class="h-1.5 flex-1 cursor-pointer appearance-none rounded-lg bg-zinc-500 accent-blue-500"
-		/>
+    <div class="flex items-center justify-center {vertical ? 'h-full w-full' : 'flex-1 gap-3'}">
+        <input
+            type="range"
+            min="0.01"
+            max={uiSettings.scaleSliderMax}
+            step="0.01"
+            bind:value={localScale}
+            oninput={() => applyScale(localScale)}
+            class="gothic-slider cursor-pointer appearance-none rounded-full bg-white/10 
+            {vertical ? 'h-1 w-32 -rotate-90' : 'h-1 flex-1'}"
+        />
 
-		<div class="relative flex items-center">
-			<input
-				type="number"
-				bind:value={localScale}
-				oninput={(e) => applyScale(parseFloat(e.currentTarget.value))}
-				min="0.01"
-				step="0.1"
-				class="w-15 [appearance:textfield] rounded bg-black/40 py-1 pr-1 pl-2 font-mono text-xs font-bold text-blue-400 ring-1 ring-white/10 focus:ring-blue-500/50 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-			/>
-		</div>
-	</div>
+        {#if !vertical}
+            <div class="relative flex items-center">
+                <input
+                    type="number"
+                    bind:value={localScale}
+                    oninput={(e) => applyScale(parseFloat(e.currentTarget.value))}
+                    min="0.01"
+                    step="0.1"
+                    class="w-10 rounded border border-white/10 bg-black/40 py-0.5 px-1 font-mono text-[11px] font-bold text-white transition-all focus:border-white/40 focus:outline-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                />
+            </div>
+        {/if}
+    </div>
 </div>
 
 <style>
-	input[type='range']::-webkit-slider-thumb {
-		appearance: none;
-		height: 14px;
-		width: 14px;
-		border-radius: 50%;
-		background: #f4f4f5;
-		cursor: pointer;
-		border: 2px solid #3b82f6;
-	}
+    .gothic-slider::-webkit-slider-thumb {
+        appearance: none;
+        height: 12px;
+        width: 12px;
+        background: #ffffff;
+        border: 2px solid #18181b;
+        border-radius: 2px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .gothic-slider::-webkit-slider-thumb:hover {
+        transform: scale(1.2);
+        background: #c5c3c1;
+    }
+
+    .gothic-slider::-moz-range-thumb {
+        height: 12px;
+        width: 12px;
+        background: #ffffff;
+        border: 2px solid #18181b;
+        border-radius: 2px;
+        cursor: pointer;
+    }
 </style>
