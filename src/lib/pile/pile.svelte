@@ -4,7 +4,7 @@
 	import ModelTemplate from './components/modelTemplate.svelte';
 	import ImageTemplate from './components/imageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
-	import CameraControls from './components/CameraControls.svelte';
+	import CameraControls from './components/camera/CameraController.svelte';
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
 
