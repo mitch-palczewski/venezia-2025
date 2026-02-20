@@ -82,6 +82,14 @@
 					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
 				/>
 			</label>
+			<label class="flex cursor-pointer items-center justify-between">
+				<span class="text-sm text-zinc-200">Auto Rotate When Idle</span>
+				<input
+					type="checkbox"
+					bind:checked={uiSettings.isIdleEnabled}
+					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
+				/>
+			</label>
 		</div>
 	</div>
 </div>

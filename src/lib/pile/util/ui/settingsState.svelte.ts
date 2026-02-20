@@ -24,6 +24,7 @@ export class SettingsState {
 	public lastState = $state<TrackedStates>({lastShowCursor: this.showCursor})
 	public showTooltip = $state(true)
 	public tooltipText = $state<string | null>(null)
+	public isIdleEnabled = $state(true);
 
 	public doubleClick = $state(false)
 	public canvasContainer: HTMLDivElement | undefined;
