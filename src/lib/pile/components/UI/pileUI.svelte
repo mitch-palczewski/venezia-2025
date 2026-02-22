@@ -4,7 +4,7 @@
 
 	import type { PileState } from '$lib/pile/util/pileState.svelte';
 	import { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
-	import { draw, fade, fly } from 'svelte/transition';
+	import {  fly } from 'svelte/transition';
 	import AddMenu from './add-menu/AddMenu.svelte';
 
 	import AddBtn from './btns/AddBtn.svelte';
@@ -12,9 +12,7 @@
 	import SettingsBtn from './btns/SettingsBtn.svelte';
 	import TransformModeBtn from './btns/TransformModeBtn.svelte';
 	import ScaleSlider from './ScaleSlider.svelte';
-	import Settings from './SettingsKeyBind.svelte';
 	import Tooltip from './Tooltip.svelte';
-	import { cubicOut } from 'svelte/easing';
 
 	interface Props {
 		pileSceneRef: PileScene;
@@ -30,7 +28,7 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 {#if uiSettings.showUI}
-	<div class="flex w-full justify-end overflow-hidden">
+	<div class="flex w-full justify-end overflow-hidden pb-[env(safe-area-inset-bottom)] pr-[env(safe-area-inset-right)]">
 		<div class="P-3 mx-2 mt-2 flex flex-col items-end gap-3">
 			<Tooltip settingsState={uiSettings} />
 

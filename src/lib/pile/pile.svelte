@@ -7,6 +7,7 @@
 	import CameraControls from './components/camera/CameraController.svelte';
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
+	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
 
 	interactivity({
 		filter: (hits) => {
@@ -31,6 +32,8 @@
 
 <svelte:document onvisibilitychange={handleVisibilityChange} />
 <svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
+
+<SettingsKeyBind settingState = {uiSettings}/>
 
 {#if uiSettings && pileApp}
 	<CameraControls {uiSettings} app={pileApp}/>

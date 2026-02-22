@@ -17,7 +17,7 @@
     tooltipText="delete : Delete Object"
     class="h-10 px-3 text-lg font-extrabold"
 >
-     <span class="hidden sm:block">
+     <span class="hidden md:block">
            Delete
         </span>
     

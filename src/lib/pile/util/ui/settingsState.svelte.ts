@@ -14,7 +14,7 @@ export class SettingsState {
 	#showSettingsMenu = $state(false);
 	public defaultShowGrid;
 	public movementSpeed = $state(10);
-	public scaleSliderMax = $state(30);
+	public scaleSliderMax = $state(100);
 	public showGrid: boolean = $state(false);
 	public showUI = $state(true);
 	public showAddMenu = $state(false);

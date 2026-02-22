@@ -30,9 +30,9 @@
 </script>
 
 <div
-    class="flex items-center rounded-xl border border-white/10 bg-stone-900/50 backdrop-blur-sm transition-all
+    class="touch-none flex items-center rounded-xl border border-white/10 bg-stone-900/50 backdrop-blur-sm transition-all
     {vertical 
-        ? 'h-48 w-10 flex-col py-4 justify-center' 
+        ? 'h-[400px] w-10 flex-col py-4 justify-center' 
         : 'h-10 w-full flex-row px-3 gap-4'}"
 >
     {#if !vertical}
@@ -48,11 +48,11 @@
             bind:value={localScale}
             oninput={() => applyScale(localScale)}
             class="gothic-slider cursor-pointer appearance-none rounded-full bg-white/10 
-            {vertical ? 'h-1 w-32 -rotate-90' : 'h-1 flex-1'}"
+            {vertical ? ' absolute h-1 w-[360px] -rotate-90' : 'h-1 sm:w-xs md:w-xs lg:w-sm xl:w-lg flex-1'}"
         />
 
         {#if !vertical}
-            <div class="relative flex items-center">
+            <div class="relative items-center hidden md:flex">
                 <input
                     type="number"
                     bind:value={localScale}
@@ -67,6 +67,14 @@
 </div>
 
 <style>
+
+    @media (pointer: coarse) {
+    .gothic-slider::-webkit-slider-thumb {
+        height: 24px; /* Double the size for touch */
+        width: 24px;
+        border-radius: 50%; /* Circles are easier to target */
+    }
+}
     .gothic-slider::-webkit-slider-thumb {
         appearance: none;
         height: 12px;

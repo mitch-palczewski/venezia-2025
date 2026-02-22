@@ -23,7 +23,7 @@
 			tooltipText={`${shortcut} : ${label} Mode`}
 			class="px-3 h-7 "
 		>
-		 <span class="hidden sm:block">
+		 <span class="hidden lg:block">
             {label}
         </span>
 
