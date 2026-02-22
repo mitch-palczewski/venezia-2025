@@ -81,7 +81,7 @@ export const testEnvironments: EnvironmentMap[] = [
 	new EnvironmentMap({
 		name: 'Studio_Mitch',
 		displayName: 'Studio',
-		path: '/images/environment/Studio_Mitch.png',
+		path: '/images/environment/Studio_Mitch.jpg',
 		fileType: 'png'
 	})
 ];
