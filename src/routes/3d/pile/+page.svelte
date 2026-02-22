@@ -38,6 +38,8 @@
 	<SettingsMenu {uiSettings} />
 {/if}
 
+
+
 <style>
 	:global(body.no-cursor) {
 		cursor: none !important;
