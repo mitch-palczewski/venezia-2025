@@ -1,65 +1,63 @@
-import type { TransformControlsMode } from "three/examples/jsm/controls/TransformControls.js";
-import type { PileApp } from "../pileApp.svelte";
+import type { TransformControlsMode } from 'three/examples/jsm/controls/TransformControls.js';
+import type { PileApp } from '../pileApp.svelte';
 
 export interface SettingsStateConfig {
 	showGrid?: boolean;
 }
 
 interface TrackedStates {
-	lastShowCursor:boolean
+	lastShowCursor: boolean;
 }
 
 export class SettingsState {
 	#presentationMode = $state(false);
-	#showSettingsMenu = $state(false)
+	#showSettingsMenu = $state(false);
 	public defaultShowGrid;
-	public movementSpeed = $state(10)
-	public scaleSliderMax = $state(30)
+	public movementSpeed = $state(10);
+	public scaleSliderMax = $state(30);
 	public showGrid: boolean = $state(false);
 	public showUI = $state(true);
 	public showAddMenu = $state(false);
 	public showCursor = $state(true);
 	public transformControlsMode = $state<TransformControlsMode>('translate');
-	public app: PileApp | undefined
-	public lastState = $state<TrackedStates>({lastShowCursor: this.showCursor})
-	public showTooltip = $state(true)
-	public tooltipText = $state<string | null>(null)
+	public app: PileApp | undefined;
+	public lastState = $state<TrackedStates>({ lastShowCursor: this.showCursor });
+	public showTooltip = $state(true);
+	public tooltipText = $state<string | null>(null);
 	public isIdleEnabled = $state(true);
 
-	public doubleClick = $state(false)
+	public doubleClick = $state(false);
 	public canvasContainer: HTMLDivElement | undefined;
-	
-
 
 	constructor(config: SettingsStateConfig) {
 		this.defaultShowGrid = config.showGrid || false;
 		this.showGrid = this.defaultShowGrid;
-	
+
 		$effect.root(() => {
-        $effect(() => {
-            if (!this.showCursor) {
-                document.body.classList.add('no-cursor');
-            } else {
-                document.body.classList.remove('no-cursor');
-            }
-        });
-    });
+			$effect(() => {
+				if (!this.showCursor) {
+					document.body.classList.add('no-cursor');
+				} else {
+					document.body.classList.remove('no-cursor');
+				}
+			});
+		});
 	}
 
-	get showSettingsMenu(){
-		return this.#showSettingsMenu
+	get showSettingsMenu() {
+		return this.#showSettingsMenu;
 	}
-	set showSettingsMenu(value){
-		if(value === true){
-			this.lastState.lastShowCursor = this.showCursor
-			this.showCursor = true
-			console.log("Setting Menu Active")
+	set showSettingsMenu(value) {
+		if (value === true) {
+			this.lastState.lastShowCursor = this.showCursor;
+			this.showCursor = true;
+			console.log('Setting Menu Active');
 		}
-		if(value === false){
-			this.showCursor = this.lastState.lastShowCursor
-			console.log("Setting Menu Inactive")
+		if (value === false) {
+			this.showCursor = this.lastState.lastShowCursor;
+			console.log('Setting Menu Inactive');
 		}
-		this.#showSettingsMenu = value
+		this.#showSettingsMenu = value;
 	}
 
 	get presentationMode() {
@@ -67,35 +65,36 @@ export class SettingsState {
 	}
 	set presentationMode(value) {
 		if (value === true) {
-			if(this.showSettingsMenu){
-				this.lastState.lastShowCursor = false
-			}else{
+			if (this.showSettingsMenu) {
+				this.lastState.lastShowCursor = false;
+			} else {
 				this.showCursor = false;
 			}
 			this.showGrid = false;
 			this.showUI = false;
+			this.showTooltip = false;
 			console.log('Presentation Mode Activate');
 		}
 		if (value === false) {
 			this.showGrid = this.defaultShowGrid;
 			this.showUI = true;
 			this.showCursor = true;
+			this.showTooltip = true;
 			console.log('Presentation Mode Inactive');
 		}
 		this.#presentationMode = value;
 	}
 
-	public escape(){
-		if (this.showSettingsMenu){
-			this.showSettingsMenu = false
-			return 
+	public escape() {
+		if (this.showSettingsMenu) {
+			this.showSettingsMenu = false;
+			return;
 		}
-		if (this.presentationMode){
-			this.presentationMode = false
-			return
+		if (this.presentationMode) {
+			this.presentationMode = false;
+			return;
 		}
-		this.showSettingsMenu = true
-		
+		this.showSettingsMenu = true;
 	}
 
 	public static setPointerLock(element: HTMLElement | null, state: boolean) {
@@ -108,9 +107,9 @@ export class SettingsState {
 		}
 	}
 
-	public hudTooltip(node: HTMLElement, text: string) {
+	public hudTooltip = (node: HTMLElement, text: string) => {
 		const show = () => (this.tooltipText = text);
-		const hide = () => (this.tooltipText = "");
+		const hide = () => (this.tooltipText = '');
 
 		node.addEventListener('mouseenter', show);
 		node.addEventListener('mouseleave', hide);
@@ -118,7 +117,10 @@ export class SettingsState {
 		node.addEventListener('focusout', hide);
 
 		return {
-			update(newText: string) {
+			update: (newText: string) => {
+				if (this.tooltipText === text) {
+					this.tooltipText = newText;
+				}
 				text = newText;
 			},
 			destroy() {
