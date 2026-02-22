@@ -10,7 +10,7 @@
 		description:
 			'A community driven art installation featuring 3D models curated by the authors that can be moved, rotated, and scaled by participants in a shared space.',
 		url: 'https://pilepilepile.com',
-		ogImage: 'https://pilepilepile.com/environment/trees.jpg' // A screenshot of your 3D world
+		ogImage: 'https://pilepilepile.com/environment/trees.jpg'
 	};
 </script>
 
