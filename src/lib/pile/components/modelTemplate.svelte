@@ -27,9 +27,9 @@
 		ref = $bindable(),
 		pileObjectData,
 		pileApp,
-		position, 
-        quaternion, 
-        scale,
+		position,
+		quaternion,
+		scale,
 		...props
 	}: Props<Group> & {
 		children?: Snippet<[{ ref: Group }]>;
@@ -38,11 +38,12 @@
 		ref?: Group;
 		pileObjectData: PileObject3D;
 		pileApp: PileApp;
-		position: [number,number,number];
-		scale: [number,number,number];
-		quaternion: [number, number, number, number]
+		position: [number, number, number];
+		scale: [number, number, number];
+		quaternion: [number, number, number, number];
 	} = $props();
-	interactivity();
+	const { raycaster } = interactivity();
+	raycaster.firstHitOnly = true;
 
 	let shown = $state(pileObjectData.shown);
 	setObjectMapIfNull(pileApp, pileObjectData);
@@ -66,21 +67,31 @@
 		}
 	});
 
-
 	const mover = createMover(() => ref);
 
 	$effect(() => {
-        if (ref && !mover.initialized) {
-           ref.position.set(position[0], position[1], position[2]);
-            ref.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
-            ref.scale.set(scale[0], scale[1], scale[2]);
-        }
-    });
+		if (ref && !mover.initialized) {
+			ref.position.set(position[0], position[1], position[2]);
+			ref.quaternion.set(quaternion[0], quaternion[1], quaternion[2], quaternion[3]);
+			ref.scale.set(scale[0], scale[1], scale[2]);
+		}
+	});
 
 	$effect(() => {
 		pileObjectData.moveTo = mover.moveTo;
-		
 	});
+
+	const options = $state<BVHOptions>({
+		enabled: true,
+		helper: false,
+		strategy: BVHSplitStrategy.SAH,
+		indirect: false,
+		verbose: false,
+		maxDepth: 20,
+		maxLeafTris: 10,
+		setBoundingBox: true
+	});
+	bvh(() => options)
 </script>
 
 <!-- 
@@ -106,7 +117,7 @@
 				position={[child.position.x, child.position.y, child.position.z]}
 				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
-				raycast={meshBounds}
+				
 				onclick={(e: MouseEvent) =>
 					pileApp.uiSettings.doubleClick ? null : handleModelClick(e, pileApp, pileObjectData)}
 				ondblclick={(e: MouseEvent) =>
@@ -118,7 +129,7 @@
 
 <!-- MAIN EXECUTION -->
 
-<T.Group bind:ref dispose={true} name={pileObjectData.name} >
+<T.Group bind:ref dispose={true} name={pileObjectData.name}>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}
