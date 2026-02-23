@@ -42,8 +42,6 @@
 		scale: [number, number, number];
 		quaternion: [number, number, number, number];
 	} = $props();
-	const { raycaster } = interactivity();
-	raycaster.firstHitOnly = true;
 
 	let shown = $state(pileObjectData.shown);
 	setObjectMapIfNull(pileApp, pileObjectData);
@@ -91,7 +89,7 @@
 		maxLeafTris: 10,
 		setBoundingBox: true
 	});
-	bvh(() => options)
+	bvh(() => options);
 </script>
 
 <!-- 
@@ -117,11 +115,6 @@
 				position={[child.position.x, child.position.y, child.position.z]}
 				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
-				
-				onclick={(e: MouseEvent) =>
-					pileApp.uiSettings.doubleClick ? null : handleModelClick(e, pileApp, pileObjectData)}
-				ondblclick={(e: MouseEvent) =>
-					pileApp.uiSettings.doubleClick ? handleModelClick(e, pileApp, pileObjectData) : null}
 			/>
 		{/if}
 	{/each}
@@ -129,7 +122,21 @@
 
 <!-- MAIN EXECUTION -->
 
-<T.Group bind:ref dispose={true} name={pileObjectData.name}>
+<T.Group
+	bind:ref
+	dispose={true}
+	name={pileObjectData.name}
+	onclick={(e: any) => {
+		e.stopPropagation();
+		if (pileApp.uiSettings.doubleClick) return;
+		handleModelClick(e, pileApp, pileObjectData);
+	}}
+	ondblclick={(e: any) => {
+		e.stopPropagation();
+		if (!pileApp.uiSettings.doubleClick) return;
+		handleModelClick(e, pileApp, pileObjectData);
+	}}
+>
 	{#await gltf}
 		{@render fallback?.()}
 	{:then gltf}

@@ -90,13 +90,18 @@ export function setObjectMapIfNull(app: PileApp, pileObject: PileObject2D | Pile
 }
 
 export function handleModelClick(
-	e: MouseEvent,
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	e: any,
 	app: PileApp,
 	pileObject: PileObject2D | PileObject3D
 ) {
+	console.log(`Raycast Hits:`, e.intersections);
+    console.log('Face Index:', e.faceIndex); 
+    console.log('Distance:', e.distance);
+	e.cancelBubble = true;
 	e.stopPropagation();
+	console.log(`Selecting ${pileObject.name}`)
 	if (app.uiSettings.presentationMode) return;
-
 	//if object is all ready selected ...
 	if (app.state.isSelectedObject(pileObject.id)) {
 		app.state.showTransformControls = false;

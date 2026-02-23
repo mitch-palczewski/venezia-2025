@@ -9,11 +9,12 @@
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
 
-	interactivity({
+	const { raycaster } = interactivity({
 		filter: (hits) => {
 			return hits.slice(0, 1);
 		}
 	});
+	raycaster.firstHitOnly = true;
 
 	let { data, uiSettings } = $props();
 
