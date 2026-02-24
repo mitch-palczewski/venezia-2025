@@ -27,6 +27,7 @@ export class PileApp {
 	environment: PileEnvironment;
 	cameraRef = $state<PerspectiveCamera>()
 	controlsRef = $state<ThreeOrbitControls>()
+	quality = $state<'low' | 'medium' | 'high'>('medium')
 	autosave = true;
 	uiSettings
 	isActivlyWatching: () => boolean;
