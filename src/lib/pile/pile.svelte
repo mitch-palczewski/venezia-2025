@@ -8,6 +8,7 @@
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
+	import PerformanceManager from './components/PerformanceManager.svelte';
 
 	const { raycaster } = interactivity({
 		filter: (hits) => {
@@ -35,6 +36,7 @@
 <svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
 
 <SettingsKeyBind settingState = {uiSettings}/>
+
 
 {#if uiSettings && pileApp}
 	<CameraControls {uiSettings} app={pileApp}/>
@@ -78,4 +80,5 @@
 		scale={[scale.x, scale.y, scale.z]}
 	/>
 {/each}
+
 

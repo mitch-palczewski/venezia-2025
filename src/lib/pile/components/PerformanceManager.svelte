@@ -1,4 +1,6 @@
 <script lang="ts">
+
+    //Not used
     import {useTask} from '@threlte/core'
 	import type { PileApp } from '../util/pileApp.svelte';
 	import { onMount } from 'svelte';
@@ -52,6 +54,4 @@
             console.warn("Performance dip: Downgrading to Low Quality (meshBounds active)")
         }
     }
-
-
 </script>
