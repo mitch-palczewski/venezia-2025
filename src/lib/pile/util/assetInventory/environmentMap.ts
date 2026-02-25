@@ -90,4 +90,11 @@ export const testEnvironments: EnvironmentMap[] = [
 		path: '/images/environment/symbols.png',
 		fileType: 'png'
 	})
+	,
+	new EnvironmentMap({
+		name: 'gradient_01',
+		displayName: 'Gradient 01',
+		path: '/images/environment/gradient_01.png',
+		fileType: 'png'
+	})
 ];
