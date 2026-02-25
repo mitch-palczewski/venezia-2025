@@ -63,6 +63,7 @@ export class PileEnvironment {
 	private applyToScene(texture: Texture) {
 		this.scene.background = texture;
 		this.scene.environment = texture;
+		this.scene.environmentIntensity = 0.1;
 		this.renderer.toneMapping = LinearToneMapping;
 		this.renderer.toneMappingExposure = 0.8;
 	}

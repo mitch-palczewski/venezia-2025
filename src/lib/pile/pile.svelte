@@ -8,7 +8,7 @@
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
-	import { render } from 'svelte/server';
+	import OrbitLight from '$lib/components/lights/OrbitLight.svelte';
 
 	let { data, uiSettings } = $props();
 
@@ -53,8 +53,8 @@
 
 {#if uiSettings && pileApp}
 	<CameraControls {uiSettings} app={pileApp}/>
-	<T.DirectionalLight position={[0, 10, 10]} />
-	<T.AmbientLight intensity={0.08} />
+	<OrbitLight/>
+	<T.AmbientLight intensity={0.3} />
 {/if}
 
 {#if uiSettings.showGrid}
