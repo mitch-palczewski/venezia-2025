@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T } from '@threlte/core';
+	import { T, useThrelte } from '@threlte/core';
 	import { Grid } from '@threlte/extras';
 	import ModelTemplate from './components/modelTemplate.svelte';
 	import ImageTemplate from './components/imageTemplate.svelte';
@@ -8,7 +8,9 @@
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
-	import PerformanceManager from './components/PerformanceManager.svelte';
+	import { render } from 'svelte/server';
+
+	let { data, uiSettings } = $props();
 
 	const { raycaster } = interactivity({
 		filter: (hits) => {
@@ -17,19 +19,30 @@
 	});
 	raycaster.firstHitOnly = true;
 
-	let { data, uiSettings } = $props();
+	const { renderer, scene, camera } = useThrelte();
+
+	export async function captureThrelteScene(): Promise<Blob> {
+		return new Promise((resolve, reject) => {
+			renderer.render(scene, camera.current)
+			const canvas = renderer.domElement
+			canvas.toBlob((blob) => {
+				if (blob) resolve(blob);
+				else reject(new Error("Failed to capture WebGL canvas"))
+			}, 'image/png')
+		})
+	}
 
 	let windowIsVisible = $state(true);
 	let windowIsFocused = $state(true);
 	const isActivelyWatching = $derived(windowIsVisible && windowIsFocused);
 	export const pileApp = new PileApp(() => isActivelyWatching, uiSettings, data);
-	onDestroy(() => {
-		pileApp.database.destroy();
-	});
-
 	function handleVisibilityChange() {
 		windowIsVisible = document.visibilityState === 'visible';
 	}
+
+	onDestroy(() => {
+		pileApp.database.destroy();
+	});
 </script>
 
 <svelte:document onvisibilitychange={handleVisibilityChange} />

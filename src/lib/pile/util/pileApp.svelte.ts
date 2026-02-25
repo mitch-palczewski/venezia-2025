@@ -1,12 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { PerspectiveCamera, Vector3 } from 'three';
+import { PerspectiveCamera } from 'three';
 import type { Transform3D } from '../types';
 import {
 	allModels
 } from './assetInventory/assetsMap';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
-import { MAX_OBJECT_DISTANCE } from '$lib/constants';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
 import { PileEnvironment } from './pileEnvironment.svelte';
 import { useThrelte } from '@threlte/core';
@@ -31,6 +30,7 @@ export class PileApp {
 	autosave = true;
 	uiSettings
 	isActivlyWatching: () => boolean;
+	public captureScreenshot?: () => Promise<Blob>;
 
 	constructor(isActivlyWatching: () => boolean,  uiSettings: SettingsState, initalDatabaseObjects?: any) {
 		this.uiSettings = uiSettings
@@ -49,14 +49,6 @@ export class PileApp {
 
 	private initInventories() {
 		this.modelInventory.add(allModels)
-		/*
-		this.imageInventory.add(test2D);
-		this.modelInventory.add(undertowModels);
-		this.modelInventory.add(variousModels);
-		this.modelInventory.add(variousMP)
-		this.modelInventory.add(potFace);
-		this.modelInventory.add(architectureModels);
-		*/
 		this.environmentInventory.add(testEnvironments);
 	}
 
@@ -102,6 +94,14 @@ export class PileApp {
 			);
 		}
 	}
+
+	async uploadStateToCloud() {
+        if (!this.captureScreenshot) return;
+        
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const blob = await this.captureScreenshot();
+        
+    }
 }
 
 function initSupabaseObject(
@@ -129,24 +129,3 @@ function initSupabaseObject(
 	});
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function isInBounds(model: PileObject3D | PileObject2D): boolean {
-	//Consider Making This based on Scale to Distance Ration instead of just distance
-	const position = new Vector3(0, 0, 0);
-	model.ref?.children[0].getWorldPosition(position);
-	if (
-		position.x >= MAX_OBJECT_DISTANCE ||
-		position.x <= -MAX_OBJECT_DISTANCE ||
-		position.y >= MAX_OBJECT_DISTANCE ||
-		position.y <= -MAX_OBJECT_DISTANCE ||
-		position.z >= MAX_OBJECT_DISTANCE ||
-		position.z <= -MAX_OBJECT_DISTANCE
-	) {
-		console.log(
-			`Warning: Model ${model.name} is out of bounds. Model Cords ... x: ${position.x}, y: ${position.y}, z: ${position.z}. The maximum distance from origin is ${MAX_OBJECT_DISTANCE}`
-		);
-		console.log('TODO: Notify the user model is out of bounds.');
-		return false;
-	}
-	return true;
-}
