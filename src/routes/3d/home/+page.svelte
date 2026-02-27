@@ -1,4 +1,7 @@
+
+
 <script lang="ts">
+//KEEP IF I WANT TO PUT SOME 3D VISUALS on here
 </script>
 
 {#snippet enterPilePilePile()}
