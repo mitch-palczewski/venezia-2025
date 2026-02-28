@@ -8,6 +8,7 @@
 		tooltipText?: string;
 		children: Snippet;
 		class?: string;
+		disabled: boolean
 	}
 	let {
 		onclick,
@@ -15,7 +16,8 @@
 		tooltip,
 		tooltipText = '',
 		children,
-		class: className = ''
+		class: className = '',
+		disabled = false
 	}: Props = $props();
 
 	const base =
@@ -28,6 +30,7 @@
 
 <button
   {onclick}
+  {disabled}
   use:tooltip={tooltipText}
   class="{base} {active ? activeStyle : inactiveStyle} {className}"
 >

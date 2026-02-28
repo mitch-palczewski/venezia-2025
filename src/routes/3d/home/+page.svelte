@@ -8,6 +8,7 @@
 	<a
 		href="/3d/pile"
 		aria-label="City Pile"
+		target="_blank"
 		class="group relative flex h-full w-full overflow-hidden bg-amber-700 p-1"
 	>
 		<img

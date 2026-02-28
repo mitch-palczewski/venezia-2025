@@ -10,7 +10,7 @@
 		description:
 			'A community driven art installation featuring 3D models curated by the authors that can be moved, rotated, and scaled by participants in a shared space.',
 		url: 'https://pilepilepile.com',
-		ogImage: 'https://pilepilepile.com/environment/trees.jpg'
+		ogImage: 'https://pilepilepile.com/media/Cover_v4.1.png'
 	};
 </script>
 
@@ -51,23 +51,34 @@
 	<h1>PilePilePile: 3D Digital Public Space</h1>
 
 	<p>
-		A community-driven art installation featuring 3D models curated by the authors. Participants can
-		move, rotate, and scale digital sculptures in a shared, real-time interactive 3D environment.
+		PilePilePile is shared public space in a web-based 3D environment which needs your
+		participation. Move, rotate, and scale objects to build community architecture in a persistent
+		sandbox. Or just explore. It is space that is meant to be changed, piled on, dug out; an
+		ever-evolving sculpture.
 	</p>
+	<a href="/3d/pile">Enter PilePilePile</a>
+	<a href="https://audehelene.itch.io/city-pile" target="_blank">City Pilemaker</a>
+	<a href="https://audehelene.itch.io/pilemaker" target="_blank">Pilemaker (Original)</a>
 
-	<h2>Created by</h2>
+	<h2>Authors</h2>
 	<ul>
 		<li>Mitch Palczewski</li>
 		<li>Eben Kling</li>
 		<li>Aude Jomini</li>
 	</ul>
 
-	<h2>Project Themes and Features</h2>
+	<h2>Organization</h2>
+	<ul>
+		<li>FEEDFEEDNHV</li>
+	</ul>
+
+	<h2>Tags</h2>
 	<ul>
 		<li>Digital Public Space and Collaborative Art</li>
 		<li>Interactive 3D Geometry and Real-time Synchronization</li>
 		<li>Curated Digital Sculptures and Asset Manipulation</li>
 	</ul>
+
 </section>
 
 {@render children?.()}

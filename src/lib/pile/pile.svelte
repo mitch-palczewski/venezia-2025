@@ -36,7 +36,7 @@
 	let windowIsVisible = $state(true);
 	let windowIsFocused = $state(true);
 	const isActivelyWatching = $derived(windowIsVisible && windowIsFocused);
-	export const pileApp = new PileApp(() => isActivelyWatching, uiSettings, data);
+	export const pileApp = new PileApp(() => isActivelyWatching, captureThrelteScene, uiSettings, data);
 	function handleVisibilityChange() {
 		windowIsVisible = document.visibilityState === 'visible';
 	}

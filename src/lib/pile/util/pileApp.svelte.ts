@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PerspectiveCamera } from 'three';
 import type { Transform3D } from '../types';
-import {
-	allModels
-} from './assetInventory/assetsMap';
+import { allModels } from './assetInventory/assetsMap';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
@@ -14,8 +12,8 @@ import { Object2DMapInventory } from './assetInventory/object2DMap';
 import { PileDatabase, type PileDatabaseObj } from './api/pileDatabase';
 import { toPileObj } from './api/pileMapper';
 import type { SettingsState } from './ui/settingsState.svelte';
-  import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-
+import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { uploadScreenshotToVercelBlob } from './api/vercelPile';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -24,31 +22,42 @@ export class PileApp {
 	database = new PileDatabase();
 	state = new PileState(this.database);
 	environment: PileEnvironment;
-	cameraRef = $state<PerspectiveCamera>()
-	controlsRef = $state<ThreeOrbitControls>()
-	quality = $state<'low' | 'medium' | 'high'>('medium')
+	cameraRef = $state<PerspectiveCamera>();
+	controlsRef = $state<ThreeOrbitControls>();
+	quality = $state<'low' | 'medium' | 'high'>('medium');
 	autosave = true;
-	uiSettings
+	uiSettings;
 	isActivlyWatching: () => boolean;
-	public captureScreenshot?: () => Promise<Blob>;
+	captureScreenshot: () => Promise<Blob>;
 
-	constructor(isActivlyWatching: () => boolean,  uiSettings: SettingsState, initalDatabaseObjects?: any) {
-		this.uiSettings = uiSettings
+	constructor(
+		isActivlyWatching: () => boolean,
+		captureScreenshot: () => Promise<Blob>,
+		uiSettings: SettingsState,
+		initalDatabaseObjects?: any
+	) {
+		this.uiSettings = uiSettings;
 		this.isActivlyWatching = isActivlyWatching;
+		this.captureScreenshot = captureScreenshot;
 		this.initInventories();
 		const { scene, renderer } = useThrelte();
-		this.environment = new PileEnvironment(scene, renderer, this.environmentInventory,undefined, this.database);
-		this.state.app = this
-		this.state.uiSettings = uiSettings
-		this.uiSettings.app = this
+		this.environment = new PileEnvironment(
+			scene,
+			renderer,
+			this.environmentInventory,
+			undefined,
+			this.database
+		);
+		this.state.app = this;
+		this.state.uiSettings = uiSettings;
+		this.uiSettings.app = this;
 		if (initalDatabaseObjects) {
 			this.initPileObjects(initalDatabaseObjects);
 		}
-		
 	}
 
 	private initInventories() {
-		this.modelInventory.add(allModels)
+		this.modelInventory.add(allModels);
 		this.environmentInventory.add(testEnvironments);
 	}
 
@@ -56,8 +65,8 @@ export class PileApp {
 		const pileDatabaseObjects = rawPositionData.pileObjects as PileDatabaseObj[];
 		pileDatabaseObjects.forEach((object) => {
 			const pileObject = toPileObj(object);
-			if(!pileObject){
-				return
+			if (!pileObject) {
+				return;
 			}
 			if (object.type === 'object2D') {
 				this.state.objects2D.set(pileObject.id, pileObject as PileObject2D);
@@ -65,9 +74,9 @@ export class PileApp {
 			if (object.type === 'object3D') {
 				this.state.objects3D.set(pileObject.id, pileObject as PileObject3D);
 			}
-			if(object.type === 'environment') {
-				const environmentMap = this.environmentInventory.get(object.name)
-				if (environmentMap) this.environment.setEnvironement(environmentMap)
+			if (object.type === 'environment') {
+				const environmentMap = this.environmentInventory.get(object.name);
+				if (environmentMap) this.environment.setEnvironement(environmentMap);
 			}
 		});
 	}
@@ -95,13 +104,24 @@ export class PileApp {
 		}
 	}
 
-	async uploadStateToCloud() {
-        if (!this.captureScreenshot) return;
-        
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        const blob = await this.captureScreenshot();
-        
-    }
+	async initCaptureScreenshot() {
+		if (!this.captureScreenshot) return;
+
+		const blob = await this.captureScreenshot();
+		if (!blob) return;
+		await uploadScreenshotToVercelBlob(blob);
+		downloadBlob(blob)
+	}
+}
+export function downloadBlob(blob: Blob, filename = 'pilepilepile.png') {
+	const url = URL.createObjectURL(blob);
+	const a = document.createElement('a');
+	a.href = url;
+	a.download = filename; 
+	document.body.appendChild(a);
+	a.click();
+	document.body.removeChild(a);
+	URL.revokeObjectURL(url);
 }
 
 function initSupabaseObject(
@@ -128,4 +148,3 @@ function initSupabaseObject(
 		uniformScale: (i.scale_x + i.scale_y + i.scale_z) / 3
 	});
 }
-
