@@ -9,6 +9,7 @@
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
 	import OrbitLight from '$lib/components/lights/OrbitLight.svelte';
+	import PerformanceManager from '$lib/components/PerformanceManager.svelte';
 
 	let { data, uiSettings } = $props();
 
@@ -47,6 +48,8 @@
 
 <svelte:document onvisibilitychange={handleVisibilityChange} />
 <svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
+
+<PerformanceManager app={pileApp}/>
 
 <SettingsKeyBind settingState = {uiSettings}/>
 

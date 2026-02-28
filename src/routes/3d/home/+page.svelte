@@ -50,7 +50,7 @@
 	</div>
 {/snippet}
 
-<div class="absolute grid h-screen w-screen grid-cols-3 gap-6 p-6 bg-violet-100">
+<div class="absolute grid h-screen w-screen grid-cols-3 gap-6 p-6 bg-slate-900">
 	<div class="col-span-2 min-h-0">{@render enterPilePilePile()}</div>
 	<div class="col-span-1 min-h-0">{@render sideBar()}</div>
 </div>
