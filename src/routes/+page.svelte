@@ -23,7 +23,12 @@
 {/snippet}
 
 {#snippet pile2DLink(linkHref: string, text: string, imageSrc: string)}
-	<a href={linkHref} aria-label="City Pile" class="group relative flex w-full bg-amber-700 p-1">
+	<a
+		href={linkHref}
+		aria-label="City Pile"
+		target="_blank"
+		class="group relative flex w-full bg-amber-700 p-1"
+	>
 		<img src={imageSrc} alt="Pilemaker Preview" class="object-fit w-full" />
 		<div class="absolute inset-0 flex items-center justify-center group-hover:bg-white/30">
 			<p class="bg-cyan-800 text-4xl font-extrabold text-white group-hover:invert">{text}</p>
@@ -54,10 +59,24 @@
 {/snippet}
 
 {#snippet pileScreenshotGallery()}
+	<div class="flex h-full flex-col overflow-hidden ">
+		<div class=" bg-cyan-800 px-1 text-xl font-extrabold text-white hover:invert">
+			<a href="/gallery" target="_blank" class=" flex w-full flex-row items-center justify-between">
+				<h1>PilePilePile Gallery</h1>
+				<h1>Visit =></h1>
+			</a>
+		</div>
+		<div class="min-h-0 flex-1">
+			{@render renderScreenshots()}
+		</div>
+	</div>
+{/snippet}
+
+{#snippet renderScreenshots()}
 	{#if screenshots && screenshots.length > 0}
-		<div class="overflow-y-auto h-full pr-2">
+		<div class="h-full overflow-y-auto pt-2 pr-2">
 			{#each screenshots.slice(0, 20) as item (item.id)}
-				<div class="overflow-hidden p-1 mb-1 bg-orange-400">
+				<div class="mb-2 overflow-hidden p-1 bg-cyan-800">
 					<img
 						src={item.url}
 						alt={item.name}
@@ -65,22 +84,29 @@
 						loading="lazy"
 						decoding="async"
 					/>
-					<div class="">
-						<p class="">{item.name || 'Untitled'}</p>
-						<p class="">
-							{new Date(item.created_at).toLocaleString()}
-						</p>
-					</div>
 				</div>
 			{/each}
+			<div class=" bg-cyan-800 hover:invert">
+				<a
+					href="/gallery"
+					target="_blank"
+					class=" flex w-full items-center justify-center py-12 text-4xl text-white"
+				>
+					<h1 class="">View More</h1>
+				</a>
+			</div>
 		</div>
 	{:else}
 		<p class="text-stone-500 italic">No screenshots in the pile yet...</p>
 	{/if}
 {/snippet}
 
-<div class="absolute grid h-screen w-screen grid-cols-4 gap-6 bg-violet-100 p-6">
-	<div class="min-h-0">{@render pileScreenshotGallery()}</div>
+<div
+	class="absolute grid h-screen w-screen grid-cols-4 gap-6 bg-violet-100 p-6 bg-cover bg-center bg-no-repeat"
+	style="background-image: url('/images/environment/world.jpg');"
+>
+	
 	<div class="col-span-2 min-h-0">{@render enterPilePilePile()}</div>
+	<div class="min-h-0">{@render pileScreenshotGallery()}</div>
 	<div class=" min-h-0">{@render sideBar()}</div>
 </div>

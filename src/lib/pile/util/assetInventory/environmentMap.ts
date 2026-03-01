@@ -1,6 +1,6 @@
 import { BaseInventory, BaseMap } from './abstractAssetMap';
 
-type EnvironmentFileType = 'jpg' | 'hdr' | 'png';
+type EnvironmentFileType = 'jpg' | 'hdr' | 'png' | 'exr';
 
 interface EnvironmentMapOptions {
 	name: string;
@@ -96,5 +96,12 @@ export const testEnvironments: EnvironmentMap[] = [
 		displayName: 'Gradient 01',
 		path: '/images/environment/gradient_01.png',
 		fileType: 'png'
+	})
+	,
+	new EnvironmentMap({
+		name: 'misty_morning',
+		displayName: 'Misty Morning',
+		path: '/images/environment/misty_morning.exr',
+		fileType: 'exr'
 	})
 ];
