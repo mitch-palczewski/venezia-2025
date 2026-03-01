@@ -1,9 +1,9 @@
-export async function uploadScreenshotToVercelBlob(blob: Blob) {
+export async function uploadScreenshot(blob: Blob) {
     try {
         const formData = new FormData();
         formData.append('screenshot', blob, `screenshot-${Date.now()}.png`);
 
-        const response = await fetch('/api/vercel-blob-upload', { // Ensure this matches your route path
+        const response = await fetch('/api/upload-screenshot', { 
             method: 'POST',
             body: formData
         });

@@ -13,7 +13,7 @@ import { PileDatabase, type PileDatabaseObj } from './api/pileDatabase';
 import { toPileObj } from './api/pileMapper';
 import type { SettingsState } from './ui/settingsState.svelte';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { uploadScreenshotToVercelBlob } from './api/vercelPile';
+import { uploadScreenshot } from './api/screenshotApi';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -109,7 +109,7 @@ export class PileApp {
 
 		const blob = await this.captureScreenshot();
 		if (!blob) return;
-		await uploadScreenshotToVercelBlob(blob);
+		await uploadScreenshot(blob);
 		downloadBlob(blob)
 	}
 }

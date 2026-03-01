@@ -1,4 +1,6 @@
 <script lang="ts">
+	let { data } = $props();
+	const { screenshots } = $derived(data);
 </script>
 
 {#snippet enterPilePilePile()}
@@ -41,13 +43,38 @@
 			'Pilemaker (Original)',
 			'/media/pilemaker_sc.png'
 		)}
-        <a href="/#" aria-label="Learn about Pilemaker" class="flex items-center justify-center  h-full bg-orange-200 hover:bg-indigo-100">
-           <p class="text-2xl font-extrabold text-white bg-emerald-800">About =></p> 
-        </a>
+		<a
+			href="/#"
+			aria-label="Learn about Pilemaker"
+			class="flex h-full items-center justify-center bg-orange-200 hover:bg-indigo-100"
+		>
+			<p class="bg-emerald-800 text-2xl font-extrabold text-white">About =></p>
+		</a>
 	</div>
 {/snippet}
 
-<div class="absolute grid h-screen w-screen grid-cols-3 gap-6 p-6 bg-violet-100">
+{#snippet pileScreenshotGallery()}
+	{#if screenshots && screenshots.length > 0}
+		
+			{#each screenshots as item (item.id)}
+				<div class="overflow-hidden">
+					<img src={item.url} alt={item.name} class="aspect-video w-full object-cover" />
+					<div class="">
+						<p class="">{item.name || 'Untitled'}</p>
+						<p class="">
+							{new Date(item.created_at).toLocaleString()}
+						</p>
+					</div>
+				</div>
+			{/each}
+
+	{:else}
+		<p class="text-stone-500 italic">No screenshots in the pile yet...</p>
+	{/if}
+{/snippet}
+
+<div class="absolute grid h-screen w-screen grid-cols-4 gap-6 bg-violet-100 p-6">
 	<div class="col-span-2 min-h-0">{@render enterPilePilePile()}</div>
-	<div class="col-span-1 min-h-0">{@render sideBar()}</div>
+	<div class="min-h-0">{@render pileScreenshotGallery()}</div>
+	<div class=" min-h-0">{@render sideBar()} </div>
 </div>
