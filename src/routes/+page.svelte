@@ -55,10 +55,16 @@
 
 {#snippet pileScreenshotGallery()}
 	{#if screenshots && screenshots.length > 0}
-		
-			{#each screenshots as item (item.id)}
-				<div class="overflow-hidden">
-					<img src={item.url} alt={item.name} class="aspect-video w-full object-cover" />
+		<div class="overflow-y-auto h-full pr-2">
+			{#each screenshots.slice(0, 20) as item (item.id)}
+				<div class="overflow-hidden p-1 mb-1 bg-orange-400">
+					<img
+						src={item.url}
+						alt={item.name}
+						class="aspect-video w-full object-cover"
+						loading="lazy"
+						decoding="async"
+					/>
 					<div class="">
 						<p class="">{item.name || 'Untitled'}</p>
 						<p class="">
@@ -67,14 +73,14 @@
 					</div>
 				</div>
 			{/each}
-
+		</div>
 	{:else}
 		<p class="text-stone-500 italic">No screenshots in the pile yet...</p>
 	{/if}
 {/snippet}
 
 <div class="absolute grid h-screen w-screen grid-cols-4 gap-6 bg-violet-100 p-6">
-	<div class="col-span-2 min-h-0">{@render enterPilePilePile()}</div>
 	<div class="min-h-0">{@render pileScreenshotGallery()}</div>
-	<div class=" min-h-0">{@render sideBar()} </div>
+	<div class="col-span-2 min-h-0">{@render enterPilePilePile()}</div>
+	<div class=" min-h-0">{@render sideBar()}</div>
 </div>
