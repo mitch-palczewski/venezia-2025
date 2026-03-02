@@ -66,16 +66,15 @@
 	>
 		<div class="grid grid-cols-2 gap-2">
 			{#if addMenuState === 'object3D'}
-				
 				{#each uiSettings.app?.modelInventory.getAll() as item}
 					<ElementBtn
 						{item}
 						isSelected={selectedElement?.name === item.name}
 						onclick={() => (selectedElement = item)}
-						image = {item.preview}
+						image={item.preview}
 					/>
 				{/each}
-			<!--
+				<!--
 			{:else if addMenuState === 'object2D'}
 				{#each uiSettings.app?.imageInventory.getAll() as item}
 					<ElementBtn
@@ -91,6 +90,7 @@
 						{item}
 						isSelected={selectedElement?.name === item.name}
 						onclick={() => (selectedElement = item)}
+						image={item.fileType === 'jpg' || item.fileType === 'png' ? item.path : undefined}
 					/>
 				{/each}
 			{/if}
@@ -100,12 +100,11 @@
 		<div class="mt-4 w-full rounded bg-black/30 p-2 text-center text-white hover:bg-white/40">
 			<button onclick={() => handleAddToScene()}>
 				<p class="text-center">{selectedElement.displayName}</p>
-				{#if addMenuState === "object2D" || addMenuState === "object3D"}
+				{#if addMenuState === 'object2D' || addMenuState === 'object3D'}
 					Add to Scene
-				{:else if addMenuState === "environment"}
+				{:else if addMenuState === 'environment'}
 					Change Environment
 				{/if}
-				
 			</button>
 		</div>
 	{/if}
