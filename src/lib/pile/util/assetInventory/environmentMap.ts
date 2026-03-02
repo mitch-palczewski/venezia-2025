@@ -61,47 +61,82 @@ export class EnvironmentPayload {
 
 export const testEnvironments: EnvironmentMap[] = [
 	new EnvironmentMap({
-		name: 'world',
-		displayName: 'Marseille',
-		path: '/images/environment/world.jpg',
+		name: 'orchard',
+		displayName: 'Citrus Sky',
+		path: '/environment/citrus_orchard_road.hdr',
+		fileType: 'hdr'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_02',
+		displayName: 'Citypile 02',
+		path: '/environment/citypile_02.jpg',
 		fileType: 'jpg'
 	}),
 	new EnvironmentMap({
-		name: 'trees',
-		displayName: 'Trees',
-		path: '/images/environment/trees.jpg',
+		name: 'citypile_03',
+		displayName: 'Citypile 03',
+		path: '/environment/citypile_03.jpg',
 		fileType: 'jpg'
 	}),
 	new EnvironmentMap({
-		name: 'yellow',
-		displayName: 'Yellow',
-		path: '/images/environment/yellow.png',
-		fileType: 'png'
-	}),
-	new EnvironmentMap({
-		name: 'Studio_Mitch',
-		displayName: 'Studio',
-		path: '/images/environment/Studio_Mitch.jpg',
+		name: 'citypile_04',
+		displayName: 'Citypile 04',
+		path: '/environment/citypile_04.jpg',
 		fileType: 'jpg'
 	}),
 	new EnvironmentMap({
-		name: 'Symbols',
-		displayName: 'Symbols',
-		path: '/images/environment/symbols.png',
-		fileType: 'png'
-	})
-	,
+		name: 'citypile_04_test',
+		displayName: 'Citypile 04 test',
+		path: '/environment/citypile_04_test.jpg',
+		fileType: 'jpg'
+	}),
 	new EnvironmentMap({
 		name: 'gradient_01',
 		displayName: 'Gradient 01',
-		path: '/images/environment/gradient_01.png',
-		fileType: 'png'
-	})
-	,
+		path: '/environment/gradient_01.jpg',
+		fileType: 'jpg'
+	}),
 	new EnvironmentMap({
-		name: 'misty_morning',
-		displayName: 'Misty Morning',
-		path: '/images/environment/misty_morning.exr',
-		fileType: 'exr'
-	})
+		name: 'gradient_02',
+		displayName: 'Gradient 02',
+		path: '/environment/gradient_02.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'gradient_03',
+		displayName: 'Gradient 03',
+		path: '/environment/gradient_03.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'gradient_05',
+		displayName: 'Gradient 05',
+		path: '/environment/gradient_05.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'gradient_waves_02',
+		displayName: 'Gradient Waves 02',
+		path: '/environment/gradient_waves_02.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'gradient_waves_03',
+		displayName: 'Gradient Waves 03',
+		path: '/environment/gradient_waves_03.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'marseille',
+		displayName: 'Marseille',
+		path: '/environment/marseille.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'studio_01',
+		displayName: 'Studio 01',
+		path: '/environment/studio_01.jpg',
+		fileType: 'jpg'
+	}),
+
 ];
