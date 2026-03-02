@@ -14,10 +14,10 @@
 		class="relative w-full h-full border border-white/10 bg-black/40 p-2 shadow-2xl "
 	>
 		<div class="mb-6 flex items-center justify-between">
-			<h2 class="text-lg font-semibold text-zinc-100">Pile Configuration</h2>
+			<h2 class="text-3xl font-semibold text-zinc-100">Pile Configuration</h2>
 			<button
 				onclick={() => (uiSettings.showSettingsMenu = false)}
-				class="text-zinc-500 transition-colors hover:text-white">✕</button
+				class="text-zinc-500 transition-colors font-extrabold bg-white hover:bg-gray-200 hover:text-black flex items-center px-2 pt-1">✕</button
 			>
 		</div>
 
@@ -25,7 +25,7 @@
 			{#each tabs as tab}
 				<button
 					onclick={() => (state = tab)}
-					class="flex-1 rounded-md py-1.5 text-sm font-medium capitalize transition-all
+					class="flex-1 rounded-md py-1.5 text-xl font-medium capitalize transition-all
 					{state === tab ? 'bg-zinc-700 text-white shadow' : 'text-zinc-500 hover:text-zinc-300'}"
 				>
 					{tab}

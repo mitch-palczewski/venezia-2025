@@ -13,8 +13,9 @@ export class SettingsState {
 	#presentationMode = $state(false);
 	#showSettingsMenu = $state(false);
 	public defaultShowGrid;
-	public movementSpeed = $state(10);
+	public movementSpeed = $state(30);
 	public scaleSliderMax = $state(100);
+	public defaultModelSize = $state(15)
 	public showGrid: boolean = $state(false);
 	public showUI = $state(true);
 	public showAddMenu = $state(false);
@@ -25,6 +26,7 @@ export class SettingsState {
 	public showTooltip = $state(true);
 	public tooltipText = $state<string | null>(null);
 	public isIdleEnabled = $state(true);
+	public showScreenshotBtn = $state(true)
 
 	public doubleClick = $state(false);
 	public canvasContainer: HTMLDivElement | undefined;

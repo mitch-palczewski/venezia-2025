@@ -14,23 +14,27 @@ import type { SvelteMap } from 'svelte/reactivity';
 import type { EnvironmentMap } from '../assetInventory/environmentMap';
 import { roundTo } from '../api/pileMapper';
 
-const BASE_TRANSFORM: Transform3D = {
-	translate: { x: 0, y: 0, z: 0 },
-	rotation: { x: 0, y: 0, z: 0, w: 1 },
-	scale: { x: 10, y: 10, z: 10 }
-};
-
 /**
  * Creates a new PileObject and adds it to pileModels[].
  * @param modelName A valid model name with corresponding .glb file
  */
 export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileApp) {
 	pileApp.state.showTransformControls = false;
-	const baseTransform: Transform3D = JSON.parse(JSON.stringify(BASE_TRANSFORM));
+	const baseTransform: Transform3D = JSON.parse(
+		JSON.stringify({
+			translate: { x: 0, y: 0, z: 0 },
+			rotation: { x: 0, y: 0, z: 0, w: 1 },
+			scale: {
+				x: pileApp.uiSettings.defaultModelSize,
+				y: pileApp.uiSettings.defaultModelSize,
+				z: pileApp.uiSettings.defaultModelSize
+			}
+		})
+	);
 	const camera = pileApp.controlsRef?.target;
 	if (camera) {
 		const spawnPos = new Vector3().copy(camera);
-		
+
 		baseTransform.translate = {
 			x: roundTo(spawnPos.x),
 			y: roundTo(spawnPos.y),
@@ -39,14 +43,14 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 	} else {
 		baseTransform.translate = { x: 0, y: 0, z: 0 };
 	}
-	console.log(baseTransform)
+	console.log(baseTransform);
 	if (modelMap.objectType === '3D') {
 		const object3D = new PileObject3D({
 			name: modelMap.name,
 			id: crypto.randomUUID(),
 			objectMap: modelMap,
 			transform3D: baseTransform,
-			uniformScale: 10
+			uniformScale: pileApp.uiSettings.defaultModelSize
 		});
 		object3D.newObject = true;
 		pileApp.state.addObject(object3D);

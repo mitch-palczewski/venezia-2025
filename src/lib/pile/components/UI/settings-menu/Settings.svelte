@@ -8,10 +8,10 @@
 	let { uiSettings }: Props = $props();
 </script>
 
-<div class="md:px-30">
+<div class="md:px-30 grid-cols-2 grid gap-8 my-auto h-full">
 	<div class="space-y-6">
 		<div class="flex flex-col gap-2">
-			<label for="speed" class="text-xs font-medium tracking-wider text-zinc-400 uppercase">
+			<label for="speed" class="text-xs font-medium tracking-wider text-white uppercase">
 				Movement Speed
 			</label>
 			<input
@@ -24,7 +24,7 @@
 			/>
 		</div>
 		<div class="flex flex-col gap-2">
-			<label for="speed" class="text-xs font-medium tracking-wider text-zinc-400 uppercase">
+			<label for="speed" class="text-xs font-medium tracking-wider text-white uppercase">
 				Scale Slider Maximum
 			</label>
 			<input
@@ -36,9 +36,22 @@
 				class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-2 text-white outline-none focus:ring-2 focus:ring-indigo-500"
 			/>
 		</div>
+		<div class="flex flex-col gap-2">
+			<label for="speed" class="text-xs font-medium tracking-wider text-white uppercase">
+				Default Model Scale
+			</label>
+			<input
+				id="speed"
+				type="number"
+				min="0.1"
+				step="0.1"
+				bind:value={uiSettings.defaultModelSize}
+				class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-2 text-white outline-none focus:ring-2 focus:ring-indigo-500"
+			/>
+		</div>
 
 		<div class="flex flex-col gap-2">
-			<span class="text-xs font-medium tracking-wider text-zinc-400 uppercase"
+			<span class="text-xs font-medium tracking-wider text-white uppercase"
 				>Click Interaction</span
 			>
 			<div class="flex rounded-md bg-zinc-800 p-1">
@@ -62,12 +75,12 @@
 				</button>
 			</div>
 		</div>
+		</div>
 
-		<hr class="border-zinc-800" />
-
-		<div class="space-y-4">
+	
+		<div class="space-y-4 text-white">
 			<label class="flex cursor-pointer items-center justify-between">
-				<span class="text-sm text-zinc-200">Presentation Mode</span>
+				<span class="">Presentation Mode</span>
 				<input
 					type="checkbox"
 					bind:checked={uiSettings.presentationMode}
@@ -75,7 +88,7 @@
 				/>
 			</label>
 			<label class="flex cursor-pointer items-center justify-between">
-				<span class="text-sm text-zinc-200">Show Grid</span>
+				<span class="">Show Grid</span>
 				<input
 					type="checkbox"
 					bind:checked={uiSettings.showGrid}
@@ -83,13 +96,21 @@
 				/>
 			</label>
 			<label class="flex cursor-pointer items-center justify-between">
-				<span class="text-sm text-zinc-200">Auto Rotate When Idle</span>
+				<span class="">Auto Rotate When Idle</span>
 				<input
 					type="checkbox"
 					bind:checked={uiSettings.isIdleEnabled}
 					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
 				/>
 			</label>
+			<label class="flex cursor-pointer items-center justify-between">
+				<span class="">Show Screenshot Button</span>
+				<input
+					type="checkbox"
+					bind:checked={uiSettings.showScreenshotBtn}
+					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
+				/>
+			</label>
 		</div>
-	</div>
+	
 </div>

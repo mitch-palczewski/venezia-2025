@@ -52,7 +52,10 @@
 				{/if}
 
 				<AddBtn {uiSettings} />
-				<ScreenshotBtn app={pileApp} {uiSettings} />
+				{#if uiSettings.showScreenshotBtn}
+					<ScreenshotBtn app={pileApp} {uiSettings} />
+				{/if}
+				
 				<div class="flex flex-col items-center gap-3">
 					<SettingsBtn {uiSettings} />
 
