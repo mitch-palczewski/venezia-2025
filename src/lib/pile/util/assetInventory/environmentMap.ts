@@ -150,4 +150,16 @@ export const testEnvironments: EnvironmentMap[] = [
 		path: '/environment/overcast_soil.hdr',
 		fileType: 'hdr'
 	}),
+	new EnvironmentMap({
+		name: 'dusk',
+		displayName: 'Dusk',
+		path: '/environment/dusk.hdr',
+		fileType: 'hdr'
+	}),
+	new EnvironmentMap({
+		name: 'sunrise',
+		displayName: 'Sunrise',
+		path: '/environment/sunrise.hdr',
+		fileType: 'hdr'
+	}),
 ];
