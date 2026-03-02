@@ -144,4 +144,10 @@ export const testEnvironments: EnvironmentMap[] = [
 		path: '/environment/symbols.png',
 		fileType: 'png'
 	}),
+	new EnvironmentMap({
+		name: 'overcast',
+		displayName: 'Overcast Soil',
+		path: '/environment/overcast_soil.hdr',
+		fileType: 'hdr'
+	}),
 ];

@@ -1,7 +1,9 @@
+//I DONT THINK THIS IS USED
+
 export async function uploadScreenshot(blob: Blob) {
     try {
         const formData = new FormData();
-        formData.append('screenshot', blob, `screenshot-${Date.now()}.png`);
+        formData.append('screenshot', blob, `screenshot-${Date.now()}.jpeg`);
 
         const response = await fetch('/api/upload-screenshot', { 
             method: 'POST',

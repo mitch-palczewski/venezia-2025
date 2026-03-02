@@ -29,7 +29,7 @@
 			canvas.toBlob((blob) => {
 				if (blob) resolve(blob);
 				else reject(new Error("Failed to capture WebGL canvas"))
-			}, 'image/png')
+			}, 'image/jpeg', 1)
 		})
 	}
 
