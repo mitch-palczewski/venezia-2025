@@ -62,6 +62,7 @@
 	bind:ref={app.cameraRef}
 	makeDefault
 	far={CAMERA_FAR_BOUND}
+	near={10}
 	position={CAMERA_POS}
 	oncreate={(ref) => ref.lookAt(...CAMERA_LOOK_AT_POS)}
 >
