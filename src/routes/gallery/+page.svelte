@@ -1,4 +1,6 @@
 <script lang="ts">
+	import PageHeader from "$lib/components/general/PageHeader.svelte";
+
 	let { data } = $props();
 	const { screenshots } = $derived(data);
 </script>
@@ -35,12 +37,8 @@
 	</div>
 {/snippet}
 
-<div class="p-6 w-full  ">
-    
-    <div class="">
-        {@render header()}
-    </div>
-
+<div class="p-6 w-full  " style="background-image: url('/environment/gradient_03.jpg');">
+    <PageHeader isGallery={true} appendTitle={"Gallery"}/>
     <div class="grid grid-cols-2 gap-3 py-3 ">
         {@render renderScreenshots()}
     </div>

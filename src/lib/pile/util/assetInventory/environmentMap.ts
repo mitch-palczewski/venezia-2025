@@ -85,12 +85,6 @@ export const testEnvironments: EnvironmentMap[] = [
 		fileType: 'jpg'
 	}),
 	new EnvironmentMap({
-		name: 'citypile_04_test',
-		displayName: 'Citypile 04 test',
-		path: '/environment/citypile_04_test.jpg',
-		fileType: 'jpg'
-	}),
-	new EnvironmentMap({
 		name: 'gradient_01',
 		displayName: 'Gradient 01',
 		path: '/environment/gradient_01.jpg',

@@ -1,4 +1,6 @@
 <script lang="ts">
+	import PageHeader from '$lib/components/general/PageHeader.svelte';
+
 	let { data } = $props();
 	const { screenshots } = $derived(data);
 </script>
@@ -14,9 +16,12 @@
 			alt="PilePilePile Preview"
 			class="h-full w-full object-cover"
 		/>
-		<div class="absolute inset-0 flex items-center justify-center group-hover:bg-white/30">
-			<p class="bg-cyan-800 text-6xl font-extrabold text-white group-hover:invert">
-				Enter PilePilePile
+		<div class="absolute inset-0 p-6 flex flex-col items-center justify-center group-hover:bg-white/10">
+			<p class="w-full p-1 text-center bg-cyan-800 text-6xl font-extrabold text-white group-hover:invert">
+				Enter Pile-Pile-Pile
+			</p>
+			<p class="bg-cyan-800 text-sm text-center font-extrabold text-white group-hover:invert">
+				Shared public space in a web-based 3D environment which needs your participation. Move, rotate, and scale objects to build community architecture in a persistent sandbox. 
 			</p>
 		</div>
 	</a>
@@ -59,11 +64,11 @@
 {/snippet}
 
 {#snippet pileScreenshotGallery()}
-	<div class="flex h-full flex-col overflow-hidden ">
-		<div class=" bg-cyan-800 px-1 text-xl font-extrabold text-white hover:invert">
-			<a href="/gallery"  class=" flex w-full flex-row items-center justify-between">
-				<h1>PilePilePile Gallery</h1>
-				<h1>Visit =></h1>
+	<div class="flex h-full flex-col overflow-hidden">
+		<div class=" bg-cyan-800 px-1 text-xl font-extrabold text-white hover:invert mr-2">
+			<a href="/gallery" class=" flex w-full flex-col items-center justify-between border-b border-cyan-900">
+				<h1>Pile-Pile-Pile Gallery</h1>
+				<p class="text-sm">A collections of user captured screenshots.</p>
 			</a>
 		</div>
 		<div class="min-h-0 flex-1">
@@ -76,7 +81,7 @@
 	{#if screenshots && screenshots.length > 0}
 		<div class="h-full overflow-y-auto pt-2 pr-2">
 			{#each screenshots.slice(0, 20) as item (item.id)}
-				<div class="mb-2 overflow-hidden p-1 bg-cyan-800">
+				<div class="mb-2 overflow-hidden bg-cyan-800 p-1">
 					<img
 						src={item.url}
 						alt={item.name}
@@ -101,11 +106,13 @@
 {/snippet}
 
 <div
-	class="absolute grid h-screen w-screen grid-cols-4 gap-6 bg-violet-100 p-6 bg-cover bg-center bg-no-repeat"
-	style="background-image: url('/images/environment/world.jpg');"
+	class="h-screen p-6 bg-cover bg-center bg-no-repeat relative flex flex-col"
+	style="background-image: url('/environment/gradient_03.jpg');"
 >
-	
-	<div class="col-span-2 min-h-0">{@render enterPilePilePile()}</div>
-	<div class="min-h-0">{@render pileScreenshotGallery()}</div>
-	<div class=" min-h-0">{@render sideBar()}</div>
+	<PageHeader isHome={true} />
+	<div class=" grid min-h-0 w-full grid-cols-4 gap-6">
+		<div class="col-span-2 min-h-0">{@render enterPilePilePile()}</div>
+		<div class="min-h-0">{@render pileScreenshotGallery()}</div>
+		<div class=" min-h-0">{@render sideBar()}</div>
+	</div>
 </div>
