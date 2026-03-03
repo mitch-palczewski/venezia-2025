@@ -1,6 +1,9 @@
 <script lang="ts">
 	import '../app.css';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
+	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+
+	injectSpeedInsights();
 	injectAnalytics();
 
 	let { children } = $props();
@@ -78,7 +81,6 @@
 		<li>Interactive 3D Geometry and Real-time Synchronization</li>
 		<li>Curated Digital Sculptures and Asset Manipulation</li>
 	</ul>
-
 </section>
 
 {@render children?.()}

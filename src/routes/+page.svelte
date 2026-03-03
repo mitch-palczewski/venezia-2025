@@ -61,7 +61,7 @@
 {#snippet pileScreenshotGallery()}
 	<div class="flex h-full flex-col overflow-hidden ">
 		<div class=" bg-cyan-800 px-1 text-xl font-extrabold text-white hover:invert">
-			<a href="/gallery" target="_blank" class=" flex w-full flex-row items-center justify-between">
+			<a href="/gallery"  class=" flex w-full flex-row items-center justify-between">
 				<h1>PilePilePile Gallery</h1>
 				<h1>Visit =></h1>
 			</a>
@@ -89,7 +89,6 @@
 			<div class=" bg-cyan-800 hover:invert">
 				<a
 					href="/gallery"
-					target="_blank"
 					class=" flex w-full items-center justify-center py-12 text-4xl text-white"
 				>
 					<h1 class="">View More</h1>
