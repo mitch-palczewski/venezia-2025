@@ -1,5 +1,5 @@
 <script lang="ts">
-	let { isHome = false, isGallery = false, isAbout = false, appendTitle = '' } = $props();
+	let { isHome = false, isGallery = false, isPrints = false, isFilm = false, appendTitle = '' } = $props();
 
 	// Toggle state for the dropdown
 	let menuOpen = $state(false);
@@ -9,8 +9,11 @@
 	<h1 class="w-full text-4xl font-extrabold">PILE-PILE-PILE {appendTitle}</h1>
 
 	<div class="flex w-full items-center justify-end gap-6">
-		{#if !isGallery}<a href="/gallery" class="uppercase hover:text-amber-600">Gallery</a>{/if}
-		{#if !isAbout}<a href="/about" class="uppercase hover:text-amber-600">About</a>{/if}
+		{#if !isGallery}<a href="/gallery" class="uppercase hover:text-amber-600">Pile-3D Gallery</a>{/if}
+		{#if !isPrints}<a href="/gallery/prints" class="uppercase hover:text-amber-600">Prints</a>{/if}
+		{#if !isPrints}<a href="/gallery/film" class="uppercase hover:text-amber-600">Film</a>{/if}
+
+
 
 		<div class="relative">
 			<button
@@ -33,6 +36,12 @@
 						href="https://audehelene.itch.io/city-pile"
 						target="_blank"
 						class="py-1 hover:text-amber-600">City Pilemaker</a
+						
+					>
+					<a
+						href="/3d/pile"
+						target="_blank"
+						class="py-1 hover:text-amber-600">Pile-3D</a
 					>
 					<a
 						href="/film"
@@ -44,8 +53,7 @@
 						target="_blank"
 						class="py-1 hover:text-amber-600">Prints</a
 					>
-					<hr class="my-2 border-black" />
-					<button class="py-1 text-left uppercase hover:text-red-600">Logout</button>
+					
 				</div>
 
 				<div

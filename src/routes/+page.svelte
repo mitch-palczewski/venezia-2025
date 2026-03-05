@@ -18,7 +18,7 @@
 		/>
 		<div class="absolute inset-0 p-6 flex flex-col items-center justify-center group-hover:bg-white/10">
 			<p class="w-full p-1 text-center bg-cyan-800 text-6xl font-extrabold text-white group-hover:invert">
-				Enter Pile-Pile-Pile
+				Enter Pile-3D
 			</p>
 			<p class="bg-cyan-800 text-sm text-center font-extrabold text-white group-hover:invert">
 				Shared public space in a web-based 3D environment which needs your participation. Move, rotate, and scale objects to build community architecture in a persistent sandbox. 
@@ -67,7 +67,7 @@
 	<div class="flex h-full flex-col overflow-hidden">
 		<div class=" bg-cyan-800 px-1 text-xl font-extrabold text-white hover:invert mr-2">
 			<a href="/gallery" class=" flex w-full flex-col items-center justify-between border-b border-cyan-900">
-				<h1>Pile-Pile-Pile Gallery</h1>
+				<h1>Pile-3D Gallery</h1>
 				<p class="text-sm">A collections of user captured screenshots.</p>
 			</a>
 		</div>
