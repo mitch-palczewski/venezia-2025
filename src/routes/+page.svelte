@@ -106,12 +106,12 @@
 {/snippet}
 
 <div
-	class="h-screen p-6 bg-cover bg-center bg-no-repeat relative flex flex-col"
+	class="sm:h-screen p-6 bg-cover bg-center bg-no-repeat relative flex flex-col"
 	style="background-image: url('/environment/gradient_03.jpg');"
 >
 	<PageHeader isHome={true} />
-	<div class=" grid min-h-0 w-full grid-cols-4 gap-6">
-		<div class="col-span-2 min-h-0">{@render enterPilePilePile()}</div>
+	<div class=" grid min-h-0 w-full grid-cols-1 sm:grid-cols-4 gap-6">
+		<div class="sm:col-span-2 min-h-0">{@render enterPilePilePile()}</div>
 		<div class="min-h-0">{@render pileScreenshotGallery()}</div>
 		<div class=" min-h-0">{@render sideBar()}</div>
 	</div>
