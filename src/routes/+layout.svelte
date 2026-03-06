@@ -12,7 +12,7 @@
 		title: 'PilePilePile | 3D Digital Public Space',
 		description:
 			'A community driven art installation featuring 3D models curated by the authors that can be moved, rotated, and scaled by participants in a shared space.',
-		url: 'https://https://www.pilepilepile.com/',
+		url: 'https://www.pilepilepile.com/',
 		ogImage: 'https://www.pilepilepile.com/media/Cover_v4.1.png'
 	};
 </script>
