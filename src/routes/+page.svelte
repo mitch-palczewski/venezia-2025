@@ -18,23 +18,30 @@
 	<a
 		href="/3d/pile"
 		aria-label="City Pile"
-		class="group relative flex sm:h-full w-full overflow-hidden bg-dark-gray pb-10 pl-20 h-[80vh]"
+		class="group relative flex h-[80vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
 	>
 		<img
-			src="/media/Cover_v4.1.png"
+			src={screenshots![0].url}
 			alt="PilePilePile Preview"
-			class="h-full w-full sm:border-b-8 sm:border-l-20 sm:border-light-yellow object-cover"
+			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
 		/>
+		<div class="absolute inset-0 flex flex-col md:flex-row">
+			<img class="md:pt-[50%]" src="/gifs/Misc_05_preview2.gif" alt="Fire Pot Rotating" />
+	
+			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
+		</div>
 		<div class="absolute inset-0 flex flex-col items-center justify-center p-6">
-			<p
-				class="w-full bg-teal p-1 text-center text-3xl sm:text-6xl font-extrabold text-white group-hover:invert"
-			>
-				Enter Pile-3D
-			</p>
-			<p class="bg-teal text-center text-sm font-extrabold text-white group-hover:invert">
-				Shared public space in a web-based 3D environment which needs your participation. Move,
-				rotate, and scale objects to build community architecture in a persistent sandbox.
-			</p>
+			<div class="mr-25 bg-teal md:mr-50">
+				<p
+					class="w-full p-1 text-center text-3xl font-extrabold text-white group-hover:invert sm:text-6xl"
+				>
+					Enter Pile-3D
+				</p>
+				<p class=" text-center text-sm font-extrabold text-white group-hover:invert">
+					Shared public space in a web-based 3D environment which needs your participation. Move,
+					rotate, and scale objects to build community architecture in a persistent sandbox.
+				</p>
+			</div>
 		</div>
 	</a>
 {/snippet}
@@ -55,7 +62,7 @@
 
 {#snippet sideBar()}
 	<div class="flex h-full w-full flex-col gap-3 bg-dark-gray p-3">
-		<div class="p-3 bg-teal">
+		<div class="bg-teal p-3">
 			{@render pile2DLink('/gallery/prints', 'Pile Prints', '/images/prints/1.jpg')}
 			{@render pile2DLink(
 				'https://audehelene.itch.io/city-pile',
@@ -90,7 +97,7 @@
 {#snippet renderScreenshots()}
 	{#if screenshots && screenshots.length > 0}
 		<div class="h-full overflow-y-auto pr-2">
-			{#each screenshots.slice(1, 11) as item (item.id)}
+			{#each screenshots.slice(0, 10) as item (item.id)}
 				<div class="relative mb-6 overflow-visible text-light-green">
 					<img
 						src={item.url}
@@ -109,9 +116,9 @@
 
 <div class="relative bg-dark-green p-6 pb-8 sm:h-screen xl:overflow-hidden">
 	<div class="pointer-events-none absolute inset-0 ml-5 grid grid-cols-1 gap-0 p-3 sm:grid-cols-6">
-		<div class=" ml-8  border-r-8 border-light-yellow bg-dark-gray "></div>
+		<div class=" ml-8 border-r-8 border-light-yellow bg-dark-gray"></div>
 		<div class=" sm:col-span-5">
-			<div class="grid sm:h-80 grid-cols-5">
+			<div class="grid grid-cols-5 sm:h-80">
 				<div class="sm:col-span-3"></div>
 				<div class="sm:col-span-2"></div>
 			</div>
