@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Shieldman from '$lib/3d/Shieldman.svelte';
+	import ShieldmanDemo from '$lib/3d/ShieldmanDemo.svelte';
 	import CanvasPortal from '$lib/components/3d-core/CanvasPortal.svelte';
 	import PageHeader from '$lib/components/general/PageHeader.svelte';
 	import { View } from '@threlte/extras';
@@ -62,13 +62,7 @@
 			'Pilemaker (Original)',
 			'/media/pilemaker_sc.png'
 		)}
-		<a
-			href="/#"
-			aria-label="Learn about Pilemaker"
-			class="flex h-full items-center justify-center bg-orange-200 hover:bg-indigo-100"
-		>
-			<p class="bg-emerald-800 text-2xl font-extrabold text-white">About =></p>
-		</a>
+	
 	</div>
 {/snippet}
 
@@ -117,10 +111,13 @@
 	{/if}
 {/snippet}
 
-
+<div
+	class="absolute bottom-8 right-9 h-[30vh] w-[22vw] z-10 border-2 overflow-hidden"
+	bind:this={scene3DDom}
+></div>
 
 <div
-	class="relative flex flex-col bg-cover bg-center bg-no-repeat p-6 sm:h-screen -z-10"
+	class="absolute flex flex-col bg-cover bg-center bg-no-repeat p-6 sm:h-screen -z-10"
 >
 	<PageHeader isHome={true} />
 	<div class=" grid min-h-0 w-full grid-cols-1 gap-6 sm:grid-cols-4">
@@ -129,14 +126,11 @@
 		<div class=" min-h-0">{@render sideBar()}</div>
 	</div>
 </div>
-<div
-	class="absolute top-[5vh] left-[50vw] h-[70vh] w-[70vh] -translate-x-1/2 z-10"
-	bind:this={scene3DDom}
-></div>
+
 <div class="absolute top-0 h-full">
 <CanvasPortal>
 	<View dom={scene3DDom}>
-		<Shieldman/>
+		<ShieldmanDemo/>
 	</View>
 </CanvasPortal>
 </div>

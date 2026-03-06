@@ -6,4 +6,11 @@
 
 @theme {
   --font-sans: "Sorts Mill Goudy", ui-sans-serif, system-ui;
+
+  --color-dark-green: #536c68;
+  --color-dark-gray: #1f1f1f;
+  --color-teal: #226777;
+  --color-light-yellow: #ffedcb;
+  --color-light-green: #e7eee6;
+  --color-dark-purple: #25274e;
 }
