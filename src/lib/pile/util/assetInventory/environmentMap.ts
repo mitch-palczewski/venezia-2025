@@ -133,12 +133,6 @@ export const testEnvironments: EnvironmentMap[] = [
 		fileType: 'jpg'
 	}),
 	new EnvironmentMap({
-		name: 'symbols',
-		displayName: 'Symbols',
-		path: '/environment/symbols.png',
-		fileType: 'png'
-	}),
-	new EnvironmentMap({
 		name: 'overcast',
 		displayName: 'Overcast Soil',
 		path: '/environment/overcast_soil.hdr',
@@ -155,5 +149,29 @@ export const testEnvironments: EnvironmentMap[] = [
 		displayName: 'Sunrise',
 		path: '/environment/sunrise.hdr',
 		fileType: 'hdr'
+	}),
+	new EnvironmentMap({
+		name: 'LW_04',
+		displayName: 'LW_04',
+		path: '/environment/LW_04.png',
+		fileType: 'png'
+	}),
+	new EnvironmentMap({
+		name: 'VE_06',
+		displayName: 'VE_06',
+		path: '/environment/VE_06.png',
+		fileType: 'png'
+	}),
+	new EnvironmentMap({
+		name: 'Overpass_01',
+		displayName: 'Overpass 01',
+		path: '/environment/Overpass_01.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'Overpass_02',
+		displayName: 'Overpass 02',
+		path: '/environment/Overpass_02.jpg',
+		fileType: 'jpg'
 	}),
 ];
