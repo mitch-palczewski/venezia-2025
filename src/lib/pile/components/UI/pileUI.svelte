@@ -15,6 +15,7 @@
 	import Tooltip from './Tooltip.svelte';
 	import ScreenshotBtn from './btns/ScreenshotBtn.svelte';
 	import FullscreenBtn from './btns/FullscreenBtn.svelte';
+	import { onMount } from 'svelte';
 
 	interface Props {
 		pileSceneRef: PileScene;
@@ -26,6 +27,17 @@
 	const isVertical = $derived(windowWidth < 640);
 	const pileApp: PileApp = $derived(pileSceneRef?.pileApp);
 	const pileState: PileState = $derived(pileSceneRef?.pileApp?.state);
+
+	let isMd = $state(false); // Svelte 5 syntax
+
+	onMount(() => {
+		const watch = window.matchMedia('(min-width: 768px)');
+		isMd = watch.matches;
+
+		const listener = (e: MediaQueryListEvent) => (isMd = e.matches);
+		watch.addEventListener('change', listener);
+		return () => watch.removeEventListener('change', listener);
+	});
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
@@ -53,12 +65,19 @@
 				{/if}
 
 				<AddBtn {uiSettings} />
-				{#if uiSettings.showScreenshotBtn}
-					<ScreenshotBtn app={pileApp} {uiSettings} />
+
+				{#if isMd}
+					{#if uiSettings.showScreenshotBtn}
+						<ScreenshotBtn app={pileApp} {uiSettings} />
+					{/if}
+					<FullscreenBtn {uiSettings} />
+				{:else if !uiSettings.app?.state.showTransformControls}
+					{#if uiSettings.showScreenshotBtn}
+						<ScreenshotBtn app={pileApp} {uiSettings} />
+					{/if}
+					<FullscreenBtn {uiSettings} />
 				{/if}
 
-				<FullscreenBtn {uiSettings}/>
-				
 				<div class="flex flex-col items-center gap-3">
 					<SettingsBtn {uiSettings} />
 
