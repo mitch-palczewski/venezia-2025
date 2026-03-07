@@ -27,7 +27,7 @@
 		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
 	>
 		<img
-			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
+			src={screenshots![0].url}
 			alt="Most recent user captured screenshot"
 			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
 		/>
