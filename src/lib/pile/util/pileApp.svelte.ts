@@ -106,7 +106,6 @@ export class PileApp {
 
 	async initCaptureScreenshot() {
 		if (!this.captureScreenshot) return;
-
 		const blob = await this.captureScreenshot();
 		if (!blob) return;
 		await uploadScreenshot(blob);

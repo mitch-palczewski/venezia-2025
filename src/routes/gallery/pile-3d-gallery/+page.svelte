@@ -8,7 +8,6 @@
 {#snippet renderScreenshots()}
 	{#if screenshots && screenshots.length > 0}
 		{#each screenshots as item (item.id)}
-		{@const optimizedUrl = `/_vercel/image?url=${encodeURIComponent(item.url)}&w=1080&q=75`}
 			<div class="mb-2 bg-cyan-800 p-1">
 				<p class=" text-white">
 					{new Date(item.created_at).toLocaleDateString('en-US', {
@@ -18,7 +17,7 @@
 					})}
 				</p>
 				<img
-					src={optimizedUrl}
+					src={item.url}
 					alt="ID: {item.id}, CREATED_AT: {item.created_at}" 
 					class="aspect-video w-full object-cover"
 					loading="lazy"

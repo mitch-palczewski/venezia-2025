@@ -14,7 +14,7 @@ export const POST: RequestHandler = async ({ request }) => {
     }
 
     try {
-        const blob = await put(`screenshots/${Date.now()}.jpeg`, file, {
+        const blob = await put(`screenshots/${Date.now()}.webp`, file, {
             access: 'public',
             token: BLOB_READ_WRITE_TOKEN
         });

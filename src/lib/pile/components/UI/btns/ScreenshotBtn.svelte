@@ -5,7 +5,6 @@
 
     let { app, uiSettings }: { app: PileApp; uiSettings: SettingsState } = $props();
 
-    // Svelte 5 state for tracking the upload/capture progress
     let isLoading = $state(false);
 
     const handleScreenshotBtnPress = async () => {
@@ -13,7 +12,6 @@
         
         isLoading = true;
         try {
-            // We await the process (make sure initCaptureScreenshot returns the Promise)
             await app.initCaptureScreenshot();
         } catch (error) {
             console.error("Screenshot failed:", error);

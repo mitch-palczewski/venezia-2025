@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { dev } from '$app/environment';
 	import PageHeader from '$lib/components/general/PageHeader.svelte';
 
 	let { data } = $props();
@@ -12,17 +13,21 @@
 
 		return `${m}/${d}/${y}`;
 	};
+
+	export function getOptimizedUrl(url: string, width = 640, quality = 75) {
+		if (dev || !url) return '/media/Cover_v4.1.png';
+		return `/_vercel/image?url=${encodeURIComponent(url)}&w=${width}&q=${quality}`;
+	}
 </script>
 
 {#snippet enterPilePilePile()}
-	{@const optimizedUrl = `/_vercel/image?url=${encodeURIComponent(screenshots![0].url)}&w=1080&q=75`}
 	<a
 		href="/3d/pile"
 		aria-label="Enter 3D Pile"
 		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
 	>
 		<img
-			src={optimizedUrl}
+			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
 			alt="Most recent user captured screenshot"
 			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
 		/>
