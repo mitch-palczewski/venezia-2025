@@ -15,7 +15,7 @@
 	};
 
 	export function getOptimizedUrl(url: string, width = 640, quality = 75) {
-		if (dev || !url) return '/media/Cover_v4.1.png';
+		if (dev) return '/media/Cover_v4.1.png';
 		return `/_vercel/image?url=${encodeURIComponent(url)}&w=${width}&q=${quality}`;
 	}
 </script>
