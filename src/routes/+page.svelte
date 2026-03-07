@@ -15,14 +15,15 @@
 </script>
 
 {#snippet enterPilePilePile()}
+	{@const optimizedUrl = `/_vercel/image?url=${encodeURIComponent(screenshots![0].url)}&w=1080&q=75`}
 	<a
 		href="/3d/pile"
-		aria-label="City Pile"
+		aria-label="Enter 3D Pile"
 		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
 	>
 		<img
-			src={screenshots![0].url}
-			alt="PilePilePile Preview"
+			src={optimizedUrl}
+			alt="Most recent user captured screenshot"
 			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
 		/>
 		<div class="absolute inset-0 flex flex-col md:flex-row">
@@ -31,7 +32,9 @@
 			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
 		</div>
 		<div class="absolute inset-0 flex flex-col items-center justify-center p-6">
-			<div class="mr-25 bg-teal group-hover:bg-light-yellow md:mr-50  border-b-2 border-r-2 border-teal group-hover:border-dark-gray">
+			<div
+				class="mr-25 border-r-2 border-b-2 border-teal bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50"
+			>
 				<p
 					class="w-full p-1 text-center text-3xl font-extrabold text-white group-hover:invert sm:text-6xl"
 				>
@@ -51,9 +54,9 @@
 		href={linkHref}
 		aria-label="City Pile"
 		target="_blank"
-		class="group relative w-full flex flex-1 min-h-0"
+		class="group relative flex min-h-0 w-full flex-1"
 	>
-		<img src={imageSrc} alt={text} class="w-full h-full object-cover" />
+		<img src={imageSrc} alt={text} class="h-full w-full object-cover" />
 		<div class="absolute inset-0 flex items-center justify-center">
 			<p class="bg-cyan-800 text-4xl font-extrabold text-white group-hover:invert">{text}</p>
 		</div>
@@ -61,8 +64,8 @@
 {/snippet}
 
 {#snippet sideBar()}
-	<div class="relative min-h-0 flex-1 flex flex-col w-full h-full gap-3 bg-dark-gray p-3">
-		<div class="bg-teal p-3 flex flex-col flex-1 gap-2 overflow-hidden">
+	<div class="relative flex h-full min-h-0 w-full flex-1 flex-col gap-3 bg-dark-gray p-3">
+		<div class="flex flex-1 flex-col gap-2 overflow-hidden bg-teal p-3">
 			{@render pile2DLink('/gallery/prints', 'Prints', '/images/prints/1.jpg')}
 			{@render pile2DLink('/gallery/film', 'Film', '')}
 			{@render pile2DLink(
@@ -99,11 +102,11 @@
 	{#if screenshots && screenshots.length > 0}
 		<div class="h-full overflow-y-auto pr-2">
 			{#each screenshots.slice(0, 10) as item (item.id)}
-			{@const optimizedUrl = `/_vercel/image?url=${encodeURIComponent(item.url)}&w=640&q=75`}
+				{@const optimizedUrl = `/_vercel/image?url=${encodeURIComponent(item.url)}&w=640&q=75`}
 				<div class="relative mb-6 overflow-visible text-light-green">
 					<img
-						src="{optimizedUrl}"
-						alt={item.name}
+						src={optimizedUrl}
+						alt="User Captured Screenshot {item.created_at}"
 						class="aspect-video w-full bg-teal object-cover"
 						loading="lazy"
 						decoding="async"
@@ -116,8 +119,7 @@
 	{/if}
 {/snippet}
 
-<div class="relative bg-dark-green p-2 pb-8 h-screen sm:p-6 overflow-hidden">
-	
+<div class="relative h-screen overflow-hidden bg-dark-green p-2 pb-8 sm:p-6">
 	<div class="pointer-events-none absolute inset-0 ml-5 grid grid-cols-1 gap-0 p-3 sm:grid-cols-6">
 		<div class=" ml-8 border-r-8 border-light-yellow bg-dark-gray"></div>
 		<div class=" sm:col-span-5">
@@ -133,8 +135,10 @@
 		<PageHeader isHome={true} />
 		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-3 lg:grid-cols-6">
 			<div class="hidden min-h-0 pt-4 xl:block">{@render pileScreenshotGallery()}</div>
-			<div class="min-h-0  lg:col-span-4 xl:col-span-3">{@render enterPilePilePile()}</div>
-			<div class="hidden lg:flex min-h-0 flex-col pt-4 lg:mt-12 pl-8 lg:col-span-2 ">{@render sideBar()}</div>
+			<div class="min-h-0 lg:col-span-4 xl:col-span-3">{@render enterPilePilePile()}</div>
+			<div class="hidden min-h-0 flex-col pt-4 pl-8 lg:col-span-2 lg:mt-12 lg:flex">
+				{@render sideBar()}
+			</div>
 		</div>
 	</div>
 </div>
