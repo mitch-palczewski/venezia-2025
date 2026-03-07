@@ -2,7 +2,7 @@
     import type { PileState } from "$lib/pile/util/pileState.svelte";
     import type { SettingsState } from "$lib/pile/util/ui/settingsState.svelte";
     import { deleteSelectedModel } from "$lib/pile/util/ui/uiActions";
-    import GeneralButton from './GeneralButton.svelte'; // Adjust path
+    import GeneralButton from './GeneralButton.svelte'; 
 
     let { pileState, uiSettings }: { pileState: PileState, uiSettings: SettingsState } = $props();
 
@@ -17,7 +17,7 @@
     tooltipText="delete : Delete Object"
     class="h-10 px-3 text-lg font-extrabold"
 >
-     <span class="hidden md:block">
+     <span class="hidden lg:block">
            Delete
         </span>
     

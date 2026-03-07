@@ -8,7 +8,7 @@
 		tooltipText?: string;
 		children: Snippet;
 		class?: string;
-		disabled: boolean
+		disabled?: boolean
 	}
 	let {
 		onclick,

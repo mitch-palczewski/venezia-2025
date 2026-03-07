@@ -14,6 +14,7 @@
 	import ScaleSlider from './ScaleSlider.svelte';
 	import Tooltip from './Tooltip.svelte';
 	import ScreenshotBtn from './btns/ScreenshotBtn.svelte';
+	import FullscreenBtn from './btns/FullscreenBtn.svelte';
 
 	interface Props {
 		pileSceneRef: PileScene;
@@ -55,6 +56,8 @@
 				{#if uiSettings.showScreenshotBtn}
 					<ScreenshotBtn app={pileApp} {uiSettings} />
 				{/if}
+
+				<FullscreenBtn {uiSettings}/>
 				
 				<div class="flex flex-col items-center gap-3">
 					<SettingsBtn {uiSettings} />
