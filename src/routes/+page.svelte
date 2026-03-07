@@ -99,9 +99,10 @@
 	{#if screenshots && screenshots.length > 0}
 		<div class="h-full overflow-y-auto pr-2">
 			{#each screenshots.slice(0, 10) as item (item.id)}
+			{@const optimizedUrl = `/_vercel/image?url=${encodeURIComponent(item.url)}&w=640&q=75`}
 				<div class="relative mb-6 overflow-visible text-light-green">
 					<img
-						src={item.url}
+						src="{optimizedUrl}"
 						alt={item.name}
 						class="aspect-video w-full bg-teal object-cover"
 						loading="lazy"

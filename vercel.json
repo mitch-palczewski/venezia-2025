@@ -1,0 +1,14 @@
+{
+  "images": {
+    "sizes": [256, 640, 1080],
+    "domains": [],
+    "remotePatterns": [
+      {
+        "protocol": "https",
+        "hostname": "**.public.blob.vercel-storage.com",
+        "port": ""
+      }
+    ],
+    "minimumCacheTTL": 60
+  }
+}

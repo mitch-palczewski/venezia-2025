@@ -1,7 +1,7 @@
 <script lang="ts">
 	let {
 		isHome = false,
-		isGallery = false,
+		isGallery: isPile3DGallery = false,
 		isPrints = false,
 		isFilm = false,
 		appendTitle = ''
@@ -11,22 +11,27 @@
 </script>
 
 <div class="flex w-full flex-row pb-3 font-extrabold text-light-green sm:p-0">
-	<a href="/#" class="w-220 pt-1 text-3xl font-extrabold sm:text-6xl bg-light-yellow text-dark-gray border-b-2 border-r-2 border-light-yellow hover:border-dark-gray ">PILE-PILE-PILE {appendTitle}</a>
+	<a
+		href="/#"
+		class="w-220 border-r-2 border-b-2 border-light-yellow
+		bg-light-yellow pt-1 text-3xl font-extrabold text-dark-gray hover:border-dark-gray sm:text-4xl md:text-5xl lg:text-6xl"
+		>PILE-PILE-PILE {appendTitle}</a
+	>
 
 	<div class="flex w-full items-center justify-end gap-6">
-		<div class="hidden uppercase sm:flex flex-row gap-6">
-			{#if !isGallery}<a href="/gallery/pile-3d-gallery" class="uppercase hover:text-amber-600"
-					>Pile-3D Gallery</a
-				>{/if}
-			{#if !isPrints}<a href="/gallery/prints" class="uppercase hover:text-amber-600">Prints</a
-				>{/if}
-			{#if !isFilm}<a href="/gallery/film" class="uppercase hover:text-amber-600">Film</a>{/if}
+		<div class="hidden flex-row gap-6 uppercase sm:flex">
+			{#if !isHome}<a href="/3d/pile" class="uppercase hover:text-amber-600">Pile-3D Enter</a>{/if}
+			{#if !isPile3DGallery}
+				<a href="/gallery/pile-3d-gallery" class="uppercase hover:text-amber-600">
+					Pile-3D Gallery
+				</a>
+			{/if}
 		</div>
 
 		<div class="relative">
 			<button
 				onclick={() => (menuOpen = !menuOpen)}
-				class="font-extrabold uppercase hover:text-amber-600 focus:outline-none w-30"
+				class="w-30 font-extrabold uppercase hover:text-amber-600 focus:outline-none"
 			>
 				Pile-World {menuOpen ? '↑' : '↓'}
 			</button>
