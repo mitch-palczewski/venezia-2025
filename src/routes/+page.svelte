@@ -31,13 +31,13 @@
 			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
 		</div>
 		<div class="absolute inset-0 flex flex-col items-center justify-center p-6">
-			<div class="mr-25 bg-teal group-hover:bg-light-yellow md:mr-50">
+			<div class="mr-25 bg-teal group-hover:bg-light-yellow md:mr-50  border-b-2 border-r-2 border-teal group-hover:border-dark-gray">
 				<p
 					class="w-full p-1 text-center text-3xl font-extrabold text-white group-hover:invert sm:text-6xl"
 				>
 					Enter Pile-3D
 				</p>
-				<p class=" text-center text-sm font-extrabold text-white group-hover:invert">
+				<p class="  text-sm font-extrabold text-white group-hover:invert">
 					Shared public space in a web-based 3D environment which needs your participation. Move,
 					rotate, and scale objects to build community architecture in a persistent sandbox.
 				</p>
@@ -51,9 +51,9 @@
 		href={linkHref}
 		aria-label="City Pile"
 		target="_blank"
-		class="group relative flex max-h-[20vh] w-full"
+		class="group relative w-full flex flex-1 min-h-0"
 	>
-		<img src={imageSrc} alt="Pilemaker Preview" class="w-full object-cover" />
+		<img src={imageSrc} alt={text} class="w-full h-full object-cover" />
 		<div class="absolute inset-0 flex items-center justify-center">
 			<p class="bg-cyan-800 text-4xl font-extrabold text-white group-hover:invert">{text}</p>
 		</div>
@@ -61,9 +61,10 @@
 {/snippet}
 
 {#snippet sideBar()}
-	<div class="relative flex w-full flex-col gap-3 bg-dark-gray p-3">
-		<div class="bg-teal p-3">
-			{@render pile2DLink('/gallery/prints', 'Pile Prints', '/images/prints/1.jpg')}
+	<div class="relative min-h-0 flex-1 flex flex-col w-full h-full gap-3 bg-dark-gray p-3">
+		<div class="bg-teal p-3 flex flex-col flex-1 gap-2 overflow-hidden">
+			{@render pile2DLink('/gallery/prints', 'Prints', '/images/prints/1.jpg')}
+			{@render pile2DLink('/gallery/film', 'Film', '')}
 			{@render pile2DLink(
 				'https://audehelene.itch.io/city-pile',
 				'City Pilemaker',
@@ -114,7 +115,8 @@
 	{/if}
 {/snippet}
 
-<div class="relative bg-dark-green p-2 pb-8 sm:h-screen sm:p-6 lg:overflow-hidden">
+<div class="relative bg-dark-green p-2 pb-8 h-screen sm:p-6 overflow-hidden">
+	
 	<div class="pointer-events-none absolute inset-0 ml-5 grid grid-cols-1 gap-0 p-3 sm:grid-cols-6">
 		<div class=" ml-8 border-r-8 border-light-yellow bg-dark-gray"></div>
 		<div class=" sm:col-span-5">
@@ -128,11 +130,10 @@
 
 	<div class="relative z-10 flex h-full flex-col">
 		<PageHeader isHome={true} />
-
 		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-3 lg:grid-cols-6">
 			<div class="hidden min-h-0 pt-4 xl:block">{@render pileScreenshotGallery()}</div>
-			<div class="min-h-0 lg:col-span-3">{@render enterPilePilePile()}</div>
-			<div class="flex min-h-0 pt-12 pl-8 lg:col-span-3 xl:col-span-2">{@render sideBar()}</div>
+			<div class="min-h-0  lg:col-span-4 xl:col-span-3">{@render enterPilePilePile()}</div>
+			<div class="hidden lg:flex min-h-0 flex-col pt-4 lg:mt-12 pl-8 lg:col-span-2 ">{@render sideBar()}</div>
 		</div>
 	</div>
 </div>

@@ -7,7 +7,6 @@
 		appendTitle = ''
 	} = $props();
 
-	// Toggle state for the dropdown
 	let menuOpen = $state(false);
 </script>
 
@@ -50,7 +49,7 @@
 						class="py-1 hover:text-amber-600">City Pilemaker</a
 					>
 					<a href="/3d/pile" target="_blank" class="py-1 hover:text-amber-600">Pile-3D</a>
-					<a href="/film" target="_blank" class="py-1 hover:text-amber-600">Film</a>
+					<a href="/gallery/film" target="_blank" class="py-1 hover:text-amber-600">Film</a>
 					<a href="/gallery/prints" target="_blank" class="py-1 hover:text-amber-600">Prints</a>
 				</div>
 
@@ -61,8 +60,5 @@
 				></div>
 			{/if}
 		</div>
-		{#if !isHome}
-			<a href="/#" class="uppercase hover:text-amber-600">Home</a>
-		{/if}
 	</div>
 </div>
