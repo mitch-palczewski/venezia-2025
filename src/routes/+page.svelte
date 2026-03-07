@@ -8,7 +8,7 @@
 		const date = new Date(isoString);
 		const m = date.getMonth() + 1;
 		const d = date.getDate();
-		const y = date.getFullYear().toString().slice(-2); // Get last 2 digits
+		const y = date.getFullYear().toString().slice(-2);
 
 		return `${m}/${d}/${y}`;
 	};
@@ -18,7 +18,7 @@
 	<a
 		href="/3d/pile"
 		aria-label="City Pile"
-		class="group relative flex h-[80vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
+		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
 	>
 		<img
 			src={screenshots![0].url}
@@ -27,11 +27,11 @@
 		/>
 		<div class="absolute inset-0 flex flex-col md:flex-row">
 			<img class="md:pt-[50%]" src="/gifs/Misc_05_preview2.gif" alt="Fire Pot Rotating" />
-	
+
 			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
 		</div>
 		<div class="absolute inset-0 flex flex-col items-center justify-center p-6">
-			<div class="mr-25 bg-teal md:mr-50">
+			<div class="mr-25 bg-teal group-hover:bg-light-yellow md:mr-50">
 				<p
 					class="w-full p-1 text-center text-3xl font-extrabold text-white group-hover:invert sm:text-6xl"
 				>
@@ -61,7 +61,7 @@
 {/snippet}
 
 {#snippet sideBar()}
-	<div class="flex h-full w-full flex-col gap-3 bg-dark-gray p-3">
+	<div class="relative flex w-full flex-col gap-3 bg-dark-gray p-3">
 		<div class="bg-teal p-3">
 			{@render pile2DLink('/gallery/prints', 'Pile Prints', '/images/prints/1.jpg')}
 			{@render pile2DLink(
@@ -114,7 +114,7 @@
 	{/if}
 {/snippet}
 
-<div class="relative bg-dark-green p-6 pb-8 sm:h-screen xl:overflow-hidden">
+<div class="relative bg-dark-green p-2 pb-8 sm:h-screen sm:p-6 lg:overflow-hidden">
 	<div class="pointer-events-none absolute inset-0 ml-5 grid grid-cols-1 gap-0 p-3 sm:grid-cols-6">
 		<div class=" ml-8 border-r-8 border-light-yellow bg-dark-gray"></div>
 		<div class=" sm:col-span-5">
@@ -129,10 +129,10 @@
 	<div class="relative z-10 flex h-full flex-col">
 		<PageHeader isHome={true} />
 
-		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-3 xl:grid-cols-6">
+		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-3 lg:grid-cols-6">
 			<div class="hidden min-h-0 pt-4 xl:block">{@render pileScreenshotGallery()}</div>
-			<div class="min-h-0 xl:col-span-3">{@render enterPilePilePile()}</div>
-			<div class="min-h-0 pt-12 pl-8 xl:col-span-2">{@render sideBar()}</div>
+			<div class="min-h-0 lg:col-span-3">{@render enterPilePilePile()}</div>
+			<div class="flex min-h-0 pt-12 pl-8 lg:col-span-3 xl:col-span-2">{@render sideBar()}</div>
 		</div>
 	</div>
 </div>

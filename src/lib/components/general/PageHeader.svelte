@@ -12,7 +12,7 @@
 </script>
 
 <div class="flex w-full flex-row pb-3 font-extrabold text-light-green sm:p-0">
-	<h1 class="w-220 pt-1 text-3xl font-extrabold sm:text-6xl bg-light-yellow text-dark-gray">PILE-PILE-PILE {appendTitle}</h1>
+	<a href="/#" class="w-220 pt-1 text-3xl font-extrabold sm:text-6xl bg-light-yellow text-dark-gray border-b-2 border-r-2 border-light-yellow hover:border-dark-gray ">PILE-PILE-PILE {appendTitle}</a>
 
 	<div class="flex w-full items-center justify-end gap-6">
 		<div class="hidden uppercase sm:flex flex-row gap-6">
@@ -51,7 +51,7 @@
 					>
 					<a href="/3d/pile" target="_blank" class="py-1 hover:text-amber-600">Pile-3D</a>
 					<a href="/film" target="_blank" class="py-1 hover:text-amber-600">Film</a>
-					<a href="/prints" target="_blank" class="py-1 hover:text-amber-600">Prints</a>
+					<a href="/gallery/prints" target="_blank" class="py-1 hover:text-amber-600">Prints</a>
 				</div>
 
 				<div
