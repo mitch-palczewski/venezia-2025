@@ -1,6 +1,6 @@
 {
   "images": {
-    "sizes": [256, 640, 1080],
+    "sizes": [256, 640, 1080, 1920],
     "domains": [],
     "remotePatterns": [
       {
