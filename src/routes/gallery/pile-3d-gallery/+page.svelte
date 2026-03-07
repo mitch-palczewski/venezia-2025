@@ -19,7 +19,7 @@
 				</p>
 				<img
 					src={optimizedUrl}
-					alt={item.name}
+					alt="ID: {item.id}, CREATED_AT: {item.created_at}" 
 					class="aspect-video w-full object-cover"
 					loading="lazy"
 					decoding="async"
