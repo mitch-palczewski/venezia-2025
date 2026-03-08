@@ -4,6 +4,7 @@
 
 	let { data } = $props();
 	const { screenshots } = $derived(data);
+	let innerWidth = $state(0);
 	let isMobile = $derived(innerWidth < 768);
 
 	const formatDate = (isoString: string | number | Date) => {
@@ -19,6 +20,8 @@
 		return `/_vercel/image?url=${encodeURIComponent(url)}&w=${width}&q=${quality}`;
 	}
 </script>
+
+<svelte:window bind:innerWidth />
 
 {#snippet enterPile3DDesktop()}
 	<a
@@ -65,15 +68,14 @@
 			alt="Most recent user captured screenshot"
 			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
 		/>
-		<div class="absolute inset-0 flex flex-col md:flex-row">
-			<img class="md:pt-[50%]" src="/gifs/Misc_05_preview2.gif" alt="Fire Pot Rotating" />
-
+		<div class="absolute mr-30">
+			<img src="/gifs/Misc_05_preview2.gif" alt="Fire Pot Rotating" />
+		</div>
+		<div class="absolute inset-0 mt-40 w-200">
 			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
 		</div>
-		<div class="absolute inset-0 flex flex-col items-center justify-end p-6 ">
-			<div
-				class=" bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50"
-			>
+		<div class="absolute inset-0 flex flex-col items-center justify-end p-6">
+			<div class=" bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50">
 				<p
 					class="w-full p-1 text-center text-6xl font-extrabold text-white group-hover:invert sm:text-6xl"
 				>
@@ -171,10 +173,10 @@
 	</div>
 
 	<div class="relative z-10 flex h-full flex-col">
-		<div class="pt-5 snm:pt-0">
+		<div class="snm:pt-0 pt-5">
 			<PageHeader isHome={true} />
 		</div>
-		
+
 		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-6 md:pt-3 lg:grid-cols-6">
 			<div class="hidden min-h-0 pt-4 xl:block">{@render pileScreenshotGallery()}</div>
 			<div class="min-h-0 lg:col-span-4 xl:col-span-3">
