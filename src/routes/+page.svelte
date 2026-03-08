@@ -75,13 +75,13 @@
 			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
 		</div>
 		<div class="absolute inset-0 flex flex-col items-center justify-end p-6">
-			<div class=" bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50">
+			<div class=" bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50 shadow-2xl">
 				<p
 					class="w-full p-1 text-center text-6xl font-extrabold text-white group-hover:invert sm:text-6xl"
 				>
 					Enter Pile-3D
 				</p>
-				<p class="  text-sm font-extrabold text-white group-hover:invert">
+				<p class=" shadow-2xl p-3 text-justify  text-sm font-extrabold text-white group-hover:invert">
 					Shared public space in a web-based 3D environment which needs your participation. Move,
 					rotate, and scale objects to build community architecture in a persistent sandbox.
 				</p>
@@ -98,8 +98,8 @@
 		class="group relative flex min-h-0 w-full flex-1"
 	>
 		<img src={imageSrc} alt={text} class="h-full w-full object-cover" />
-		<div class="absolute inset-0 flex items-center justify-center">
-			<p class="bg-cyan-800 text-4xl font-extrabold text-white group-hover:invert">{text}</p>
+		<div class="absolute inset-0 flex items-center justify-top px-6 ">
+			<p class="bg-teal px-1 text-2xl font-extrabold text-light-green group-hover:text-dark-gray group-hover:bg-light-yellow">{text}</p>
 		</div>
 	</a>
 {/snippet}

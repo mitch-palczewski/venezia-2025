@@ -41,16 +41,17 @@
 {#snippet menu()}
 	{#if menuOpen}
 		<div
-			class="shadow-3xl fixed right-0 z-50 mt-2 flex w-screen flex-col border-b-6 border-l-6 border-dark-gray bg-light-green p-4 text-xl text-dark-gray sm:w-[500px]"
+			class="shadow-3xl fixed right-0 z-50 mt-2 flex h-full w-screen flex-col overflow-y-scroll border-b-6 border-l-6 border-dark-gray bg-light-green p-4 text-xl text-dark-gray sm:w-[500px]"
 		>
 			<h1 class="bg-teal pt-1 pl-1 text-3xl text-light-green">Pile World</h1>
 			<div class="flex flex-col p-2">
-				<a href="/3d/pile" target="_blank" class="py-1 hover:bg-light-yellow">Enter Pile-3D</a>
-				<a href="/gallery/pile-3d-gallery" target="_blank" class="py-1 hover:bg-light-yellow"
+				<a href="/#" class="py-1 hover:bg-light-yellow">Home</a>
+				<a href="/3d/pile" class="py-1 hover:bg-light-yellow">Enter Pile-3D</a>
+				<a href="/gallery/pile-3d-gallery" class="py-1 hover:bg-light-yellow"
 					>Pile-3D Screenshot Gallery</a
 				>
-				<a href="/gallery/film" target="_blank" class="py-1 hover:bg-light-yellow">Film</a>
-				<a href="/gallery/prints" target="_blank" class="py-1 hover:bg-light-yellow">Prints</a>
+				<a href="/gallery/film" class="py-1 hover:bg-light-yellow">Film</a>
+				<a href="/gallery/prints" class="py-1 hover:bg-light-yellow">Prints</a>
 				<a
 					href="https://audehelene.itch.io/pilemaker"
 					target="_blank"

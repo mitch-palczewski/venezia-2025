@@ -14,11 +14,11 @@
 	];
 </script>
 
-<div class="bg-dark-green p-6">
-	<div class="pb-8">
-		<PageHeader />
+<div class=" min-h-screen w-full bg-dark-green">
+	<div class="sticky top-0 z-10 bg-dark-green px-2 pt-4 pb-2">
+		<PageHeader  appendTitle={'Prints'} />
 	</div>
-	<div class="grid grid-cols-1 xl:grid-cols-2 px-auto">
+	<div class="grid grid-cols-1 gap-3 p-2 md:grid-cols-2">
 		{#each prints as print}
 			<div class="mx-auto h-screen w-full p-2">
 				<img src={print} alt="Pile Print" class="h-[90vh] object-contain" />

@@ -8,8 +8,8 @@
 {#snippet renderScreenshots()}
 	{#if screenshots && screenshots.length > 0}
 		{#each screenshots as item (item.id)}
-			<div class="mb-2 bg-cyan-800 p-1">
-				<p class=" text-white">
+			<div class="mb-2 bg-dark-gray p-1">
+				<p class=" text-light-green w-full flex justify-end">
 					{new Date(item.created_at).toLocaleDateString('en-US', {
 						month: 'numeric',
 						day: 'numeric',
@@ -26,21 +26,15 @@
 			</div>
 		{/each}
 	{:else}
-		<p class="text-stone-500 italic">No screenshots in the pile yet...</p>
+		<p class="text-light-green italic">No screenshots in the pile yet...</p>
 	{/if}
 {/snippet}
 
-{#snippet header()}
-	<div class="flex flex-row w-full">
-		<h1 class="w-full text-4xl font-extrabold">PILE-PILE-PILE Gallery</h1>
-        <a href="/#" class="flex w-full items-center font-extrabold justify-end">Back</a>
-	</div>
-{/snippet}
-
-<div class="p-6 w-full  " style="background-image: url('/environment/gradient_03.jpg');">
-    <PageHeader isGallery={true} appendTitle={"Gallery"}/>
-    <div class="grid grid-cols-2 gap-3 py-3 ">
+<div class=" w-full bg-dark-green min-h-screen">
+    <div class="sticky pt-4 px-2 pb-2 top-0 z-10 bg-dark-green">
+        <PageHeader isGallery={true} appendTitle={"Gallery"}/>
+    </div>
+    <div class="p-2 grid grid-cols-1 md:grid-cols-2 gap-3">
         {@render renderScreenshots()}
     </div>
-    
 </div>
