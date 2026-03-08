@@ -38,11 +38,54 @@
 	</button>
 {/snippet}
 
+{#snippet menu()}
+	{#if menuOpen}
+		<div
+			class="shadow-3xl fixed right-0 z-50 mt-2 flex w-screen sm:w-[500px] flex-col bg-light-green p-4 text-xl text-dark-gray border-l-6 border-b-6 border-dark-gray"
+		>
+			<h1 class="bg-teal pt-1 pl-1 text-3xl text-light-green">Pile World</h1>
+			<div class="flex flex-col p-2">
+				<a href="/3d/pile" target="_blank" class="py-1 hover:bg-light-yellow">Enter Pile-3D</a>
+				<a href="/gallery/pile-3d-gallery" target="_blank" class="py-1 hover:bg-light-yellow"
+					>Pile-3D Screenshot Gallery</a
+				>
+				<a href="/gallery/film" target="_blank" class="py-1 hover:bg-light-yellow">Film</a>
+				<a href="/gallery/prints" target="_blank" class="py-1 hover:bg-light-yellow">Prints</a>
+				<a
+					href="https://audehelene.itch.io/pilemaker"
+					target="_blank"
+					class="py-1 hover:bg-light-yellow">Pilemaker (Original)</a
+				>
+				<a
+					href="https://audehelene.itch.io/city-pile"
+					target="_blank"
+					class="py-1 hover:bg-light-yellow">City Pilemaker</a
+				>
+			</div>
+
+			<hr class="bold py-3" />
+			<h1 class="bg-teal pt-1 pl-1 text-3xl text-light-green">Association</h1>
+			<div class="flex flex-col p-2">
+				<a href="https://www.feedfeednhv.com/" target="_blank" class="py-1 hover:bg-light-yellow"
+					>FEED FEED NHV</a
+				>
+				<a
+					href="https://www.mitch-palczewski.com/"
+					target="_blank"
+					class="py-1 hover:bg-light-yellow">Mitch-Palczewski.com</a
+				>
+			</div>
+		</div>
+
+		<div role="presentation" class="fixed inset-0 z-40" onclick={() => (menuOpen = false)}></div>
+	{/if}
+{/snippet}
+
 <div class="flex w-full flex-row pb-3 font-extrabold text-light-yellow sm:p-0">
 	<a
 		href="/#"
-		class="w-220 border-r-2 border-b-2 border-light-yellow
-		bg-light-yellow pt-1 text-3xl font-extrabold text-dark-gray hover:border-dark-gray sm:text-4xl md:text-5xl lg:text-6xl"
+		class="w-240 border-r-2 border-b-2 border-light-yellow
+		bg-light-yellow pt-1 text-4xl font-extrabold text-dark-gray hover:border-dark-gray sm:text-5xl  lg:text-6xl"
 		>PILE-PILE-PILE {appendTitle}</a
 	>
 
@@ -50,7 +93,10 @@
 		<div class="hidden flex-row gap-6 uppercase sm:flex">
 			{#if !isHome}<a href="/3d/pile" class="uppercase hover:text-amber-600">Pile-3D Enter</a>{/if}
 			{#if !isPile3DGallery}
-				<a href="/gallery/pile-3d-gallery" class="uppercase hover:text-dark-gray hover:bg-light-green">
+				<a
+					href="/gallery/pile-3d-gallery"
+					class="uppercase hover:bg-light-green hover:text-dark-gray"
+				>
 					Pile-3D Gallery
 				</a>
 			{/if}
@@ -58,34 +104,7 @@
 
 		<div class="relative">
 			{@render hamburger()}
-			{#if menuOpen}
-				<div
-					class="absolute right-0 z-50 mt-2 flex min-w-[150px] flex-col bg-white p-4 text-black shadow-xl ring-4 ring-white"
-				>
-					<a href="/gallery/pile-3d-gallery" target="_blank" class="py-1 hover:text-amber-600"
-						>Pile-3D Gallery</a
-					>
-					<a
-						href="https://audehelene.itch.io/pilemaker"
-						target="_blank"
-						class="py-1 hover:text-amber-600">Pilemaker (Original)</a
-					>
-					<a
-						href="https://audehelene.itch.io/city-pile"
-						target="_blank"
-						class="py-1 hover:text-amber-600">City Pilemaker</a
-					>
-					<a href="/3d/pile" target="_blank" class="py-1 hover:text-amber-600">Pile-3D</a>
-					<a href="/gallery/film" target="_blank" class="py-1 hover:text-amber-600">Film</a>
-					<a href="/gallery/prints" target="_blank" class="py-1 hover:text-amber-600">Prints</a>
-				</div>
-
-				<div
-					role="presentation"
-					class="fixed inset-0 z-40"
-					onclick={() => (menuOpen = false)}
-				></div>
-			{/if}
+			{@render menu()}
 		</div>
 	</div>
 </div>
