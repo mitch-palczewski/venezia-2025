@@ -97,16 +97,16 @@
 		</div>
 	</div>
 	{#if selectedElement}
-		<div class="mt-4 w-full rounded bg-black/30 p-2 text-center text-white hover:bg-white/40">
-			<button onclick={() => handleAddToScene()}>
+		<button onclick={() => handleAddToScene()}>
+			<div class="mt-4 w-full rounded bg-black/30 p-2 text-center text-white hover:bg-white/40">
 				<p class="text-center">{selectedElement.displayName}</p>
 				{#if addMenuState === 'object2D' || addMenuState === 'object3D'}
 					Add to Scene
 				{:else if addMenuState === 'environment'}
 					Change Environment
 				{/if}
-			</button>
-		</div>
+			</div>
+		</button>
 	{/if}
 </div>
 

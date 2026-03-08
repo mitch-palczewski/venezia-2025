@@ -41,7 +41,7 @@
 {#snippet menu()}
 	{#if menuOpen}
 		<div
-			class="shadow-3xl fixed right-0 z-50 mt-2 flex w-screen sm:w-[500px] flex-col bg-light-green p-4 text-xl text-dark-gray border-l-6 border-b-6 border-dark-gray"
+			class="shadow-3xl fixed right-0 z-50 mt-2 flex w-screen flex-col border-b-6 border-l-6 border-dark-gray bg-light-green p-4 text-xl text-dark-gray sm:w-[500px]"
 		>
 			<h1 class="bg-teal pt-1 pl-1 text-3xl text-light-green">Pile World</h1>
 			<div class="flex flex-col p-2">
@@ -74,6 +74,11 @@
 					target="_blank"
 					class="py-1 hover:bg-light-yellow">Mitch-Palczewski.com</a
 				>
+				<a
+					href="https://www.mitch-palczewski.com/sketches/shield-man/"
+					target="_blank"
+					class="py-1 hover:bg-light-yellow">Shield Man Speaks</a
+				>
 			</div>
 		</div>
 
@@ -85,7 +90,7 @@
 	<a
 		href="/#"
 		class="w-240 border-r-2 border-b-2 border-light-yellow
-		bg-light-yellow pt-1 text-4xl font-extrabold text-dark-gray hover:border-dark-gray sm:text-5xl  lg:text-6xl"
+		bg-light-yellow pt-1 text-4xl font-extrabold text-dark-gray hover:border-dark-gray sm:text-5xl lg:text-6xl"
 		>PILE-PILE-PILE {appendTitle}</a
 	>
 
