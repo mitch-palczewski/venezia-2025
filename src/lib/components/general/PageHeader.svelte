@@ -8,6 +8,14 @@
 	} = $props();
 
 	let menuOpen = $state(false);
+
+	$effect(() => {
+		if (menuOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	});
 </script>
 
 {#snippet hamburger()}
@@ -41,7 +49,7 @@
 {#snippet menu()}
 	{#if menuOpen}
 		<div
-			class="shadow-3xl fixed right-0 z-50 mt-2 flex h-full w-screen flex-col overflow-y-scroll border-b-6 border-l-6 border-dark-gray bg-light-green p-4 text-xl text-dark-gray sm:w-[500px]"
+			class="shadow-3xl ml-auto fixed inset-0 top-15 sm:top-21 right-0 z-50 mt-2 flex h-full w-screen flex-col overflow-y-scroll border-b-6 border-l-6 border-dark-gray bg-light-green p-4 text-xl text-dark-gray sm:w-[500px]"
 		>
 			<h1 class="bg-teal pt-1 pl-1 text-3xl text-light-green">Pile World</h1>
 			<div class="flex flex-col p-2">
@@ -87,28 +95,30 @@
 	{/if}
 {/snippet}
 
-<div class="flex w-full flex-row pb-3 font-extrabold text-light-yellow sm:p-0">
+<div class="flex w-full flex-row font-extrabold text-light-yellow sm:p-0">
 	<a
 		href="/#"
-		class="w-240 border-r-2 border-b-2 border-light-yellow
+		class="w-240 sm:border-r-2 sm:border-b-2 border-light-yellow
 		bg-light-yellow pt-1 text-4xl font-extrabold text-dark-gray hover:border-dark-gray sm:text-5xl lg:text-6xl"
-		>PILE-PILE-PILE {appendTitle}</a
+		>PILE-PILE-PILE </a
 	>
 
 	<div class="flex w-full items-center justify-end gap-6">
-		<div class="hidden flex-row gap-6 uppercase sm:flex">
-			{#if !isHome}<a href="/3d/pile" class="uppercase hover:text-amber-600">Pile-3D Enter</a>{/if}
+		<div class="hidden flex-row items-center gap-6 uppercase sm:flex">
+			{#if !isHome}
+				<a href="/3d/pile" class="hover:text-amber-600">Pile-3D Enter</a>
+			{/if}
+
 			{#if !isPile3DGallery}
 				<a
 					href="/gallery/pile-3d-gallery"
-					class="uppercase hover:bg-light-green hover:text-dark-gray"
+					class="px-1 transition-colors hover:bg-light-green hover:text-dark-gray"
 				>
 					Pile-3D Gallery
 				</a>
 			{/if}
 		</div>
-
-		<div class="relative">
+		<div class="flex flex-col ">
 			{@render hamburger()}
 			{@render menu()}
 		</div>

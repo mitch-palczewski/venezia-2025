@@ -34,7 +34,7 @@
     <div class="sticky pt-4 px-2 pb-2 top-0 z-10 bg-dark-green">
         <PageHeader isGallery={true} appendTitle={"Gallery"}/>
     </div>
-    <div class="p-2 grid grid-cols-1 md:grid-cols-2 gap-3">
+    <div class="p-2 pt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
         {@render renderScreenshots()}
     </div>
 </div>
