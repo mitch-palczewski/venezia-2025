@@ -4,13 +4,13 @@
 
 	let { data } = $props();
 	const { screenshots } = $derived(data);
+	let isMobile = $derived(innerWidth < 768);
 
 	const formatDate = (isoString: string | number | Date) => {
 		const date = new Date(isoString);
 		const m = date.getMonth() + 1;
 		const d = date.getDate();
 		const y = date.getFullYear().toString().slice(-2);
-
 		return `${m}/${d}/${y}`;
 	};
 
@@ -20,7 +20,7 @@
 	}
 </script>
 
-{#snippet enterPilePilePile()}
+{#snippet enterPile3DDesktop()}
 	<a
 		href="/3d/pile"
 		aria-label="Enter 3D Pile"
@@ -42,6 +42,40 @@
 			>
 				<p
 					class="w-full p-1 text-center text-3xl font-extrabold text-white group-hover:invert sm:text-6xl"
+				>
+					Enter Pile-3D
+				</p>
+				<p class="  text-sm font-extrabold text-white group-hover:invert">
+					Shared public space in a web-based 3D environment which needs your participation. Move,
+					rotate, and scale objects to build community architecture in a persistent sandbox.
+				</p>
+			</div>
+		</div>
+	</a>
+{/snippet}
+
+{#snippet enterPile3DMobile()}
+	<a
+		href="/3d/pile"
+		aria-label="Enter 3D Pile"
+		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
+	>
+		<img
+			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
+			alt="Most recent user captured screenshot"
+			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
+		/>
+		<div class="absolute inset-0 flex flex-col md:flex-row">
+			<img class="md:pt-[50%]" src="/gifs/Misc_05_preview2.gif" alt="Fire Pot Rotating" />
+
+			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
+		</div>
+		<div class="absolute inset-0 flex flex-col items-center justify-end p-6 ">
+			<div
+				class=" bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50"
+			>
+				<p
+					class="w-full p-1 text-center text-6xl font-extrabold text-white group-hover:invert sm:text-6xl"
 				>
 					Enter Pile-3D
 				</p>
@@ -126,21 +160,30 @@
 
 <div class="relative h-screen overflow-hidden bg-dark-green p-2 pb-8 sm:p-6">
 	<div class="pointer-events-none absolute inset-0 ml-5 grid grid-cols-1 gap-0 p-3 sm:grid-cols-6">
-		<div class=" ml-8 border-r-8 border-light-yellow bg-dark-gray"></div>
-		<div class=" sm:col-span-5">
+		<div class="mr-40 border-r-8 border-light-yellow bg-dark-gray sm:mr-0 sm:ml-8"></div>
+		<div class="hidden sm:col-span-5 md:block">
 			<div class="grid grid-cols-5 sm:h-80">
 				<div class="sm:col-span-3"></div>
 				<div class="sm:col-span-2"></div>
 			</div>
-			<div class="mb-2 ml-12 h-full bg-dark-gray"></div>
+			<div class=" mb-2 ml-12 h-full bg-dark-gray"></div>
 		</div>
 	</div>
 
 	<div class="relative z-10 flex h-full flex-col">
-		<PageHeader isHome={true} />
-		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-3 lg:grid-cols-6">
+		<div class="pt-5 snm:pt-0">
+			<PageHeader isHome={true} />
+		</div>
+		
+		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-6 md:pt-3 lg:grid-cols-6">
 			<div class="hidden min-h-0 pt-4 xl:block">{@render pileScreenshotGallery()}</div>
-			<div class="min-h-0 lg:col-span-4 xl:col-span-3">{@render enterPilePilePile()}</div>
+			<div class="min-h-0 lg:col-span-4 xl:col-span-3">
+				{#if isMobile}
+					{@render enterPile3DMobile()}
+				{:else}
+					{@render enterPile3DDesktop()}
+				{/if}
+			</div>
 			<div class="hidden min-h-0 flex-col pt-4 pl-8 lg:col-span-2 lg:mt-12 lg:flex">
 				{@render sideBar()}
 			</div>
