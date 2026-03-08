@@ -75,7 +75,9 @@
 					{#if uiSettings.showScreenshotBtn}
 						<ScreenshotBtn app={pileApp} {uiSettings} />
 					{/if}
-					<FullscreenBtn {uiSettings} />
+					{#if !uiSettings.isFullscreen}
+						<FullscreenBtn {uiSettings} />
+					{/if}
 				{/if}
 
 				<div class="flex flex-col items-center gap-3">

@@ -51,10 +51,11 @@
 </svelte:head>
 
 <section class="sr-only">
-	<h1>PilePilePile: 3D Digital Public Space</h1>
-
+	<h1>Pile-Pile-Pile: 3D Digital Public Space</h1>
+	<h1>Pile Pile Pile</h1>
+	<h1>Pile-3D</h1>
 	<p>
-		PilePilePile is shared public space in a web-based 3D environment which needs your
+		Pile-Pile-Pile is shared public space in a web-based 3D environment which needs your
 		participation. Move, rotate, and scale objects to build community architecture in a persistent
 		sandbox. Or just explore. It is space that is meant to be changed, piled on, dug out; an
 		ever-evolving sculpture.
@@ -70,13 +71,14 @@
 		<li>Aude Jomini</li>
 	</ul>
 
-	<h2>Organization</h2>
+	<p>Organization</p>
 	<ul>
 		<li>FEEDFEEDNHV</li>
 	</ul>
 
-	<h2>Tags</h2>
+	<p>Tags</p>
 	<ul>
+		<li>Pile Maker</li>
 		<li>Digital Public Space and Collaborative Art</li>
 		<li>Interactive 3D Geometry and Real-time Synchronization</li>
 		<li>Curated Digital Sculptures and Asset Manipulation</li>
