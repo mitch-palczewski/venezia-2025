@@ -102,7 +102,6 @@
 		bg-light-yellow pt-1 text-4xl font-extrabold text-dark-gray hover:border-dark-gray sm:text-5xl lg:text-6xl"
 		>PILE-PILE-PILE </a
 	>
-
 	<div class="flex w-full items-center justify-end gap-6">
 		<div class="hidden flex-row items-center gap-6 uppercase sm:flex">
 			{#if !isHome}

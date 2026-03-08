@@ -61,7 +61,7 @@
 	<a
 		href="/3d/pile"
 		aria-label="Enter 3D Pile"
-		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
+		class="group relative flex h-[82vh] max-h-200 min-h-[82vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
 	>
 		<img
 			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
