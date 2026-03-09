@@ -79,9 +79,9 @@
 		pileObjectData.moveTo = mover.moveTo;
 	});
 
-
+	const isLowQuality = pileApp.quality === 'low'
 	bvh(() => ({
-		enabled: pileApp.quality !== 'low',
+		enabled: !isLowQuality,
 		strategy: BVHSplitStrategy.CENTER,
 		maxDepth: pileApp.quality === 'high' ? 10 : 5,
 		maxLeafTris: pileApp.quality === 'high' ? 100 : 500,
@@ -114,7 +114,7 @@
 				position={[child.position.x, child.position.y, child.position.z]}
 				rotation={[child.rotation.x, child.rotation.y, child.rotation.z]}
 				scale={[child.scale.x, child.scale.y, child.scale.z]}
-				raycast={pileApp.quality === 'low' ? meshBounds : undefined}
+				raycast={isLowQuality ? meshBounds : undefined}
 			></T.Mesh>
 		{/if}
 	{/each}
