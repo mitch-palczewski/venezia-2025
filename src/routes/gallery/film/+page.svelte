@@ -1,9 +1,8 @@
 <script lang="ts">
 	const count: number[] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 </script>
-
+<img src="/media/film_cover.png" alt="Film Cover">
 <h1>Page is under construction</h1>
-
 {#each count as num (num)}
 	<hr />
 	<p>//////////////////////////////////</p>

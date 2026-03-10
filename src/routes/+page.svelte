@@ -108,7 +108,7 @@
 	<div class="relative flex h-full min-h-0 w-full flex-1 flex-col gap-3 bg-dark-gray p-3">
 		<div class="flex flex-1 flex-col gap-2 overflow-hidden bg-teal p-3">
 			{@render pile2DLink('/gallery/prints', 'Prints', '/images/prints/1_LOD2.avif')}
-			{@render pile2DLink('/gallery/film', 'Film', '')}
+			{@render pile2DLink('/gallery/film', 'Film', '/media/film_cover.png')}
 			{@render pile2DLink(
 				'https://audehelene.itch.io/city-pile',
 				'City Pilemaker',
