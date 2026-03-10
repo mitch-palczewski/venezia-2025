@@ -4,7 +4,7 @@
 
 <h1>Page is under construction</h1>
 
-{#each count as num}
+{#each count as num (num)}
 	<hr />
 	<p>//////////////////////////////////</p>
 	<p>
