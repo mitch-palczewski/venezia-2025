@@ -4,12 +4,12 @@
 	import Settings from './Settings.svelte';
 
 	let { uiSettings }: { uiSettings: SettingsState } = $props();
-	let state = $state<'settings' | 'controls'>('settings');
+	let state = $state<'settings' | 'controls' >('settings');
 
 	const tabs = ['settings', 'controls'] as const;
 </script>
 
-<div class="fixed inset-0 z-50 flex items-start justify-center bg-black/20 p-8 backdrop-blur-xs">
+<div class="fixed inset-0 z-50 flex items-start justify-center bg-black/20 p-3 sm:p-8 backdrop-blur-xs">
 	<div
 		class="relative w-full h-full border border-white/10 bg-black/40 p-2 shadow-2xl "
 	>
@@ -36,8 +36,8 @@
 		<div class="mt-6 max-h-[70vh] overflow-y-auto pr-2">
 			{#if state === 'settings'}
 				<Settings {uiSettings} />
-			{:else}
-				<Controls />
+			{:else if state === 'controls'}
+				<Controls/>
 			{/if}
 		</div>
 	</div>

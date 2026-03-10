@@ -79,7 +79,7 @@
 		pileObjectData.moveTo = mover.moveTo;
 	});
 
-	const isLowQuality = pileApp.quality === 'low'
+	const isLowQuality = pileApp.quality === 'low';
 	bvh(() => ({
 		enabled: !isLowQuality,
 		strategy: BVHSplitStrategy.CENTER,
