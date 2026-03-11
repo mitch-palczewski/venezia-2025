@@ -1,15 +1,14 @@
 <script lang="ts">
-	import { isInstanceOf, T, useTask } from '@threlte/core';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+	import { isInstanceOf, T} from '@threlte/core';
 	import {
 		bvh,
 		BVHSplitStrategy,
-		interactivity,
 		meshBounds,
 		TransformControls,
 		useGltf,
-		type BVHOptions
 	} from '@threlte/extras';
-	import { Group, Mesh, Object3D, Vector3 } from 'three';
+	import { Group, Mesh, Object3D } from 'three';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import {
@@ -137,7 +136,7 @@
 		handleModelClick(e, pileApp, pileObjectData);
 	}}
 >
-	{#await gltf}
+	{#await $gltf}
 		{@render fallback?.()}
 	{:then gltf}
 		{#if shown && sceneChildren}
