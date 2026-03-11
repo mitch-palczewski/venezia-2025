@@ -5,7 +5,8 @@ export async function GET() {
         '', 
         '3d/pile', 
         'gallery/prints', 
-        'gallery/pile-3d-gallery'
+        'gallery/pile-3d-gallery',
+        'gallery/film'
     ];
 
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>

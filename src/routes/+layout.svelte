@@ -11,9 +11,9 @@
 	const SEO = {
 		title: 'PilePilePile | 3D Digital Public Space',
 		description:
-			'A community driven art installation featuring 3D models curated by the authors that can be moved, rotated, and scaled by participants in a shared space.',
+			'Shared public space in a web-based 3D environment which needs your participation. Move, rotate, and scale objects to build community architecture in a persistent sandbox.',
 		url: 'https://www.pilepilepile.com/',
-		ogImage: 'https://www.pilepilepile.com/media/Cover_v4.1.png'
+		ogImage: 'https://www.pilepilepile.com/media/SEO_cover.jpg'
 	};
 </script>
 
@@ -25,42 +25,51 @@
 	<meta property="og:type" content="website" />
 	<meta property="og:url" content={SEO.url} />
 	<meta property="og:title" content={SEO.title} />
+	<meta property="og:site_name" content="PilePilePile" />
 	<meta property="og:description" content={SEO.description} />
 	<meta property="og:image" content={SEO.ogImage} />
+	<meta property="og:image:width" content="1200" />
+	<meta property="og:image:height" content="630" />
+	<meta
+		property="og:image:alt"
+		content="A screenshot of the PilePilePile 3D interactive art environment."
+	/>
 
 	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content={SEO.title} />
 	<meta name="twitter:description" content={SEO.description} />
 	<meta name="twitter:image" content={SEO.ogImage} />
+	<meta name="twitter:image:alt" content="Public Space in a 3D digital environment" />
 
-	{@html `<script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "VisualArtwork",
-      "name": "PilePilePile",
-      "description": "${SEO.description}",
-      "creator": [
-        { "@type": "Person", "name": "Mitch Palczewski" },
-        { "@type": "Person", "name": "Eben Kling" },
-        { "@type": "Person", "name": "Aude Jomini" }
-      ],
-      "artform": "Interactive 3D Installation",
-      "medium": "Digital/Real-time Software"
-    }
-  </script>`}
+	<script type="application/ld+json">
+    {@html JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "VisualArtwork",
+        "name": "Pile Pile Pile",
+        "description": SEO.description,
+        "creator": [
+            { "@type": "Person", "name": "Mitch Palczewski" },
+            { "@type": "Person", "name": "Eben Kling" },
+            { "@type": "Person", "name": "Aude Jomini" }
+        ],
+        "artform": "Interactive 3D Installation",
+        "medium": "Digital/Real-time Software"
+    })}
+	</script>
 </svelte:head>
 
 <section class="sr-only">
 	<h1>Pile-Pile-Pile: 3D Digital Public Space</h1>
-	<h1>Pile Pile Pile</h1>
-	<h1>Pile-3D</h1>
+	<h2>PilePilePile</h2>
+	<h2>Pile Pile Pile</h2>
+	<h2>Pile-3D</h2>
 	<p>
-		Pile-Pile-Pile is shared public space in a web-based 3D environment which needs your
+		Pile Pile Pile is shared public space in a web-based 3D environment which needs your
 		participation. Move, rotate, and scale objects to build community architecture in a persistent
 		sandbox. Or just explore. It is space that is meant to be changed, piled on, dug out; an
 		ever-evolving sculpture.
 	</p>
-	<a href="/3d/pile">Enter PilePilePile</a>
+	<a href="/3d/pile"><h2>Enter PilePilePile</h2></a>
 	<a href="https://audehelene.itch.io/city-pile" target="_blank">City Pilemaker</a>
 	<a href="https://audehelene.itch.io/pilemaker" target="_blank">Pilemaker (Original)</a>
 
