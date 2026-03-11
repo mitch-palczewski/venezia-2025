@@ -85,6 +85,60 @@ export const testEnvironments: EnvironmentMap[] = [
 		fileType: 'jpg'
 	}),
 	new EnvironmentMap({
+		name: 'citypile_05',
+		displayName: 'Citypile 05',
+		path: '/environment/citypile_05.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_06',
+		displayName: 'Citypile 06',
+		path: '/environment/citypile_06.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_07',
+		displayName: 'Citypile 07',
+		path: '/environment/citypile_07.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_08',
+		displayName: 'Citypile 08',
+		path: '/environment/citypile_08.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_09',
+		displayName: 'Citypile 09',
+		path: '/environment/citypile_09.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_10',
+		displayName: 'Citypile 10',
+		path: '/environment/citypile_10.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_11',
+		displayName: 'Citypile 11',
+		path: '/environment/citypile_11.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_12',
+		displayName: 'Citypile 12',
+		path: '/environment/citypile_12.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
+		name: 'citypile_13',
+		displayName: 'Citypile 13',
+		path: '/environment/citypile_13.jpg',
+		fileType: 'jpg'
+	}),
+	new EnvironmentMap({
 		name: 'gradient_01',
 		displayName: 'Gradient 01',
 		path: '/environment/gradient_01.jpg',
