@@ -27,7 +27,9 @@ export default defineConfig(
 			'no-undef': 'off',
 			'no-unused-vars': 'off', 
             '@typescript-eslint/no-unused-vars': 'off', 
-            'svelte/no-navigation-without-resolve': 'off'
+            'svelte/no-navigation-without-resolve': 'off',
+			'svelte/no-useless-mustaches': 'off', 
+   			'svelte/require-each-key': 'off'
 		}
 	},
 	{

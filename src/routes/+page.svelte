@@ -173,7 +173,7 @@
 	</div>
 
 	<div class="relative z-10 flex h-full flex-col">
-		<div class="snm:pt-0 pt-3">
+		<div class="sm:pt-0 pt-3">
 			<PageHeader isHome={true} />
 		</div>
 
