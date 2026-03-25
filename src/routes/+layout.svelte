@@ -30,6 +30,9 @@
         "medium": "Digital/Real-time Software"
     };
 
+
+	const jsonLD = JSON.stringify(schemaData)
+
 </script>
 
 <svelte:head>
@@ -57,7 +60,7 @@
 	<meta name="twitter:image:alt" content="Public Space in a 3D digital environment" />
 
 	<script type="application/ld+json">
-        {@html JSON.stringify(schemaData)}
+        {@html jsonLD}
     </script>
 </svelte:head>
 
