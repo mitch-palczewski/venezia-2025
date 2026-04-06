@@ -65,7 +65,7 @@
 </svelte:head>
 
 <section class="sr-only">
-	<h1>Pile Pile Pile: 3D Digital Public Space</h1>
+	<h1>PilePilePile: 3D Digital Public Space</h1>
 
 	<p>
 		Pile Pile Pile is shared public space in a web-based 3D environment which needs your

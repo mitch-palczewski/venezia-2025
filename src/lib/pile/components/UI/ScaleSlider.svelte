@@ -10,14 +10,27 @@
 
     let { pileState, uiSettings, vertical = false }: Props = $props();
     let localScale = $state(1);
+    let baseScale = $state(1);
+    let currentObjectId = $state<string | null>(null);
 
     $effect(() => {
         const selectedObj = pileState.getSelectedObject();
         if (selectedObj?.ref) {
             const scale = PileState.getObjScale(selectedObj.ref);
+            const currentVal = Math.round(scale.x * 1000) / 1000;
+
+            if(selectedObj.id !== currentObjectId) {
+                currentObjectId = selectedObj.id
+                baseScale = currentVal
+            }
             localScale = Math.round(scale.x * 1000) / 1000;
+
+        } else {
+            currentObjectId = null
         }
     });
+
+    const maxScale = $derived(baseScale + 100)
 
     function applyScale(val: number) {
         const sanitized = Math.max(0.01, val);
@@ -43,7 +56,7 @@
         <input
             type="range"
             min="0.01"
-            max={uiSettings.scaleSliderMax}
+            max={maxScale}
             step="0.01"
             bind:value={localScale}
             oninput={() => applyScale(localScale)}
