@@ -13,7 +13,7 @@
 	const CAMERA_LOOK_AT_POS: [x: number, y: number, z: number] = [0, 3, 0];
 	const MAX_CAMERA_DISTANCE = 3000
 	const SM_SCREEN_ROT_SPEED = .1
-	const ROT_SPEED = .4
+	const ROT_SPEED = .8
 	const SM_SCREEN_DAMPING = 1
 	const DAMPING = .1
 	const SM_SCRREN_PAN_SPEED = .5
