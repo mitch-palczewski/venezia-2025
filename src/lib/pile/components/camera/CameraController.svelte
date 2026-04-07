@@ -83,7 +83,7 @@
 		rotateSpeed={smScreen ? SM_SCREEN_ROT_SPEED : ROT_SPEED}
 		autoRotate={idleManager.autoRotate}
 		autoRotateSpeed={AUTO_ROTATE_SPEED}
-		maxDistance={uiSettings.lockMaxZoom ? MAX_CAMERA_DISTANCE : Infinity}
+		maxDistance={smScreen ? MAX_CAMERA_DISTANCE : Infinity}
 		panSpeed={smScreen ? SM_SCRREN_PAN_SPEED : PAN_SPEED}
 		onstart={idleManager.stop}
 		onend={idleManager.reset}

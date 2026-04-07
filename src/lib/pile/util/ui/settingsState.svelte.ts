@@ -28,7 +28,6 @@ export class SettingsState {
 	public isIdleEnabled = $state(true);
 	public showScreenshotBtn = $state(true)
 	public isFullscreen = $state(false)
-	public lockMaxZoom = $state(true)
 
 	public doubleClick = $state(false);
 	public canvasContainer: HTMLDivElement | undefined;
@@ -77,7 +76,6 @@ export class SettingsState {
 			this.showGrid = false;
 			this.showUI = false;
 			this.showTooltip = false;
-			this.lockMaxZoom = false
 			console.log('Presentation Mode Activate');
 		}
 		if (value === false) {
