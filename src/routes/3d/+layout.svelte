@@ -2,7 +2,7 @@
 	Portals Scenes onto a genaric Canvas. Maintains a singular Canvas Context.
 -->
 <script lang="ts">
-	import CanvasPortalTarget from '$lib/components/3d-core/CanvasPortalTarget.svelte';
+	import CanvasPortalTarget from '$lib/components/3d-canvas/CanvasPortalTarget.svelte';
 	import { Canvas } from '@threlte/core';
 	import type { Snippet } from 'svelte';
 

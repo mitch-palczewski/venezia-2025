@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CanvasPortal from '$lib/components/3d-core/CanvasPortal.svelte';
+	import CanvasPortal from '$lib/components/3d-canvas/CanvasPortal.svelte';
 	import { PileScene } from '$lib/pile';
 	import PileUI from '$lib/pile/components/UI/pileUI.svelte';
 	import SettingsMenu from '$lib/pile/components/UI/settings-menu/Menu.svelte';

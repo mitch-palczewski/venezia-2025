@@ -1,5 +1,5 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/general/PageHeader.svelte';
+	import PageHeader from '$lib/components/layouts/PageHeader.svelte';
 	import { dev } from '$app/environment';
 
 	let { data } = $props();
