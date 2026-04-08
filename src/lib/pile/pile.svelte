@@ -74,7 +74,7 @@
 {/if}
 
 
-<DowntownNH position={[8000,-10000,500]}/>
+<DowntownNH position={[8000,-15000,500]}/>
 
 {#each pileApp.state.objects2D as [id, image] (id)}
 	{@const { translate: translate, rotation: quaternion, scale: scale } = image.transform3D}
