@@ -13,7 +13,7 @@
 	const CAMERA_LOOK_AT_POS: [x: number, y: number, z: number] = [0, 3, 0];
 	const MAX_CAMERA_DISTANCE = 3000
 	const SM_SCREEN_ROT_SPEED = .1
-	const ROT_SPEED = .8
+	const ROT_SPEED = .4
 	const SM_SCREEN_DAMPING = 1
 	const DAMPING = .1
 	const SM_SCRREN_PAN_SPEED = .5
@@ -28,7 +28,7 @@
 	let screenHeight: number = $state(0);
 
 	const idleManager = createIdleManage(IDLE_SEC, () => uiSettings.isIdleEnabled);
-	const smScreen = $derived(screenWidth  < 700 || screenHeight < 700 )
+	const smScreen = $derived(screenWidth  < 700 || screenHeight < 500 )
 
 	$effect(() => {
 		if (uiSettings.isIdleEnabled) {

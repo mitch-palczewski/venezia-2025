@@ -13,7 +13,7 @@ export class SettingsState {
 	#presentationMode = $state(false);
 	#showSettingsMenu = $state(false);
 	public defaultShowGrid;
-	public movementSpeed = $state(30);
+	public movementSpeed = $state(120);
 	public scaleSliderMax = $state(100);
 	public defaultModelSize = $state(15)
 	public showGrid: boolean = $state(false);
