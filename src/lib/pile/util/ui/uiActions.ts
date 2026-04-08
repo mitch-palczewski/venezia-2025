@@ -3,7 +3,7 @@
  * uploadDataFactory: gets position data to be uploaded to the Blob Storage
  */
 
-import { Vector3, type Mesh } from 'three';
+import { Object3D, Quaternion, Vector3, type Mesh } from 'three';
 import type { Object2DMap } from '../assetInventory/object2DMap';
 import type { Object3DMap } from '../assetInventory/object3DMap';
 import type { PileApp } from '../pileApp.svelte';
@@ -67,6 +67,42 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 		object2D.newObject = true;
 		pileApp.state.addObject(object2D);
 		pileApp.database.add(object2D);
+	}
+}
+
+export function duplicateSelectedModel(pileState: PileState, pileApp: PileApp) {
+	const id = pileState.selectedObjectID
+	if(!id) throw Error("selectedObjectID = null. Cannot duplicate a null object")
+	const original = pileState.objects3D.get(id)
+	
+	if (original){	
+		const pos = new Vector3();
+		const quat = new Quaternion();
+		const scale = new Vector3();
+		const originalMatrix = original.ref?.children[0].matrixWorld
+		originalMatrix?.decompose(pos, quat, scale)
+		console.log("Matrix World",originalMatrix)
+
+		const newTransform: Transform3D = {
+			translate: { x: pos.x + scale.x*.8, y: pos.y, z: pos.z },
+			rotation: { x: quat.x, y: quat.y, z: quat.z, w: quat.w },
+			scale: {
+				x: scale.x,
+				y: scale.y,
+				z: scale.z
+			}
+		}
+		
+		const newObj = new PileObject3D({
+			name: original.name,
+			id: crypto.randomUUID(),
+			objectMap: original.objectMap,
+			transform3D: newTransform
+		})
+		newObj.newObject = true
+		pileApp.state.addObject(newObj);
+		pileApp.database.add(newObj);
+		pileState.selectedObjectID = newObj.id
 	}
 }
 

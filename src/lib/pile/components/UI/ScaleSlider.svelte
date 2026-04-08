@@ -105,8 +105,8 @@
     }
 
     .gothic-slider::-moz-range-thumb {
-        height: 12px;
-        width: 12px;
+        height: 30px;
+        width: 15px;
         background: #ffffff;
         border: 2px solid #18181b;
         border-radius: 2px;

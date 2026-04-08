@@ -16,6 +16,7 @@
 	import ScreenshotBtn from './btns/ScreenshotBtn.svelte';
 	import FullscreenBtn from './btns/FullscreenBtn.svelte';
 	import { onMount } from 'svelte';
+	import DuplicateBtn from './btns/DuplicateBtn.svelte';
 
 	interface Props {
 		pileSceneRef: PileScene;
@@ -59,13 +60,14 @@
 						{/if}
 						{#if (!uiSettings.showAddMenu && isVertical) || !isVertical}
 							<TransformModeBtn {uiSettings} />
+							<DuplicateBtn {pileState} {uiSettings} {pileApp}/>
 							<DeleteBtn {pileState} {uiSettings} />
 						{/if}
 					</div>
 				{/if}
 
 				<AddBtn {uiSettings} />
-
+				
 				{#if isMd}
 					{#if uiSettings.showScreenshotBtn}
 						<ScreenshotBtn app={pileApp} {uiSettings} />

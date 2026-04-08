@@ -16,11 +16,7 @@
     tooltip={uiSettings.hudTooltip}
     tooltipText="delete : Delete Object"
     class="h-10 px-3 text-lg font-extrabold"
->
-     <span class="hidden lg:block">
-           Delete
-        </span>
-    
+>    
     <svg
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 24 24"
