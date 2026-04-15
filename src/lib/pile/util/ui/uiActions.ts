@@ -14,20 +14,26 @@ import type { SvelteMap } from 'svelte/reactivity';
 import type { EnvironmentMap } from '../assetInventory/environmentMap';
 import { roundTo } from '../api/pileMapper';
 
+const FALLBACK_SCALE = 15
+const ZOOM_SCALE_MULTIPLY = .12
+
 /**
  * Creates a new PileObject and adds it to pileModels[].
  * @param modelName A valid model name with corresponding .glb file
  */
 export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileApp) {
 	pileApp.state.showTransformControls = false;
+	const zoomDistance = pileApp.controlsRef?.getDistance()
+	const defaultScale = zoomDistance? zoomDistance * ZOOM_SCALE_MULTIPLY: FALLBACK_SCALE
+	console.log("Zoom Distance:", zoomDistance, "Default Scale:", defaultScale)
 	const baseTransform: Transform3D = JSON.parse(
 		JSON.stringify({
 			translate: { x: 0, y: 0, z: 0 },
 			rotation: { x: 0, y: 0, z: 0, w: 1 },
 			scale: {
-				x: pileApp.uiSettings.defaultModelSize,
-				y: pileApp.uiSettings.defaultModelSize,
-				z: pileApp.uiSettings.defaultModelSize
+				x: defaultScale,
+				y: defaultScale,
+				z: defaultScale
 			}
 		})
 	);
@@ -50,7 +56,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			id: crypto.randomUUID(),
 			objectMap: modelMap,
 			transform3D: baseTransform,
-			uniformScale: pileApp.uiSettings.defaultModelSize
+			uniformScale: defaultScale
 		});
 		object3D.newObject = true;
 		pileApp.state.addObject(object3D);
@@ -62,7 +68,7 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 			id: crypto.randomUUID(),
 			objectMap: modelMap,
 			transform3D: baseTransform,
-			uniformScale: 1
+			uniformScale: defaultScale
 		});
 		object2D.newObject = true;
 		pileApp.state.addObject(object2D);
