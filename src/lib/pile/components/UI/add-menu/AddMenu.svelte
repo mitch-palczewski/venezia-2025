@@ -13,6 +13,7 @@
 	let selectedElement: Object2DMap | Object3DMap | EnvironmentMap | null = $state(null);
 
 	$effect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 		addMenuState;
 		selectedElement = null;
 	});
@@ -53,17 +54,30 @@
 				use:uiSettings.hudTooltip={`${hint}`}
 				class="flex-1 rounded py-1.5 text-[10px] font-bold uppercase transition-all
                 {addMenuState === id
-					? 'bg-zinc-700 text-white shadow'
+					? 'bg-orange-800/60 text-white shadow'
 					: 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'}"
 			>
 				{label}
 			</button>
 		{/each}
 	</div>
+	{#if selectedElement}
+		<button onclick={() => handleAddToScene()}>
+			<div class="mb-4 w-full rounded bg-orange-800 p-2 text-center text-white hover:bg-orange-200/40">
+				<p class="text-center ">{selectedElement.displayName}</p>
+				<p class="font-bold text-2xl">{#if addMenuState === 'object2D' || addMenuState === 'object3D'}
+					Add to Pile
+				{:else if addMenuState === 'environment'}
+					Change Environment
+				{/if}</p>
+			</div>
+		</button>
+	{/if}
 
 	<div
 		class="custom-scrollbar flex-1 overflow-y-auto rounded-lg bg-black/20 p-2 ring-1 ring-white/5"
 	>
+	
 		<div class="grid grid-cols-2 gap-2">
 			{#if addMenuState === 'object3D'}
 				{#each uiSettings.app?.modelInventory.getAll() as item}
@@ -96,18 +110,7 @@
 			{/if}
 		</div>
 	</div>
-	{#if selectedElement}
-		<button onclick={() => handleAddToScene()}>
-			<div class="mt-4 w-full rounded bg-black/30 p-2 text-center text-white hover:bg-white/40">
-				<p class="text-center">{selectedElement.displayName}</p>
-				{#if addMenuState === 'object2D' || addMenuState === 'object3D'}
-					Add to Scene
-				{:else if addMenuState === 'environment'}
-					Change Environment
-				{/if}
-			</div>
-		</button>
-	{/if}
+	
 </div>
 
 <style>
