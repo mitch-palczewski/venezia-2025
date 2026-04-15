@@ -23,32 +23,8 @@
 				class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-2 text-white outline-none focus:ring-2 focus:ring-indigo-500"
 			/>
 		</div>
-		<div class="flex flex-col gap-2">
-			<label for="speed" class="text-xs font-medium tracking-wider text-white uppercase">
-				Scale Slider Maximum
-			</label>
-			<input
-				id="speed"
-				type="number"
-				min="0.1"
-				step="0.1"
-				bind:value={uiSettings.scaleSliderMax}
-				class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-2 text-white outline-none focus:ring-2 focus:ring-indigo-500"
-			/>
-		</div>
-		<div class="flex flex-col gap-2">
-			<label for="speed" class="text-xs font-medium tracking-wider text-white uppercase">
-				Default Model Scale
-			</label>
-			<input
-				id="speed"
-				type="number"
-				min="0.1"
-				step="0.1"
-				bind:value={uiSettings.defaultModelSize}
-				class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-2 text-white outline-none focus:ring-2 focus:ring-indigo-500"
-			/>
-		</div>
+		
+		
 
 		<div class="flex flex-col gap-2">
 			<span class="text-xs font-medium tracking-wider text-white uppercase"
@@ -103,14 +79,7 @@
 					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
 				/>
 			</label>
-			<label class="flex cursor-pointer items-center justify-between">
-				<span class="">Show Screenshot Button</span>
-				<input
-					type="checkbox"
-					bind:checked={uiSettings.showScreenshotBtn}
-					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
-				/>
-			</label>
+			
 			
 			
 		</div>
