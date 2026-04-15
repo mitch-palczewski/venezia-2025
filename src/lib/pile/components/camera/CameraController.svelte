@@ -12,7 +12,7 @@
 	const CAMERA_POS: [x: number, y: number, z: number] = [5, 5, 10];
 	const CAMERA_LOOK_AT_POS: [x: number, y: number, z: number] = [0, 3, 0];
 	const SM_SCREEN_MAX_CAMERA_DISTANCE = 3000
-	const MAX_CAMERA_DISTANCE = 70000
+	const MAX_CAMERA_DISTANCE = 30000
 	const SM_SCREEN_ROT_SPEED = .1
 	const ROT_SPEED = .4
 	const SM_SCREEN_DAMPING = 1
@@ -85,7 +85,8 @@
 		rotateSpeed={smScreen ? SM_SCREEN_ROT_SPEED : ROT_SPEED}
 		autoRotate={idleManager.autoRotate}
 		autoRotateSpeed={AUTO_ROTATE_SPEED}
-		maxDistance={smScreen ? SM_SCREEN_MAX_CAMERA_DISTANCE : MAX_CAMERA_DISTANCE}
+		zoomSpeed={.4}
+		maxDistance={smScreen ? SM_SCREEN_MAX_CAMERA_DISTANCE : uiSettings.presentationMode ?  Infinity : MAX_CAMERA_DISTANCE}
 		panSpeed={smScreen ? SM_SCRREN_PAN_SPEED : PAN_SPEED}
 		onstart={idleManager.stop}
 		onend={idleManager.reset}
