@@ -81,13 +81,13 @@
 	<OrbitControls
 		bind:ref={app.controlsRef}
 		enableDamping
-		dampingFactor={smScreen ? SM_SCREEN_DAMPING : DAMPING}
-		rotateSpeed={smScreen ? SM_SCREEN_ROT_SPEED : ROT_SPEED}
+		dampingFactor={ DAMPING}
+		rotateSpeed={ ROT_SPEED}
 		autoRotate={idleManager.autoRotate}
 		autoRotateSpeed={AUTO_ROTATE_SPEED}
 		zoomSpeed={.4}
-		maxDistance={smScreen ? SM_SCREEN_MAX_CAMERA_DISTANCE : uiSettings.presentationMode ?  Infinity : MAX_CAMERA_DISTANCE}
-		panSpeed={smScreen ? SM_SCRREN_PAN_SPEED : PAN_SPEED}
+		maxDistance={ MAX_CAMERA_DISTANCE}
+		panSpeed={ PAN_SPEED}
 		onstart={idleManager.stop}
 		onend={idleManager.reset}
 	/>
