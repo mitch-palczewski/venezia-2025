@@ -1,7 +1,9 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
+	import { ambientManager } from '$lib/audio/ambient.svelte';
 	import PageHeader from '$lib/components/layouts/PageHeader.svelte';
 	import PrintsBtnCarousel from '$lib/components/layouts/PrintsBtnCarousel.svelte';
+	import { onMount } from 'svelte';
 
 	let { data } = $props();
 	const { screenshots } = $derived(data);
@@ -20,6 +22,10 @@
 		if (dev || !url) return '/media/Cover_v4.1.png';
 		return `/_vercel/image?url=${encodeURIComponent(url)}&w=${width}&q=${quality}`;
 	}
+
+	onMount(() => {
+		ambientManager.init()
+	})
 </script>
 
 <svelte:window bind:innerWidth />
@@ -29,6 +35,9 @@
 		href="/3d/pile"
 		aria-label="Enter 3D Pile"
 		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
+		onclick={() => {
+			ambientManager.play(); 
+		}}
 	>
 		<img
 			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
@@ -120,9 +129,8 @@
 		target="_blank"
 		class="group relative flex min-h-0 w-full flex-1 bg-dark-gray"
 	>
-
 		<iframe
-			class="h-full w-full mx-auto"
+			class="mx-auto h-full w-full"
 			src="https://www.youtube.com/embed/KfQhvnP_rBo?autoplay=1&mute=1&loop=1&playlist=KfQhvnP_rBo&rel=0&playsinline=1"
 			title="YouTube video player"
 			frameborder="0"
@@ -143,7 +151,7 @@
 {#snippet sideBar()}
 	<div class="relative flex h-full min-h-0 w-full flex-1 flex-col gap-3 bg-dark-gray p-3">
 		<div class="flex flex-1 flex-col gap-2 overflow-hidden bg-teal p-3">
-			<PrintsBtnCarousel/>
+			<PrintsBtnCarousel />
 			<!--
 									{@render pile2DLink('/gallery/prints', 'Prints', '/images/prints/1_LOD2.avif')}
 
@@ -221,7 +229,7 @@
 			<PageHeader isHome={true} />
 		</div>
 
-		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-6 md:pt-3 md:grid-cols-6">
+		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-6 md:grid-cols-6 md:pt-3">
 			<div class="hidden min-h-0 pt-4 lg:block">{@render pileScreenshotGallery()}</div>
 			<div class="min-h-0 md:col-span-4 lg:col-span-3">
 				{#if isMobile}
