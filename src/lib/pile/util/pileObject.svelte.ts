@@ -4,6 +4,7 @@ import type { Object3DMap } from './assetInventory/object3DMap';
 import type { Object2DMap } from './assetInventory/object2DMap';
 import type { PileApp } from './pileApp.svelte';
 import type { MoveTo } from './animator.svelte';
+import { playSound } from '$lib/audio/audio';
 
 export const object2DType = 'object2D';
 export const object3DType = 'object3D';
@@ -110,4 +111,5 @@ export function handleModelClick(
 		app.state.selectedObjectID = pileObject.id;
 		app.state.showTransformControls = true;
 	}
+	playSound('HOVER2', 1)
 }
