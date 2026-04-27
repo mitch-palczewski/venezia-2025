@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import PageHeader from '$lib/components/layouts/PageHeader.svelte';
+	import PrintsBtnCarousel from '$lib/components/layouts/PrintsBtnCarousel.svelte';
 
 	let { data } = $props();
 	const { screenshots } = $derived(data);
@@ -61,7 +62,7 @@
 	<a
 		href="/3d/pile"
 		aria-label="Enter 3D Pile"
-		class="group relative flex h-[82vh] max-h-200 min-h-[82vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
+		class="group relative flex h-[70vh] max-h-200 min-h-[70vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
 	>
 		<img
 			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
@@ -75,13 +76,17 @@
 			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
 		</div>
 		<div class="absolute inset-0 flex flex-col items-center justify-end p-6">
-			<div class=" bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50 shadow-2xl">
+			<div
+				class=" bg-teal shadow-2xl group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50"
+			>
 				<p
 					class="w-full p-1 text-center text-6xl font-extrabold text-white group-hover:invert sm:text-6xl"
 				>
 					Enter Pile-3D
 				</p>
-				<p class=" shadow-2xl p-3 text-justify  text-sm font-extrabold text-white group-hover:invert">
+				<p
+					class=" p-3 text-justify text-sm font-extrabold text-white shadow-2xl group-hover:invert"
+				>
 					Shared public space in a web-based 3D environment which needs your participation. Move,
 					rotate, and scale objects to build community architecture in a persistent sandbox.
 				</p>
@@ -98,8 +103,39 @@
 		class="group relative flex min-h-0 w-full flex-1"
 	>
 		<img src={imageSrc} alt={text} class="h-full w-full object-cover" />
-		<div class="absolute inset-0 flex items-center justify-top px-6 ">
-			<p class="bg-teal px-1 text-2xl font-extrabold text-light-green group-hover:text-dark-gray group-hover:bg-light-yellow">{text}</p>
+		<div class="justify-top absolute inset-0 flex items-center px-6">
+			<p
+				class="bg-teal px-1 text-2xl font-extrabold text-light-green group-hover:bg-light-yellow group-hover:text-dark-gray"
+			>
+				{text}
+			</p>
+		</div>
+	</a>
+{/snippet}
+
+{#snippet video()}
+	<a
+		href="/gallery/film"
+		aria-label="City Pile"
+		target="_blank"
+		class="group relative flex min-h-0 w-full flex-1 bg-dark-gray"
+	>
+
+		<iframe
+			class="h-full w-full mx-auto"
+			src="https://www.youtube.com/embed/KfQhvnP_rBo?autoplay=1&mute=1&loop=1&playlist=KfQhvnP_rBo&rel=0&playsinline=1"
+			title="YouTube video player"
+			frameborder="0"
+			allow=" autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+			referrerpolicy="strict-origin-when-cross-origin"
+			loading="lazy"
+		></iframe>
+		<div class="justify-top absolute inset-0 flex items-center px-6">
+			<p
+				class="bg-teal px-1 text-2xl font-extrabold text-light-green group-hover:bg-light-yellow group-hover:text-dark-gray"
+			>
+				Film
+			</p>
 		</div>
 	</a>
 {/snippet}
@@ -107,18 +143,26 @@
 {#snippet sideBar()}
 	<div class="relative flex h-full min-h-0 w-full flex-1 flex-col gap-3 bg-dark-gray p-3">
 		<div class="flex flex-1 flex-col gap-2 overflow-hidden bg-teal p-3">
-			{@render pile2DLink('/gallery/prints', 'Prints', '/images/prints/1_LOD2.avif')}
-			{@render pile2DLink('/gallery/film', 'Film', '/media/film_cover.png')}
-			{@render pile2DLink(
-				'https://audehelene.itch.io/city-pile',
-				'City Pilemaker',
-				'/media/city-pile_sc.png'
-			)}
-			{@render pile2DLink(
-				'https://audehelene.itch.io/pilemaker',
-				'Pilemaker (Original)',
-				'/media/pilemaker_sc.png'
-			)}
+			<PrintsBtnCarousel/>
+			<!--
+									{@render pile2DLink('/gallery/prints', 'Prints', '/images/prints/1_LOD2.avif')}
+
+						{@render pile2DLink('/gallery/film', 'Film', '/media/film_cover.png')}
+
+			-->
+			{@render video()}
+			<div class="grid grid-cols-2 gap-2">
+				{@render pile2DLink(
+					'https://audehelene.itch.io/city-pile',
+					'City Pilemaker',
+					'/media/city-pile_sc.png'
+				)}
+				{@render pile2DLink(
+					'https://audehelene.itch.io/pilemaker',
+					'Pilemaker (Original)',
+					'/media/pilemaker_sc.png'
+				)}
+			</div>
 		</div>
 	</div>
 {/snippet}
@@ -131,7 +175,7 @@
 		<div
 			class=" mt-1 mr-2 px-1 text-xl font-extrabold text-light-green hover:bg-light-green hover:text-dark-gray"
 		>
-			<a href="/gallery" class=" flex w-full flex-col tracking-tight">
+			<a href="/gallery/pile-3d-gallery" class=" flex w-full flex-col tracking-tight">
 				<h1 class="text-xl">Pile-3D Gallery</h1>
 				<p class="text-sm">User captured screenshots.</p>
 			</a>
@@ -173,20 +217,20 @@
 	</div>
 
 	<div class="relative z-10 flex h-full flex-col">
-		<div class="sm:pt-0 pt-3">
+		<div class="pt-3 sm:pt-0">
 			<PageHeader isHome={true} />
 		</div>
 
-		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-6 md:pt-3 lg:grid-cols-6">
-			<div class="hidden min-h-0 pt-4 xl:block">{@render pileScreenshotGallery()}</div>
-			<div class="min-h-0 lg:col-span-4 xl:col-span-3">
+		<div class="grid min-h-0 w-full grid-cols-1 gap-0 pt-6 md:pt-3 md:grid-cols-6">
+			<div class="hidden min-h-0 pt-4 lg:block">{@render pileScreenshotGallery()}</div>
+			<div class="min-h-0 md:col-span-4 lg:col-span-3">
 				{#if isMobile}
 					{@render enterPile3DMobile()}
 				{:else}
 					{@render enterPile3DDesktop()}
 				{/if}
 			</div>
-			<div class="hidden min-h-0 flex-col pt-4 pl-8 lg:col-span-2 lg:mt-12 lg:flex">
+			<div class="hidden min-h-0 flex-col pt-4 pl-8 md:col-span-2 md:mt-12 md:flex">
 				{@render sideBar()}
 			</div>
 		</div>

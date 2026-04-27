@@ -20,8 +20,8 @@
 	</div>
 	<div class="grid grid-cols-1 gap-3 p-2 md:grid-cols-2">
 		{#each prints as print}
-			<div class="mx-auto h-screen w-full p-2">
-				<img src={print} alt="Pile Print" class="h-[90vh] object-contain" />
+			<div class="mx-auto h-screen  p-2">
+				<img src={print} alt="Pile Print" class="h-[80vh] object-contain" />
 			</div>
 		{/each}
 	</div>

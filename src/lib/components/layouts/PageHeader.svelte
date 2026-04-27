@@ -200,7 +200,7 @@
 	<div class="flex w-full items-center justify-end gap-6">
 		<div class="hidden flex-row items-center gap-6 uppercase sm:flex">
 			{#if !isHome}
-				<a href="/3d/pile" class="hover:text-amber-600">Pile-3D Enter</a>
+				<a href="/3d/pile" class="px-1 transition-colors hover:bg-light-green hover:text-dark-gray">Pile-3D Enter</a>
 			{/if}
 
 			{#if !isPile3DGallery}

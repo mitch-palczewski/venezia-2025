@@ -12,9 +12,9 @@
 
 {#snippet renderScreenshots()}
 	{#if screenshots && screenshots.length > 0}
-		<div style="content-visibility: auto; contain-intrinsic-size: 500px;">
+		<div class="grid grid-cols-2 w-full gap-3" style="content-visibility: auto; ">
 			{#each screenshots as item (item.id)}
-				<div class="mb-2 bg-dark-gray p-1">
+				<div class="mb-2 bg-dark-gray pt-1 px-3 pb-3">
 					<p class=" flex w-full justify-end text-light-green">
 						{new Date(item.created_at).toLocaleDateString('en-US', {
 							month: 'numeric',
@@ -41,7 +41,7 @@
 	<div class="sticky top-0 z-10 bg-dark-green px-2 pt-4 pb-2">
 		<PageHeader isGallery={true} appendTitle={'Gallery'} />
 	</div>
-	<div class="grid grid-cols-1 gap-3 p-2 pt-3 md:grid-cols-2">
+	<div class="gap-3 p-2 pt-3 ">
 		{@render renderScreenshots()}
 	</div>
 </div>
