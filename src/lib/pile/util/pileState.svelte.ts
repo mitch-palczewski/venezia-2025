@@ -5,6 +5,7 @@ import type { Transform3D } from '../types';
 import { Matrix4, Quaternion, Vector3, type Object3D } from 'three';
 import type { PileApp } from './pileApp.svelte';
 import type { SettingsState } from './ui/settingsState.svelte';
+import { playAddObject } from '$lib/audio/audio.svelte';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
@@ -74,7 +75,8 @@ export class PileState {
 		return this.selectedObjectID === id;
 	}
 
-	public addObject = (obj: AcceptedPileObjects) => {
+	public addObject = (obj: AcceptedPileObjects, suppressSound = false) => {
+		if(!suppressSound) playAddObject();
 		console.log(`Adding Object`, obj);
 		if (obj.objectType === 'object2D') {
 			this.objects2D.set(obj.id, obj as PileObject2D);

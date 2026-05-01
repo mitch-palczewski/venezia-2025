@@ -1,3 +1,4 @@
+import { audioSettings } from './audio.svelte';
 import { SOUND_EVENTS } from './manifest';
 
 class AmbientManager {
@@ -9,20 +10,27 @@ class AmbientManager {
     if (this.#audio) return;
     this.#audio = new Audio(SOUND_EVENTS.AMBIENT);
     this.#audio.loop = true;
-    this.#audio.volume = this.volume;
+    this.#audio.volume = audioSettings.isMuted ? 0 : this.volume;
+  
   }
+
+  setMute(isMuted: boolean) {
+  if (this.#audio) {
+    this.#audio.volume = isMuted ? 0 : this.volume;
+  }
+}
 
   setVolume(newVolume: number) {
     const clampedVolume = Math.max(0, Math.min(1, newVolume));
     this.volume = clampedVolume;
 
-    if (this.#audio) {
+    if (this.#audio && !audioSettings.isMuted) {
       this.#audio.volume = clampedVolume;
     }
   }
 
   play() {
-    this.#audio?.play();
+    this.#audio?.play().catch(e => console.error("Playback failed", e));
     this.isPlaying = true;
   }
 

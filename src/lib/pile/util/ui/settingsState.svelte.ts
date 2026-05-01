@@ -28,7 +28,6 @@ export class SettingsState {
 	public isIdleEnabled = $state(true);
 	public showScreenshotBtn = $state(true)
 	public isFullscreen = $state(false)
-
 	public doubleClick = $state(false);
 	public canvasContainer: HTMLDivElement | undefined;
 
