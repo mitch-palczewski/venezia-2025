@@ -58,7 +58,7 @@
 {#if uiSettings && pileApp}
 	<CameraControls {uiSettings} app={pileApp}/>
 	<OrbitLight/>
-	<T.AmbientLight intensity={0.3} />
+	<T.AmbientLight intensity={.6} />
 {/if}
 
 {#if uiSettings.showGrid}

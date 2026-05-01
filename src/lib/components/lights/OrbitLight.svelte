@@ -9,7 +9,7 @@
 	let x = $derived(Math.cos(time) * radius);
 	let z = $derived(Math.sin(time) * radius);
 	let y = $derived(Math.sin(time * 0.5) * 1000 + height);
-	let intensity = $derived(2 + Math.sin(time * 2) * 0.3);
+	let intensity = $derived(2.7 + Math.sin(time * 2) * 0.4);
 	let sunColor = $derived(y > 12 ? '#ffcc00' : '#ff5500');
     let currentOpacity = $derived(baseOpacity + Math.sin(time) * 0.3);
 </script>
