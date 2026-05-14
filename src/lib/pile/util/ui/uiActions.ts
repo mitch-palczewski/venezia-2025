@@ -13,6 +13,7 @@ import type { PileState } from '../pileState.svelte';
 import type { SvelteMap } from 'svelte/reactivity';
 import type { EnvironmentMap } from '../assetInventory/environmentMap';
 import { roundTo } from '../api/pileMapper';
+import { playAddObject, playDuplicteObject, playSound } from '$lib/audio/audio.svelte';
 
 const FALLBACK_SCALE = 15
 const ZOOM_SCALE_MULTIPLY = .12
@@ -106,10 +107,11 @@ export function duplicateSelectedModel(pileState: PileState, pileApp: PileApp) {
 			transform3D: newTransform
 		})
 		newObj.newObject = true
-		pileApp.state.addObject(newObj);
+		pileApp.state.addObject(newObj, true);
 		pileApp.database.add(newObj);
 		pileState.selectedObjectID = newObj.id
 	}
+	playDuplicteObject()
 }
 
 export function deleteSelectedModel(pileState: PileState) {

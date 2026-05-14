@@ -1,6 +1,7 @@
 <script lang="ts">
+	import { ambientManager } from '$lib/audio/ambient.svelte';
+	import { audioSettings} from '$lib/audio/audio.svelte';
 	import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
-	import { fade, scale } from 'svelte/transition';
 
 	interface Props {
 		uiSettings: SettingsState;
@@ -79,9 +80,16 @@
 					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
 				/>
 			</label>
-			
-			
-			
+			<label class="flex cursor-pointer items-center justify-between">
+				<span class="">Mute</span>
+				<input
+					type="checkbox"
+					bind:checked={audioSettings.isMuted}
+					onchange={() => ambientManager.setMute(audioSettings.isMuted)}
+
+					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
+				/>
+			</label>
 		</div>
 	
 </div>

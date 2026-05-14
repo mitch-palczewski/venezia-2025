@@ -1,7 +1,11 @@
 export const SOUND_EVENTS = {
-  CLICK: '/sounds/ui-click.mp3',
-  COLLISION: '/sounds/thud.wav',
-  AMBIENT_WIND: '/sounds/ambient-wind.ogg'
+  ON_ADD: '/audio/Add Object.wav',
+  AMBIENT: '/audio/PilePilePile_Splash_Final.wav',
+  HOVER1: '/audio/UI_Hover_01.wav',
+  HOVER2: '/audio/UI_Hover_02.wav',
+  Misc1: '/audio/UI_Unassigned_01.wav'
+
+
 } as const;
 
 export type SoundEvent = keyof typeof SOUND_EVENTS;
