@@ -1,5 +1,7 @@
 <script lang="ts">
 	import CanvasPortal from '$lib/components/3d-canvas/CanvasPortal.svelte';
+	import AsciiArtIntro from '$lib/components/layouts/AsciiArtIntro.svelte';
+	import InitializingScreen from '$lib/components/layouts/InitializingScreen.svelte';
 	import { PileScene } from '$lib/pile';
 	import PileUI from '$lib/pile/components/UI/pileUI.svelte';
 	import SettingsMenu from '$lib/pile/components/UI/settings-menu/Menu.svelte';
@@ -30,9 +32,11 @@
 
 {#if pileSceneRef}
 	<PileUI {pileSceneRef} {uiSettings} />
+	<AsciiArtIntro/>
 {:else}
-	<p class="absolute">Initializing Scene ...</p>
+	<InitializingScreen/>
 {/if}
+
 
 {#if uiSettings.showSettingsMenu}
 	<SettingsMenu {uiSettings} />
