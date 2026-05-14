@@ -19,7 +19,7 @@
     const interval = setInterval(() => {
       currentIndex = (currentIndex + 1) % slides.length;
       lastIndex = (lastIndex + 1) % slides.length
-    }, 2300); 
+    }, 2000); 
 
     const stopTimer = setTimeout(() => {
       clearInterval(interval);
@@ -39,8 +39,7 @@
   {#key currentIndex}
     <div 
      
-      out:fade={{ duration: 300 }} 
-      in:fly={{ y: 200, duration: 2000 }}
+      
       class="flex flex-row items-start justify-center gap-8 w-full  bg-linear-to-r from-cyan-800 to-fuchsia-500 bg-clip-text pl-25 text-transparent text-bold overflow-hidden "
     >
         <pre>
