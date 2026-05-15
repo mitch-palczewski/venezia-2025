@@ -4,7 +4,7 @@
 
 	let { uiSettings }: { uiSettings: SettingsState } = $props();
 
-	async function toggleFullscreen() {
+	 async function toggleFullscreen() {
 		if (!document.fullscreenElement) {
 			try {
 				await document.documentElement.requestFullscreen();

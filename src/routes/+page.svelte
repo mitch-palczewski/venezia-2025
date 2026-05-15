@@ -1,12 +1,16 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
 	import { ambientManager } from '$lib/audio/ambient.svelte';
+	import AsciiArtIntro from '$lib/components/layouts/AsciiArtIntro.svelte';
+	import InitializingScreen from '$lib/components/layouts/InitializingScreen.svelte';
 	import PageHeader from '$lib/components/layouts/PageHeader.svelte';
 	import PrintsBtnCarousel from '$lib/components/layouts/PrintsBtnCarousel.svelte';
 	import { onMount } from 'svelte';
 
+
 	let { data } = $props();
 	const { screenshots } = $derived(data);
+	let enteringPile = $state(false)
 	let innerWidth = $state(0);
 	let isMobile = $derived(innerWidth < 768);
 
@@ -17,6 +21,20 @@
 		const y = date.getFullYear().toString().slice(-2);
 		return `${m}/${d}/${y}`;
 	};
+
+	async function toggleFullscreen() {
+		if (!document.fullscreenElement) {
+			try {
+				await document.documentElement.requestFullscreen();
+			} catch (err) {
+				console.error(`Error attempting to enable fullscreen: ${err}`);
+			}
+		} else {
+			if (document.exitFullscreen) {
+				await document.exitFullscreen();
+			}
+		}
+	}
 
 	export function getOptimizedUrl(url: string, width = 640, quality = 75) {
 		if (dev || !url) return '/media/Cover_v4.1.png';
@@ -37,6 +55,8 @@
 		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
 		onclick={() => {
 			ambientManager.play(); 
+			toggleFullscreen();
+			enteringPile = true
 		}}
 	>
 		<img
@@ -72,6 +92,11 @@
 		href="/3d/pile"
 		aria-label="Enter 3D Pile"
 		class="group relative flex h-[70vh] max-h-200 min-h-[70vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
+		onclick={() => {
+			ambientManager.play(); 
+			toggleFullscreen();
+			enteringPile = true
+		}}
 	>
 		<img
 			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
@@ -211,6 +236,11 @@
 		<p class="text-stone-500 italic">No screenshots in the pile yet...</p>
 	{/if}
 {/snippet}
+
+
+{#if enteringPile}
+	<InitializingScreen/>
+{/if}
 
 <div class="relative h-screen overflow-hidden bg-dark-green p-2 pb-8 sm:p-6">
 	<div class="pointer-events-none absolute inset-0 ml-5 grid grid-cols-1 gap-0 p-3 sm:grid-cols-6">
