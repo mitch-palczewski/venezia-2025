@@ -15,8 +15,8 @@ import type { EnvironmentMap } from '../assetInventory/environmentMap';
 import { roundTo } from '../api/pileMapper';
 import { playAddObject, playDuplicteObject, playSound } from '$lib/audio/audio.svelte';
 
-const FALLBACK_SCALE = 15
-const ZOOM_SCALE_MULTIPLY = .12
+const FALLBACK_SCALE = 15;
+const ZOOM_SCALE_MULTIPLY = 0.12;
 
 /**
  * Creates a new PileObject and adds it to pileModels[].
@@ -24,9 +24,9 @@ const ZOOM_SCALE_MULTIPLY = .12
  */
 export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileApp) {
 	pileApp.state.showTransformControls = false;
-	const zoomDistance = pileApp.controlsRef?.getDistance()
-	const defaultScale = zoomDistance? zoomDistance * ZOOM_SCALE_MULTIPLY: FALLBACK_SCALE
-	console.log("Zoom Distance:", zoomDistance, "Default Scale:", defaultScale)
+	const zoomDistance = pileApp.controlsRef?.getDistance();
+	const defaultScale = zoomDistance ? zoomDistance * ZOOM_SCALE_MULTIPLY : FALLBACK_SCALE;
+	console.log('Zoom Distance:', zoomDistance, 'Default Scale:', defaultScale);
 	const baseTransform: Transform3D = JSON.parse(
 		JSON.stringify({
 			translate: { x: 0, y: 0, z: 0 },
@@ -78,40 +78,40 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 }
 
 export function duplicateSelectedModel(pileState: PileState, pileApp: PileApp) {
-	const id = pileState.selectedObjectID
-	if(!id) throw Error("selectedObjectID = null. Cannot duplicate a null object")
-	const original = pileState.objects3D.get(id)
-	
-	if (original){	
+	const id = pileState.selectedObjectID;
+	if (!id) throw Error('selectedObjectID = null. Cannot duplicate a null object');
+	const original = pileState.objects3D.get(id);
+
+	if (original) {
 		const pos = new Vector3();
 		const quat = new Quaternion();
 		const scale = new Vector3();
-		const originalMatrix = original.ref?.children[0].matrixWorld
-		originalMatrix?.decompose(pos, quat, scale)
-		console.log("Matrix World",originalMatrix)
+		const originalMatrix = original.ref?.children[0].matrixWorld;
+		originalMatrix?.decompose(pos, quat, scale);
+		console.log('Matrix World', originalMatrix);
 
 		const newTransform: Transform3D = {
-			translate: { x: pos.x + scale.x*.8, y: pos.y, z: pos.z },
+			translate: { x: pos.x + scale.x * 0.8, y: pos.y, z: pos.z },
 			rotation: { x: quat.x, y: quat.y, z: quat.z, w: quat.w },
 			scale: {
 				x: scale.x,
 				y: scale.y,
 				z: scale.z
 			}
-		}
-		
+		};
+
 		const newObj = new PileObject3D({
 			name: original.name,
 			id: crypto.randomUUID(),
 			objectMap: original.objectMap,
 			transform3D: newTransform
-		})
-		newObj.newObject = true
+		});
+		newObj.newObject = true;
 		pileApp.state.addObject(newObj, true);
 		pileApp.database.add(newObj);
-		pileState.selectedObjectID = newObj.id
+		pileState.selectedObjectID = newObj.id;
 	}
-	playDuplicteObject()
+	playDuplicteObject();
 }
 
 export function deleteSelectedModel(pileState: PileState) {
@@ -143,4 +143,20 @@ function deleteObject(
 export function changeEnvironment(selectedEnvironment: EnvironmentMap, pileApp: PileApp) {
 	pileApp.environment.selectedEnvironment = selectedEnvironment;
 	pileApp.environment.uploadEnvironment();
+}
+
+export function focusOnObject(pileState: PileState) {
+	const obj = pileState.getSelectedObject();
+	const camera = pileState.app?.cameraRef
+	const controls = pileState.app?.controlsRef
+	if (!obj || !camera || !controls) return;
+	const pos = new Vector3();
+	const quat = new Quaternion();
+	const scale = new Vector3();
+	const originalMatrix = obj.ref?.children[0].matrixWorld;
+	originalMatrix?.decompose(pos, quat, scale);
+	controls.target.copy(pos)
+	const offset = new Vector3(0, 2 * scale.x *.9, 5*scale.x*.9); 
+    camera.position.copy(pos).add(offset);
+	camera.lookAt(pos);
 }

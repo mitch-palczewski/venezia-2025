@@ -17,6 +17,7 @@
 	import FullscreenBtn from './btns/FullscreenBtn.svelte';
 	import { onMount } from 'svelte';
 	import DuplicateBtn from './btns/DuplicateBtn.svelte';
+	import FocusBtn from './btns/FocusBtn.svelte';
 
 	interface Props {
 		pileSceneRef: PileScene;
@@ -25,7 +26,7 @@
 	let { pileSceneRef, uiSettings }: Props = $props();
 
 	let windowWidth = $state(0);
-	const isVertical = $derived(windowWidth < 640);
+	const isVertical = $derived(windowWidth < 800);
 	const pileApp: PileApp = $derived(pileSceneRef?.pileApp);
 	const pileState: PileState = $derived(pileSceneRef?.pileApp?.state);
 
@@ -61,6 +62,7 @@
 						{#if (!uiSettings.showAddMenu && isVertical) || !isVertical}
 							<TransformModeBtn {uiSettings} />
 							<DuplicateBtn {pileState} {uiSettings} {pileApp}/>
+							<FocusBtn {pileState}{uiSettings}/>
 							<DeleteBtn {pileState} {uiSettings} />
 						{/if}
 					</div>
