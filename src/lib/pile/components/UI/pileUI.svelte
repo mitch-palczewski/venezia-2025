@@ -96,7 +96,7 @@
 			</div>
 		</div>
 		{#if uiSettings.showAddMenu}
-			<div class="overflow-hidden">
+			<div class="">
 				<AddMenu {uiSettings} />
 			</div>
 		{/if}
