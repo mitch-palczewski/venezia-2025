@@ -1,5 +1,6 @@
 import type { TransformControlsMode } from 'three/examples/jsm/controls/TransformControls.js';
 import type { PileApp } from '../pileApp.svelte';
+import type { AddMenuState } from '$lib/pile/components/UI/add-menu/AddMenu.svelte';
 
 export interface SettingsStateConfig {
 	showGrid?: boolean;
@@ -29,6 +30,7 @@ export class SettingsState {
 	public showScreenshotBtn = $state(true)
 	public isFullscreen = $state(false)
 	public doubleClick = $state(false);
+	public addMenuState = $state<AddMenuState>('object3D');
 	public canvasContainer: HTMLDivElement | undefined;
 
 	constructor(config: SettingsStateConfig) {

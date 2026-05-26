@@ -81,11 +81,33 @@
 				/>
 			</label>
 			<label class="flex cursor-pointer items-center justify-between">
-				<span class="">Mute</span>
+				<span class="">Mute SFX</span>
+				<input
+					type="checkbox"
+					bind:checked={audioSettings.SFXIsMuted}
+					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
+				/>
+			</label>
+			<label class="flex cursor-pointer items-center justify-between">
+				<span class="">Mute Ambient</span>
+				<input
+					type="checkbox"
+					bind:checked={audioSettings.ambientIsMuted}
+					onchange={() => ambientManager.setMute(audioSettings.ambientIsMuted)}
+
+					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
+				/>
+			</label>
+			<label class="flex cursor-pointer items-center justify-between">
+				<span class="">Mute All</span>
 				<input
 					type="checkbox"
 					bind:checked={audioSettings.isMuted}
-					onchange={() => ambientManager.setMute(audioSettings.isMuted)}
+					onchange={() => {
+						ambientManager.setMute(audioSettings.isMuted)
+						audioSettings.SFXIsMuted = audioSettings.isMuted
+						audioSettings.ambientIsMuted = audioSettings.isMuted
+					}}
 
 					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
 				/>

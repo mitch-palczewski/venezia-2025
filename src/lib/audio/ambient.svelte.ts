@@ -10,7 +10,7 @@ class AmbientManager {
     if (this.#audio) return;
     this.#audio = new Audio(SOUND_EVENTS.AMBIENT);
     this.#audio.loop = true;
-    this.#audio.volume = audioSettings.isMuted ? 0 : this.volume;
+    this.#audio.volume = audioSettings.ambientIsMuted ? 0 : this.volume;
   
   }
 

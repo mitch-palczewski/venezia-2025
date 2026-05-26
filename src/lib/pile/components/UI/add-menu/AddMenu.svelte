@@ -8,13 +8,12 @@
 
 	let { uiSettings }: { uiSettings: SettingsState } = $props();
 
-	type AddMenuState = 'object3D' | 'object2D' | 'environment';
-	let addMenuState = $state<AddMenuState>('object3D');
+	export type AddMenuState = 'object3D' | 'object2D' | 'environment';
 	let selectedElement: Object2DMap | Object3DMap | EnvironmentMap | null = $state(null);
 
 	$effect(() => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-expressions
-		addMenuState;
+		uiSettings.addMenuState;
 		selectedElement = null;
 	});
 
@@ -26,13 +25,13 @@
 
 	function handleAddToScene() {
 		if (!selectedElement) return;
-		if (addMenuState === 'object3D') {
+		if (uiSettings.addMenuState === 'object3D') {
 			addNewModel(selectedElement as Object3DMap, uiSettings.app!);
 		}
-		if (addMenuState === 'object2D') {
+		if (uiSettings.addMenuState === 'object2D') {
 			addNewModel(selectedElement as Object2DMap, uiSettings.app!);
 		}
-		if (addMenuState === 'environment') {
+		if (uiSettings.addMenuState === 'environment') {
 			changeEnvironment(selectedElement as EnvironmentMap, uiSettings.app!);
 		}
 		selectedElement = null;
@@ -50,10 +49,10 @@
 	<div class="mb-4 flex gap-1 rounded-lg bg-black/40 p-1 ring-1 ring-white/5">
 		{#each categories as { id, label, hint }}
 			<button
-				onclick={() => (addMenuState = id)}
+				onclick={() => (uiSettings.addMenuState = id)}
 				use:uiSettings.hudTooltip={`${hint}`}
 				class="flex-1 rounded py-1.5 text-[10px] font-bold uppercase transition-all
-                {addMenuState === id
+                {uiSettings.addMenuState === id
 					? 'bg-orange-800/60 text-white shadow'
 					: 'text-zinc-500 hover:bg-white/5 hover:text-zinc-300'}"
 			>
@@ -65,9 +64,9 @@
 		<button onclick={() => handleAddToScene()}>
 			<div class="mb-4 w-full rounded bg-orange-800 p-2 text-center text-white hover:bg-orange-200/40">
 				<p class="text-center ">{selectedElement.displayName}</p>
-				<p class="font-bold text-2xl">{#if addMenuState === 'object2D' || addMenuState === 'object3D'}
+				<p class="font-bold text-2xl">{#if uiSettings.addMenuState === 'object2D' || uiSettings.addMenuState === 'object3D'}
 					Add to Pile
-				{:else if addMenuState === 'environment'}
+				{:else if uiSettings.addMenuState === 'environment'}
 					Change Environment
 				{/if}</p>
 			</div>
@@ -79,7 +78,7 @@
 	>
 	
 		<div class="grid grid-cols-2 gap-2">
-			{#if addMenuState === 'object3D'}
+			{#if uiSettings.addMenuState === 'object3D'}
 				{#each uiSettings.app?.modelInventory.getAll() as item}
 					<ElementBtn
 						{item}
@@ -98,7 +97,7 @@
 					/>
 				{/each}
 			-->
-			{:else if addMenuState === 'environment'}
+			{:else if uiSettings.addMenuState === 'environment'}
 				{#each uiSettings.app?.environmentInventory.getAll() as item}
 					<ElementBtn
 						{item}

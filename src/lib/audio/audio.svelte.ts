@@ -2,11 +2,13 @@ import { SOUND_EVENTS, type SoundEvent } from './manifest';
 
 export const audioSettings = $state({
 	isMuted: false,
+	ambientIsMuted: false,
+	SFXIsMuted: false,
 	masterVolume: 1
 });
 
 export const playSound = (event: SoundEvent, volume = 0.5) => {
-	if (audioSettings.isMuted) return;
+	if (audioSettings.isMuted || audioSettings.SFXIsMuted) return;
 	const audio = new Audio(SOUND_EVENTS[event]);
 	audio.volume = volume * audioSettings.masterVolume;
 	audio.play().catch(() => {
