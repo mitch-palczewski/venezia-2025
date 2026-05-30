@@ -10,7 +10,7 @@
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
 	import OrbitLight from '$lib/components/lights/OrbitLight.svelte';
 	import PerformanceManager from '$lib/components/PerformanceManager.svelte';
-	import DowntownNH from '$lib/assets/DowntownNH.svelte';
+	import Tower from '../assets/Tower.svelte';
 
 	let { data, uiSettings } = $props();
 
@@ -74,9 +74,7 @@
 {/if}
 
 
-<!--
-<DowntownNH position={[8000,-15000,500]}/>
--->
+<Tower />
 
 {#each pileApp.state.objects2D as [id, image] (id)}
 	{@const { translate: translate, rotation: quaternion, scale: scale } = image.transform3D}
