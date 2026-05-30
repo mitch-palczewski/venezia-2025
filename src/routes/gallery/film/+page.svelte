@@ -10,7 +10,7 @@
         <div class="h-[80vh] w-full bg-black p-1 sm:p-4">
             <iframe
                 class="h-full w-full"
-                src="https://www.youtube.com/embed/KfQhvnP_rBo?autoplay=1&mute=1&loop=1&playlist=KfQhvnP_rBo&rel=0&playsinline=1"
+                src="https://www.youtube.com/embed/4N1fsPaxdyg?si=lGfyfc7HnqyR96DM&rel=0"
                 title="YouTube video player"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

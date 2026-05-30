@@ -7,10 +7,9 @@
 	import PrintsBtnCarousel from '$lib/components/layouts/PrintsBtnCarousel.svelte';
 	import { onMount } from 'svelte';
 
-
 	let { data } = $props();
 	const { screenshots } = $derived(data);
-	let enteringPile = $state(false)
+	let enteringPile = $state(false);
 	let innerWidth = $state(0);
 	let isMobile = $derived(innerWidth < 768);
 
@@ -42,8 +41,8 @@
 	}
 
 	onMount(() => {
-		ambientManager.init()
-	})
+		ambientManager.init();
+	});
 </script>
 
 <svelte:window bind:innerWidth />
@@ -54,9 +53,9 @@
 		aria-label="Enter 3D Pile"
 		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
 		onclick={() => {
-			ambientManager.play(); 
+			ambientManager.play();
 			toggleFullscreen();
-			enteringPile = true
+			enteringPile = true;
 		}}
 	>
 		<img
@@ -93,9 +92,9 @@
 		aria-label="Enter 3D Pile"
 		class="group relative flex h-[70vh] max-h-200 min-h-[70vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
 		onclick={() => {
-			ambientManager.play(); 
+			ambientManager.play();
 			toggleFullscreen();
-			enteringPile = true
+			enteringPile = true;
 		}}
 	>
 		<img
@@ -152,11 +151,11 @@
 		href="/gallery/film"
 		aria-label="City Pile"
 		target="_blank"
-		class="group relative flex min-h-0 w-full flex-1 bg-dark-gray"
+		class="group relative flex min-h-0 w-full flex-1 bg-dark-gray overflow-hidden"
 	>
 		<iframe
-			class="mx-auto h-full w-full"
-			src="https://www.youtube.com/embed/KfQhvnP_rBo?autoplay=1&mute=1&loop=1&playlist=KfQhvnP_rBo&rel=0&playsinline=1"
+			class="absolute  left-1/2 ] min-w-[190%] min-h-[135%] -translate-x-1/2 -translate-y-1/2 aspect-video"
+			src="https://www.youtube.com/embed/4N1fsPaxdyg?si=lGfyfc7HnqyR96DM&autoplay=1&mute=1&controls=0&loop=1&showinfo=0&modestbranding=1&rel=0"
 			title="YouTube video player"
 			frameborder="0"
 			allow=" autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
@@ -237,9 +236,8 @@
 	{/if}
 {/snippet}
 
-
 {#if enteringPile}
-	<InitializingScreen/>
+	<InitializingScreen />
 {/if}
 
 <div class="relative h-screen overflow-hidden bg-dark-green p-2 pb-8 sm:p-6">
