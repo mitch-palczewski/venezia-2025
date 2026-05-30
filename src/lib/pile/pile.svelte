@@ -11,6 +11,7 @@
 	import OrbitLight from '$lib/components/lights/OrbitLight.svelte';
 	import PerformanceManager from '$lib/components/PerformanceManager.svelte';
 	import Tower from '../assets/Tower.svelte';
+	import Fireplace from '$lib/assets/3D/Fireplace.svelte';
 
 	let { data, uiSettings } = $props();
 
@@ -75,6 +76,7 @@
 
 
 <Tower />
+<Fireplace/>
 
 {#each pileApp.state.objects2D as [id, image] (id)}
 	{@const { translate: translate, rotation: quaternion, scale: scale } = image.transform3D}
