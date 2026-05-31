@@ -2,7 +2,7 @@
 	/* eslint-disable @typescript-eslint/no-explicit-any */
 	import { isInstanceOf, T } from '@threlte/core';
 	import { bvh, BVHSplitStrategy, meshBounds, TransformControls, useGltf } from '@threlte/extras';
-	import { Group, Mesh, Object3D } from 'three';
+	import { Box3, Group, Mesh, Object3D, Vector3 } from 'three';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
 	import {
@@ -58,8 +58,8 @@
 		}
 	});
 
+	//Moving Animation
 	const mover = createMover(() => ref);
-
 	$effect(() => {
 		if (ref && !mover.initialized) {
 			ref.position.set(position[0], position[1], position[2]);
@@ -67,15 +67,27 @@
 			ref.scale.set(scale[0], scale[1], scale[2]);
 		}
 	});
-
 	$effect(() => {
 		pileObjectData.moveTo = mover.moveTo;
 	});
 
+	//Get AssetSize when GLTF store resolves
+	let baseAssetSize = $state(1);
+	$effect(() => {
+        if (!$gltf?.scene) return;
+        const box = new Box3().setFromObject($gltf.scene);
+        const size = new Vector3();
+        box.getSize(size);
+        baseAssetSize = Math.max(size.x, size.y, size.z);
+        if (baseAssetSize === 0) baseAssetSize = 1; 
+    });
+
+
+	// Hide Object if small and far away 
 	let shouldRender = $state(true);
 	$effect(() => {
 		if (!ref || !pileApp.cameraRef) return;
-		const staggeredDelay = 1500 + Math.random() * 200;
+		const staggeredDelay = 2000 + Math.random() * 400;
 		const interval = setInterval(() => {
 			if (!ref || !pileApp.cameraRef) return;
 			if (pileApp.state.selectedObjectID === pileObjectData.id) {
@@ -83,13 +95,18 @@
 				return;
 			}
 			const distance = ref.position.distanceTo(pileApp.cameraRef.position);
-			const apparentSize = scale[0] / distance;
-			const CUTOFF_THRESHOLD = 0.003;
+			const currentScaleFactor = Math.max(scale[0], scale[1], scale[2]);
+			const trueWorldSize = baseAssetSize * currentScaleFactor;
+			const apparentSize = trueWorldSize / distance;
+
+			const CUTOFF_THRESHOLD = 0.01;
 			shouldRender = apparentSize > CUTOFF_THRESHOLD;
 		}, staggeredDelay);
 		return () => clearInterval(interval);
 	});
 
+
+	// BVH Settings 
 	const isLowQuality = pileApp.quality === 'low';
 	bvh(() => ({
 		enabled: !isLowQuality,
