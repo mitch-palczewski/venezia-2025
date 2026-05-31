@@ -32,9 +32,12 @@
 
 {#if pileSceneRef}
 	<PileUI {pileSceneRef} {uiSettings} />
-	<AsciiArtIntro/>
 {:else}
 	<InitializingScreen/>
+{/if}
+
+{#if uiSettings.showSettingsMenu}
+	<AsciiArtIntro/>
 {/if}
 
 

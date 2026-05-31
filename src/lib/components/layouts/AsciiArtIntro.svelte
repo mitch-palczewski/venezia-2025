@@ -21,15 +21,10 @@
       lastIndex = (lastIndex + 1) % slides.length
     }, 2000); 
 
-    const stopTimer = setTimeout(() => {
-      clearInterval(interval);
-      console.log("Animation halted.");
-      showing = false
-    }, 10600);
+ 
 
     return () => {
       clearInterval(interval);
-      clearTimeout(stopTimer);
     };
   });
 </script>

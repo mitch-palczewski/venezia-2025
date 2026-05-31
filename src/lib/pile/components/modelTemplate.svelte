@@ -1,6 +1,6 @@
 <script lang="ts">
 	/* eslint-disable @typescript-eslint/no-explicit-any */
-	import { isInstanceOf, T } from '@threlte/core';
+	import { isInstanceOf, T, useThrelte } from '@threlte/core';
 	import { bvh, BVHSplitStrategy, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { Box3, Group, Mesh, Object3D, Vector3 } from 'three';
 	import type { Props } from '@threlte/core';
@@ -38,6 +38,7 @@
 
 	let shown = $state(pileObjectData.shown);
 	setObjectMapIfNull(pileApp, pileObjectData);
+	const { renderer, scene, camera } = useThrelte();
 	const gltf = useGltf(pileObjectData.objectMap!.path);
 	const sceneChildren = $derived.by(() => {
 		if (!$gltf || !$gltf.scene.children) {
@@ -57,6 +58,20 @@
 			return false;
 		}
 	});
+
+	let gltfReady = $state(false);
+	$effect(() => {
+        if (!$gltf?.scene || !renderer) return;
+
+        renderer.compileAsync($gltf.scene, camera.current, scene)
+            .then(() => {
+                gltfReady = true; 
+            })
+            .catch((err) => {
+                console.error("Failed to pre-compile GLTF:", err);
+                gltfReady = true; // Fallback so it doesn't stay hidden forever
+            });
+    });
 
 	//Moving Animation
 	const mover = createMover(() => ref);
@@ -168,7 +183,7 @@
 	{#await $gltf}
 		{@render fallback?.()}
 	{:then gltf}
-		{#if shown && sceneChildren && shouldRender}
+		{#if shown && sceneChildren && shouldRender && gltfReady}
 			<TransformControls
 				showX={showThisTransformControls}
 				showY={showThisTransformControls}
