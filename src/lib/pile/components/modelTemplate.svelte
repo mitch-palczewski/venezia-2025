@@ -1,13 +1,7 @@
 <script lang="ts">
-/* eslint-disable @typescript-eslint/no-explicit-any */
-	import { isInstanceOf, T} from '@threlte/core';
-	import {
-		bvh,
-		BVHSplitStrategy,
-		meshBounds,
-		TransformControls,
-		useGltf,
-	} from '@threlte/extras';
+	/* eslint-disable @typescript-eslint/no-explicit-any */
+	import { isInstanceOf, T } from '@threlte/core';
+	import { bvh, BVHSplitStrategy, meshBounds, TransformControls, useGltf } from '@threlte/extras';
 	import { Group, Mesh, Object3D } from 'three';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
@@ -78,6 +72,24 @@
 		pileObjectData.moveTo = mover.moveTo;
 	});
 
+	let shouldRender = $state(true);
+	$effect(() => {
+		if (!ref || !pileApp.cameraRef) return;
+		const staggeredDelay = 1500 + Math.random() * 200;
+		const interval = setInterval(() => {
+			if (!ref || !pileApp.cameraRef) return;
+			if (pileApp.state.selectedObjectID === pileObjectData.id) {
+				shouldRender = true;
+				return;
+			}
+			const distance = ref.position.distanceTo(pileApp.cameraRef.position);
+			const apparentSize = scale[0] / distance;
+			const CUTOFF_THRESHOLD = 0.003;
+			shouldRender = apparentSize > CUTOFF_THRESHOLD;
+		}, staggeredDelay);
+		return () => clearInterval(interval);
+	});
+
 	const isLowQuality = pileApp.quality === 'low';
 	bvh(() => ({
 		enabled: !isLowQuality,
@@ -139,7 +151,7 @@
 	{#await $gltf}
 		{@render fallback?.()}
 	{:then gltf}
-		{#if shown && sceneChildren}
+		{#if shown && sceneChildren && shouldRender}
 			<TransformControls
 				showX={showThisTransformControls}
 				showY={showThisTransformControls}
