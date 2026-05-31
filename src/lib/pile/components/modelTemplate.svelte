@@ -99,7 +99,7 @@
 			const trueWorldSize = baseAssetSize * currentScaleFactor;
 			const apparentSize = trueWorldSize / distance;
 
-			const CUTOFF_THRESHOLD = 0.01;
+			const CUTOFF_THRESHOLD = pileApp.quality === 'low' ? 0.03 : 0.015;
 			shouldRender = apparentSize > CUTOFF_THRESHOLD;
 		}, staggeredDelay);
 		return () => clearInterval(interval);
