@@ -36,7 +36,7 @@
 	<InitializingScreen/>
 {/if}
 
-{#if uiSettings.showSettingsMenu}
+{#if uiSettings.showSettingsMenu }
 	<AsciiArtIntro/>
 {/if}
 

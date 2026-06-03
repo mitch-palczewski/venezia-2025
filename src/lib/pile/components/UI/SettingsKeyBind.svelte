@@ -58,6 +58,13 @@
 		if(event.key === 'f' || event.key === 'F'){
 			toggleFullscreen()
 		}
+		if(event.key === '+' || event.key === '='){
+			settingState.showAddMenu = !settingState.showAddMenu		
+		}
+		if(event.key === '-' || event.key === '_'){
+			settingState.showAddMenu = false	
+		}
+		
 	}
 
 	

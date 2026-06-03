@@ -32,7 +32,7 @@
   {onclick}
   {disabled}
   use:tooltip={tooltipText}
-  class="{base} {active ? activeStyle : inactiveStyle} {className}"
+  class="{base} {active ? activeStyle : inactiveStyle} {className} z-50"
 >
   {@render children()}
 </button>
