@@ -137,7 +137,7 @@
     >
         <div 
             transition:scale={{ start: 0.95, duration: 200 }}
-            class=" border border-white/10 p-1 rounded-sm shadow-2xl  w-50 h-50 flex flex-col items-center justify-center aspect-square"
+            class=" border border-white/10 p-1 rounded-sm shadow-2xl  w-20 sm:w-25 md:w-50 h-50 flex flex-col items-center justify-center aspect-square"
         >
             <img 
                 src={previewImage()} 
