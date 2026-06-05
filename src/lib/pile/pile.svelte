@@ -11,7 +11,7 @@
 	import OrbitLight from '$lib/components/lights/OrbitLight.svelte';
 	import PerformanceManager from '$lib/components/PerformanceManager.svelte';
 	import Tower from '../assets/Tower.svelte';
-	import Fireplace from '$lib/assets/3D/Fireplace.svelte';
+	import Fireplace from '$lib/assets/Fireplace.svelte';
 
 	let { data, uiSettings } = $props();
 

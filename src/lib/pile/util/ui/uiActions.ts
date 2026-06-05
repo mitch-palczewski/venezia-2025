@@ -23,6 +23,10 @@ const ZOOM_SCALE_MULTIPLY = 0.12;
  * @param modelName A valid model name with corresponding .glb file
  */
 export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileApp) {
+	if(modelMap.name == "3D"){
+		console.log("THIS IS NOT GOOD")
+		console.log(modelMap)
+	}
 	pileApp.state.showTransformControls = false;
 	const zoomDistance = pileApp.controlsRef?.getDistance();
 	const defaultScale = zoomDistance ? zoomDistance * ZOOM_SCALE_MULTIPLY : FALLBACK_SCALE;

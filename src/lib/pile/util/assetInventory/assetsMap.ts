@@ -181,7 +181,7 @@ export const variousMP: Object3DMap[]=[
 export const allModels:Object3DMap[]= await initializeModels()
 
 export async function initializeModels(): Promise<Object3DMap[]> {
-    const allFiles = import.meta.glob('$lib/assets/3D/**/*.*', {
+    const allFiles = import.meta.glob('$lib/assets/3D/**/*.{glb,gltf,csv,png}', {
         eager: true,
         query: '?url',
         import: 'default'
