@@ -66,6 +66,9 @@ export function addNewModel(modelMap: Object2DMap | Object3DMap, pileApp: PileAp
 		object3D.newObject = true;
 		pileApp.state.addObject(object3D);
 		pileApp.database.add(object3D);
+		pileApp.state.selectedObjectID = object3D.id
+		pileApp.state.showTransformControls = true
+		
 	}
 	if (modelMap.objectType === '2D') {
 		const object2D = new PileObject2D({

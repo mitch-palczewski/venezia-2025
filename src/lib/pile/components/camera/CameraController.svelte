@@ -8,8 +8,8 @@
 
 	const IDLE_SEC = 60;
 	const AUTO_ROTATE_SPEED = 0.5;
-	const CAMERA_FAR_BOUND = 150000;
-	const CAMERA_POS: [x: number, y: number, z: number] = [5, 5, 10];
+	const CAMERA_FAR_BOUND = 130000;
+	const CAMERA_POS: [x: number, y: number, z: number] = [20, 20, 20];
 	const CAMERA_LOOK_AT_POS: [x: number, y: number, z: number] = [0, 3, 0];
 	const SM_SCREEN_MAX_CAMERA_DISTANCE = 3000
 	const MAX_CAMERA_DISTANCE = 30000
@@ -73,10 +73,12 @@
 <T.PerspectiveCamera
 	bind:ref={app.cameraRef}
 	makeDefault
-	far={smScreen ? 50000 : CAMERA_FAR_BOUND}
-	near={25}
+	far={smScreen ? 40000 : CAMERA_FAR_BOUND}
+	near={15}
 	position={CAMERA_POS}
 	oncreate={(ref) => ref.lookAt(...CAMERA_LOOK_AT_POS)}
+	zoom={.7}
+
 >
 	<OrbitControls
 		bind:ref={app.controlsRef}
