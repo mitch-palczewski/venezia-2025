@@ -132,6 +132,13 @@
 		setBoundingBox: false,
 		helper: false
 	}));
+
+	$effect(() => {
+        if ($gltf && pileObjectData.onLoad) {
+            pileObjectData.onLoad();
+            delete pileObjectData.onLoad;
+        }
+    });
 </script>
 
 <!-- 

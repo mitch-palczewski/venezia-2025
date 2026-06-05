@@ -59,9 +59,9 @@
 	<p><span class="font-bold">Right Click</span> to pan or use <span class="font-bold">WASD</span> buttons to move around.</p>
 {/snippet}
 {#snippet phoneBannerMessage()}
-	<p>Tap on objects to move, rotate, and scale them. </p>
-	<p>Use the + button to add objects </p>
-	<p>Use two fingers to pan.</p>
+	<p><span class="font-bold">Tap</span> on objects to move, rotate, and scale them. </p>
+	<p>Use the <span class="font-bold">[+]</span> button to add objects </p>
+	<p>Use <span class="font-bold">Two Fingers</span> to pan.</p>
 {/snippet}
 
 {#snippet banner()}
@@ -74,7 +74,7 @@
 {/snippet}
 
 
-{#if uiSettings.showUI}
+{#if uiSettings.showUI && pileApp.isReady}
 	<div
 		class="flex w-full justify-end overflow-hidden pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] z-10"
 	>
@@ -105,12 +105,12 @@
 				<AddBtn {uiSettings} />
 				
 				{#if isMd}
-					{#if uiSettings.showScreenshotBtn && !uiSettings.showAddMenu}
+					{#if uiSettings.showScreenshotBtn && !uiSettings.showAddMenu && pileApp.isReady}
 						<ScreenshotBtn app={pileApp} {uiSettings} />
 					{/if}
 					<FullscreenBtn {uiSettings} />
 				{:else if !uiSettings.app?.state.showTransformControls}
-					{#if uiSettings.showScreenshotBtn && !uiSettings.showAddMenu}
+					{#if uiSettings.showScreenshotBtn && !uiSettings.showAddMenu && pileApp.isReady}
 						<ScreenshotBtn app={pileApp} {uiSettings} />
 					{/if}
 					{#if !uiSettings.isFullscreen && !uiSettings.showAddMenu}

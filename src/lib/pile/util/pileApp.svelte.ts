@@ -14,6 +14,8 @@ import { toPileObj } from './api/pileMapper';
 import type { SettingsState } from './ui/settingsState.svelte';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { uploadScreenshot } from './api/screenshotApi';
+import { useProgress } from '@threlte/extras';
+import { fromStore } from 'svelte/store';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -27,6 +29,8 @@ export class PileApp {
 	quality = $state<'low' | 'medium' | 'high'>('medium');
 	autosave = true;
 	uiSettings;
+	private progressActive = fromStore(useProgress().active);
+	isReady = $derived(!this.progressActive.current && this.state.objects3D.size > 0);
 	isActivlyWatching: () => boolean;
 	captureScreenshot: () => Promise<Blob>;
 

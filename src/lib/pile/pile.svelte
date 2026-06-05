@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { T, useThrelte } from '@threlte/core';
-	import { Grid } from '@threlte/extras';
+	import { Grid, useProgress } from '@threlte/extras';
 	import ModelTemplate from './components/modelTemplate.svelte';
 	import ImageTemplate from './components/imageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
@@ -23,6 +23,8 @@
 	raycaster.firstHitOnly = true;
 
 	const { renderer, scene, camera } = useThrelte();
+
+	
 
 	export async function captureThrelteScene(): Promise<Blob> {
 		return new Promise((resolve, reject) => {
@@ -58,7 +60,7 @@
 
 {#if uiSettings && pileApp}
 	<CameraControls {uiSettings} app={pileApp}/>
-	<OrbitLight/>
+	<OrbitLight ready={pileApp.isReady}/>
 	<T.AmbientLight intensity={.6} />
 {/if}
 
