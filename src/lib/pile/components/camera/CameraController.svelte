@@ -8,7 +8,7 @@
 
 	const IDLE_SEC = 60;
 	const AUTO_ROTATE_SPEED = 0.5;
-	const CAMERA_FAR_BOUND = 130000;
+	const CAMERA_FAR_BOUND = 110000;
 	const CAMERA_POS: [x: number, y: number, z: number] = [20, 20, 20];
 	const CAMERA_LOOK_AT_POS: [x: number, y: number, z: number] = [0, 3, 0];
 	const SM_SCREEN_MAX_CAMERA_DISTANCE = 3000

@@ -30,7 +30,7 @@ export class PileApp {
 	autosave = true;
 	uiSettings;
 	private progressActive = fromStore(useProgress().active);
-	isReady = $derived(!this.progressActive.current && this.state.objects3D.size > 0);
+	isReady = $state(false)
 	isActivlyWatching: () => boolean;
 	captureScreenshot: () => Promise<Blob>;
 
@@ -58,6 +58,17 @@ export class PileApp {
 		if (initalDatabaseObjects) {
 			this.initPileObjects(initalDatabaseObjects);
 		}
+		$effect(() => {
+            if (this.isReady) return;
+
+            const assetsDoneLoading = !this.progressActive.current;
+            const databaseObjectsLoaded = this.state.objects3D.size > 0;
+
+            if (assetsDoneLoading && databaseObjectsLoaded) {
+                this.isReady = true; 
+                console.log("🚀 Initial scene load complete! Locking lighting settings.");
+            }
+        });
 	}
 
 	private initInventories() {
