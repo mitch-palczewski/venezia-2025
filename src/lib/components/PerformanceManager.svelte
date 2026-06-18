@@ -8,9 +8,8 @@
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const RAM = (navigator as any).deviceMemory || 4;
 		const cores = navigator.hardwareConcurrency || 4;
-
 		const isMobile = /iPhone|iPod|Android/i.test(navigator.userAgent);
-
+		const pixelRatio = isMobile ? Math.min(window.devicePixelRatio, 1.5) : window.devicePixelRatio; 
 		const isIPad =
 			(navigator.userAgent.includes('Macintosh') && navigator.maxTouchPoints > 1) ||
 			/iPad/i.test(navigator.userAgent);

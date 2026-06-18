@@ -12,8 +12,8 @@
 		title: 'PilePilePile | 3D Digital Public Space',
 		description:
 			'Shared public space in a web-based 3D environment which needs your participation. Move, rotate, and scale objects to build community architecture in a persistent sandbox.',
-		url: 'https://www.pilepilepile.com/',
-		ogImage: 'https://www.pilepilepile.com/media/SEO_cover.jpg'
+		url: 'https://pilepilepile.com/',
+		ogImage: 'https://pilepilepile.com/media/SEO_cover.jpg'
 	};
 
 	const schemaData = {
