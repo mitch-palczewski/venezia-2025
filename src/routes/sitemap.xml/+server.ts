@@ -1,5 +1,5 @@
 export async function GET() {
-    const website = 'https://www.pilepilepile.com';
+    const website = 'https://pilepilepile.com';
     
     const pages = [
         '', 
