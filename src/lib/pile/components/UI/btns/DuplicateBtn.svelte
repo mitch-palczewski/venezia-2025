@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { PileApp } from "$lib/pile/util/pileApp.svelte";
     import type { PileState } from "$lib/pile/util/pileState.svelte";
-    import type { SettingsState } from "$lib/pile/util/ui/settingsState.svelte";
+    import type { UiState } from "$lib/pile/util/ui/uiState.svelte";
     import { duplicateSelectedModel } from "$lib/pile/util/ui/uiActions";
     import GeneralButton from './GeneralButton.svelte'; 
 
-    let { pileState, uiSettings, pileApp }: { pileState: PileState, uiSettings: SettingsState, pileApp: PileApp } = $props();
+    let { pileState, uiSettings, pileApp }: { pileState: PileState, uiSettings: UiState, pileApp: PileApp } = $props();
 
     const duplicateItem = () => {
         duplicateSelectedModel(pileState, pileApp)

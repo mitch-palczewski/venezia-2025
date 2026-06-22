@@ -2,18 +2,15 @@ import type { TransformControlsMode } from 'three/examples/jsm/controls/Transfor
 import type { PileApp } from '../pileApp.svelte';
 import type { AddMenuState } from '$lib/pile/components/UI/add-menu/AddMenu.svelte';
 
-export interface SettingsStateConfig {
-	showGrid?: boolean;
-}
+
 
 interface TrackedStates {
 	lastShowCursor: boolean;
 }
 
-export class SettingsState {
+export class UiState {
 	#presentationMode = $state(false);
 	#showSettingsMenu = $state(false);
-	public defaultShowGrid;
 	public movementSpeed = $state(300);
 	public scaleSliderMax = $state(100);
 	public defaultModelSize = $state(15)
@@ -33,9 +30,7 @@ export class SettingsState {
 	public addMenuState = $state<AddMenuState>('object3D');
 	public canvasContainer: HTMLDivElement | undefined;
 
-	constructor(config: SettingsStateConfig) {
-		this.defaultShowGrid = config.showGrid || false;
-		this.showGrid = this.defaultShowGrid;
+	constructor() {
 
 		$effect.root(() => {
 			$effect(() => {
@@ -80,7 +75,6 @@ export class SettingsState {
 			console.log('Presentation Mode Activate');
 		}
 		if (value === false) {
-			this.showGrid = this.defaultShowGrid;
 			this.showUI = true;
 			this.showCursor = true;
 			this.showTooltip = true;

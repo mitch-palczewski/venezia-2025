@@ -12,59 +12,45 @@
 	import PerformanceManager from '$lib/components/util/PerformanceManager.svelte';
 	import Tower from '../assets/Tower.svelte';
 	import Fireplace from '$lib/assets/Fireplace.svelte';
+	import { captureThrelteScene } from '$lib/utils/captureScene';
+	import type { PileData } from '.';
+	import type { UiState } from './util/ui/uiState.svelte';
+	import { WindowManager } from '$lib/utils/windowManager.svelte';
 
-	let { data, uiSettings } = $props();
+	type Props = {
+		data: PileData;
+		uiState: UiState;
+	};
+	let { data, uiState }: Props = $props();
 
-	const { raycaster } = interactivity({
-		filter: (hits) => {
-			return hits.slice(0, 1);
-		}
-	});
+	const { raycaster } = interactivity();
 	raycaster.firstHitOnly = true;
 
 	const { renderer, scene, camera } = useThrelte();
-
-	
-
-	export async function captureThrelteScene(): Promise<Blob> {
-		return new Promise((resolve, reject) => {
-			renderer.render(scene, camera.current)
-			const canvas = renderer.domElement
-			canvas.toBlob((blob) => {
-				if (blob) resolve(blob);
-				else reject(new Error("Failed to capture WebGL canvas"))
-			}, 'image/jpeg', 1)
-		})
+	export async function capturePileScene(): Promise<Blob> {
+		return captureThrelteScene(renderer, scene, camera, 'image/jpeg', 1);
 	}
 
-	let windowIsVisible = $state(true);
-	let windowIsFocused = $state(true);
-	const isActivelyWatching = $derived(windowIsVisible && windowIsFocused);
-	export const pileApp = new PileApp(() => isActivelyWatching, captureThrelteScene, uiSettings, data);
-	function handleVisibilityChange() {
-		windowIsVisible = document.visibilityState === 'visible';
-	}
-
+	const windowManager = new WindowManager();
+	export const pileApp = new PileApp(() => windowManager.isActivelyWatching, capturePileScene, uiState, data);
 	onDestroy(() => {
 		pileApp.database.destroy();
 	});
 </script>
 
-<svelte:document onvisibilitychange={handleVisibilityChange} />
-<svelte:window onfocus={() => (windowIsFocused = true)} onblur={() => (windowIsFocused = false)} />
-
-<PerformanceManager app={pileApp}/>
-
-<SettingsKeyBind settingState = {uiSettings}/>
 
 
-{#if uiSettings && pileApp}
-	<CameraControls {uiSettings} app={pileApp}/>
-	<OrbitLight ready={pileApp.isReady}/>
-	<T.AmbientLight intensity={.6} />
+<PerformanceManager app={pileApp} />
+
+<SettingsKeyBind settingState={uiState} />
+
+{#if uiState && pileApp}
+	<CameraControls uiSettings={uiState} app={pileApp} />
+	<OrbitLight ready={pileApp.isReady} />
+	<T.AmbientLight intensity={0.6} />
 {/if}
 
-{#if uiSettings.showGrid}
+{#if uiState.showGrid}
 	<Grid
 		type={'polar'}
 		cellSize={10}
@@ -76,9 +62,8 @@
 	/>
 {/if}
 
-
 <Tower />
-<Fireplace/>
+<Fireplace />
 
 {#each pileApp.state.objects2D as [id, image] (id)}
 	{@const { translate: translate, rotation: quaternion, scale: scale } = image.transform3D}
@@ -104,5 +89,3 @@
 		scale={[scale.x, scale.y, scale.z]}
 	/>
 {/each}
-
-

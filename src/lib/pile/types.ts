@@ -1,9 +1,9 @@
+import type { PileDatabaseObj } from './util/api/pileDatabase';
 import type { PileObject3D } from './util/pileObject.svelte';
 
-
-
-
-//Active Model Type
+export type PileData = {
+	pileObjects: PileDatabaseObj[];
+};
 export type ID = string
 
 export type PileModels = Array<PileObject3D>;

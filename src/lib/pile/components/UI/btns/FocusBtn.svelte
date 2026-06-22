@@ -1,10 +1,10 @@
 <script lang="ts">
     import type { PileState } from "$lib/pile/util/pileState.svelte";
-    import type { SettingsState } from "$lib/pile/util/ui/settingsState.svelte";
+    import type { UiState } from "$lib/pile/util/ui/uiState.svelte";
     import { focusOnObject } from "$lib/pile/util/ui/uiActions";
     import GeneralButton from './GeneralButton.svelte'; 
 
-    let { pileState, uiSettings }: { pileState: PileState, uiSettings: SettingsState } = $props();
+    let { pileState, uiSettings }: { pileState: PileState, uiSettings: UiState } = $props();
 
     const focus = () => {
         focusOnObject(pileState)

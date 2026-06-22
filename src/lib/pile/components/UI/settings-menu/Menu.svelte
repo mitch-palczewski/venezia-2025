@@ -1,9 +1,9 @@
 <script lang="ts">
-	import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+	import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
 	import Controls from './Controls.svelte';
 	import Settings from './Settings.svelte';
 
-	let { uiSettings }: { uiSettings: SettingsState } = $props();
+	let { uiSettings }: { uiSettings: UiState } = $props();
 	let state = $state<'settings' | 'controls' >('settings');
 
 	const tabs = ['settings', 'controls'] as const;

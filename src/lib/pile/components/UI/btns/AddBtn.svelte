@@ -1,8 +1,8 @@
 <script lang="ts">
-	import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+	import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
 	import GeneralButton from './GeneralButton.svelte';
 
-	let { uiSettings }: { uiSettings: SettingsState } = $props();
+	let { uiSettings }: { uiSettings: UiState } = $props();
 </script>
 
 <GeneralButton

@@ -4,7 +4,7 @@ import type { AcceptedPileObjects, PileDatabase } from './api/pileDatabase';
 import type { Transform3D } from '../types';
 import { Matrix4, Quaternion, Vector3, type Object3D } from 'three';
 import type { PileApp } from './pileApp.svelte';
-import type { SettingsState } from './ui/settingsState.svelte';
+import type { UiState } from './ui/uiState.svelte';
 import { playAddObject } from '$lib/audio/audio.svelte';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
@@ -16,7 +16,7 @@ export class PileState {
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
 	#showTransformControls = $state(false);
 	pileDatabase: PileDatabase;
-	uiSettings: SettingsState | undefined;
+	uiSettings: UiState | undefined;
 	app: PileApp | undefined;
 
 	constructor(database: PileDatabase) {

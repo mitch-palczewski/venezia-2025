@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { PileState } from '$lib/pile/util/pileState.svelte';
-	import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+	import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
 
 	interface Props {
 		pileState: PileState;
-		uiSettings: SettingsState;
+		uiSettings: UiState;
 		vertical?: boolean;
 	}
 

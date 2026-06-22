@@ -11,7 +11,7 @@ import { Object3DMapInventory } from './assetInventory/object3DMap';
 import { Object2DMapInventory } from './assetInventory/object2DMap';
 import { PileDatabase, type PileDatabaseObj } from './api/pileDatabase';
 import { toPileObj } from './api/pileMapper';
-import type { SettingsState } from './ui/settingsState.svelte';
+import type { UiState } from './ui/uiState.svelte';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { uploadScreenshot } from './api/screenshotApi';
 import { useProgress } from '@threlte/extras';
@@ -37,7 +37,7 @@ export class PileApp {
 	constructor(
 		isActivlyWatching: () => boolean,
 		captureScreenshot: () => Promise<Blob>,
-		uiSettings: SettingsState,
+		uiSettings: UiState,
 		initalDatabaseObjects?: any
 	) {
 		this.uiSettings = uiSettings;

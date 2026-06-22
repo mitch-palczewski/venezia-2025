@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { PileApp } from '$lib/pile/util/pileApp.svelte';
-    import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+    import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
     import GeneralButton from './GeneralButton.svelte';
 
-    let { app, uiSettings }: { app: PileApp; uiSettings: SettingsState } = $props();
+    let { app, uiSettings }: { app: PileApp; uiSettings: UiState } = $props();
 
     let isLoading = $state(false);
 

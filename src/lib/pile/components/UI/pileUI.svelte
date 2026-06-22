@@ -3,7 +3,7 @@
 	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
 
 	import type { PileState } from '$lib/pile/util/pileState.svelte';
-	import { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+	import { UiState } from '$lib/pile/util/ui/uiState.svelte';
 	import { fly } from 'svelte/transition';
 	import AddMenu from './add-menu/AddMenu.svelte';
 
@@ -22,7 +22,7 @@
 
 	interface Props {
 		pileSceneRef: PileScene;
-		uiSettings: SettingsState;
+		uiSettings: UiState;
 	}
 	let { pileSceneRef, uiSettings }: Props = $props();
 

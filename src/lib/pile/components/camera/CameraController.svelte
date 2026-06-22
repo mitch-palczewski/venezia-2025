@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { T, useTask } from '@threlte/core';
 	import { OrbitControls } from '@threlte/extras';
-	import type { SettingsState } from '../../util/ui/settingsState.svelte';
+	import type { UiState } from '../../util/ui/uiState.svelte';
 	import type { PileApp } from '../../util/pileApp.svelte';
 	import { createIdleManage } from './idleManager.svelte';
 	import { calculateMovement } from './movement';
@@ -21,7 +21,7 @@
 	const PAN_SPEED = .8
 
 	interface Props {
-		uiSettings: SettingsState;
+		uiSettings: UiState;
 		app: PileApp;
 	}
 	let { uiSettings, app }: Props = $props();

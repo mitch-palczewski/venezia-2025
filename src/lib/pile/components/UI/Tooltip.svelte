@@ -1,8 +1,8 @@
 <script lang="ts">
-    import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+    import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
     import { fade } from 'svelte/transition';
 
-    let { settingsState }: { settingsState: SettingsState } = $props();
+    let { settingsState }: { settingsState: UiState } = $props();
 </script>
 
 {#if settingsState.tooltipText && settingsState.showTooltip}

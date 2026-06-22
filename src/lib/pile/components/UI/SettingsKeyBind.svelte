@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { ambientManager } from "$lib/audio/ambient.svelte";
 	import { audioSettings } from "$lib/audio/audio.svelte";
-	import { SettingsState } from "$lib/pile/util/ui/settingsState.svelte";
+	import { UiState } from "$lib/pile/util/ui/uiState.svelte";
 	import { deleteSelectedModel } from "$lib/pile/util/ui/uiActions";
 
 	
 
     interface Props {
-        settingState: SettingsState 
+        settingState: UiState 
     }
     let {settingState}:Props = $props()
 

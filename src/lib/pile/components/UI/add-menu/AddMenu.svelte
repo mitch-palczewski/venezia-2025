@@ -2,12 +2,12 @@
 	import type { EnvironmentMap } from '$lib/pile/util/assetInventory/environmentMap';
 	import type { Object2DMap } from '$lib/pile/util/assetInventory/object2DMap';
 	import { Object3DMap } from '$lib/pile/util/assetInventory/object3DMap';
-	import type { SettingsState } from '$lib/pile/util/ui/settingsState.svelte';
+	import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
 	import { addNewModel, changeEnvironment } from '$lib/pile/util/ui/uiActions';
 	import { fade, scale } from 'svelte/transition';
 	import ElementBtn from './ElementBtn.svelte';
 
-	let { uiSettings }: { uiSettings: SettingsState } = $props();
+	let { uiSettings }: { uiSettings: UiState } = $props();
 
 	export type AddMenuState = 'object3D' | 'object2D' | 'environment';
 	let selectedElement: Object2DMap | Object3DMap | EnvironmentMap | null = $state(null);
