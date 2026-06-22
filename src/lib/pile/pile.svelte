@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { T, useThrelte } from '@threlte/core';
-	import { Grid, useProgress } from '@threlte/extras';
+	import { Grid } from '@threlte/extras';
 	import ModelTemplate from './components/modelTemplate.svelte';
 	import ImageTemplate from './components/imageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
@@ -8,8 +8,8 @@
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
-	import OrbitLight from '$lib/components/lights/OrbitLight.svelte';
-	import PerformanceManager from '$lib/components/PerformanceManager.svelte';
+	import OrbitLight from '$lib/components/3d/lights/OrbitLight.svelte';
+	import PerformanceManager from '$lib/components/util/PerformanceManager.svelte';
 	import Tower from '../assets/Tower.svelte';
 	import Fireplace from '$lib/assets/Fireplace.svelte';
 

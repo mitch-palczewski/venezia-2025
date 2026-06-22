@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { PileApp } from '../pile/util/pileApp.svelte';
+	import type { PileApp } from '../../pile/util/pileApp.svelte';
 	import { onMount } from 'svelte';
 
 	let { app }: { app: PileApp } = $props();
