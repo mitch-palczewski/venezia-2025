@@ -9,19 +9,19 @@
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
 	import OrbitLight from '$lib/components/3d/lights/OrbitLight.svelte';
-	import PerformanceManager from '$lib/components/util/PerformanceManager.svelte';
 	import Tower from '../assets/Tower.svelte';
 	import Fireplace from '$lib/assets/Fireplace.svelte';
 	import type { PileData } from '.';
 	import type { UiState } from './util/ui/uiState.svelte';
-	import { WindowLifecycle } from '$lib/core/windowLifecycle.svelte';
 	import { captureThrelteScene } from '$lib/graphics/utils/captureScene';
+	import { DeviceContext } from '$lib/core';
 
 	type Props = {
 		data: PileData;
 		uiState: UiState;
+		deviceContext: DeviceContext;
 	};
-	let { data, uiState }: Props = $props();
+	let { data, uiState, deviceContext }: Props = $props();
 
 	const { raycaster } = interactivity();
 	raycaster.firstHitOnly = true;
@@ -30,17 +30,17 @@
 	export async function capturePileScene(): Promise<Blob> {
 		return captureThrelteScene(renderer, scene, camera, 'image/jpeg', 1);
 	}
+	
+	export const pileApp = new PileApp(capturePileScene, uiState, deviceContext, data);
 
-	const windowLifecycle = new WindowLifecycle();
-	export const pileApp = new PileApp(() => windowLifecycle.isActivelyWatching, capturePileScene, uiState, data);
 	onDestroy(() => {
 		pileApp.database.destroy();
+		deviceContext.destroy()
 	});
 </script>
 
 
 
-<PerformanceManager app={pileApp} />
 
 <SettingsKeyBind settingState={uiState} />
 

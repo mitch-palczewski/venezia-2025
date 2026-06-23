@@ -1,5 +1,5 @@
 import type { SystemProfiler } from "./systemProfiler";
-import type { Viewport } from "./viewport";
+import type { Viewport } from "./viewport.svelte";
 
 
 export type PerformanceTier = 0 | 1 | 2 | 3 | 4;

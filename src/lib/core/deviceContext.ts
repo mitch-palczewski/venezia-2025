@@ -1,6 +1,6 @@
 import { PerformanceTierEvaluator, type PerformanceTier } from "./performanceTierEvaluator";
 import { SystemProfiler } from "./systemProfiler";
-import { Viewport } from "./viewport";
+import { Viewport } from "./viewport.svelte";
 import { WindowLifecycle } from "./windowLifecycle.svelte";
 
 

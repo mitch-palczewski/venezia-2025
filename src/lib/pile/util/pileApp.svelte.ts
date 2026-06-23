@@ -16,6 +16,7 @@ import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls
 import { uploadScreenshot } from './api/screenshotApi';
 import { useProgress } from '@threlte/extras';
 import { fromStore } from 'svelte/store';
+import type { DeviceContext } from '$lib/core';
 
 export class PileApp {
 	modelInventory = new Object3DMapInventory();
@@ -31,17 +32,19 @@ export class PileApp {
 	uiSettings;
 	private progressActive = fromStore(useProgress().active);
 	isReady = $state(false)
+	public deviceContext: DeviceContext
 	isActivlyWatching: () => boolean;
 	captureScreenshot: () => Promise<Blob>;
 
 	constructor(
-		isActivlyWatching: () => boolean,
 		captureScreenshot: () => Promise<Blob>,
 		uiSettings: UiState,
+		deviceContext: DeviceContext,
 		initalDatabaseObjects?: any
 	) {
+		this.deviceContext = deviceContext
 		this.uiSettings = uiSettings;
-		this.isActivlyWatching = isActivlyWatching;
+		this.isActivlyWatching = () => deviceContext.lifecycle.isActivelyWatching
 		this.captureScreenshot = captureScreenshot;
 		this.initInventories();
 		const { scene, renderer } = useThrelte();
@@ -66,7 +69,7 @@ export class PileApp {
 
             if (assetsDoneLoading && databaseObjectsLoaded) {
                 this.isReady = true; 
-                console.log("🚀 Initial scene load complete! Locking lighting settings.");
+                console.log(" Initial scene load complete! Locking lighting settings.");
             }
         });
 	}
