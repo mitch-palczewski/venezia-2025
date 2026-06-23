@@ -1,4 +1,4 @@
-export class WindowManager {
+export class WindowLifecycle {
 	private windowIsVisible = $state(true);
 	private windowIsFocused = $state(true);
 
@@ -25,6 +25,12 @@ export class WindowManager {
 		this.windowIsFocused = false;
 	}
 
+	/**
+     * Determines if the application is currently actively viewed and engaged by the user.
+     * Evaluates to `true` only when the browser tab is explicitly active (visible) AND 
+     * the window currently holds system focus.
+     * * @returns {boolean} True if the app is active and focused, false if hidden or blurred.
+     */
     get isActivelyWatching(): boolean {
         return this.windowIsVisible && this.windowIsFocused;
     }
