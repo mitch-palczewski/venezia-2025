@@ -1,0 +1,1 @@
+import { captureThrelteScene } from "./utils/captureScene";

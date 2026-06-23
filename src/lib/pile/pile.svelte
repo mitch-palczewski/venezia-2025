@@ -12,10 +12,10 @@
 	import PerformanceManager from '$lib/components/util/PerformanceManager.svelte';
 	import Tower from '../assets/Tower.svelte';
 	import Fireplace from '$lib/assets/Fireplace.svelte';
-	import { captureThrelteScene } from '$lib/utils/captureScene';
 	import type { PileData } from '.';
 	import type { UiState } from './util/ui/uiState.svelte';
-	import { WindowManager } from '$lib/utils/windowManager.svelte';
+	import { WindowLifecycle } from '$lib/core/windowLifecycle.svelte';
+	import { captureThrelteScene } from '$lib/graphics/utils/captureScene';
 
 	type Props = {
 		data: PileData;
@@ -31,8 +31,8 @@
 		return captureThrelteScene(renderer, scene, camera, 'image/jpeg', 1);
 	}
 
-	const windowManager = new WindowManager();
-	export const pileApp = new PileApp(() => windowManager.isActivelyWatching, capturePileScene, uiState, data);
+	const windowLifecycle = new WindowLifecycle();
+	export const pileApp = new PileApp(() => windowLifecycle.isActivelyWatching, capturePileScene, uiState, data);
 	onDestroy(() => {
 		pileApp.database.destroy();
 	});
