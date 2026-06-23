@@ -1,5 +1,5 @@
 import type { SystemProfiler } from "./systemProfiler";
-import type { Viewport } from "./viewport.svelte";
+import type { Viewport } from "./viewport/viewport.svelte";
 
 
 export type PerformanceTier = 0 | 1 | 2 | 3 | 4;
@@ -98,11 +98,11 @@ export class PerformanceTierEvaluator {
 		if (!this.#screenManager) {
 			return 1; //Low
 		}
-		if (this.#screenManager.isLargeScreen) {
+		if (this.#screenManager.areaTier >= 3) {
 			if (!this.#profiler.hasTouch) return 3; // High
 			return 2; // Medium
 		}
-		if (this.#screenManager.isMediumScreen) {
+		if (this.#screenManager.areaTier >= 2) {
 			if (!this.#profiler.hasTouch) return 2; // Medium
 			return 1; //Low
 		}
