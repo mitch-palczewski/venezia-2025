@@ -14,12 +14,13 @@
             <p>Area: {viewport.area}</p>
 		</div>
 		<div class="border p-1">
-			<p>Area Tier: {viewport.areaTier}</p>
-            <p>Shortest Edge Tier: {viewport.shortestEdgeTier}</p>
-            <p>Width Tier: {viewport.widthTier}</p>
+			<p>Area Tier: {viewport.areaTierText}</p>
+            <p>Shortest Edge Tier: {viewport.shortestEdgeTierText}</p>
+            <p>Width Tier: {viewport.widthTierText}</p>
 		</div>
-        <p>Orientation: {viewport.orientation}</p>
+        
 		<div class="border p-1">
+            <p>Orientation: {viewport.orientation}</p>
             <p>Raw Ratio: {viewport.rawRatio}</p>
             <p>Closest Common Ratio: {viewport.closestCommonRatio}</p>
             <p>Closest Common Ratio Value: {viewport.closestCommonRatioValue}</p>

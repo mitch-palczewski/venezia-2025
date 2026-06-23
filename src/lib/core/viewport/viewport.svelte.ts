@@ -2,15 +2,17 @@ import {
 	areaTierBreaks,
 	COMMON_RATIOS,
 	shortestEdgeTierBreaks,
+	TIER_TEXT_MAP,
 	widthTierBreaks,
 	type AspectRatio,
 	type Orientation,
 	type Tier,
-	type TierBreakpoints
+	type TierBreakpoints,
+	type TierText
 } from './viewport.types';
 
 /**
- * Manages reactive viewport state, tracking dimensions, orientation, 
+ * Manages reactive viewport state, tracking dimensions, orientation,
  * aspect ratios, and design system layout tiers.
  * * Optimized for Svelte 5 using runes, throttled window resize observers, and
  * fully decoupled to evaluate custom collections of layout design anchors.
@@ -21,8 +23,8 @@ export class Viewport {
 	#ticking = false;
 	#targetRatios: readonly AspectRatio[] = COMMON_RATIOS;
 	#closestRatioMatch = $derived(
-        getClosestAspectRatio(this.#width, this.#height, this.#targetRatios)
-    );
+		getClosestAspectRatio(this.#width, this.#height, this.#targetRatios)
+	);
 
 	/** The total calculated screen area in pixels (width * height). */
 	public area: number = $derived(this.#width * this.#height);
@@ -44,23 +46,34 @@ export class Viewport {
 	/** The calculated tier classification (0-4) matching traditional width media queries. */
 	public widthTier: Tier = $derived(getTierFromBreakpoints(this.#width, widthTierBreaks));
 
+	/** The readable text descriptor (e.g., 'Medium') matching the current area tier. */
+	public areaTierText: TierText = $derived(TIER_TEXT_MAP[this.areaTier]);
+
+	/** The readable text descriptor (e.g., 'Small') matching the shortest edge calculation. */
+	public shortestEdgeTierText: TierText = $derived(TIER_TEXT_MAP[this.shortestEdgeTier]);
+
+	/** The readable text descriptor (e.g., 'Large') matching traditional responsive layout width. */
+	public widthTierText: TierText = $derived(TIER_TEXT_MAP[this.widthTier]);
+
 	/** The precise decimal value of the current width-to-height aspect ratio. */
 	public rawRatio: number = $derived(getRawRatio(this.#width, this.#height));
 
 	/** The text label of the nearest matched aspect ratio configuration (e.g., '16:9'). */
-    public closestCommonRatio: string = $derived(this.#closestRatioMatch?.text ?? 'Unknown');
+	public closestCommonRatio: string = $derived(this.#closestRatioMatch?.text ?? 'Unknown');
 
-    /** The numerical decimal value of the nearest matched aspect ratio configuration (e.g., 1.777). */
-    public closestCommonRatioValue: number = $derived(this.#closestRatioMatch?.value ?? this.rawRatio);
+	/** The numerical decimal value of the nearest matched aspect ratio configuration (e.g., 1.777). */
+	public closestCommonRatioValue: number = $derived(
+		this.#closestRatioMatch?.value ?? this.rawRatio
+	);
 
 	/**
-     * Initializes a new viewport tracker instance.
-     * @param customTargets An optional, tailored array of aspect ratios to target for layout snapping.
-     */
-	constructor(customTargets?:readonly AspectRatio[]) {
+	 * Initializes a new viewport tracker instance.
+	 * @param customTargets An optional, tailored array of aspect ratios to target for layout snapping.
+	 */
+	constructor(customTargets?: readonly AspectRatio[]) {
 		if (customTargets) {
-            this.#targetRatios = customTargets;
-        }
+			this.#targetRatios = customTargets;
+		}
 		if (typeof window !== 'undefined') {
 			this.syncDimensions();
 			window.addEventListener('resize', this.handleResize);
@@ -106,12 +119,12 @@ export class Viewport {
  * @param breakpoints The ordered design system limits map.
  * @returns An integer rating representing the assigned responsive tier.
  */
-function getTierFromBreakpoints(value: number, breakpoints: TierBreakpoints):Tier {
+function getTierFromBreakpoints(value: number, breakpoints: TierBreakpoints): Tier {
 	const limits = Object.values(breakpoints);
 
-	for (let i=0; i<limits.length; i++){
-		if(value <= limits[i]){
-			return i as Tier
+	for (let i = 0; i < limits.length; i++) {
+		if (value <= limits[i]) {
+			return i as Tier;
 		}
 	}
 	return limits.length as Tier;
@@ -141,19 +154,23 @@ function getRawRatio(width: number, height: number): number {
  * @param allowedRatios The array of targets assigned to evaluate against.
  * @returns The matched AspectRatio object, or null if the system calculation is currently un-resolvable.
  */
-function getClosestAspectRatio(width: number, height: number, allowedRatios: readonly AspectRatio[]): AspectRatio | null {
-    const currentRatio = getRawRatio(width, height);
-    if (currentRatio === 0) return null;
+function getClosestAspectRatio(
+	width: number,
+	height: number,
+	allowedRatios: readonly AspectRatio[]
+): AspectRatio | null {
+	const currentRatio = getRawRatio(width, height);
+	if (currentRatio === 0) return null;
 
-    let closestMatch = allowedRatios[0];
-    let smallestDelta = Math.abs(currentRatio - closestMatch.value);
+	let closestMatch = allowedRatios[0];
+	let smallestDelta = Math.abs(currentRatio - closestMatch.value);
 
-    for (let i = 1; i < allowedRatios.length; i++) {
-        const currentDelta = Math.abs(currentRatio - allowedRatios[i].value);
-        if (currentDelta < smallestDelta) {
-            smallestDelta = currentDelta;
-            closestMatch = allowedRatios[i];
-        }
-    }
-    return closestMatch;
+	for (let i = 1; i < allowedRatios.length; i++) {
+		const currentDelta = Math.abs(currentRatio - allowedRatios[i].value);
+		if (currentDelta < smallestDelta) {
+			smallestDelta = currentDelta;
+			closestMatch = allowedRatios[i];
+		}
+	}
+	return closestMatch;
 }

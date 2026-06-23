@@ -1,10 +1,8 @@
 
 
+// --- Viewport Ratios ---
 
 export type Orientation = 'tall' | 'wide' | 'square';
-
-
-// --- Viewport Common Ratios ---
 
 export type AspectRatio = {
     readonly text: string;
@@ -19,11 +17,24 @@ export const COMMON_RATIOS = [
     { text: '3:4',   value: 3 / 4 }
 ] as const;
 
+export const PHOTOGRAPHY_RATIOS = [
+    { text: '1:1',   value: 1 },
+    { text: '16:9',  value: 16 / 9 },
+    { text: '9:16',  value: 9 / 16 },
+    { text: '3:2',   value: 3 / 2 },
+    { text: '2:3',   value: 2 / 3 }
+] as const;
 
-
+/**Used for a Mobile First Approach. */
+export const MOBILE_TARGET_RATIOS = [
+    { text: '16:9',  value: 16 / 9 },
+    { text: '9:16',  value: 9 / 16 },
+    { text: '3:2',   value: 3 / 2 },
+] as const;
 
 
 // --- Viewport Tier ---
+
 export const TIER_TEXT_MAP = {
     0: 'Extra Small',
     1: 'Small',
