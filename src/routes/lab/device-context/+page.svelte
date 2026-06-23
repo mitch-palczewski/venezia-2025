@@ -22,6 +22,7 @@
 		<div class="border p-1">
             <p>Raw Ratio: {viewport.rawRatio}</p>
             <p>Closest Common Ratio: {viewport.closestCommonRatio}</p>
+            <p>Closest Common Ratio Value: {viewport.closestCommonRatioValue}</p>
 		</div>
 	</div>
 {/snippet}

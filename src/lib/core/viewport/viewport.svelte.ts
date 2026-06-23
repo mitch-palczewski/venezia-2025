@@ -4,7 +4,6 @@ import {
 	shortestEdgeTierBreaks,
 	widthTierBreaks,
 	type AspectRatio,
-	type CommonRatioText,
 	type Orientation,
 	type Tier,
 	type TierBreakpoints
