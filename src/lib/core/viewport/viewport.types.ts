@@ -1,22 +1,41 @@
-export type Tier = 0 | 1 | 2 | 3 | 4;
-export type TierText = 'Extra Small' | 'Small' | 'Medium' | 'Large' | 'Extra Large';
-export type Orientation = 'tall' | 'wide' | 'square';
-export type CommonRatioText =
-	| '1:1'
-	| '16:9'
-	| '9:16'
-	| '4:3'
-	| '3:4'
-	| '3:2'
-	| '2:3'
-	| '21:9'
-	| '9:21'
-	| 'Unknown';
 
-export interface RatioMap {
-	text: CommonRatioText;
-	value: number;
-}
+
+
+export type Orientation = 'tall' | 'wide' | 'square';
+
+
+// --- Viewport Common Ratios ---
+
+export type AspectRatio = {
+    readonly text: string;
+    readonly value: number;
+};
+
+export const COMMON_RATIOS = [
+    { text: '1:1',   value: 1 },
+    { text: '16:9',  value: 16 / 9 },
+    { text: '9:16',  value: 9 / 16 },
+    { text: '3:2',   value: 3 / 2 },
+    { text: '2:3',   value: 2 / 3 }
+] as const;
+
+export type CommonRatioText = typeof COMMON_RATIOS[number]['text'] | 'Unknown';
+
+
+
+
+// --- Viewport Tier ---
+export const TIER_TEXT_MAP = {
+    0: 'Extra Small',
+    1: 'Small',
+    2: 'Medium',
+    3: 'Large',
+    4: 'Extra Large'
+} as const;
+
+export type Tier = keyof typeof TIER_TEXT_MAP;
+
+export type TierText = typeof TIER_TEXT_MAP[Tier];
 
 export interface TierBreakpoints {
 	XsSm: number;
@@ -25,28 +44,25 @@ export interface TierBreakpoints {
 	LgXl: number;
 }
 
-export const widthTierBreaks: TierBreakpoints = { XsSm: 300, SmMd: 440, MdLg: 660, LgXl: 1000 };
-export const shortestEdgeTierBreaks: TierBreakpoints = {
+export const widthTierBreaks = { 
+    XsSm: 640, 
+    SmMd: 768, 
+    MdLg: 1024, 
+    LgXl: 1280 
+} as const;
+
+export const shortestEdgeTierBreaks = {
 	XsSm: 300,
 	SmMd: 440,
 	MdLg: 660,
 	LgXl: 1000
-};
-export const areaTierBreaks: TierBreakpoints = {
+} as const;
+
+export const areaTierBreaks = {
 	XsSm: 150000,
 	SmMd: 350000,
 	MdLg: 850000,
 	LgXl: 2100000
-};
+} as const;
 
-export const COMMON_RATIOS: RatioMap[] = [
-	{ text: '1:1', value: 1 },
-	{ text: '16:9', value: 16 / 9 },
-	{ text: '9:16', value: 9 / 16 },
-	{ text: '4:3', value: 4 / 3 },
-	{ text: '3:4', value: 3 / 4 },
-	{ text: '3:2', value: 3 / 2 },
-	{ text: '2:3', value: 2 / 3 },
-	{ text: '21:9', value: 21 / 9 },
-	{ text: '9:21', value: 9 / 21 }
-];
+
