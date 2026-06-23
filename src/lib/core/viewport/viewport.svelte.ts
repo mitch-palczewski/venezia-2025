@@ -21,6 +21,9 @@ export class Viewport {
 	#height = $state(0);
 	#ticking = false;
 	#targetRatios: readonly AspectRatio[] = COMMON_RATIOS;
+	#closestRatioMatch = $derived(
+        getClosestAspectRatio(this.#width, this.#height, this.#targetRatios)
+    );
 
 	/** The total calculated screen area in pixels (width * height). */
 	public area: number = $derived(this.#width * this.#height);
@@ -45,10 +48,11 @@ export class Viewport {
 	/** The precise decimal value of the current width-to-height aspect ratio. */
 	public rawRatio: number = $derived(getRawRatio(this.#width, this.#height));
 
-	/** The nearest standardized display aspect ratio text string (e.g., '16:9', '21:9'). */
-	public closestCommonRatio: string = $derived(
-		getClosestCommonRatio(this.#width, this.#height, this.#targetRatios)
-	);
+	/** The text label of the nearest matched aspect ratio configuration (e.g., '16:9'). */
+    public closestCommonRatio: string = $derived(this.#closestRatioMatch?.text ?? 'Unknown');
+
+    /** The numerical decimal value of the nearest matched aspect ratio configuration (e.g., 1.777). */
+    public closestCommonRatioValue: number = $derived(this.#closestRatioMatch?.value ?? this.rawRatio);
 
 	/**
      * Initializes a new viewport tracker instance.
@@ -132,24 +136,25 @@ function getRawRatio(width: number, height: number): number {
 }
 
 /**
- * Loops through a collection of custom aspect targets to discover the closest statistical match.
- * * @param width Live window pixel width.
+ * Loops through a collection of custom aspect targets to discover the closest statistical match object.
+ * @param width Live window pixel width.
  * @param height Live window pixel height.
  * @param allowedRatios The array of targets assigned to evaluate against.
+ * @returns The matched AspectRatio object, or null if the system calculation is currently un-resolvable.
  */
-function getClosestCommonRatio(width: number, height: number, allowedRatios: readonly AspectRatio[]): string {
-	const currentRatio = getRawRatio(width, height);
-	if (currentRatio === 0) return 'Unknown';
+function getClosestAspectRatio(width: number, height: number, allowedRatios: readonly AspectRatio[]): AspectRatio | null {
+    const currentRatio = getRawRatio(width, height);
+    if (currentRatio === 0) return null;
 
-	let closestMatch = allowedRatios[0];
-	let smallestDelta = Math.abs(currentRatio - closestMatch.value);
+    let closestMatch = allowedRatios[0];
+    let smallestDelta = Math.abs(currentRatio - closestMatch.value);
 
-	for (let i = 1; i < allowedRatios.length; i++) {
-		const currentDelta = Math.abs(currentRatio - allowedRatios[i].value);
-		if (currentDelta < smallestDelta) {
-			smallestDelta = currentDelta;
-			closestMatch = allowedRatios[i];
-		}
-	}
-	return closestMatch.text;
+    for (let i = 1; i < allowedRatios.length; i++) {
+        const currentDelta = Math.abs(currentRatio - allowedRatios[i].value);
+        if (currentDelta < smallestDelta) {
+            smallestDelta = currentDelta;
+            closestMatch = allowedRatios[i];
+        }
+    }
+    return closestMatch;
 }
