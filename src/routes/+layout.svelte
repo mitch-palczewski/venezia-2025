@@ -1,3 +1,4 @@
+<!-- eslint-disable svelte/no-at-html-tags -->
 <script lang="ts">
 	import '../app.css';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
@@ -36,32 +37,30 @@
 </script>
 
 <svelte:head>
-	<title>{SEO.title}</title>
-	<meta name="description" content={SEO.description} />
-	<link rel="canonical" href={SEO.url} />
+    <title>{SEO.title}</title>
+    <meta name="description" content={SEO.description} />
+    <link rel="canonical" href={SEO.url} />
 
-	<meta property="og:type" content="website" />
-	<meta property="og:url" content={SEO.url} />
-	<meta property="og:title" content={SEO.title} />
-	<meta property="og:site_name" content="PilePilePile" />
-	<meta property="og:description" content={SEO.description} />
-	<meta property="og:image" content={SEO.ogImage} />
-	<meta property="og:image:width" content="1200" />
-	<meta property="og:image:height" content="630" />
-	<meta
-		property="og:image:alt"
-		content="A screenshot of the PilePilePile 3D interactive art environment."
-	/>
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={SEO.url} />
+    <meta property="og:title" content={SEO.title} />
+    <meta property="og:site_name" content="PilePilePile" />
+    <meta property="og:description" content={SEO.description} />
+    <meta property="og:image" content={SEO.ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+        property="og:image:alt"
+        content="A screenshot of the PilePilePile 3D interactive art environment."
+    />
 
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:title" content={SEO.title} />
-	<meta name="twitter:description" content={SEO.description} />
-	<meta name="twitter:image" content={SEO.ogImage} />
-	<meta name="twitter:image:alt" content="Public Space in a 3D digital environment" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={SEO.title} />
+    <meta name="twitter:description" content={SEO.description} />
+    <meta name="twitter:image" content={SEO.ogImage} />
+    <meta name="twitter:image:alt" content="Public Space in a 3D digital environment" />
 
-	<script type="application/ld+json">
-        {@html jsonLD}
-    </script>
+    {@html '<script type="application/ld+json">' + jsonLD + '</' + 'script>'}
 </svelte:head>
 
 <section class="sr-only">
