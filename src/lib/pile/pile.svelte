@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { T, useThrelte } from '@threlte/core';
 	import { Grid } from '@threlte/extras';
-	import ModelTemplate from './components/modelTemplate.svelte';
-	import ImageTemplate from './components/imageTemplate.svelte';
+	import ModelTemplate from './components/ModelTemplate.svelte';
+	import ImageTemplate from './components/ImageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
 	import CameraControls from './components/camera/CameraController.svelte';
 	import { onDestroy } from 'svelte';

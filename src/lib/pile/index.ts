@@ -7,4 +7,4 @@ export * from './types';
 export * from './util/pileState.svelte';
 export * from './components/UI/pileUI.svelte';
 export * from './util/assetInventory/assetsMap';
-export * from './components/modelTemplate.svelte'
+export * from './components/ModelTemplate.svelte'
