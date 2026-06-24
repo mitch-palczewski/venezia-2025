@@ -25,8 +25,8 @@ export const PHOTOGRAPHY_RATIOS = [
     { text: '2:3',   value: 2 / 3 }
 ] as const;
 
-/**Used for a Mobile First Approach. */
-export const MOBILE_TARGET_RATIOS = [
+/**Used for Minimal Development First Approach. */
+export const MINIMAL_TARGET_RATIOS = [
     { text: '16:9',  value: 16 / 9 },
     { text: '9:16',  value: 9 / 16 },
     { text: '3:2',   value: 3 / 2 },

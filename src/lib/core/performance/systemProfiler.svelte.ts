@@ -1,19 +1,53 @@
-interface GpuProfile {
-	gpuName: string;
-	maxTextureSize: number;
-	glVersion: 'webgpu' | 'webgl2' | 'webgl' | string;
-}
+import type { GpuProfile } from "./performance.types";
 
+/**
+ * Orchestrates synchronous baseline and asynchronous advanced telemetry scans 
+ * of client hardware capabilities including CPU thread counts, memory boundaries, 
+ * network optimization flags, and hardware-accelerated graphics architectures.
+ */
 export class SystemProfiler {
+
+	
+	/** * Indicates whether the device environment supports active touch interaction parameters.
+     */
 	public hasTouch = false;
+
+	/** * The approximate amount of system RAM allocated to the device in gigabytes (GB). 
+     * @remarks Frequently returns `null` on privacy-hardened or Apple mobile platforms to mitigate browser fingerprinting tracking.
+     */
 	public memory: number | null = null;
+
+	/** * The number of logical CPU core execution threads available to the current application thread. 
+     */
 	public cpuCores: number | null = null;
-	public gpuName: string | null = null;
-	public maxTextureSize: number | null = null;
-	public glVersion: 'webgpu' | 'webgl2' | 'webgl' | string | null = null;
+
+	/** * The unmasked hardware renderer identifier or vendor marketing string of the system's graphics core.
+     */
+	public get gpuName() { return this.#gpuName; }
+	#gpuName = $state<string | null>(null);
+
+	/** * The maximum dimension boundary (width or height) permitted for 2D texture arrays within the current graphics engine context.
+     */
+	public get maxTextureSize() { return this.#maxTextureSize; }
+	#maxTextureSize = $state<number | null>(null);
+
+	/** * The specific web graphics layer execution driver currently bound to the profiling canvas.
+     */
+	public get glVersion() { return this.#glVersion; }
+	#glVersion = $state<'webgpu' | 'webgl2' | 'webgl' | string | null>(null);
+
+	/** * Indicates whether the user's browser or operating system network stack has flagged active data conservation constraints.
+     */
 	public isDataSaverEnabled = false;
+
+	/** * The backing store pixel resolution scale metric of the system's physical display display matrix.
+     */
 	public dpr = 1;
 
+	/**
+     * Initializes the system profiler instance, gathers synchronous device configuration metrics,
+     * and performs an immediate fallback WebGL context validation.
+     */
 	constructor() {
 		if (typeof window === 'undefined' || typeof navigator === 'undefined') return;
 
@@ -34,7 +68,7 @@ export class SystemProfiler {
      * this should be called during your application's initial loading phase (e.g., inside 
      * Svelte's `onMount`). If the browser supports WebGPU, this method safely replaces the 
      * synchronous WebGL baseline specs with clean, unmasked hardware details.
-     * * @returns {Promise<void>} Resolves once the background GPU hardware profile is finalized.
+     * * @returns Resolves once the background GPU hardware profile is finalized.
      */
 	public async profileGpuAsync(): Promise<void> {
 		if (typeof window === 'undefined') return;
@@ -62,9 +96,9 @@ export class SystemProfiler {
 
 	private applyProfile(profile: GpuProfile | null) {
 		if (!profile) return;
-		this.gpuName = profile.gpuName;
-		this.maxTextureSize = profile.maxTextureSize;
-		this.glVersion = profile.glVersion;
+		this.#gpuName = profile.gpuName;
+		this.#maxTextureSize = profile.maxTextureSize;
+		this.#glVersion = profile.glVersion;
 	}
 }
 
