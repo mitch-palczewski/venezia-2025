@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { T } from '@threlte/core';
-	import { interactivity, meshBounds, SVG, TransformControls, useTexture } from '@threlte/extras';
+	import { interactivity, SVG, TransformControls, useTexture } from '@threlte/extras';
 	import { Group, Vector3, Quaternion, Texture } from 'three';
 	import type { AsyncWritable, Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';

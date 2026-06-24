@@ -1,6 +1,7 @@
 import type { TransformControlsMode } from 'three/examples/jsm/controls/TransformControls.js';
 import type { PileApp } from '../pileApp.svelte';
 import type { AddMenuState } from '$lib/pile/components/UI/add-menu/AddMenu.svelte';
+import type { DeviceContext, PerformanceTier } from '$lib/core';
 
 
 
@@ -11,6 +12,7 @@ interface TrackedStates {
 export class UiState {
 	#presentationMode = $state(false);
 	#showSettingsMenu = $state(false);
+	#performance:PerformanceTier = $state(2)
 	public movementSpeed = $state(300);
 	public scaleSliderMax = $state(100);
 	public defaultModelSize = $state(15)
@@ -29,9 +31,11 @@ export class UiState {
 	public doubleClick = $state(false);
 	public addMenuState = $state<AddMenuState>('object3D');
 	public canvasContainer: HTMLDivElement | undefined;
+	public deviceContext: DeviceContext;
+	
 
-	constructor() {
-
+	constructor(deviceContext:DeviceContext) {
+		this.deviceContext = deviceContext
 		$effect.root(() => {
 			$effect(() => {
 				if (!this.showCursor) {
@@ -41,6 +45,14 @@ export class UiState {
 				}
 			});
 		});
+	}
+
+	get performance() {
+		return this.#performance
+	}
+	set performance(value:PerformanceTier) {
+		this.deviceContext.qualityOverride = value
+		this.#performance = value
 	}
 
 	get showSettingsMenu() {

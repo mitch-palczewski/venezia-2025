@@ -12,7 +12,12 @@ import { type PerformanceTier, type PerformanceTierText, PERFORMANCE_TIER_TEXT_M
 export class PerformanceTierEvaluator {
 	#profiler: SystemProfiler;
 	#screenManager: Viewport | undefined;
-	#overridePerformanceTier: PerformanceTier | undefined | null;
+
+	/**
+     * Gets or sets the active manual performance profile override.
+     * Setting this to null restores automatic hardware telemetry tracking.
+     */
+	public overridePerformanceTier: PerformanceTier | undefined | null = $state(null);
 
 	/**
      * Constructs a new instance of the performance capability evaluator.
@@ -27,7 +32,7 @@ export class PerformanceTierEvaluator {
 	) {
 		this.#profiler = profiler;
 		this.#screenManager = screenManager;
-		this.#overridePerformanceTier = overridePerformanceTier;
+		this.overridePerformanceTier = overridePerformanceTier;
 	}
 
 	/**
@@ -53,12 +58,10 @@ export class PerformanceTierEvaluator {
      * * @returns The resolved performance tier index.
      */
 	get performanceTier(): PerformanceTier {
-		const memory = this.#profiler.memory;
-		const cpuCores = this.#profiler.cpuCores;
 
 		// --- 1. Manual Override ---
-		if (this.#overridePerformanceTier !== null && this.#overridePerformanceTier !== undefined)
-			return this.#overridePerformanceTier;
+		if (this.overridePerformanceTier !== null && this.overridePerformanceTier !== undefined)
+			return this.overridePerformanceTier;
 
 		// --- 2. Data Saver Gate ---
 		if (this.#profiler.isDataSaverEnabled) return 0;

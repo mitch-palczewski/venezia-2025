@@ -6,11 +6,26 @@
 	interface Props {
 		uiSettings: UiState;
 	}
-	let { uiSettings }: Props = $props();
+	let { uiSettings: uiState }: Props = $props();
 </script>
 
 <div class="md:px-30 grid-cols-2 grid gap-8 my-auto h-full">
 	<div class="space-y-6">
+		<div class="flex flex-col gap-2">
+			<label for="speed" class="text-xs font-medium tracking-wider text-white uppercase">
+				Graphics Quality
+			</label>
+			<input
+				id="speed"
+				type="number"
+				min="0"
+				max="4"
+				step="1"
+				bind:value={uiState.performance}
+				class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-2 text-white outline-none focus:ring-2 focus:ring-indigo-500"
+			/>
+		</div>
+
 		<div class="flex flex-col gap-2">
 			<label for="speed" class="text-xs font-medium tracking-wider text-white uppercase">
 				Movement Speed
@@ -20,7 +35,7 @@
 				type="number"
 				min="0.1"
 				step="0.1"
-				bind:value={uiSettings.movementSpeed}
+				bind:value={uiState.movementSpeed}
 				class="w-full rounded-lg border border-zinc-700 bg-zinc-800 p-2 text-white outline-none focus:ring-2 focus:ring-indigo-500"
 			/>
 		</div>
@@ -33,18 +48,18 @@
 			>
 			<div class="flex rounded-md bg-zinc-800 p-1">
 				<button
-					onclick={() => (uiSettings.doubleClick = false)}
+					onclick={() => (uiState.doubleClick = false)}
 					class="flex-1 rounded-sm py-1.5 text-sm font-medium transition-all
-                        {!uiSettings.doubleClick
+                        {!uiState.doubleClick
 						? 'bg-zinc-600 text-white shadow-sm'
 						: 'text-zinc-400 hover:text-zinc-200'}"
 				>
 					Single
 				</button>
 				<button
-					onclick={() => (uiSettings.doubleClick = true)}
+					onclick={() => (uiState.doubleClick = true)}
 					class="flex-1 rounded-sm py-1.5 text-sm font-medium transition-all
-                        {uiSettings.doubleClick
+                        {uiState.doubleClick
 						? 'bg-zinc-600 text-white shadow-sm'
 						: 'text-zinc-400 hover:text-zinc-200'}"
 				>
@@ -60,7 +75,7 @@
 				<span class="">Presentation Mode</span>
 				<input
 					type="checkbox"
-					bind:checked={uiSettings.presentationMode}
+					bind:checked={uiState.presentationMode}
 					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
 				/>
 			</label>
@@ -68,7 +83,7 @@
 				<span class="">Show Grid</span>
 				<input
 					type="checkbox"
-					bind:checked={uiSettings.showGrid}
+					bind:checked={uiState.showGrid}
 					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
 				/>
 			</label>
@@ -76,7 +91,7 @@
 				<span class="">Auto Rotate When Idle</span>
 				<input
 					type="checkbox"
-					bind:checked={uiSettings.isIdleEnabled}
+					bind:checked={uiState.isIdleEnabled}
 					class="h-5 w-5 cursor-pointer rounded border-zinc-700 bg-zinc-800 text-indigo-500 focus:ring-offset-zinc-900"
 				/>
 			</label>

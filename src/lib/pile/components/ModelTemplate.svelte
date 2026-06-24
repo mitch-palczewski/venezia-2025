@@ -114,7 +114,7 @@
 			const trueWorldSize = baseAssetSize * currentScaleFactor;
 			const apparentSize = trueWorldSize / distance;
 
-			const CUTOFF_THRESHOLD = pileApp.quality === 'low' ? 0.03 : 0.015;
+			const CUTOFF_THRESHOLD = pileApp.deviceContext.performance.performanceTier <= 1  ? 0.03 : 0.015;
 			shouldRender = apparentSize > CUTOFF_THRESHOLD;
 		}, staggeredDelay);
 		return () => clearInterval(interval);
@@ -122,12 +122,12 @@
 
 
 	// BVH Settings 
-	const isLowQuality = pileApp.quality === 'low';
+	const isLowQuality = pileApp.deviceContext.performance.performanceTier <= 1;
 	bvh(() => ({
 		enabled: !isLowQuality,
 		strategy: BVHSplitStrategy.CENTER,
-		maxDepth: pileApp.quality === 'high' ? 10 : 5,
-		maxLeafTris: pileApp.quality === 'high' ? 100 : 500,
+		maxDepth: pileApp.deviceContext.performance.performanceTier === 4 ? 10 : 5,
+		maxLeafTris: pileApp.deviceContext.performance.performanceTier ===  4 ? 100 : 500,
 		verbose: false,
 		setBoundingBox: false,
 		helper: false

@@ -4,26 +4,32 @@
 	import { PileScene, type PileData } from '$lib/pile';
 	import Pile2DElements from '$lib/pile/components/Pile2DElements.svelte';
 	import { UiState } from '$lib/pile/util/ui/uiState.svelte.js';
-	import { onDestroy } from 'svelte';
+	import { onDestroy, onMount } from 'svelte';
 
 	type Props = {
-		data: PileData
+		data: PileData;
 	};
 	let { data }: Props = $props();
 	let pileSceneRef = $state<PileScene>();
-	
-	const deviceContext = new DeviceContext()
-	deviceContext.initAsync()
 
-	const uiState = new UiState();
+	const deviceContext = new DeviceContext();
+	const uiState = new UiState(deviceContext);
+
+	onMount(() => {
+		if (!deviceContext.isInitialized) {
+			deviceContext.initalize();
+		}
+		uiState.performance = deviceContext.performance.performanceTier
+	});
 	onDestroy(() => {
 		uiState.showCursor = true;
+		deviceContext.destroy();
 	});
 </script>
 
 <div bind:this={uiState.canvasContainer}>
 	<CanvasPortal>
-		<PileScene bind:this={pileSceneRef} {data} {uiState} {deviceContext}/>
+		<PileScene bind:this={pileSceneRef} {data} {uiState} {deviceContext} />
 	</CanvasPortal>
 </div>
 

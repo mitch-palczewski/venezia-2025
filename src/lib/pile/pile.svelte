@@ -46,8 +46,7 @@
 
 {#if uiState && pileApp}
 	<CameraControls uiSettings={uiState} app={pileApp} />
-	<OrbitLight ready={pileApp.isReady} />
-	<T.AmbientLight intensity={0.6} />
+	<OrbitLight ready={pileApp.isReady} performanceTier={deviceContext.performance.performanceTier}/>
 {/if}
 
 {#if uiState.showGrid}

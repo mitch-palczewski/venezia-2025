@@ -31,6 +31,22 @@
 	const idleManager = createIdleManage(IDLE_SEC, () => uiSettings.isIdleEnabled);
 	const smScreen = $derived(screenWidth  < 700 || screenHeight < 500 )
 
+	const farValue = () => {
+		const performanceTier = app.deviceContext.performance.performanceTier
+		switch(performanceTier){
+			case 0:
+				return 50000
+			case 1:
+				return 60000
+			case 2:
+				return 70000
+			case 3:
+				return 90000
+			case 4:
+				return 110000
+		}
+	}
+
 	$effect(() => {
 		if (uiSettings.isIdleEnabled) {
 			idleManager.reset();
@@ -73,7 +89,7 @@
 <T.PerspectiveCamera
 	bind:ref={app.cameraRef}
 	makeDefault
-	far={smScreen ? 40000 : CAMERA_FAR_BOUND}
+	far={farValue()}
 	near={15}
 	position={CAMERA_POS}
 	oncreate={(ref) => ref.lookAt(...CAMERA_LOOK_AT_POS)}

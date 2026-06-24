@@ -3,7 +3,7 @@
     import { AmbientLight, Color } from 'three';
 
     // 1. Added a `ready` prop to control when the heavy lights turn on
-    let { radius = 9000, height = 7000, speed = .2, sunSize = 500, baseOpacity = 0.1, ready = false } = $props();
+    let { radius = 9000, height = 7000, speed = .2, sunSize = 500, baseOpacity = 0.1, ready = false, performanceTier = 2 } = $props();
     
     let time = $state(Math.random() * 360);
     
@@ -33,7 +33,23 @@
 {#if !ready}
     <T.AmbientLight intensity={1.5} color="#ffffff" />
 {:else}
-    <T.DirectionalLight position={[x, y, z]} {intensity} {sunColor} />
-    <T.DirectionalLight position={[x, -radius, -z]} intensity={intensity} color={'#088F8F'} />
-    <T.DirectionalLight position={[-x, -radius, -z]} intensity={intensity * .6} color={'#400754'} />
+
+    {#if performanceTier <= 0}
+        <T.AmbientLight/>
+    {/if}
+    {#if performanceTier === 1}
+        <T.AmbientLight intensity={.6}/>
+        <T.DirectionalLight position={[0, height, 0]} />
+    {/if}
+    {#if performanceTier === 2}
+        <T.AmbientLight intensity={.45}/>
+        <T.DirectionalLight position={[x, y, z]} {intensity} {sunColor} />
+        <T.DirectionalLight position={[x, -radius, -z]} intensity={intensity} color={'#088F8F'} />
+    {/if}
+    {#if performanceTier >= 3}
+        <T.AmbientLight intensity={.4}/>
+        <T.DirectionalLight position={[x, y, z]} {intensity} {sunColor} />
+        <T.DirectionalLight position={[x, -radius, -z]} intensity={intensity} color={'#088F8F'} />
+        <T.DirectionalLight position={[-x, -radius, -z]} intensity={intensity * .6} color={'#400754'} />
+    {/if}
 {/if}

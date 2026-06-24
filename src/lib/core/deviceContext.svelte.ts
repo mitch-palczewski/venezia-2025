@@ -1,5 +1,5 @@
 import type { PerformanceTier } from "./performance/performance.types";
-import { PerformanceTierEvaluator } from "./performance/performanceTierEvaluator";
+import { PerformanceTierEvaluator } from "./performance/performanceTierEvaluator.svelte";
 import { SystemProfiler } from "./performance/systemProfiler.svelte";
 import { Viewport } from "./viewport/viewport.svelte";
 import { WindowLifecycle } from "./windowLifecycle.svelte";
@@ -11,6 +11,8 @@ export class DeviceContext {
     public readonly viewport: Viewport;
     public readonly lifecycle: WindowLifecycle;
     public readonly performance: PerformanceTierEvaluator;
+
+    #isInitialized = $state(false);
 
     constructor(overridePerformanceTier?: PerformanceTier) {
         // 1. Initialize independent systems
@@ -27,11 +29,39 @@ export class DeviceContext {
     }
 
     /**
+     * Reactively indicates whether the asynchronous hardware profiling loop has finalized.
+     * Perfect for driving loading states or skeleton screens in your UI layers.
+     */
+    public get isInitialized(): boolean {
+        return this.#isInitialized;
+    }
+
+    /**
+     * Gets or sets the runtime graphics quality override tier.
+     */
+    public get qualityOverride(): PerformanceTier | undefined | null {
+        return this.performance.overridePerformanceTier;
+    }
+
+    public set qualityOverride(value: PerformanceTier | undefined | null) {
+        this.performance.overridePerformanceTier = value;
+    }
+
+    public resetQuality(){
+        this.performance.overridePerformanceTier = null;
+    }
+
+    /**
      * Executes the asynchronous subsystem profiling tasks (e.g., WebGPU unmasking).
      * Call this during your app's boot/loading stage inside the browser.
      */
-    public async initAsync(): Promise<void> {
-        await this.profiler.profileGpuAsync();
+    public async initalize(): Promise<void> {
+        try {
+            await this.profiler.profileGpuAsync();
+        } finally {
+            // Flip the rune! Any UI element watching `device.isInitialized` will instantly update.
+            this.#isInitialized = true; 
+        }
     }
 
     /**
