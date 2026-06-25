@@ -18,10 +18,11 @@ import { useProgress } from '@threlte/extras';
 import { fromStore } from 'svelte/store';
 import type { DeviceContext } from '$lib/core';
 import type { PilePerformance } from './pilePerformance.svelte';
+import { loadPayload } from './initalizeObject';
 
 export class PileApp {
 	public readonly performance: PilePerformance;
-	public readonly deviceContext: DeviceContext
+	public readonly deviceContext: DeviceContext;
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	environmentInventory = new EnvironmentMapInventory();
@@ -34,7 +35,7 @@ export class PileApp {
 	autosave = true;
 	uiSettings;
 	private progressActive = fromStore(useProgress().active);
-	isReady = $state(false)
+	isReady = $state(false);
 	isActivlyWatching: () => boolean;
 	captureScreenshot: () => Promise<Blob>;
 
@@ -44,10 +45,10 @@ export class PileApp {
 		performance: PilePerformance,
 		initalDatabaseObjects?: any
 	) {
-		this.performance = performance
-		this.deviceContext = performance.deviceContext
+		this.performance = performance;
+		this.deviceContext = performance.deviceContext;
 		this.uiSettings = uiSettings;
-		this.isActivlyWatching = () => this.deviceContext.lifecycle.isActivelyWatching
+		this.isActivlyWatching = () => this.deviceContext.lifecycle.isActivelyWatching;
 		this.captureScreenshot = captureScreenshot;
 		this.initInventories();
 		const { scene, renderer } = useThrelte();
@@ -62,19 +63,20 @@ export class PileApp {
 		this.state.uiSettings = uiSettings;
 		this.uiSettings.app = this;
 		if (initalDatabaseObjects) {
-			this.initPileObjects(initalDatabaseObjects);
+			loadPayload(initalDatabaseObjects.pileObjects, this.state.objects3D, this.isReady, this.performance.performance)
+			//this.initPileObjects(initalDatabaseObjects);
 		}
 		$effect(() => {
-            if (this.isReady) return;
+			if (this.isReady) return;
 
-            const assetsDoneLoading = !this.progressActive.current;
-            const databaseObjectsLoaded = this.state.objects3D.size > 0;
+			const assetsDoneLoading = !this.progressActive.current;
+			const databaseObjectsLoaded = this.state.objects3D.size > 0;
 
-            if (assetsDoneLoading && databaseObjectsLoaded) {
-                this.isReady = true; 
-                console.log(" Initial scene load complete! Locking lighting settings.");
-            }
-        });
+			if (assetsDoneLoading && databaseObjectsLoaded) {
+				this.isReady = true;
+				console.log(' Initial scene load complete! Locking lighting settings.');
+			}
+		});
 	}
 
 	private initInventories() {
@@ -130,14 +132,14 @@ export class PileApp {
 		const blob = await this.captureScreenshot();
 		if (!blob) return;
 		await uploadScreenshot(blob);
-		downloadBlob(blob)
+		downloadBlob(blob);
 	}
 }
 export function downloadBlob(blob: Blob, filename = 'pilepilepile.png') {
 	const url = URL.createObjectURL(blob);
 	const a = document.createElement('a');
 	a.href = url;
-	a.download = filename; 
+	a.download = filename;
 	document.body.appendChild(a);
 	a.click();
 	document.body.removeChild(a);
@@ -168,3 +170,5 @@ function initSupabaseObject(
 		uniformScale: (i.scale_x + i.scale_y + i.scale_z) / 3
 	});
 }
+
+
