@@ -1,6 +1,6 @@
 <script lang="ts">
     import { T, useTask } from '@threlte/core';
-    import { AmbientLight, Color } from 'three';
+    import {  Color } from 'three';
 
     // 1. Added a `ready` prop to control when the heavy lights turn on
     let { radius = 9000, height = 7000, speed = .2, sunSize = 500, baseOpacity = 0.1, ready = false, performanceTier = 2 } = $props();

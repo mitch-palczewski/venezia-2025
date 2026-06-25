@@ -17,8 +17,11 @@ import { uploadScreenshot } from './api/screenshotApi';
 import { useProgress } from '@threlte/extras';
 import { fromStore } from 'svelte/store';
 import type { DeviceContext } from '$lib/core';
+import type { PilePerformance } from './pilePerformance.svelte';
 
 export class PileApp {
+	public readonly performance: PilePerformance;
+	public readonly deviceContext: DeviceContext
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	environmentInventory = new EnvironmentMapInventory();
@@ -32,19 +35,19 @@ export class PileApp {
 	uiSettings;
 	private progressActive = fromStore(useProgress().active);
 	isReady = $state(false)
-	public deviceContext: DeviceContext
 	isActivlyWatching: () => boolean;
 	captureScreenshot: () => Promise<Blob>;
 
 	constructor(
 		captureScreenshot: () => Promise<Blob>,
 		uiSettings: UiState,
-		deviceContext: DeviceContext,
+		performance: PilePerformance,
 		initalDatabaseObjects?: any
 	) {
-		this.deviceContext = deviceContext
+		this.performance = performance
+		this.deviceContext = performance.deviceContext
 		this.uiSettings = uiSettings;
-		this.isActivlyWatching = () => deviceContext.lifecycle.isActivelyWatching
+		this.isActivlyWatching = () => this.deviceContext.lifecycle.isActivelyWatching
 		this.captureScreenshot = captureScreenshot;
 		this.initInventories();
 		const { scene, renderer } = useThrelte();

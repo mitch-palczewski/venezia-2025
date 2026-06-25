@@ -15,13 +15,14 @@
 	import type { UiState } from './util/ui/uiState.svelte';
 	import { captureThrelteScene } from '$lib/graphics/utils/captureScene';
 	import { DeviceContext } from '$lib/core';
+	import type { PilePerformance } from './util/pilePerformance.svelte';
 
 	type Props = {
 		data: PileData;
 		uiState: UiState;
-		deviceContext: DeviceContext;
+		performance: PilePerformance;
 	};
-	let { data, uiState, deviceContext }: Props = $props();
+	let { data, uiState, performance }: Props = $props();
 
 	const { raycaster } = interactivity();
 	raycaster.firstHitOnly = true;
@@ -31,11 +32,11 @@
 		return captureThrelteScene(renderer, scene, camera, 'image/jpeg', 1);
 	}
 	
-	export const pileApp = new PileApp(capturePileScene, uiState, deviceContext, data);
+	export const pileApp = new PileApp(capturePileScene, uiState, performance, data);
 
 	onDestroy(() => {
 		pileApp.database.destroy();
-		deviceContext.destroy()
+		performance.deviceContext.destroy()
 	});
 </script>
 
@@ -46,7 +47,7 @@
 
 {#if uiState && pileApp}
 	<CameraControls uiSettings={uiState} app={pileApp} />
-	<OrbitLight ready={pileApp.isReady} performanceTier={deviceContext.performance.performanceTier}/>
+	<OrbitLight ready={pileApp.isReady} performanceTier={performance.lights}/>
 {/if}
 
 {#if uiState.showGrid}

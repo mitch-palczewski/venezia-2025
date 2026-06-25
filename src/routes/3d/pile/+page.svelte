@@ -3,6 +3,7 @@
 	import { DeviceContext } from '$lib/core';
 	import { PileScene, type PileData } from '$lib/pile';
 	import Pile2DElements from '$lib/pile/components/Pile2DElements.svelte';
+	import { PilePerformance } from '$lib/pile/util/pilePerformance.svelte';
 	import { UiState } from '$lib/pile/util/ui/uiState.svelte.js';
 	import { onDestroy, onMount } from 'svelte';
 
@@ -13,6 +14,7 @@
 	let pileSceneRef = $state<PileScene>();
 
 	const deviceContext = new DeviceContext();
+	const performance = new PilePerformance(deviceContext)
 	const uiState = new UiState(deviceContext);
 
 	onMount(() => {
@@ -29,7 +31,7 @@
 
 <div bind:this={uiState.canvasContainer}>
 	<CanvasPortal>
-		<PileScene bind:this={pileSceneRef} {data} {uiState} {deviceContext} />
+		<PileScene bind:this={pileSceneRef} {data} {uiState} {performance} />
 	</CanvasPortal>
 </div>
 
