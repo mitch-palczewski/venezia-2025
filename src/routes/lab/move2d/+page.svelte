@@ -2,6 +2,7 @@
 	import Container from "$lib/features/canvas-2d/container/Container.svelte";
 	import { ContainerModel } from "$lib/features/canvas-2d/container/containerModel.svelte";
 	import EnterPile3DContainer from "$lib/features/pile-home/EnterPile3DContainer.svelte";
+	import SpinningIbex from "$lib/features/pile-home/SpinningIbex.svelte";
 
 
     // 1. Instantiate a single model directly in local state
@@ -41,9 +42,10 @@
 
     <EnterPile3DContainer/>
 
+    <SpinningIbex/>
+
     <Container 
         container={testContainer} 
-        showTransformGizmo={showGizmo}
         onSelect={() => {
             console.log('Container body or axis arrow was clicked!');
         }}
@@ -64,7 +66,6 @@
     </Container>
     <Container 
         container={testContainer2} 
-        showTransformGizmo={showGizmo}
         onSelect={() => {
             console.log('Container body or axis arrow was clicked!');
         }}

@@ -42,7 +42,7 @@
 		{src}
 		{alt}
 		onload={handleImageLoad}
-		class="pointer-events-none absolute inset-0 h-full w-full object-fill select-none"
+		class="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
 	/>
 
 	{#if children}

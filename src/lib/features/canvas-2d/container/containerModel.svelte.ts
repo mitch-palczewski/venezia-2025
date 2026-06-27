@@ -4,8 +4,8 @@ export interface ContainerConfig {
 	zIndex?: number;
 	width?: number;
 	height?: number;
-	draggable: boolean;       
-    showTransformGizmo: boolean;
+	draggable?: boolean;       
+    showTransformGizmo?: boolean;
 }
 
 export class ContainerModel {
@@ -22,8 +22,8 @@ export class ContainerModel {
 		this.x = config.x;
 		this.y = config.y;
 		this.zIndex = config.zIndex ?? 1;
-		this.draggable = config.draggable
-		this.showTransformGizmo = config.showTransformGizmo
+		this.draggable = config.draggable ? config.draggable : true
+		this.showTransformGizmo = config.showTransformGizmo ? config.showTransformGizmo : true
 		if (config.width) this.width = config.width;
 		if (config.height) this.height = config.height;
 	}

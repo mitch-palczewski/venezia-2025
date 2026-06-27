@@ -6,16 +6,13 @@
 	import ImageContainer from '../canvas-2d/container/ImageContainer.svelte';
 
 	const modelConfig: ContainerConfig = {
-		x: 100,
-		y: 100
+		x: 500,
+		y: 300
 	};
 	const container = new ContainerModel(modelConfig);
 </script>
 
-<ImageContainer {container} src={"/media/Cover_v4.1.png"} class={"border"} fixedRatio={true}>
-<div>
-        hello world
-    </div>
+<ImageContainer {container} src={"/gifs/Ibix_01_preview2.gif"}  fixedRatio={true}>
 </ImageContainer>
 
 
