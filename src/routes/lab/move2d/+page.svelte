@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Container from "$lib/features/canvas-2d/container/Container.svelte";
 	import { ContainerModel } from "$lib/features/canvas-2d/container/containerModel.svelte";
+	import EnterPile3DContainer from "$lib/features/pile-home/EnterPile3DContainer.svelte";
 
 
     // 1. Instantiate a single model directly in local state
@@ -37,6 +38,8 @@
             Show Transform Gizmo Axis Arrows
         </label>
     </div>
+
+    <EnterPile3DContainer/>
 
     <Container 
         container={testContainer} 

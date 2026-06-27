@@ -7,8 +7,6 @@
 	type Props = {
 		container: ContainerModel;
 		onSelect?: () => void;
-		draggable?: boolean;
-		showTransformGizmo?: boolean;
 		togglableTransformGizmo?: boolean;
 		class?: string;
 		children?: Snippet;
@@ -17,8 +15,6 @@
 	let {
 		container,
 		onSelect,
-		draggable = true,
-		showTransformGizmo = $bindable(true),
 		togglableTransformGizmo = true,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
 		children
@@ -29,7 +25,7 @@
 	let totalMovement = 0;
 
 	function handlePointerDown(event: PointerEvent) {
-		if (!draggable) return;
+		if (!container.draggable) return;
 		if (event.button !== 0) return;
 		if (onSelect) {
 			onSelect();
@@ -56,7 +52,7 @@
 		window.removeEventListener('pointermove', handlePointerMove);
 		window.removeEventListener('pointerup', handlePointerUp);
 		if (totalMovement < 4 && togglableTransformGizmo) {
-			showTransformGizmo = !showTransformGizmo;
+			container.showTransformGizmo = !container.showTransformGizmo;
 		}
 	}
 
@@ -69,7 +65,8 @@
 </script>
 
 <div
-	class="absolute touch-none select-none {draggable
+	role="application"
+	class="absolute touch-none select-none {container.draggable
 		? 'cursor-move'
 		: 'cursor-default'} {className}"
 	style="
@@ -80,8 +77,9 @@
     z-index: {container.zIndex};
   "
 	onpointerdown={handlePointerDown}
+	ondragstart={(e) => e.preventDefault()} 
 >
-	{#if showTransformGizmo}
+	{#if container.showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
 				if (side === 'left' || side === 'right') {
