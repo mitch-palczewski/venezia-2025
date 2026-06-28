@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { CanvasScaler } from '$lib/core/viewport/canvasScaler.svelte';
-    import type { Snippet } from 'svelte';
+    import { setContext, type Snippet } from 'svelte';
 
     interface Props {
         scaler: CanvasScaler;
@@ -8,6 +8,10 @@
     }
 
     let { scaler, children }: Props = $props();
+
+    setContext('canvas-stage-scale', {
+        get current() { return scaler.scale; }
+    });
 </script>
 
 <div 

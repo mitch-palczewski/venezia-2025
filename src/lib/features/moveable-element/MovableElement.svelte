@@ -1,12 +1,12 @@
 <script lang="ts">
-	import { onDestroy, type Snippet } from 'svelte';
+	import { getContext, onDestroy, type Snippet } from 'svelte';
 	import { browser } from '$app/environment';
 	import { TransformGizmo } from '../canvas-2d';
 	import type { MovableElementModel } from './MovableElementModel.svelte';
 
 	type Props = {
 		movableElement: MovableElementModel;
-		scale?: number;
+		scaleOveride?: number;
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		class?: string;
@@ -15,12 +15,15 @@
 
 	let {
 		movableElement,
-		scale = 1,
+		scaleOveride = 1,
 		onSelect,
 		togglableTransformGizmo = true,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
 		children
 	}: Props = $props();
+
+	const stageContext = getContext<{ current: number }>('canvas-stage-scale');    
+    const scale = $derived(stageContext?.current ?? scaleOveride);
 
 	let startPointer = { x: 0, y: 0 };
 	let startBox = { x: 0, y: 0 };
