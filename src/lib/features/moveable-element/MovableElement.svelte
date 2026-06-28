@@ -6,7 +6,7 @@
 
 	type Props = {
 		movableElement: MovableElementModel;
-		scaleOveride?: number;
+		scaleOverride?: number;
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		class?: string;
@@ -15,7 +15,7 @@
 
 	let {
 		movableElement,
-		scaleOveride = 1,
+		scaleOverride = 1,
 		onSelect,
 		togglableTransformGizmo = true,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
@@ -23,7 +23,7 @@
 	}: Props = $props();
 
 	const stageContext = getContext<{ current: number }>('canvas-stage-scale');    
-    const scale = $derived(stageContext?.current ?? scaleOveride);
+    const scale = $derived(stageContext?.current ?? scaleOverride);
 
 	let startPointer = { x: 0, y: 0 };
 	let startBox = { x: 0, y: 0 };
