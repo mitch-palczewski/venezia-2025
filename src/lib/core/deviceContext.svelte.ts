@@ -1,6 +1,7 @@
 import type { PerformanceTier } from "./performance/performance.types";
 import { PerformanceTierEvaluator } from "./performance/performanceTierEvaluator.svelte";
 import { SystemProfiler } from "./performance/systemProfiler.svelte";
+import { useViewport } from "./viewport/viewport.context.svelte";
 import { Viewport } from "./viewport/viewport.svelte";
 import { WindowLifecycle } from "./windowLifecycle.svelte";
 
@@ -17,7 +18,7 @@ export class DeviceContext {
     constructor(overridePerformanceTier?: PerformanceTier) {
         // 1. Initialize independent systems
         this.profiler = new SystemProfiler();
-        this.viewport = new Viewport();
+        this.viewport = useViewport() || new Viewport()
         this.lifecycle = new WindowLifecycle();
 
         // 2. Initialize dependent systems (injecting the dependencies)

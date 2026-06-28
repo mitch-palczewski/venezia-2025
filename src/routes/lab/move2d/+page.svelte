@@ -36,11 +36,9 @@
         <div>
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident, aperiam sit sapiente nostrum rerum aliquid quaerat modi ipsa. Sequi facilis recusandae autem perspiciatis assumenda, accusantium voluptatibus asperiores est quisquam rem.
         </div>
+        <div class="r1-1:w-[10%] r3-4:w-[30%] w-[90%] h-[10%] bg-amber-300"></div>
     </Stage>
     
-
-
-
     <EnterPile3DContainer/>
 
     <SpinningIbex/>

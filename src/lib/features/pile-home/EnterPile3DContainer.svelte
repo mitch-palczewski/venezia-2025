@@ -14,8 +14,8 @@
 
 <ImageContainer {container} src={"/media/Cover_v4.1.png"} class={"border"} fixedRatio={true}>
 <div>
-        hello world
-    </div>
+
+ </div>
 </ImageContainer>
 
 
