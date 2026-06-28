@@ -52,7 +52,7 @@
 		<SpinningIbex />
 
 		<Container
-			scaler = {canvasScaler}
+			scale = {canvasScaler.scale}
 			container={testContainer}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
@@ -92,7 +92,7 @@
 		</Container>
 		<Container
 			container={testContainer2}
-						scaler = {canvasScaler}
+						scale = {canvasScaler.scale}
 
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');

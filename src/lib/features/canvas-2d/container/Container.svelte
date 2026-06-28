@@ -3,11 +3,10 @@
 	import { browser } from '$app/environment';
 	import type { ContainerModel } from './containerModel.svelte';
 	import { TransformGizmo } from '..';
-	import type { CanvasScaler } from '$lib/core/viewport/canvasScaler.svelte';
 
 	type Props = {
 		container: ContainerModel;
-		scaler?: CanvasScaler
+		scale?: number
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		class?: string;
@@ -17,13 +16,12 @@
 	let {
 		container,
 		onSelect,
-		scaler,
+		scale = 1,
 		togglableTransformGizmo = true,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
 		children
 	}: Props = $props();
 
-	const currentScale = $derived(scaler?.scale ?? 1);
 	let startPointer = { x: 0, y: 0 };
 	let startBox = { x: 0, y: 0 };
 	let totalMovement = 0;
@@ -49,8 +47,8 @@
         totalMovement = Math.abs(physicalDeltaX) + Math.abs(physicalDeltaY);
 
 		
-        const designDeltaX = physicalDeltaX / currentScale;
-        const designDeltaY = physicalDeltaY / currentScale;
+        const designDeltaX = physicalDeltaX / scale;
+        const designDeltaY = physicalDeltaY / scale;
 
         container.x = startBox.x + designDeltaX;
         container.y = startBox.y + designDeltaY;
@@ -90,7 +88,7 @@
 	{#if container.showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
-				const scaleDelta = delta / currentScale
+				const scaleDelta = delta / scale
 				if (side === 'left' || side === 'right') {
 					container.x = container.x + scaleDelta;
 				}
