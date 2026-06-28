@@ -5,7 +5,8 @@
 	import type { MovableElementModel } from './MovableElementModel.svelte';
 
 	type Props = {
-		moveableElement: MovableElementModel;
+		movableElement: MovableElementModel;
+		scale?: number;
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		class?: string;
@@ -13,7 +14,8 @@
 	};
 
 	let {
-		moveableElement,
+		movableElement,
+		scale = 1,
 		onSelect,
 		togglableTransformGizmo = true,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
@@ -25,13 +27,13 @@
 	let totalMovement = 0;
 
 	function handlePointerDown(event: PointerEvent) {
-		if (!moveableElement.draggable) return;
+		if (!movableElement.draggable) return;
 		if (event.button !== 0) return;
 		if (onSelect) {
 			onSelect();
 		}
 		startPointer = { x: event.clientX, y: event.clientY };
-		startBox = { x: moveableElement.x, y: moveableElement.y };
+		startBox = { x: movableElement.x, y: movableElement.y };
 		totalMovement = 0;
 
 		window.addEventListener('pointermove', handlePointerMove);
@@ -39,24 +41,23 @@
 	}
 
 	function handlePointerMove(event: PointerEvent) {
-        const physicalDeltaX = event.clientX - startPointer.x;
-        const physicalDeltaY = event.clientY - startPointer.y;
+		const physicalDeltaX = event.clientX - startPointer.x;
+		const physicalDeltaY = event.clientY - startPointer.y;
 
-        totalMovement = Math.abs(physicalDeltaX) + Math.abs(physicalDeltaY);
+		totalMovement = Math.abs(physicalDeltaX) + Math.abs(physicalDeltaY);
 
-		
-        const designDeltaX = physicalDeltaX / moveableElement.scale;
-        const designDeltaY = physicalDeltaY / moveableElement.scale;
+		const designDeltaX = physicalDeltaX / scale;
+		const designDeltaY = physicalDeltaY / scale;
 
-        moveableElement.x = startBox.x + designDeltaX;
-        moveableElement.y = startBox.y + designDeltaY;
-    }
+		movableElement.x = startBox.x + designDeltaX;
+		movableElement.y = startBox.y + designDeltaY;
+	}
 
 	function handlePointerUp() {
 		window.removeEventListener('pointermove', handlePointerMove);
 		window.removeEventListener('pointerup', handlePointerUp);
 		if (totalMovement < 4 && togglableTransformGizmo) {
-			moveableElement.showTransformGizmo = !moveableElement.showTransformGizmo;
+			movableElement.showTransformGizmo = !movableElement.showTransformGizmo;
 		}
 	}
 
@@ -70,28 +71,28 @@
 
 <div
 	role="application"
-	class="absolute touch-none select-none {moveableElement.draggable
+	class="absolute touch-none select-none {movableElement.draggable
 		? 'cursor-move'
 		: 'cursor-default'} {className}"
 	style="
-    left: {moveableElement.x}px; 
-    top: {moveableElement.y}px; 
-    width: {moveableElement.width}px; 
-    height: {moveableElement.height}px; 
-    z-index: {moveableElement.zIndex};
+    left: {movableElement.x}px; 
+    top: {movableElement.y}px; 
+    width: {movableElement.width}px; 
+    height: {movableElement.height}px; 
+    z-index: {movableElement.zIndex};
   "
 	onpointerdown={handlePointerDown}
-	ondragstart={(e) => e.preventDefault()} 
+	ondragstart={(e) => e.preventDefault()}
 >
-	{#if moveableElement.showTransformGizmo}
+	{#if movableElement.showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
-				const scaleDelta = delta / moveableElement.scale
+				const scaleDelta = delta / scale;
 				if (side === 'left' || side === 'right') {
-					moveableElement.x = moveableElement.x + scaleDelta;
+					movableElement.x = movableElement.x + scaleDelta;
 				}
 				if (side === 'top' || side === 'bottom') {
-					moveableElement.y = moveableElement.y + scaleDelta;
+					movableElement.y = movableElement.y + scaleDelta;
 				}
 			}}
 		/>

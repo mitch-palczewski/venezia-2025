@@ -4,7 +4,6 @@ export interface MovableElementConfig {
 	zIndex?: number;
 	width?: number;
 	height?: number;
-	scale?: number;
 	draggable?: boolean;       
     showTransformGizmo?: boolean;
 }
@@ -16,7 +15,6 @@ export class MovableElementModel {
 	public zIndex = $state(1);
 	public width = $state(240);
 	public height = $state(160);
-	public scale = $state(1)
 	public draggable = $state(true);
 	public showTransformGizmo = $state(true)
 
@@ -24,7 +22,6 @@ export class MovableElementModel {
 		this.x = config.x;
 		this.y = config.y;
 		this.zIndex = config.zIndex ?? 1;
-		this.scale = config.scale ?? 1;
 		this.draggable = config.draggable ?? true
 		this.showTransformGizmo = config.showTransformGizmo ?? true
 		this.width = config.width ?? 240

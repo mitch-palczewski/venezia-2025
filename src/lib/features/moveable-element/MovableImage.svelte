@@ -37,7 +37,7 @@
 	}
 </script>
 
-<MovableElement moveableElement={movableElement} {togglableTransformGizmo} {onSelect} class={className}>
+<MovableElement movableElement={movableElement} {togglableTransformGizmo} {onSelect} class={className}>
 	<img
 		{src}
 		{alt}

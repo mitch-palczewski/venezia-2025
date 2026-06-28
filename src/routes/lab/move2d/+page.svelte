@@ -19,7 +19,6 @@
 		width: 300,
 		height: 200,
 		zIndex: 10,
-		scale: canvasScaler.scale
 	});
 	const testContainer2 = new MovableElementModel({
 		x: 59,
@@ -27,7 +26,6 @@
 		width: 300,
 		height: 200,
 		zIndex: 10,
-		scale: canvasScaler.scale
 	});
 </script>
 
@@ -54,7 +52,8 @@
 		<SpinningIbex />
 
 		<MovableElement
-			moveableElement={testContainer}
+			movableElement={testContainer}
+			scale = {canvasScaler.scale}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
 			}}
@@ -92,7 +91,8 @@
 			</div>
 		</MovableElement>
 		<MovableElement
-			moveableElement={testContainer2}
+			movableElement={testContainer2}
+			scale = {canvasScaler.scale}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
 			}}
