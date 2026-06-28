@@ -66,6 +66,11 @@ export class Viewport {
 		this.#closestRatioMatch?.value ?? this.rawRatio
 	);
 
+	/** * A CSS-safe string representation of the closest ratio (e.g., '16-9').
+	 * Optimized specifically for HTML data-attributes and custom Tailwind modifiers.
+	 */
+	public ratioSlug: string = $derived(this.closestCommonRatio.replace(':', '-'));
+
 	/**
 	 * Initializes a new viewport tracker instance.
 	 * @param customTargets An optional, tailored array of aspect ratios to target for layout snapping.

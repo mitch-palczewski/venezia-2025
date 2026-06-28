@@ -1,4 +1,4 @@
-import type { Viewport } from "./viewport.svelte";
+import type { Viewport } from "../viewport/viewport.svelte";
 
 export class VirtualStage {
 	public readonly viewport: Viewport;

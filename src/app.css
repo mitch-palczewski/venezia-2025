@@ -14,3 +14,24 @@
   --color-light-green: #e7eee6;
   --color-dark-purple: #25274e;
 }
+
+/**
+ * PREFIX-FREE ASPECT RATIO VARIANTS (Tailwind v4)
+ *
+ * Mechanically binds the Svelte Viewport state (`data-ratio`) to Tailwind modifiers.
+ * Due to native CSS parser restrictions, identifiers cannot start with a digit
+ * or contain raw slashes. We use Unicode character escaping to bypass this.
+ *
+ * Example usage in HTML: 
+ * class="1/1:text-xl 16/9:block 9/16:hidden"
+ *
+ * Note: The spaces inside sequences like `\31 6` are required to separate the 
+ * escaped hex character code from subsequent numbers.
+ */
+@custom-variant \31 \/1 (&[data-ratio="1-1"]);
+@custom-variant \34 \/3 (&[data-ratio="4-3"]);
+@custom-variant \33 \/4 (&[data-ratio="3-4"]);
+@custom-variant \33 \/2 (&[data-ratio="3-2"]);
+@custom-variant \32 \/3 (&[data-ratio="2-3"]);
+@custom-variant \39 \/16 (&[data-ratio="9-16"]);
+@custom-variant \31 6\/9 (&[data-ratio="16-9"]);

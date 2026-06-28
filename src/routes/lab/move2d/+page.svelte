@@ -1,14 +1,14 @@
 <script lang="ts">
-	import { Viewport, VirtualStage } from "$lib/core";
+	import { useViewportContext, Viewport, VirtualStage } from "$lib/core";
+	import Stage from "$lib/core/stage/Stage.svelte";
 	import Container from "$lib/features/canvas-2d/container/Container.svelte";
 	import { ContainerModel } from "$lib/features/canvas-2d/container/containerModel.svelte";
 	import EnterPile3DContainer from "$lib/features/pile-home/EnterPile3DContainer.svelte";
 	import SpinningIbex from "$lib/features/pile-home/SpinningIbex.svelte";
 
-    const viewport = new Viewport()
+    const viewport = useViewportContext()
     const stage = new VirtualStage(viewport, .04)
 
-    // 1. Instantiate a single model directly in local state
     const testContainer = new ContainerModel({
         x: 200,
         y: 200,
@@ -28,20 +28,17 @@
 </script>
 
 <div class="relative w-screen h-screen bg-slate-900 overflow-hidden text-white flex flex-col justify-between p-6 select-none">
-    
-    <div 
-        class="absolute border-2 border-dashed border-emerald-500/30 bg-slate-900 shadow-[0_0_50px_rgba(0,0,0,0.6)] rounded-sm pointer-events-none"
-        style="
-            left: {stage.x}px; 
-            top: {stage.y}px; 
-            width: {stage.width}px; 
-            height: {stage.height}px;
-        "
-    >
+
+    <Stage {stage} clipContent={false}>
         <div class="absolute -top-6 left-0 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2 py-0.5 rounded font-mono">
             VIRTUAL STAGE CANVAS ({viewport.closestCommonRatio})
         </div>
-    </div>
+        <div>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident, aperiam sit sapiente nostrum rerum aliquid quaerat modi ipsa. Sequi facilis recusandae autem perspiciatis assumenda, accusantium voluptatibus asperiores est quisquam rem.
+        </div>
+    </Stage>
+    
+
 
 
     <EnterPile3DContainer/>

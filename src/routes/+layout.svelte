@@ -1,8 +1,17 @@
 <!-- eslint-disable svelte/no-at-html-tags -->
 <script lang="ts">
+	import { setViewportContext, Viewport } from '$lib/core';
+	import { onDestroy } from 'svelte';
 	import '../app.css';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
+
+    const vp = new Viewport();
+    setViewportContext(vp);
+
+    $effect(() => {
+        return () => vp.destroy();
+    });
 
 	injectSpeedInsights();
 	injectAnalytics();
@@ -76,4 +85,7 @@
 	
 </section>
 
+<div data-ratio={vp.ratioSlug}>
 {@render children?.()}
+</div>
+
