@@ -1,3 +1,29 @@
+<!--
+@component
+
+- A interactive, floating window that you can drag, and position anywhere on your digital workspace stage.
+
+@Props 
+
+```svelte
+		movableElement: MovableElementModel;
+		scaleOverride?: number;
+		onSelect?: () => void;
+		togglableTransformGizmo?: boolean;
+		class?: string;
+		children?: Snippet;
+```
+
+@example
+
+```svelte
+<MovableElement {movableElement}>
+    <div>Your custom content, tool, or graphic goes here!</div>
+</MovableElement>
+```
+
+
+-->
 <script lang="ts">
 	import { getContext, onDestroy, type Snippet } from 'svelte';
 	import { browser } from '$app/environment';

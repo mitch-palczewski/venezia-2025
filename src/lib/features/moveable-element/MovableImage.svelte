@@ -1,3 +1,29 @@
+<!--
+@component
+
+- An image that can be moved by dragging or transform gizmo
+
+```svelte
+		movableElement: MovableElementModel
+		src:string;
+		alt?: string;
+		togglableTransformGizmo?: boolean;
+		onSelect?: () => void;
+		class?: string;
+		children?: Snippet;
+		fixedRatio?: boolean;
+```
+
+@example
+
+```svelte
+<MovableImage {movableElement} {src}>
+    <div>Content that goes on top of the image</div>
+</MovableImage>
+```
+-->
+
+
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import type { MovableElementModel } from './MovableElementModel.svelte';
@@ -51,3 +77,4 @@
 		</div>
 	{/if}
 </MovableElement>
+
