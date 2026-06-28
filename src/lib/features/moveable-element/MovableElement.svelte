@@ -6,7 +6,6 @@
 
 	type Props = {
 		moveableElement: MovableElementModel;
-		scale?: number
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		class?: string;
@@ -16,7 +15,6 @@
 	let {
 		moveableElement,
 		onSelect,
-		scale = 1,
 		togglableTransformGizmo = true,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
 		children
@@ -47,8 +45,8 @@
         totalMovement = Math.abs(physicalDeltaX) + Math.abs(physicalDeltaY);
 
 		
-        const designDeltaX = physicalDeltaX / scale;
-        const designDeltaY = physicalDeltaY / scale;
+        const designDeltaX = physicalDeltaX / moveableElement.scale;
+        const designDeltaY = physicalDeltaY / moveableElement.scale;
 
         moveableElement.x = startBox.x + designDeltaX;
         moveableElement.y = startBox.y + designDeltaY;
@@ -88,7 +86,7 @@
 	{#if moveableElement.showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
-				const scaleDelta = delta / scale
+				const scaleDelta = delta / moveableElement.scale
 				if (side === 'left' || side === 'right') {
 					moveableElement.x = moveableElement.x + scaleDelta;
 				}

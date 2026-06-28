@@ -1,30 +1,33 @@
 <script lang="ts">
 	import { useViewportContext } from '$lib/core';
-	import Container from '$lib/features/moveable-element/MovableElement.svelte';
+	import MovableElement from '$lib/features/moveable-element/MovableElement.svelte';
 	import EnterPile3DContainer from '$lib/features/pile-home/EnterPile3DContainer.svelte';
 	import SpinningIbex from '$lib/features/pile-home/SpinningIbex.svelte';
 	import AspectStage from '$lib/features/aspect-stage/AspectStage.svelte';
 	import { AspectStageModel } from '$lib/features/aspect-stage/aspectStageModel.svelte';
 	import { CanvasScaler } from '$lib/core/viewport/canvasScaler.svelte';
 	import ScalerStage from '$lib/features/ScalerStage.svelte';
+	import { MovableElementModel } from '$lib/features/moveable-element/MovableElementModel.svelte';
 
 	const viewport = useViewportContext();
 	const stage = new AspectStageModel(viewport, 0.04);
 	const canvasScaler = new CanvasScaler(viewport);
 
-	const testContainer = new ContainerModel({
+	const testContainer = new MovableElementModel({
 		x: 200,
 		y: 200,
 		width: 300,
 		height: 200,
-		zIndex: 10
+		zIndex: 10,
+		scale: canvasScaler.scale
 	});
-	const testContainer2 = new ContainerModel({
+	const testContainer2 = new MovableElementModel({
 		x: 59,
 		y: 446,
 		width: 300,
 		height: 200,
-		zIndex: 10
+		zIndex: 10,
+		scale: canvasScaler.scale
 	});
 </script>
 
@@ -50,8 +53,7 @@
 
 		<SpinningIbex />
 
-		<Container
-			scale = {canvasScaler.scale}
+		<MovableElement
 			moveableElement={testContainer}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
@@ -88,11 +90,9 @@
 					)}px
 				</div>
 			</div>
-		</Container>
-		<Container
+		</MovableElement>
+		<MovableElement
 			moveableElement={testContainer2}
-						scale = {canvasScaler.scale}
-
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
 			}}
@@ -117,6 +117,6 @@
 					</div>
 				</div>
 			</div>
-		</Container>
+		</MovableElement>
 	</ScalerStage>
 </div>
