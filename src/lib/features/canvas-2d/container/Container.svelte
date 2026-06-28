@@ -3,9 +3,11 @@
 	import { browser } from '$app/environment';
 	import type { ContainerModel } from './containerModel.svelte';
 	import { TransformGizmo } from '..';
+	import type { CanvasScaler } from '$lib/core/viewport/canvasScaler.svelte';
 
 	type Props = {
 		container: ContainerModel;
+		scaler?: CanvasScaler
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		class?: string;
@@ -15,11 +17,13 @@
 	let {
 		container,
 		onSelect,
+		scaler,
 		togglableTransformGizmo = true,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
 		children
 	}: Props = $props();
 
+	const currentScale = $derived(scaler?.scale ?? 1);
 	let startPointer = { x: 0, y: 0 };
 	let startBox = { x: 0, y: 0 };
 	let totalMovement = 0;
@@ -39,14 +43,18 @@
 	}
 
 	function handlePointerMove(event: PointerEvent) {
-		const deltaX = event.clientX - startPointer.x;
-		const deltaY = event.clientY - startPointer.y;
+        const physicalDeltaX = event.clientX - startPointer.x;
+        const physicalDeltaY = event.clientY - startPointer.y;
 
-		totalMovement = Math.abs(deltaX) + Math.abs(deltaY);
+        totalMovement = Math.abs(physicalDeltaX) + Math.abs(physicalDeltaY);
 
-		container.x = startBox.x + deltaX;
-		container.y = startBox.y + deltaY;
-	}
+		
+        const designDeltaX = physicalDeltaX / currentScale;
+        const designDeltaY = physicalDeltaY / currentScale;
+
+        container.x = startBox.x + designDeltaX;
+        container.y = startBox.y + designDeltaY;
+    }
 
 	function handlePointerUp() {
 		window.removeEventListener('pointermove', handlePointerMove);
@@ -82,11 +90,12 @@
 	{#if container.showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
+				const scaleDelta = delta / currentScale
 				if (side === 'left' || side === 'right') {
-					container.x = container.x + delta;
+					container.x = container.x + scaleDelta;
 				}
 				if (side === 'top' || side === 'bottom') {
-					container.y = container.y + delta;
+					container.y = container.y + scaleDelta;
 				}
 			}}
 		/>

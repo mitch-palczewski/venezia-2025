@@ -12,8 +12,9 @@ export class CanvasScaler {
     public readonly viewport: Viewport
     public referenceWidth = $state(1920);
     public referenceHeight = $state(1080);
-    public minScale = $state(0.1); 
+    public minScale = $state(0.4); 
     public maxScale = $state(5.0);
+    public scale = $derived(this.getScaleFactor())
 
     constructor(viewport: Viewport, config?: ScalerConfig) {
         this.viewport = viewport;
@@ -25,7 +26,7 @@ export class CanvasScaler {
      * Calculates the proportional scale factor and clamps it 
      * within the defined minimum and maximum boundaries.
      */
-    get scaleFactor(): number {
+    private getScaleFactor(): number {
         const rawScale = Math.min(
             this.viewport.width / this.referenceWidth,
             this.viewport.height / this.referenceHeight
@@ -33,4 +34,6 @@ export class CanvasScaler {
 
         return Math.max(this.minScale, Math.min(this.maxScale, rawScale));
     }
+
 }
+
