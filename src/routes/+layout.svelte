@@ -1,5 +1,5 @@
 <script lang="ts">
-	import SEO from '$lib/core/seo/SEO.svelte';
+	import SEO from '$lib/components/seo/SEO.svelte';
 	import { initViewportContext } from '$lib/core/viewport/viewport.context.svelte';
 	import '../app.css';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
