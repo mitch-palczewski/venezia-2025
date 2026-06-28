@@ -3,10 +3,10 @@
 	import MovableElement from '$lib/features/moveable-element/MovableElement.svelte';
 	import EnterPile3DContainer from '$lib/features/pile-home/EnterPile3DContainer.svelte';
 	import SpinningIbex from '$lib/features/pile-home/SpinningIbex.svelte';
-	import AspectStage from '$lib/features/aspect-stage/AspectStage.svelte';
-	import { AspectStageModel } from '$lib/features/aspect-stage/aspectStageModel.svelte';
+	import AspectStage from '$lib/features/stages/aspect-stage/AspectStage.svelte';
+	import { AspectStageModel } from '$lib/features/stages/aspect-stage/aspectStageModel.svelte';
 	import { CanvasScaler } from '$lib/core/viewport/canvasScaler.svelte';
-	import ScalerStage from '$lib/features/ScalerStage.svelte';
+	import ScalerStage from '$lib/features/stages/ScalerStage.svelte';
 	import { MovableElementModel } from '$lib/features/moveable-element/MovableElementModel.svelte';
 
 	const viewport = useViewportContext();
@@ -53,7 +53,6 @@
 
 		<MovableElement
 			movableElement={testContainer}
-			scale = {canvasScaler.scale}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
 			}}
@@ -92,7 +91,6 @@
 		</MovableElement>
 		<MovableElement
 			movableElement={testContainer2}
-			scale = {canvasScaler.scale}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
 			}}

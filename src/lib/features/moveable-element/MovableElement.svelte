@@ -27,8 +27,8 @@
 <script lang="ts">
 	import { getContext, onDestroy, type Snippet } from 'svelte';
 	import { browser } from '$app/environment';
-	import { TransformGizmo } from '../canvas-2d';
 	import type { MovableElementModel } from './MovableElementModel.svelte';
+	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
 
 	type Props = {
 		movableElement: MovableElementModel;
