@@ -15,11 +15,21 @@
   --color-dark-purple: #25274e;
 }
 
-@custom-variant r1-1 (&[data-ratio="1-1"]);
-@custom-variant r4-3 (&[data-ratio="4-3"]);
-@custom-variant r3-4 (&[data-ratio="3-4"]);
-@custom-variant r3-2 (&[data-ratio="3-2"]);
-@custom-variant r2-3 (&[data-ratio="2-3"]);
-@custom-variant r9-16 (&[data-ratio="9-16"]);
-@custom-variant r16-9 (&[data-ratio="16-9"]);
+/*
+ * ASPECT RATIO VARIANTS (Tailwind v4)
+ * Maps runtime viewport states to responsive design system modifiers.
+ * * Maintenance: Every custom aspect ratio passed to initViewportContext() 
+ * must be explicitly registered here for Tailwind to compile its utilities.
+ *
+ * Example: class="r16-9:block r1-1:grid"
+ */
+@custom-variant r1-1 (:root[data-ratio="1-1"] &);
+@custom-variant r4-3 (:root[data-ratio="4-3"] &);
+@custom-variant r3-4 (:root[data-ratio="3-4"] &);
+/*
+@custom-variant r3-2 (:root[data-ratio="3-2"] &);
+@custom-variant r2-3 (:root[data-ratio="2-3"] &);
+*/
+@custom-variant r9-16 (:root[data-ratio="9-16"] &);
+@custom-variant r16-9 (:root[data-ratio="16-9"] &);
 
