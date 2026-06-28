@@ -3,7 +3,7 @@ import { PerformanceTierEvaluator } from "./performance/performanceTierEvaluator
 import { SystemProfiler } from "./performance/systemProfiler.svelte";
 import { useViewport } from "./viewport/viewport.context.svelte";
 import { Viewport } from "./viewport/viewport.svelte";
-import { WindowLifecycle } from "./windowLifecycle.svelte";
+import { WindowLifecycle } from "./performance/windowLifecycle.svelte";
 
 
 export class DeviceContext {
@@ -14,12 +14,19 @@ export class DeviceContext {
     public readonly performance: PerformanceTierEvaluator;
 
     #isInitialized = $state(false);
+    #ownsViewport = false;
 
     constructor(overridePerformanceTier?: PerformanceTier) {
         // 1. Initialize independent systems
         this.profiler = new SystemProfiler();
-        this.viewport = useViewport() || new Viewport()
         this.lifecycle = new WindowLifecycle();
+        const sharedViewport = useViewport();
+        if (sharedViewport) {
+            this.viewport = sharedViewport;
+        } else {
+            this.viewport = new Viewport();
+            this.#ownsViewport = true; 
+        }
 
         // 2. Initialize dependent systems (injecting the dependencies)
         this.performance = new PerformanceTierEvaluator(
@@ -60,7 +67,6 @@ export class DeviceContext {
         try {
             await this.profiler.profileGpuAsync();
         } finally {
-            // Flip the rune! Any UI element watching `device.isInitialized` will instantly update.
             this.#isInitialized = true; 
         }
     }
@@ -70,7 +76,9 @@ export class DeviceContext {
      * to ensure zero memory leaks during hot-module reloading or route changes.
      */
     public destroy(): void {
-        this.viewport.destroy();
+        if (this.#ownsViewport) {
+            this.viewport.destroy();
+        }
         this.lifecycle.destroy();
     }
 }
