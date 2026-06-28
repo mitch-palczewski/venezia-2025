@@ -5,7 +5,6 @@
     import { injectAnalytics } from '@vercel/analytics/sveltekit';
     import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
-    // Global layout & aspect-ratio engine
     const vp = new Viewport();
     setViewportContext(vp);
 
