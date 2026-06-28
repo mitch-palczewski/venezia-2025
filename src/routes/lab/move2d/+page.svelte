@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { useViewportContext } from '$lib/core';
-	import Container from '$lib/features/canvas-2d/container/Container.svelte';
-	import { ContainerModel } from '$lib/features/canvas-2d/container/containerModel.svelte';
+	import Container from '$lib/features/moveable-element/MovableElement.svelte';
 	import EnterPile3DContainer from '$lib/features/pile-home/EnterPile3DContainer.svelte';
 	import SpinningIbex from '$lib/features/pile-home/SpinningIbex.svelte';
 	import AspectStage from '$lib/features/aspect-stage/AspectStage.svelte';
@@ -53,7 +52,7 @@
 
 		<Container
 			scale = {canvasScaler.scale}
-			container={testContainer}
+			moveableElement={testContainer}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
 			}}
@@ -91,7 +90,7 @@
 			</div>
 		</Container>
 		<Container
-			container={testContainer2}
+			moveableElement={testContainer2}
 						scale = {canvasScaler.scale}
 
 			onSelect={() => {

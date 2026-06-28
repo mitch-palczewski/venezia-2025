@@ -1,13 +1,14 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import Container from './Container.svelte';
-	import type { ContainerModel } from './containerModel.svelte';
+	import type { MovableElementModel } from './MovableElementModel.svelte';
+	import MovableElement from './MovableElement.svelte';
+	
+
 
 	type Props = {
-		container: ContainerModel;
-		src: string;
+		movableElement: MovableElementModel
+		src:string;
 		alt?: string;
-		showTransformGizmo?: boolean;
 		togglableTransformGizmo?: boolean;
 		onSelect?: () => void;
 		class?: string;
@@ -16,10 +17,9 @@
 	};
 
 	let {
-		container,
+		movableElement,
 		src,
 		alt = '',
-		showTransformGizmo = $bindable(true),
 		togglableTransformGizmo = true,
 		onSelect,
 		class: className = '',
@@ -32,12 +32,12 @@
 		const ratio = img.naturalWidth / img.naturalHeight;
 
 		if (fixedRatio) {
-			container.height = container.width / ratio;
+			movableElement.height = movableElement.width / ratio;
 		}
 	}
 </script>
 
-<Container {container} {togglableTransformGizmo} {onSelect} class={className}>
+<MovableElement moveableElement={movableElement} {togglableTransformGizmo} {onSelect} class={className}>
 	<img
 		{src}
 		{alt}
@@ -50,4 +50,4 @@
 			{@render children()}
 		</div>
 	{/if}
-</Container>
+</MovableElement>

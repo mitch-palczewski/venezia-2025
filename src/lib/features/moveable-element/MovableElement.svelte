@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { onDestroy, type Snippet } from 'svelte';
 	import { browser } from '$app/environment';
-	import type { ContainerModel } from './containerModel.svelte';
-	import { TransformGizmo } from '..';
+	import { TransformGizmo } from '../canvas-2d';
+	import type { MovableElementModel } from './MovableElementModel.svelte';
 
 	type Props = {
-		container: ContainerModel;
+		moveableElement: MovableElementModel;
 		scale?: number
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
@@ -14,7 +14,7 @@
 	};
 
 	let {
-		container,
+		moveableElement,
 		onSelect,
 		scale = 1,
 		togglableTransformGizmo = true,
@@ -27,13 +27,13 @@
 	let totalMovement = 0;
 
 	function handlePointerDown(event: PointerEvent) {
-		if (!container.draggable) return;
+		if (!moveableElement.draggable) return;
 		if (event.button !== 0) return;
 		if (onSelect) {
 			onSelect();
 		}
 		startPointer = { x: event.clientX, y: event.clientY };
-		startBox = { x: container.x, y: container.y };
+		startBox = { x: moveableElement.x, y: moveableElement.y };
 		totalMovement = 0;
 
 		window.addEventListener('pointermove', handlePointerMove);
@@ -50,15 +50,15 @@
         const designDeltaX = physicalDeltaX / scale;
         const designDeltaY = physicalDeltaY / scale;
 
-        container.x = startBox.x + designDeltaX;
-        container.y = startBox.y + designDeltaY;
+        moveableElement.x = startBox.x + designDeltaX;
+        moveableElement.y = startBox.y + designDeltaY;
     }
 
 	function handlePointerUp() {
 		window.removeEventListener('pointermove', handlePointerMove);
 		window.removeEventListener('pointerup', handlePointerUp);
 		if (totalMovement < 4 && togglableTransformGizmo) {
-			container.showTransformGizmo = !container.showTransformGizmo;
+			moveableElement.showTransformGizmo = !moveableElement.showTransformGizmo;
 		}
 	}
 
@@ -72,28 +72,28 @@
 
 <div
 	role="application"
-	class="absolute touch-none select-none {container.draggable
+	class="absolute touch-none select-none {moveableElement.draggable
 		? 'cursor-move'
 		: 'cursor-default'} {className}"
 	style="
-    left: {container.x}px; 
-    top: {container.y}px; 
-    width: {container.width}px; 
-    height: {container.height}px; 
-    z-index: {container.zIndex};
+    left: {moveableElement.x}px; 
+    top: {moveableElement.y}px; 
+    width: {moveableElement.width}px; 
+    height: {moveableElement.height}px; 
+    z-index: {moveableElement.zIndex};
   "
 	onpointerdown={handlePointerDown}
 	ondragstart={(e) => e.preventDefault()} 
 >
-	{#if container.showTransformGizmo}
+	{#if moveableElement.showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
 				const scaleDelta = delta / scale
 				if (side === 'left' || side === 'right') {
-					container.x = container.x + scaleDelta;
+					moveableElement.x = moveableElement.x + scaleDelta;
 				}
 				if (side === 'top' || side === 'bottom') {
-					container.y = container.y + scaleDelta;
+					moveableElement.y = moveableElement.y + scaleDelta;
 				}
 			}}
 		/>

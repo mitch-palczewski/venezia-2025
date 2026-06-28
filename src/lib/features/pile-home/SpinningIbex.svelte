@@ -1,18 +1,17 @@
 <script lang="ts">
-	import {
-		ContainerModel,
-		type ContainerConfig
-	} from '../canvas-2d/container/containerModel.svelte';
-	import ImageContainer from '../canvas-2d/container/ImageContainer.svelte';
+	import { MovableElementModel, type MovableElementConfig } from "../moveable-element/MovableElementModel.svelte";
+	import MovableImage from "../moveable-element/MovableImage.svelte";
 
-	const modelConfig: ContainerConfig = {
+
+
+	const modelConfig: MovableElementConfig = {
 		x: 500,
 		y: 300
 	};
-	const container = new ContainerModel(modelConfig);
+	const container = new MovableElementModel(modelConfig);
 </script>
 
-<ImageContainer {container} src={"/gifs/Ibix_01_preview2.gif"}  fixedRatio={true}>
-</ImageContainer>
+<MovableImage movableElement={container} src={"/gifs/Ibix_01_preview2.gif"}  fixedRatio={true}>
+</MovableImage>
 
 
