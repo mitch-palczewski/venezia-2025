@@ -54,7 +54,7 @@
             console.log('Container body or axis arrow was clicked!');
         }}
     >
-        <div class="absolute top-4 left-4 z-50 bg-slate-900/90 backdrop-blur border border-slate-800 p-4 rounded-xl shadow-2xl text-xs space-y-2 pointer-events-none min-w-60">
+        <div class="  z-50 bg-slate-900/90 backdrop-blur border border-slate-800 p-4 rounded-xl shadow-2xl text-xs space-y-2 pointer-events-none0">
         <h3 class="font-bold text-emerald-400 uppercase tracking-wider text-[10px]">System Diagnostics</h3>
         <hr class="border-slate-800" />
         <div><span class="text-slate-400">Viewport:</span> {viewport.width}px × {viewport.height}px</div>
