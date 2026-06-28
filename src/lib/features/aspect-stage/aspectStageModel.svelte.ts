@@ -1,6 +1,6 @@
-import type { Viewport } from "../viewport/viewport.svelte";
+import type { Viewport } from "$lib/core";
 
-export class VirtualStage {
+export class AspectStageModel {
 	public readonly viewport: Viewport;
 
 	public marginPercentage = $state(0);

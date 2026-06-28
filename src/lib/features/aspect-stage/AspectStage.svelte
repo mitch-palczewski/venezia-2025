@@ -1,9 +1,9 @@
 <script lang="ts">
     import type { Snippet } from 'svelte';
-    import type { VirtualStage } from './virtualStage.svelte';
+	import type { AspectStageModel } from './aspectStageModel.svelte';
 
     interface Props {
-        stage: VirtualStage;
+        stage: AspectStageModel;
         clipContent?: boolean; 
         class?: string;
         children?: Snippet;

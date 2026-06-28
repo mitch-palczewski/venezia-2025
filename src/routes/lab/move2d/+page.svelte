@@ -1,13 +1,14 @@
 <script lang="ts">
-	import { useViewportContext, Viewport, VirtualStage } from "$lib/core";
-	import Stage from "$lib/core/stage/Stage.svelte";
+	import { useViewportContext } from "$lib/core";
 	import Container from "$lib/features/canvas-2d/container/Container.svelte";
 	import { ContainerModel } from "$lib/features/canvas-2d/container/containerModel.svelte";
 	import EnterPile3DContainer from "$lib/features/pile-home/EnterPile3DContainer.svelte";
 	import SpinningIbex from "$lib/features/pile-home/SpinningIbex.svelte";
+	import AspectStage from "$lib/features/aspect-stage/AspectStage.svelte";
+	import { AspectStageModel } from "$lib/features/aspect-stage/aspectStageModel.svelte";
 
     const viewport = useViewportContext()
-    const stage = new VirtualStage(viewport, .04)
+    const stage = new AspectStageModel(viewport, .04)
 
     const testContainer = new ContainerModel({
         x: 200,
@@ -29,7 +30,7 @@
 
 <div class="relative w-screen h-screen bg-slate-900 overflow-hidden text-white flex flex-col justify-between p-6 select-none">
 
-    <Stage {stage} clipContent={false}>
+    <AspectStage {stage} clipContent={false}>
         <div class="absolute -top-6 left-0 bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] px-2 py-0.5 rounded font-mono">
             VIRTUAL STAGE CANVAS ({viewport.closestCommonRatio})
         </div>
@@ -37,7 +38,7 @@
             Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident, aperiam sit sapiente nostrum rerum aliquid quaerat modi ipsa. Sequi facilis recusandae autem perspiciatis assumenda, accusantium voluptatibus asperiores est quisquam rem.
         </div>
         <div class="r1-1:w-[10%] r3-4:w-[30%] w-[90%] h-[10%] bg-amber-300"></div>
-    </Stage>
+    </AspectStage>
     
     <EnterPile3DContainer/>
 
