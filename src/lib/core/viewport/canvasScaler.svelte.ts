@@ -23,6 +23,11 @@ export interface ScalerConfig {
      * @default 5.0
      */
 	maxScale?: number;
+
+	/** * Which viewport attribute the scale is based on.
+     * @default 'area'
+     */
+	scaleBasedOn?: 'area' | 'shortest edge' | 'width';
 }
 
 /**
@@ -31,14 +36,16 @@ export interface ScalerConfig {
  */
 export class CanvasScaler {
 
+	#scaleBasedOn: 'area' | 'shortest edge' | 'width'
+
     /** The active viewport instance monitored for window dimension changes. */
 	public readonly viewport: Viewport;
 
     /** The baseline target width of the canvas layout space. */
-	public referenceWidth = $state(1920);
+	public readonly referenceWidth: number
 
     /** The baseline target height of the canvas layout space. */
-	public referenceHeight = $state(1080);
+	public readonly referenceHeight: number
 
     /** The minimum scaling boundary clamp. */
 	public minScale = $state(0.4);
@@ -47,7 +54,16 @@ export class CanvasScaler {
 	public maxScale = $state(5.0);
 
     /** The maximum scaling boundary clamp. */
-	public scale = $derived(this.getScaleFactor());
+	public scale = $derived.by(() => {
+		switch(this.#scaleBasedOn){
+			case 'area':
+				return this.getAreaScaleFactor()
+			case 'shortest edge':
+				return this.getShortestEdgeScaleFactor()
+			case 'width':
+				return this.getWidthScaleFactor()
+		}
+	});
 
     /**
      * Initializes a new CanvasScaler instance tied to an active viewport.
@@ -56,20 +72,35 @@ export class CanvasScaler {
      */
 	constructor(viewport: Viewport, config?: ScalerConfig) {
 		this.viewport = viewport;
+		this.#scaleBasedOn = config?.scaleBasedOn ?? 'area';
 		this.referenceWidth = config?.referenceWidth ?? 1920;
 		this.referenceHeight = config?.referenceHeight ?? 1080;
 	}
+	
+	/** The baseline Area of the canvas layout space */
+	get referenceArea() {
+		return this.referenceHeight * this.referenceWidth
+	}
 
-	/**
-	 * Calculates the proportional scale factor and clamps it
-	 * within the defined minimum and maximum boundaries.
-	 */
-	private getScaleFactor(): number {
-		const rawScale = Math.min(
+	private getShortestEdgeScaleFactor(): number {
+		const scale = Math.min(
 			this.viewport.width / this.referenceWidth,
 			this.viewport.height / this.referenceHeight
 		);
+		return this.clampScale(scale)
+	}
 
+	private getWidthScaleFactor():number {
+		const scale = this.viewport.width / this.referenceWidth
+		return this.clampScale(scale)
+	}
+
+	private getAreaScaleFactor():number {
+		const scale = this.viewport.area / this.referenceArea
+		return this.clampScale(scale)
+	}
+
+	private clampScale(rawScale:number) {
 		return Math.max(this.minScale, Math.min(this.maxScale, rawScale));
 	}
 }

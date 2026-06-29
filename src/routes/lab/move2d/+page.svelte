@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { useViewportContext } from '$lib/core';
 	import MovableElement from '$lib/features/moveable-element/MovableElement.svelte';
 	import EnterPile3DContainer from '$lib/features/pile-home/EnterPile3DContainer.svelte';
 	import SpinningIbex from '$lib/features/pile-home/SpinningIbex.svelte';
@@ -8,8 +7,9 @@
 	import { CanvasScaler } from '$lib/core/viewport/canvasScaler.svelte';
 	import ScalerStage from '$lib/features/stages/ScalerStage.svelte';
 	import { MovableElementModel } from '$lib/features/moveable-element/MovableElementModel.svelte';
+	import { useViewport } from '$lib/core';
 
-	const viewport = useViewportContext();
+	const viewport = useViewport();
 	const stage = new AspectStageModel(viewport, 0.04);
 	const canvasScaler = new CanvasScaler(viewport);
 
@@ -27,23 +27,25 @@
 		height: 200,
 		zIndex: 10,
 	});
+const gridCells = Array.from({ length: 400 }, (_, i) => i);
 </script>
 
 <div
-	class="relative flex h-screen w-screen flex-col justify-between overflow-hidden bg-slate-900 p-6 text-white select-none"
+	class="relative flex h-screen w-screen flex-col justify-between overflow-hidden bg-slate-800 p-6 text-white select-none"
 >
 	<AspectStage {stage} clipContent={false}>
-		<div
-			class="absolute -top-6 left-0 rounded border border-emerald-500/20 bg-emerald-500/10 px-2 py-0.5 font-mono text-[10px] text-emerald-400"
-		>
-			VIRTUAL STAGE CANVAS ({viewport.closestCommonRatio})
-		</div>
-		<div>
-			Lorem ipsum dolor sit, amet consectetur adipisicing elit. Provident, aperiam sit sapiente
-			nostrum rerum aliquid quaerat modi ipsa. Sequi facilis recusandae autem perspiciatis
-			assumenda, accusantium voluptatibus asperiores est quisquam rem.
-		</div>
-		<div class="h-[10%] w-[90%] bg-amber-300 r1-1:w-[10%] r3-4:w-[30%]"></div>
+	<div 
+        class="grid w-full h-full gap-0" 
+        style="grid-template-columns: repeat(20, 1fr); grid-template-rows: repeat(20, 1fr);"
+    >
+        {#each gridCells as cellId}
+            <div 
+                class="border-[0.5px] border-slate-800/50 hover:bg-sky-500/20 transition-colors duration-150 flex items-center justify-center text-[10px] text-slate-500 select-none"
+            >
+                {cellId}
+            </div>
+        {/each}
+    </div>
 	</AspectStage>
 
 	<ScalerStage scaler={canvasScaler}>
