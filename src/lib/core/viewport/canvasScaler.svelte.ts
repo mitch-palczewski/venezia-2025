@@ -5,12 +5,12 @@ import type { Viewport } from './viewport.svelte';
  */
 export interface ScalerConfig {
 	/** * The baseline target width of your virtual canvas coordinate space.
-	 * @default 1920
+	 * @default 1280
 	 */
 	referenceWidth?: number;
 
 	/** * The baseline target height of your virtual canvas coordinate space.
-	 * @default 1080
+	 * @default 720
 	 */
 	referenceHeight?: number;
 
@@ -73,8 +73,8 @@ export class CanvasScaler {
 	constructor(viewport: Viewport, config?: ScalerConfig) {
 		this.viewport = viewport;
 		this.#scaleBasedOn = config?.scaleBasedOn ?? 'area';
-		this.referenceWidth = config?.referenceWidth ?? 1920;
-		this.referenceHeight = config?.referenceHeight ?? 1080;
+		this.referenceWidth = config?.referenceWidth ?? 1280;
+		this.referenceHeight = config?.referenceHeight ?? 720;
 	}
 	
 	/** The baseline Area of the canvas layout space */

@@ -4,14 +4,18 @@
 	import SpinningIbex from '$lib/features/pile-home/SpinningIbex.svelte';
 	import AspectStage from '$lib/features/stages/aspect-stage/AspectStage.svelte';
 	import { AspectStageModel } from '$lib/features/stages/aspect-stage/aspectStageModel.svelte';
-	import { CanvasScaler } from '$lib/core/viewport/canvasScaler.svelte';
+	import { CanvasScaler, type ScalerConfig } from '$lib/core/viewport/canvasScaler.svelte';
 	import ScalerStage from '$lib/features/stages/ScalerStage.svelte';
 	import { MovableElementModel } from '$lib/features/moveable-element/MovableElementModel.svelte';
 	import { useViewport } from '$lib/core';
 
 	const viewport = useViewport();
 	const stage = new AspectStageModel(viewport, 0.04);
-	const canvasScaler = new CanvasScaler(viewport);
+	const scalorConfig: ScalerConfig = {
+		referenceWidth: 1280,
+		referenceHeight:720
+	}
+	const canvasScaler = new CanvasScaler(viewport,scalorConfig);
 
 	const testContainer = new MovableElementModel({
 		x: 200,

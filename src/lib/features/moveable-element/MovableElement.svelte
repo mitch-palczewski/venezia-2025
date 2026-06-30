@@ -21,8 +21,6 @@
     <div>Your custom content, tool, or graphic goes here!</div>
 </MovableElement>
 ```
-
-
 -->
 <script lang="ts">
 	import { getContext, onDestroy, type Snippet } from 'svelte';
@@ -32,7 +30,7 @@
 
 	type Props = {
 		movableElement: MovableElementModel;
-		scaleOverride?: number;
+		scaleOverride?: number | undefined;
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		class?: string;
@@ -41,19 +39,19 @@
 
 	let {
 		movableElement,
-		scaleOverride = 1,
+		scaleOverride,
 		onSelect,
 		togglableTransformGizmo = true,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
 		children
 	}: Props = $props();
 
-	const stageContext = getContext<{ current: number }>('canvas-stage-scale');    
-    const scale = $derived(stageContext?.current ?? scaleOverride);
-
 	let startPointer = { x: 0, y: 0 };
 	let startBox = { x: 0, y: 0 };
 	let totalMovement = 0;
+
+	const stageContext = getContext<{ current: number }>('canvas-stage-scale');    
+    const scale = $derived( scaleOverride ?? stageContext?.current ?? 1);
 
 	function handlePointerDown(event: PointerEvent) {
 		if (!movableElement.draggable) return;
