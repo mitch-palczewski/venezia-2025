@@ -12,8 +12,8 @@
 
     // 3. Compute the step sizing based on a 20x20 grid matrix
     const gridCount = 20;
-    const stepX = $derived(projector.virtualBase / gridCount); // 1000 / 20 = 50 units
-    const stepY = $derived(projector.virtualBase / gridCount); // 1000 / 20 = 50 units
+    const stepX = $derived(projector.virtualResolution / gridCount); // 1000 / 20 = 50 units
+    const stepY = $derived(projector.virtualResolution / gridCount); // 1000 / 20 = 50 units
 
     // 4. Generate data array representing the 20x20 matrix structure
     const gridCells = Array.from({ length: gridCount * gridCount }, (_, i) => {
@@ -34,7 +34,7 @@
         </h2>
         <div class="space-y-1 text-slate-400">
             <p><span class="text-slate-500">Viewport:</span> {viewport.width.toFixed(0)}px × {viewport.height.toFixed(0)}px</p>
-            <p><span class="text-slate-500">Virtual Bounds:</span> 0 → {projector.virtualBase}</p>
+            <p><span class="text-slate-500">Virtual Bounds:</span> 0 → {projector.virtualResolution}</p>
             <p><span class="text-slate-500">Scale X:</span> {projector.scaleX.toFixed(4)} px/unit</p>
             <p><span class="text-slate-500">Scale Y:</span> {projector.scaleY.toFixed(4)} px/unit</p>
         </div>

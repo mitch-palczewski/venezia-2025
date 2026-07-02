@@ -1,21 +1,18 @@
-import type { Viewport } from './viewport.svelte';
+import type { DimensionalSource, Point } from "./viewport.types";
 
-interface Point {
-	x: number;
-	y: number;
-}
+
 
 export class CoordinateProjector {
-	public viewport = $state<Viewport>();
-	public virtualBase = $state(1000);
+	public source = $state<DimensionalSource>();
+	public virtualResolution = $state(1000);
 
-	public scaleX = $derived((this.viewport?.width ?? 0) / (this.virtualBase || 1 ));
+	public scaleX = $derived((this.source?.width ?? 0) / (this.virtualResolution || 1 ));
 
-	public scaleY = $derived((this.viewport?.height ?? 0) / (this.virtualBase || 1));
+	public scaleY = $derived((this.source?.height ?? 0) / (this.virtualResolution || 1));
 
-	constructor(viewport: Viewport, virtualBase?: number) {
-		this.viewport = viewport;
-		this.virtualBase = virtualBase ?? 1000;
+	constructor(source: DimensionalSource, virtualResolution: number = 1000) {
+		this.source = source;
+		this.virtualResolution = virtualResolution
 	}
 
 	public toVirtual(point: Point, scroll: Point = { x: 0, y: 0 }): Point {

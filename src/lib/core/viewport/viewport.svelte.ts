@@ -110,8 +110,6 @@ export class Viewport {
 		return this.#height;
 	}
 
-	
-
 	/** Cleans up browser event listener structures to safely prevent memory leaks. */
 	destroy() {
 		if (typeof window !== 'undefined') {

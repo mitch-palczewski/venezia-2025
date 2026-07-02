@@ -1,4 +1,14 @@
+// --- Projection Util --- 
 
+export interface Point {
+	x: number;
+	y: number;
+}
+
+export interface DimensionalSource {
+    width: number;
+    height: number;
+}
 
 // --- Viewport Ratios ---
 
