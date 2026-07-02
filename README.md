@@ -1,3 +1,12 @@
+# About 
+
+This project establishes a web UI paradigm with three basic concepts
+- Scaling content by the viewport area 
+- Shaping content based on common aspect ratios
+- Normalize the positioning of content between all viewports
+
+
+
 # Aspect Ratio Responsive Layouts
 
 This project uses custom Tailwind v4 variants to handle responsive layouts based on screen aspect ratios rather than traditional width-based breakpoints. 
