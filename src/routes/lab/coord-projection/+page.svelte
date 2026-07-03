@@ -1,9 +1,11 @@
 <script lang="ts">
     import { useViewport } from "$lib/core";
     import { CoordinateProjector } from "$lib/core/viewport/coordinateProjector.svelte";
-	import ProjectedElement from "$lib/features/projected-element/ProjectedElement.svelte";
-	import { ProjectedElementModel } from "$lib/features/projected-element/projectedElementModel.svelte";
-  
+	import { MovableElement, MovableElementModel } from "$lib/features";
+    import ProjectedElement from "$lib/features/projected-element/ProjectedElement.svelte";
+    import { ProjectedElementModel } from "$lib/features/projected-element/projectedElementModel.svelte";
+    
+
 
     // 1. Initialize your projector state
     let viewport = useViewport();
@@ -13,24 +15,34 @@
     let mouse = $state({ x: 0, y: 0 });
     let virtualPos = $derived(projector.toVirtual(mouse));
 
-    // 3. TARGETING STATE: Managed entirely via the ElementProjectorModel instance
-    // We instantiate it at (250, 250) with an unscaled physical sizing footprint 
-    // centered perfectly on its designated point using the 'C' compass layout rule.
+    // 3. TARGETING STATE
     let targetElement = new ProjectedElementModel({
         x: 250,
         y: 250,
-        width: 0,              // Width and height can be 0 because we handle the target offset via CSS centers
+        width: 0,
         height: 0,
-        projectDimensions: false, // The target indicator badge stays absolute size, it shouldn't deform or stretch
-        anchor: 'C'            // Center-aligns the node around its (x,y) point to prevent window-scale drift
+        projectDimensions: false,
+        anchor: 'C'
     }, projector);
 
-    // 4. Compute the step sizing based on a 20x20 grid matrix
-    const gridCount = 20;
-    const stepX = $derived(projector.virtualResolution / gridCount); // 1000 / 20 = 50 units
-    const stepY = $derived(projector.virtualResolution / gridCount); // 1000 / 20 = 50 units
+    // 4. TEST MOVABLE ELEMENT: Instantiate with virtual coordinate boundaries (e.g. 0 to 1000)
+    // Placed at virtual x: 500, y: 500 with a virtual box size of 200x150 units
+    let testMovable = new MovableElementModel({
+        x: 500,
+        y: 500,
+        width: 200,
+        height: 150,
+        zIndex: 10,
+        draggable: true,
+        showTransformGizmo: true
+    });
 
-    // 5. Generate data array representing the 20x20 matrix structure
+    // 5. Compute the step sizing based on a 20x20 grid matrix
+    const gridCount = 20;
+    const stepX = $derived(projector.virtualResolution / gridCount);
+    const stepY = $derived(projector.virtualResolution / gridCount);
+
+    // 6. Generate data array representing the 20x20 matrix structure
     const gridCells = Array.from({ length: gridCount * gridCount }, (_, i) => {
         const col = i % gridCount;
         const row = Math.floor(i / gridCount);
@@ -39,7 +51,6 @@
 
     // Helper to snap target to the nearest cell when clicking on the grid
     function handleGridClick() {
-        // We now update properties directly on our ElementProjectorModel instance!
         targetElement.x = Math.round(virtualPos.x);
         targetElement.y = Math.round(virtualPos.y);
     }
@@ -73,11 +84,11 @@
         </div>
         <hr class="border-slate-800 my-2" />
         <div class="space-y-1">
-            <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Pinned Element Status</p>
+            <p class="text-xs text-slate-500 font-bold uppercase tracking-wider">Live Testing Status</p>
             <p class="text-indigo-400 font-bold"><span class="text-slate-500">Virtual Target:</span> X: {targetElement.x}, Y: {targetElement.y}</p>
-            <p class="text-indigo-300"><span class="text-slate-500">Render Pixels:</span> X: {targetElement.physicalX.toFixed(1)}px, Y: {targetElement.physicalY.toFixed(1)}px</p>
+            <p class="text-amber-500 font-bold"><span class="text-slate-500">Movable Box:</span> X: {Math.round(testMovable.x)}, Y: {Math.round(testMovable.y)}</p>
         </div>
-        <p class="text-[10px] text-slate-500 mt-2 italic">Click anywhere on the grid to change anchor point</p>
+        <p class="text-[10px] text-slate-500 mt-2 italic">Click anywhere on the grid to change indicator position</p>
     </div>
 
     <div 
@@ -110,5 +121,17 @@
             </div>
         </div>
     </ProjectedElement>
+
+    <MovableElement movableElement={testMovable} {projector} class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between">
+        <div class="pointer-events-none">
+            <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Virtual Node</h3>
+            <p class="text-[11px] font-mono text-slate-400 mt-1">
+                Size: {testMovable.width} × {testMovable.height}
+            </p>
+        </div>
+        <div class="text-[10px] bg-slate-900/50 rounded p-1 text-slate-400 font-mono text-center pointer-events-none select-none">
+            Drag Me Around
+        </div>
+    </MovableElement>
 
 </main>
