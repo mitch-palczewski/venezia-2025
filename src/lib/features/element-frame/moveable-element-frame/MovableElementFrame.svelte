@@ -1,7 +1,7 @@
 <!--
 @component
 
-- A interactive, floating window that you can drag, and position anywhere on your digital workspace stage.
+- An interactive, floating window that you can drag, and position anywhere on your digital workspace stage.
 
 @Props 
 
@@ -28,9 +28,8 @@
 	import type { MovableElementFrameModel } from './MovableElementFrameModel.svelte';
 	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
 	import type { CoordinateProjector } from '$lib/core/viewport/coordinateProjector.svelte';
-	import ProjectedElement from '../projected-element-frame/ProjectedElementFrame.svelte';
 	import { ProjectedElementFrameModel } from '../projected-element-frame/projectedElementFrameModel.svelte';
-	import CanvasElement from '../element-frame/ElementFrame.svelte';
+	import ElementFrame from '../ElementFrame.svelte';
 
 	type Props = {
 		movableElement: MovableElementFrameModel;
@@ -57,7 +56,6 @@
 	let totalMovement = 0;
 
 	const stageContext = getContext<{ current: number }>('canvas-stage-scale');
-	const scale = $derived(scaleOverride ?? stageContext?.current ?? 1);
 	const activeScaleX = $derived(projector?.scaleX ?? scaleOverride ?? stageContext?.current ?? 1);
 	const activeScaleY = $derived(projector?.scaleY ?? scaleOverride ?? stageContext?.current ?? 1);
 
@@ -137,14 +135,14 @@
 	</div>
 {/snippet}
 
-<CanvasElement
+<ElementFrame
 	{projectorModel}
-	{movableElement}
+	movableElementFrameModel={movableElement}
 	class="touch-none select-none {movableElement.draggable ? 'cursor-move' : 'cursor-default'} {className}"
 	onpointerdown={handlePointerDown}
 	ondragstart={(e) => e.preventDefault()}
 >
 	{@render innerContent()}
-</CanvasElement>
+</ElementFrame>
 
 
