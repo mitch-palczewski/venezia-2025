@@ -1,17 +1,19 @@
 <script lang="ts">
-	import { MovableElementModel, type MovableElementConfig } from "../moveable-element/MovableElementFrameModel.svelte";
-	import MovableImage from "../moveable-element/MovableImage.svelte";
+	import { MovableElementFrameModel, type MovableElementFrameConfig } from "../element-frame/moveable-element-frame/MovableElementFrameModel.svelte";
+	import MovableImageFrame from "../element-frame/moveable-element-frame/MovableImageFrame.svelte";
 
 
 
-	const modelConfig: MovableElementConfig = {
+
+
+	const modelConfig: MovableElementFrameConfig = {
 		x: 500,
 		y: 300
 	};
-	const container = new MovableElementModel(modelConfig);
+	const container = new MovableElementFrameModel(modelConfig);
 </script>
 
-<MovableImage movableElement={container} src={"/gifs/Ibix_01_preview2.gif"}  fixedRatio={true}>
-</MovableImage>
+<MovableImageFrame movableElement={container} src={"/gifs/Ibix_01_preview2.gif"}  fixedRatio={true}>
+</MovableImageFrame>
 
 
