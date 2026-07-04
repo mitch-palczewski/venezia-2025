@@ -2,7 +2,7 @@ import type { CoordinateProjector } from "$lib/core/viewport/coordinateProjector
 
 export type CompassAnchor = 'NW' | 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'C';
 
-export interface ProjectedElementConfig {
+export interface ProjectedElementFrameConfig {
     x: number;
     y: number;
     width: number;
@@ -12,7 +12,7 @@ export interface ProjectedElementConfig {
     anchor?: CompassAnchor;     
 }
 
-export class ProjectedElementModel{
+export class ProjectedElementFrameModel{
     public x = $state(0);
     public y = $state(0);
     public width = $state(0);
@@ -24,7 +24,7 @@ export class ProjectedElementModel{
 
     public projector = $state<CoordinateProjector | undefined>(undefined);
 
-    constructor(config: ProjectedElementConfig, projector?: CoordinateProjector) {
+    constructor(config: ProjectedElementFrameConfig, projector?: CoordinateProjector) {
         this.x = config.x;
         this.y = config.y;
         this.width = config.width;

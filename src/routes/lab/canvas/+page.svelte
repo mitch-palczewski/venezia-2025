@@ -2,9 +2,9 @@
     import { useViewport } from "$lib/core";
     import { CoordinateProjector } from "$lib/core/viewport/coordinateProjector.svelte";
     import { MovableElement, MovableElementModel } from "$lib/features";
-	import CanvasElement from "$lib/features/element/CanvasElement.svelte";
-    import ProjectedElement from "$lib/features/projected-element/ProjectedElement.svelte";
-    import { ProjectedElementModel } from "$lib/features/projected-element/projectedElementModel.svelte";
+	import CanvasElement from "$lib/features/element-frame/ElementFrame.svelte";
+    import ProjectedElement from "$lib/features/element-frame/projected-element-frame/ProjectedElementFrame.svelte";
+    import { ProjectedElementFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";
     
     // Brand new refactored bridge component to test
 
@@ -18,7 +18,7 @@
 
     // 3. TARGETING STATE (using your new custom CanvasElement layer)
     let targetElement = $derived.by(() => {
-        return new ProjectedElementModel({
+        return new ProjectedElementFrameModel({
             x: 250,
             y: 250,
             width: 0,
@@ -54,7 +54,7 @@
     // Helper to snap target to the nearest cell when clicking on the grid
     function handleGridClick() {
         // Mutate target positional coordinate states reactively
-        const mockModel = new ProjectedElementModel({
+        const mockModel = new ProjectedElementFrameModel({
             x: Math.round(virtualPos.x),
             y: Math.round(virtualPos.y),
             width: 0,
@@ -113,17 +113,7 @@
         {/each}
     </div>
 
-    <CanvasElement 
-        projectorModel={targetElement} 
-        movableElement={testMovable} 
-        class="z-40 pointer-events-none will-change-transform"
-    >
-        <div class="relative flex items-center justify-center">
-            <div class="absolute h-8 w-8 rounded-full border-2 border-indigo-500 animate-ping opacity-40"></div>
-            <div class="absolute h-4 w-4 rounded-full border border-indigo-400 bg-indigo-500/30 backdrop-blur-xs shadow-lg shadow-indigo-500/50"></div>
-            <div class="absolute h-1 w-1 rounded-full bg-white"></div>
-        </div>
-    </CanvasElement>
+
 
     <MovableElement 
         movableElement={testMovable} 

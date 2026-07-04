@@ -25,12 +25,12 @@
 <script lang="ts">
 	import { getContext, onDestroy, type Snippet } from 'svelte';
 	import { browser } from '$app/environment';
-	import type { MovableElementModel } from './MovableElementModel.svelte';
+	import type { MovableElementModel } from './MovableElementFrameModel.svelte';
 	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
 	import type { CoordinateProjector } from '$lib/core/viewport/coordinateProjector.svelte';
-	import ProjectedElement from '../projected-element/ProjectedElement.svelte';
-	import { ProjectedElementModel } from '../projected-element/projectedElementModel.svelte';
-	import CanvasElement from '../element/CanvasElement.svelte';
+	import ProjectedElement from '../projected-element-frame/ProjectedElementFrame.svelte';
+	import { ProjectedElementFrameModel } from '../projected-element-frame/projectedElementFrameModel.svelte';
+	import CanvasElement from '../element-frame/ElementFrame.svelte';
 
 	type Props = {
 		movableElement: MovableElementModel;
@@ -62,7 +62,7 @@
 	const activeScaleY = $derived(projector?.scaleY ?? scaleOverride ?? stageContext?.current ?? 1);
 
 	const projectorModel = $derived.by(() => {
-		return new ProjectedElementModel(
+		return new ProjectedElementFrameModel(
 			{
 				x: movableElement.x,
 				y: movableElement.y,
@@ -148,34 +148,3 @@
 </CanvasElement>
 
 
-
-{#if projectorModel}
-	<ProjectedElement
-		model={projectorModel}
-		class="touch-none select-none {movableElement.draggable
-			? 'cursor-move'
-			: 'cursor-default'} {className}"
-		onpointerdown={handlePointerDown}
-		ondragstart={(e) => e.preventDefault()}
-	>
-		{@render innerContent()}
-	</ProjectedElement>
-{:else}
-	<div
-		role="application"
-		class="absolute touch-none select-none {movableElement.draggable
-			? 'cursor-move'
-			: 'cursor-default'} {className}"
-		style="
-            left: {movableElement.x}px; 
-            top: {movableElement.y}px; 
-            width: {movableElement.width}px; 
-            height: {movableElement.height}px; 
-            z-index: {movableElement.zIndex};
-        "
-		onpointerdown={handlePointerDown}
-		ondragstart={(e) => e.preventDefault()}
-	>
-		{@render innerContent()}
-	</div>
-{/if}

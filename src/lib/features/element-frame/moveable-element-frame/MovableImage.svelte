@@ -26,8 +26,8 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { MovableElementModel } from './MovableElementModel.svelte';
-	import MovableElement from './MovableElement.svelte';
+	import type { MovableElementModel } from './MovableElementFrameModel.svelte';
+	import MovableElement from './MovableElementFrame.svelte';
 	
 
 

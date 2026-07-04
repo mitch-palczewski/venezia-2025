@@ -1,6 +1,6 @@
 <script lang="ts">
 	
-	import { MovableElementModel, type MovableElementConfig } from '../moveable-element/MovableElementModel.svelte';
+	import { MovableElementModel, type MovableElementConfig } from '../moveable-element/MovableElementFrameModel.svelte';
 	import MovableImage from '../moveable-element/MovableImage.svelte';
 
 	const modelConfig: MovableElementConfig = {

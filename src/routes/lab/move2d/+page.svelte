@@ -1,12 +1,12 @@
 <script lang="ts">
-	import MovableElement from '$lib/features/moveable-element/MovableElement.svelte';
+	import MovableElement from '$lib/features/moveable-element/MovableElementFrame.svelte';
 	import EnterPile3DContainer from '$lib/features/pile-home/EnterPile3DContainer.svelte';
 	import SpinningIbex from '$lib/features/pile-home/SpinningIbex.svelte';
 	import AspectStage from '$lib/features/stages/aspect-stage/AspectStage.svelte';
 	import { AspectStageModel } from '$lib/features/stages/aspect-stage/aspectStageModel.svelte';
 	import { CanvasScaler, type ScalerConfig } from '$lib/core/viewport/canvasScaler.svelte';
 	import ScalerStage from '$lib/features/stages/ScalerStage.svelte';
-	import { MovableElementModel } from '$lib/features/moveable-element/MovableElementModel.svelte';
+	import { MovableElementModel } from '$lib/features/moveable-element/MovableElementFrameModel.svelte';
 	import { useViewport } from '$lib/core';
 
 	const viewport = useViewport();

@@ -2,8 +2,8 @@
     import { useViewport } from "$lib/core";
     import { CoordinateProjector } from "$lib/core/viewport/coordinateProjector.svelte";
 	import { MovableElement, MovableElementModel } from "$lib/features";
-    import ProjectedElement from "$lib/features/projected-element/ProjectedElement.svelte";
-    import { ProjectedElementModel } from "$lib/features/projected-element/projectedElementModel.svelte";
+    import ProjectedElement from "$lib/features/element-frame/projected-element-frame/ProjectedElementFrame.svelte";
+    import { ProjectedElementFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";
     
 
 
@@ -16,7 +16,7 @@
     let virtualPos = $derived(projector.toVirtual(mouse));
 
     // 3. TARGETING STATE
-    let targetElement = new ProjectedElementModel({
+    let targetElement = new ProjectedElementFrameModel({
         x: 250,
         y: 250,
         width: 0,

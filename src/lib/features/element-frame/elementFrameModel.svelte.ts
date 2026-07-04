@@ -5,10 +5,10 @@
  * NEEED TO FINISH
  * */
 
-import type { CompassAnchor } from "../projected-element/projectedElementModel.svelte";
+import type { CompassAnchor } from "./projected-element-frame/projectedElementFrameModel.svelte";
 
 // 1. The baseline geometric data properties shared by ALL structural elements
-export interface BaseElementConfig {
+export interface BaseElementFrameConfig {
     x: number;
     y: number;
     width: number;
@@ -17,7 +17,7 @@ export interface BaseElementConfig {
 }
 
 // 2. The unified configurations representing the super-set of both behaviors
-export interface CanvasElementConfig extends BaseElementConfig {
+export interface ElementFrameConfig extends BaseElementFrameConfig {
     // Projection specific options
     projectDimensions?: boolean;        
     anchor?: CompassAnchor;     
@@ -29,7 +29,7 @@ export interface CanvasElementConfig extends BaseElementConfig {
 
 import type { CoordinateProjector } from '$lib/core/viewport/coordinateProjector.svelte';
 
-export class CanvasElementModel {
+export class ElementFrameModel {
     public readonly id = crypto.randomUUID();
 
     // Core Geometry Runes
@@ -48,7 +48,7 @@ export class CanvasElementModel {
     // Optional projector reference if operating on an infinite workspace stage
     private projector = $state<CoordinateProjector | undefined>(undefined);
 
-    constructor(config: CanvasElementConfig, projector?: CoordinateProjector) {
+    constructor(config: ElementFrameConfig, projector?: CoordinateProjector) {
         this.x = config.x;
         this.y = config.y;
         this.width = config.width;

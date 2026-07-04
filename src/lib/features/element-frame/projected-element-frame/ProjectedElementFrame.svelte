@@ -21,11 +21,11 @@
 ```
 -->
 <script lang="ts">
-	import type { ProjectedElementModel } from './projectedElementModel.svelte';
+	import type { ProjectedElementFrameModel } from './projectedElementFrameModel.svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 
     interface Props extends HTMLAttributes<HTMLDivElement> {
-        model: ProjectedElementModel;
+        model: ProjectedElementFrameModel;
     };
 
     let { 
