@@ -1,4 +1,4 @@
-export interface MovableElementConfig {
+export interface MovableElementFrameConfig {
 	x: number;
 	y: number;
 	zIndex?: number;
@@ -8,7 +8,7 @@ export interface MovableElementConfig {
     showTransformGizmo?: boolean;
 }
 
-export class MovableElementModel {
+export class MovableElementFrameModel {
 	public readonly id = crypto.randomUUID();
 	public x = $state(0);
 	public y = $state(0);
@@ -18,7 +18,7 @@ export class MovableElementModel {
 	public draggable = $state(true);
 	public showTransformGizmo = $state(true)
 
-	constructor(config: MovableElementConfig) {
+	constructor(config: MovableElementFrameConfig) {
 		this.x = config.x;
 		this.y = config.y;
 		this.zIndex = config.zIndex ?? 1;

@@ -26,13 +26,13 @@
 
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { MovableElementModel } from './MovableElementFrameModel.svelte';
+	import type { MovableElementFrameModel } from './MovableElementFrameModel.svelte';
 	import MovableElement from './MovableElementFrame.svelte';
 	
 
 
 	type Props = {
-		movableElement: MovableElementModel
+		movableElement: MovableElementFrameModel
 		src:string;
 		alt?: string;
 		togglableTransformGizmo?: boolean;

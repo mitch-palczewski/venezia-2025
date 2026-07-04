@@ -25,7 +25,7 @@
 <script lang="ts">
 	import { getContext, onDestroy, type Snippet } from 'svelte';
 	import { browser } from '$app/environment';
-	import type { MovableElementModel } from './MovableElementFrameModel.svelte';
+	import type { MovableElementFrameModel } from './MovableElementFrameModel.svelte';
 	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
 	import type { CoordinateProjector } from '$lib/core/viewport/coordinateProjector.svelte';
 	import ProjectedElement from '../projected-element-frame/ProjectedElementFrame.svelte';
@@ -33,7 +33,7 @@
 	import CanvasElement from '../element-frame/ElementFrame.svelte';
 
 	type Props = {
-		movableElement: MovableElementModel;
+		movableElement: MovableElementFrameModel;
 		scaleOverride?: number | undefined;
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
