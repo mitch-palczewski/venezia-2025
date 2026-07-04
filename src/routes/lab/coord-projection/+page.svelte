@@ -1,7 +1,7 @@
 <script lang="ts">
     import { useViewport } from "$lib/core";
     import { CoordinateProjector } from "$lib/core/viewport/coordinateProjector.svelte";
-	import { MovableElement, MovableElementModel } from "$lib/features";
+	import { MovableElementFrame, MovableElementFrameModel } from "$lib/features";
     import ProjectedElement from "$lib/features/element-frame/projected-element-frame/ProjectedElementFrame.svelte";
     import { ProjectedElementFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";
     
@@ -27,7 +27,7 @@
 
     // 4. TEST MOVABLE ELEMENT: Instantiate with virtual coordinate boundaries (e.g. 0 to 1000)
     // Placed at virtual x: 500, y: 500 with a virtual box size of 200x150 units
-    let testMovable = new MovableElementModel({
+    let testMovable = new MovableElementFrameModel({
         x: 500,
         y: 500,
         width: 200,
@@ -122,7 +122,7 @@
         </div>
     </ProjectedElement>
 
-    <MovableElement movableElement={testMovable} {projector} class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between">
+    <MovableElementFrame movableElement={testMovable} {projector} class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between">
         <div class="pointer-events-none">
             <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Virtual Node</h3>
             <p class="text-[11px] font-mono text-slate-400 mt-1">
@@ -132,6 +132,6 @@
         <div class="text-[10px] bg-slate-900/50 rounded p-1 text-slate-400 font-mono text-center pointer-events-none select-none">
             Drag Me Around
         </div>
-    </MovableElement>
+    </MovableElementFrame>
 
 </main>

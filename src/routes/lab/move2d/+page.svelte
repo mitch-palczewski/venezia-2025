@@ -1,13 +1,12 @@
 <script lang="ts">
-	import MovableElement from '$lib/features/moveable-element/MovableElementFrame.svelte';
 	import EnterPile3DContainer from '$lib/features/pile-home/EnterPile3DContainer.svelte';
 	import SpinningIbex from '$lib/features/pile-home/SpinningIbex.svelte';
 	import AspectStage from '$lib/features/stages/aspect-stage/AspectStage.svelte';
 	import { AspectStageModel } from '$lib/features/stages/aspect-stage/aspectStageModel.svelte';
 	import { CanvasScaler, type ScalerConfig } from '$lib/core/viewport/canvasScaler.svelte';
 	import ScalerStage from '$lib/features/stages/ScalerStage.svelte';
-	import { MovableElementModel } from '$lib/features/moveable-element/MovableElementFrameModel.svelte';
 	import { useViewport } from '$lib/core';
+	import { MovableElementFrame, MovableElementFrameModel } from '$lib/features';
 
 	const viewport = useViewport();
 	const stage = new AspectStageModel(viewport, 0.04);
@@ -17,14 +16,14 @@
 	}
 	const canvasScaler = new CanvasScaler(viewport,scalorConfig);
 
-	const testContainer = new MovableElementModel({
+	const testContainer = new MovableElementFrameModel({
 		x: 200,
 		y: 200,
 		width: 300,
 		height: 200,
 		zIndex: 10,
 	});
-	const testContainer2 = new MovableElementModel({
+	const testContainer2 = new MovableElementFrameModel({
 		x: 59,
 		y: 446,
 		width: 300,
@@ -57,7 +56,7 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 
 		<SpinningIbex />
 
-		<MovableElement
+		<MovableElementFrame
 			movableElement={testContainer}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
@@ -94,8 +93,8 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 					)}px
 				</div>
 			</div>
-		</MovableElement>
-		<MovableElement
+		</MovableElementFrame>
+		<MovableElementFrame
 			movableElement={testContainer2}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
@@ -121,6 +120,6 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 					</div>
 				</div>
 			</div>
-		</MovableElement>
+		</MovableElementFrame>
 	</ScalerStage>
 </div>
