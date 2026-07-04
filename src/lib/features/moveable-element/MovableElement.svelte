@@ -30,6 +30,7 @@
 	import type { CoordinateProjector } from '$lib/core/viewport/coordinateProjector.svelte';
 	import ProjectedElement from '../projected-element/ProjectedElement.svelte';
 	import { ProjectedElementModel } from '../projected-element/projectedElementModel.svelte';
+	import CanvasElement from '../element/CanvasElement.svelte';
 
 	type Props = {
 		movableElement: MovableElementModel;
@@ -55,22 +56,23 @@
 	let startBox = { x: 0, y: 0 };
 	let totalMovement = 0;
 
-	const stageContext = getContext<{ current: number }>('canvas-stage-scale');    
-    const scale = $derived( scaleOverride ?? stageContext?.current ?? 1);
+	const stageContext = getContext<{ current: number }>('canvas-stage-scale');
+	const scale = $derived(scaleOverride ?? stageContext?.current ?? 1);
 	const activeScaleX = $derived(projector?.scaleX ?? scaleOverride ?? stageContext?.current ?? 1);
-    const activeScaleY = $derived(projector?.scaleY ?? scaleOverride ?? stageContext?.current ?? 1);
+	const activeScaleY = $derived(projector?.scaleY ?? scaleOverride ?? stageContext?.current ?? 1);
 
 	const projectorModel = $derived.by(() => {
-        return new ProjectedElementModel({
-            x: movableElement.x,
-            y: movableElement.y,
-            width: movableElement.width,
-            height: movableElement.height,
-            zIndex: movableElement.zIndex,
-        }, projector);
-    });
-
-	
+		return new ProjectedElementModel(
+			{
+				x: movableElement.x,
+				y: movableElement.y,
+				width: movableElement.width,
+				height: movableElement.height,
+				zIndex: movableElement.zIndex
+			},
+			projector
+		);
+	});
 
 	function handlePointerDown(event: PointerEvent) {
 		if (!movableElement.draggable) return;
@@ -116,48 +118,64 @@
 </script>
 
 {#snippet innerContent()}
-    {#if movableElement.showTransformGizmo}
-        <TransformGizmo
-            ondrag={(side, delta) => {
-                const scaleDeltaX = delta / activeScaleX;
-                const scaleDeltaY = delta / activeScaleY;
-                if (side === 'left' || side === 'right') {
-                    movableElement.x = movableElement.x + scaleDeltaX;
-                }
-                if (side === 'top' || side === 'bottom') {
-                    movableElement.y = movableElement.y + scaleDeltaY;
-                }
-            }}
-        />
-    {/if}
-    <div class="pointer-events-auto relative h-full w-full cursor-auto">
-        {@render children?.()}
-    </div>
+	{#if movableElement.showTransformGizmo}
+		<TransformGizmo
+			ondrag={(side, delta) => {
+				const scaleDeltaX = delta / activeScaleX;
+				const scaleDeltaY = delta / activeScaleY;
+				if (side === 'left' || side === 'right') {
+					movableElement.x = movableElement.x + scaleDeltaX;
+				}
+				if (side === 'top' || side === 'bottom') {
+					movableElement.y = movableElement.y + scaleDeltaY;
+				}
+			}}
+		/>
+	{/if}
+	<div class="pointer-events-auto relative h-full w-full cursor-auto">
+		{@render children?.()}
+	</div>
 {/snippet}
 
-{#if projector}
-    <ProjectedElement
-        model = {projectorModel}
-        class="touch-none select-none {movableElement.draggable ? 'cursor-move' : 'cursor-default'} {className}"
-        onpointerdown={handlePointerDown}
-        ondragstart={(e) => e.preventDefault()}
-    >
-        {@render innerContent()}
-    </ProjectedElement>
+<CanvasElement
+	{projectorModel}
+	{movableElement}
+	class="touch-none select-none {movableElement.draggable ? 'cursor-move' : 'cursor-default'} {className}"
+	onpointerdown={handlePointerDown}
+	ondragstart={(e) => e.preventDefault()}
+>
+	{@render innerContent()}
+</CanvasElement>
+
+
+
+{#if projectorModel}
+	<ProjectedElement
+		model={projectorModel}
+		class="touch-none select-none {movableElement.draggable
+			? 'cursor-move'
+			: 'cursor-default'} {className}"
+		onpointerdown={handlePointerDown}
+		ondragstart={(e) => e.preventDefault()}
+	>
+		{@render innerContent()}
+	</ProjectedElement>
 {:else}
-    <div
-        role="application"
-        class="absolute touch-none select-none {movableElement.draggable ? 'cursor-move' : 'cursor-default'} {className}"
-        style="
+	<div
+		role="application"
+		class="absolute touch-none select-none {movableElement.draggable
+			? 'cursor-move'
+			: 'cursor-default'} {className}"
+		style="
             left: {movableElement.x}px; 
             top: {movableElement.y}px; 
             width: {movableElement.width}px; 
             height: {movableElement.height}px; 
             z-index: {movableElement.zIndex};
         "
-        onpointerdown={handlePointerDown}
-        ondragstart={(e) => e.preventDefault()}
-    >
-        {@render innerContent()}
-    </div>
+		onpointerdown={handlePointerDown}
+		ondragstart={(e) => e.preventDefault()}
+	>
+		{@render innerContent()}
+	</div>
 {/if}
