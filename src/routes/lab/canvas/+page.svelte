@@ -1,9 +1,9 @@
 <script lang="ts">
     import { useViewport } from "$lib/core";
     import { CoordinateProjector } from "$lib/core/viewport/coordinateProjector.svelte";
-    import { MovableElement, MovableElementModel } from "$lib/features";
-	import CanvasElement from "$lib/features/element-frame/ElementFrame.svelte";
-    import ProjectedElement from "$lib/features/element-frame/projected-element-frame/ProjectedElementFrame.svelte";
+	import { MovableElementFrameModel } from "$lib/features";
+	import MovableElementFrame from "$lib/features/element-frame/moveable-element-frame/MovableElementFrame.svelte";
+
     import { ProjectedElementFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";
     
     // Brand new refactored bridge component to test
@@ -29,7 +29,7 @@
     });
 
     // 4. TEST MOVABLE ELEMENT: Instantiate with virtual coordinate boundaries (0 to 1000)
-    let testMovable = new MovableElementModel({
+    let testMovable = new MovableElementFrameModel({
         x: 500,
         y: 500,
         width: 200,
@@ -115,7 +115,7 @@
 
 
 
-    <MovableElement 
+    <MovableElementFrame 
         movableElement={testMovable} 
         {projector} 
         class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between"
@@ -129,5 +129,5 @@
         <div class="text-[10px] bg-slate-900/50 rounded p-1 text-slate-400 font-mono text-center pointer-events-none select-none">
             Drag Me Around
         </div>
-    </MovableElement>
+    </MovableElementFrame>
 </main>
