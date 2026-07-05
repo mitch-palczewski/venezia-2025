@@ -1,4 +1,4 @@
-import type { CoordinateProjector } from "$lib/core/viewport/coordinateProjector.svelte";
+import type { CoordinateProjector } from "$lib/core/projector/coordinateProjector.svelte";
 
 export type CompassAnchor = 'NW' | 'N' | 'NE' | 'E' | 'SE' | 'S' | 'SW' | 'W' | 'C';
 

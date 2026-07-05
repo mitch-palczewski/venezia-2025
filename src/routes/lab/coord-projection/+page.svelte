@@ -1,6 +1,6 @@
 <script lang="ts">
     import { useViewport } from "$lib/core";
-    import { CoordinateProjector } from "$lib/core/viewport/coordinateProjector.svelte";
+    import { CoordinateProjector } from "$lib/core/projector/coordinateProjector.svelte";
 	import { MovableElementFrame, MovableElementFrameModel } from "$lib/features";
     import ProjectedElement from "$lib/features/element-frame/projected-element-frame/ProjectedElementFrame.svelte";
     import { ProjectedElementFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";

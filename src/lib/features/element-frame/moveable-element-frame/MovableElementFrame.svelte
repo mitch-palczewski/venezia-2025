@@ -23,11 +23,11 @@
 ```
 -->
 <script lang="ts">
-	import { getContext, onDestroy, type Snippet } from 'svelte';
+	import { getContext, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 	import type { MovableElementFrameModel } from './MovableElementFrameModel.svelte';
 	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
-	import type { CoordinateProjector } from '$lib/core/viewport/coordinateProjector.svelte';
+	import type { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
 	import { ProjectedElementFrameModel } from '../projected-element-frame/projectedElementFrameModel.svelte';
 	import ElementFrame from '../ElementFrame.svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
@@ -138,7 +138,6 @@
 
 <ElementFrame
 	{projectorModel}
-	movableElementFrameModel={movableElement}
 	class="touch-none select-none {movableElement.draggable
 		? 'cursor-move'
 		: 'cursor-default'} {className}"

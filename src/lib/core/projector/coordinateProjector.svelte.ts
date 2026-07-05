@@ -1,4 +1,4 @@
-import type { DimensionalSource, Point } from "./viewport.types";
+import type { DimensionalSource, Point } from "../viewport/viewport.types";
 
 
 
