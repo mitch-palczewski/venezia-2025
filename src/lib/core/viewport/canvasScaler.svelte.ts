@@ -36,7 +36,7 @@ export interface ScalerConfig {
  */
 export class CanvasScaler {
 
-	#scaleBasedOn: 'area' | 'shortest edge' | 'width'
+	public scaleBasedOn = $state<'area' | 'shortest edge' | 'width'>('area');
 
     /** The active viewport instance monitored for window dimension changes. */
 	public readonly viewport: Viewport;
@@ -55,7 +55,7 @@ export class CanvasScaler {
 
     /** The maximum scaling boundary clamp. */
 	public scale = $derived.by(() => {
-		switch(this.#scaleBasedOn){
+		switch(this.scaleBasedOn){
 			case 'area':
 				return this.getAreaScaleFactor()
 			case 'shortest edge':
@@ -72,7 +72,7 @@ export class CanvasScaler {
      */
 	constructor(viewport: Viewport, config?: ScalerConfig) {
 		this.viewport = viewport;
-		this.#scaleBasedOn = config?.scaleBasedOn ?? 'area';
+		this.scaleBasedOn = config?.scaleBasedOn ?? 'area';
 		this.referenceWidth = config?.referenceWidth ?? 1280;
 		this.referenceHeight = config?.referenceHeight ?? 720;
 	}
