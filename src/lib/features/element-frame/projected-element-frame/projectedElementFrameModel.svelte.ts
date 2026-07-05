@@ -18,6 +18,7 @@ export class ProjectedElementFrameModel{
     public width = $state(0);
     public height = $state(0);
     public zIndex = $state(1);
+    public scale = $state(1)
     
     public projectDimensions = $state(true);
     public anchor = $state<CompassAnchor>('NW');
@@ -37,19 +38,19 @@ export class ProjectedElementFrameModel{
 
     public physicalWidth = $derived.by(() => {
         if (!this.projector || !this.projectDimensions) return this.width;
-        return this.width * this.projector.scaleX;
+        return this.width * this.activeScaleX;
     });
 
     public physicalHeight = $derived.by(() => {
         if (!this.projector || !this.projectDimensions) return this.height;
-        return this.height * this.projector.scaleY;
+        return this.height * this.activeScaleY;
     });
 
     private anchorOffset = $derived.by(() => {
         if (!this.projector || this.projectDimensions) return { x: 0, y: 0 };
 
-        const sx = this.projector.scaleX;
-        const sy = this.projector.scaleY;
+        const sx = this.activeScaleX;
+        const sy = this.activeScaleY;
 
         const diffW = this.width * sx - this.width;
         const diffH = this.height * sy - this.height;
@@ -76,12 +77,12 @@ export class ProjectedElementFrameModel{
     });
 
     public physicalX = $derived.by(() => {
-        const base = this.projector ? (this.x * this.projector.scaleX) : this.x;
+        const base = this.projector ? (this.x * this.activeScaleX) : this.x;
         return base - this.anchorOffset.x;
     });
 
     public physicalY = $derived.by(() => {
-        const base = this.projector ? (this.y * this.projector.scaleY) : this.y;
+        const base = this.projector ? (this.y * this.activeScaleY) : this.y;
         return base - this.anchorOffset.y;
     });
 
@@ -94,6 +95,14 @@ export class ProjectedElementFrameModel{
         z-index: ${this.zIndex};
         transform-origin: ${this.getTransformOrigin()};
     `);
+
+    private get activeScaleX() {
+        return (this.projector?.scaleX ?? 1) * this.scale;
+    }
+
+    private get activeScaleY() {
+        return (this.projector?.scaleY ?? 1) * this.scale;
+    }
 
     private getTransformOrigin(): string {
         const mapping: Record<CompassAnchor, string> = {
