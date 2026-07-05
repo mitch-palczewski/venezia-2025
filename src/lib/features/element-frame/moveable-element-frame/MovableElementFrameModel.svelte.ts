@@ -9,7 +9,6 @@ export interface MovableElementFrameConfig {
 }
 
 export class MovableElementFrameModel {
-	public readonly id = crypto.randomUUID();
 	public x = $state(0);
 	public y = $state(0);
 	public zIndex = $state(1);
