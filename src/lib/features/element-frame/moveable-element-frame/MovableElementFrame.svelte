@@ -30,25 +30,25 @@
 	import type { CoordinateProjector } from '$lib/core/viewport/coordinateProjector.svelte';
 	import { ProjectedElementFrameModel } from '../projected-element-frame/projectedElementFrameModel.svelte';
 	import ElementFrame from '../ElementFrame.svelte';
+	import type { HTMLAttributes } from 'svelte/elements';
 
-	type Props = {
-		movableElement: MovableElementFrameModel;
+	interface Props extends HTMLAttributes<HTMLDivElement> {
+		movableElementFrameModel: MovableElementFrameModel;
 		scaleOverride?: number | undefined;
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		projector?: CoordinateProjector;
-		class?: string;
-		children?: Snippet;
 	};
 
 	let {
-		movableElement,
+		movableElementFrameModel: movableElement,
 		scaleOverride,
 		onSelect,
 		togglableTransformGizmo = true,
 		projector,
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
-		children
+		children,
+		...restProps
 	}: Props = $props();
 
 	let startPointer = { x: 0, y: 0 };
@@ -144,6 +144,7 @@
 		: 'cursor-default'} {className}"
 	onpointerdown={handlePointerDown}
 	ondragstart={(e) => e.preventDefault()}
+	{...restProps}
 >
 	{@render innerContent()}
 </ElementFrame>

@@ -23,24 +23,19 @@
 ```
 -->
 
-
 <script lang="ts">
-	import type { Snippet } from 'svelte';
 	import type { MovableElementFrameModel } from './MovableElementFrameModel.svelte';
 	import MovableElement from './MovableElementFrame.svelte';
-	
+	import type { HTMLAttributes } from 'svelte/elements';
 
-
-	type Props = {
-		movableElement: MovableElementFrameModel
-		src:string;
+	interface Props extends HTMLAttributes<HTMLDivElement> {
+		movableElement: MovableElementFrameModel;
+		src: string;
 		alt?: string;
 		togglableTransformGizmo?: boolean;
 		onSelect?: () => void;
-		class?: string;
-		children?: Snippet;
 		fixedRatio?: boolean;
-	};
+	}
 
 	let {
 		movableElement,
@@ -50,7 +45,8 @@
 		onSelect,
 		class: className = '',
 		children,
-		fixedRatio = false
+		fixedRatio = false,
+		...restProps
 	}: Props = $props();
 
 	function handleImageLoad(event: Event) {
@@ -63,7 +59,13 @@
 	}
 </script>
 
-<MovableElement movableElement={movableElement} {togglableTransformGizmo} {onSelect} class={className}>
+<MovableElement
+	movableElementFrameModel={movableElement}
+	{togglableTransformGizmo}
+	{onSelect}
+	class={className}
+	{...restProps}
+>
 	<img
 		{src}
 		{alt}
@@ -77,4 +79,3 @@
 		</div>
 	{/if}
 </MovableElement>
-

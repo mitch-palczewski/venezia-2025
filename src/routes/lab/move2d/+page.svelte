@@ -57,7 +57,7 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 		<SpinningIbex />
 
 		<MovableElementFrame
-			movableElement={testContainer}
+			movableElementFrameModel={testContainer}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
 			}}
@@ -95,7 +95,7 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 			</div>
 		</MovableElementFrame>
 		<MovableElementFrame
-			movableElement={testContainer2}
+			movableElementFrameModel={testContainer2}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
 			}}

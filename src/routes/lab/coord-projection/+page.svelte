@@ -122,7 +122,7 @@
         </div>
     </ProjectedElement>
 
-    <MovableElementFrame movableElement={testMovable} {projector} class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between">
+    <MovableElementFrame movableElementFrameModel={testMovable} {projector} class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between">
         <div class="pointer-events-none">
             <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Virtual Node</h3>
             <p class="text-[11px] font-mono text-slate-400 mt-1">

@@ -116,7 +116,7 @@
 
 
     <MovableElementFrame 
-        movableElement={testMovable} 
+        movableElementFrameModel={testMovable} 
         {projector} 
         class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between"
     >
