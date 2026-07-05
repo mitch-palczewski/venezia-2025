@@ -60,16 +60,17 @@
 	const activeScaleY = $derived(projector?.scaleY ?? scaleOverride ?? stageContext?.current ?? 1);
 
 	const projectorModel = $derived.by(() => {
-		return new ProjectedElementFrameModel(
-			{
-				x: movableElement.x,
-				y: movableElement.y,
-				width: movableElement.width,
-				height: movableElement.height,
-				zIndex: movableElement.zIndex
-			},
-			projector
-		);
+		if (projector)
+			return new ProjectedElementFrameModel(
+				{
+					x: movableElement.x,
+					y: movableElement.y,
+					width: movableElement.width,
+					height: movableElement.height,
+					zIndex: movableElement.zIndex
+				},
+				projector
+			);
 	});
 
 	function handlePointerDown(event: PointerEvent) {
@@ -138,11 +139,11 @@
 <ElementFrame
 	{projectorModel}
 	movableElementFrameModel={movableElement}
-	class="touch-none select-none {movableElement.draggable ? 'cursor-move' : 'cursor-default'} {className}"
+	class="touch-none select-none {movableElement.draggable
+		? 'cursor-move'
+		: 'cursor-default'} {className}"
 	onpointerdown={handlePointerDown}
 	ondragstart={(e) => e.preventDefault()}
 >
 	{@render innerContent()}
 </ElementFrame>
-
-

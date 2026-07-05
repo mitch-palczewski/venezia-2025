@@ -31,7 +31,7 @@
 {/snippet}
 
 
-{#if projectorModel && projectorModel.projector}
+{#if projectorModel}
 	<ProjectedElement model={projectorModel} class={className} {...restProps}>
 		{@render children?.()}
 	</ProjectedElement>
