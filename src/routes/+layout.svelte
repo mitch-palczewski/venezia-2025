@@ -1,11 +1,16 @@
 <script lang="ts">
 	import SEO from '$lib/components/seo/SEO.svelte';
+	import { initViewportProjectorContext } from '$lib/core/projector/projector.context.svelte';
 	import { initViewportContext } from '$lib/core/viewport/viewport.context.svelte';
 	import '../app.css';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
-	initViewportContext();
+	const viewport = initViewportContext();
+	initViewportProjectorContext(viewport);
+
+
+
 	injectSpeedInsights();
 	injectAnalytics();
 

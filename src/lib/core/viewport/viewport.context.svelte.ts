@@ -21,7 +21,7 @@ export function useViewport() {
 	const context = getContext<Viewport>(VIEWPORT_KEY);
 	if (!context) {
 		throw new Error(
-			'useViewportContext missing context. Call initViewportContext() in a parent component.'
+			'useViewport missing context. Call initViewportContext() in a parent component.'
 		);
 	}
 	return context;
