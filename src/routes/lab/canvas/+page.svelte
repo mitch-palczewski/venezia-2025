@@ -59,7 +59,7 @@
             y: Math.round(virtualPos.y),
             width: 0,
             height: 0
-        });
+        }, projector);
         // (If keeping target state static or inline mutable, target positions map instantly)
     }
 </script>

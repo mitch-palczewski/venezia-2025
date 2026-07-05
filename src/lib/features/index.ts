@@ -14,7 +14,6 @@ export {default as AspectStage} from './stages/aspect-stage/AspectStage.svelte'
 
 //element-frame
 export {ElementFrame} 
-export {ElementFrameModel} from './element-frame/elementFrameModel.svelte'
 
 export {MovableElementFrame}
 export {MovableElementFrameModel} from './element-frame/moveable-element-frame/MovableElementFrameModel.svelte'
