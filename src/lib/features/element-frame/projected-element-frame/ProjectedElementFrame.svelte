@@ -38,7 +38,7 @@
 
 <div 
     class="touch-none select-none {className}" 
-    style={model.cssStyle}
+    style={model.physicalBoundsStyle}
     {...restProps}
 >
     {@render children?.()}

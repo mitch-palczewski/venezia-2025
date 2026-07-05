@@ -23,7 +23,7 @@
 	<div
 		role="application"
 		class="absolute touch-none select-none {className}"
-		style="{projectorModel?.cssStyle}; {style}"
+		style="{projectorModel?.physicalBoundsStyle}; {style}"
 		{...restProps}
 	>
 		{@render children?.()}

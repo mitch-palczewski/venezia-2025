@@ -22,9 +22,9 @@ export class ProjectedElementFrameModel{
     public projectDimensions = $state(true);
     public anchor = $state<CompassAnchor>('NW');
 
-    public projector = $state<CoordinateProjector | undefined>(undefined);
+    public projector = $state<CoordinateProjector>();
 
-    constructor(config: ProjectedElementFrameConfig, projector?: CoordinateProjector) {
+    constructor(config: ProjectedElementFrameConfig, projector: CoordinateProjector) {
         this.x = config.x;
         this.y = config.y;
         this.width = config.width;
@@ -85,7 +85,7 @@ export class ProjectedElementFrameModel{
         return base - this.anchorOffset.y;
     });
 
-    public cssStyle = $derived(`
+    public physicalBoundsStyle = $derived(`
         position: absolute;
         left: ${this.physicalX}px;
         top: ${this.physicalY}px;
