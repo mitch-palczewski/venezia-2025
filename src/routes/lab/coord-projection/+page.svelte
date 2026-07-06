@@ -1,9 +1,8 @@
 <script lang="ts">
     import { useViewport } from "$lib/core";
     import { CoordinateProjector } from "$lib/core/projector/coordinateProjector.svelte";
-	import { MovableElementFrame, MovableElementFrameModel } from "$lib/features";
-    import ProjectedElement from "$lib/features/element-frame/projected-element-frame/ProjectedElementFrame.svelte";
-    import { ProjectedFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";
+	import { MovableElementFrame, MovableElementFrameModel, ProjectedFrameModel } from "$lib/features";
+    import ProjectedElement from "$lib/features/element-frame/projected-element-frame/ProjectedFrame.svelte";
     
 
 
@@ -19,9 +18,6 @@
     let targetElement = new ProjectedFrameModel({
         x: 250,
         y: 250,
-        width: 0,
-        height: 0,
-        projectWidthHeight: false,
         anchor: 'C'
     }, projector);
 

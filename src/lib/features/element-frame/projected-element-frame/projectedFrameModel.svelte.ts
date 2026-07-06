@@ -1,6 +1,6 @@
 import type { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
 import { getAnchorOffset, getTransformOrigin, type CompassAnchor } from '../util/anchor';
-import type { BaseFrameConfig, ProjectedElementFrameConfig } from './projectedElementFrame.types';
+import type { BaseFrameConfig, ProjectedElementFrameConfig } from './projectedFrame.types';
 
 type InternalConfig = BaseFrameConfig & {
     projectedWidth?: number;

@@ -1,6 +1,6 @@
-import ElementFrame from './element-frame/ElementFrame.svelte'
-import MovableElementFrame from './element-frame/moveable-element-frame/MovableElementFrame.svelte'
-import ProjectedElementFrame from './element-frame/projected-element-frame/ProjectedElementFrame.svelte'
+import ElementFrame from './element-frame/Frame.svelte'
+import MovableElementFrame from './element-frame/moveable-element-frame/MovableFrame.svelte'
+import ProjectedFrame from './element-frame/projected-element-frame/ProjectedFrame.svelte'
 
 
 // stages
@@ -16,7 +16,7 @@ export {default as AspectStage} from './stages/aspect-stage/AspectStage.svelte'
 export {ElementFrame} 
 
 export {MovableElementFrame}
-export {MovableElementFrameModel} from './element-frame/moveable-element-frame/MovableElementFrameModel.svelte'
+export {MovableElementFrameModel} from './element-frame/moveable-element-frame/MovableFrameModel.svelte'
 
-export {ProjectedElementFrame}
-export {ProjectedFrameModel as ProjectedElementFrameModel} from './element-frame/projected-element-frame/projectedElementFrameModel.svelte'
+export {ProjectedFrame}
+export {ProjectedFrameModel} from './element-frame/projected-element-frame/projectedFrameModel.svelte'

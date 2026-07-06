@@ -2,7 +2,7 @@
     import { useViewport } from "$lib/core";
     import { CoordinateProjector } from "$lib/core/projector/coordinateProjector.svelte";
 	import { MovableElementFrameModel } from "$lib/features";
-	import MovableElementFrame from "$lib/features/element-frame/moveable-element-frame/MovableElementFrame.svelte";
+	import MovableElementFrame from "$lib/features/element-frame/moveable-element-frame/MovableFrame.svelte";
 
     import { ProjectedFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";
     
@@ -21,9 +21,6 @@
         return new ProjectedFrameModel({
             x: 250,
             y: 250,
-            width: 0,
-            height: 0,
-            projectWidthHeight: false,
             anchor: 'C'
         }, projector);
     });
@@ -57,8 +54,6 @@
         const mockModel = new ProjectedFrameModel({
             x: Math.round(virtualPos.x),
             y: Math.round(virtualPos.y),
-            width: 0,
-            height: 0
         }, projector);
         // (If keeping target state static or inline mutable, target positions map instantly)
     }

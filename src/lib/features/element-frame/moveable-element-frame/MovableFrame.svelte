@@ -25,11 +25,11 @@
 <script lang="ts">
 	import { getContext, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
-	import type { MovableElementFrameModel } from './MovableElementFrameModel.svelte';
+	import type { MovableElementFrameModel } from './MovableFrameModel.svelte';
 	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
 	import type { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
 	import { ProjectedFrameModel } from '../projected-element-frame/projectedElementFrameModel.svelte';
-	import ElementFrame from '../ElementFrame.svelte';
+	import ElementFrame from '../Frame.svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {

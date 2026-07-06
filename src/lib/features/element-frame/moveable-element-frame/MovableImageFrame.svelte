@@ -24,8 +24,8 @@
 -->
 
 <script lang="ts">
-	import type { MovableElementFrameModel } from './MovableElementFrameModel.svelte';
-	import MovableElement from './MovableElementFrame.svelte';
+	import type { MovableElementFrameModel } from './MovableFrameModel.svelte';
+	import MovableElement from './MovableFrame.svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {

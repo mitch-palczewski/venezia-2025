@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { MovableElementFrameModel, type MovableElementFrameConfig } from "../element-frame/moveable-element-frame/MovableElementFrameModel.svelte";
+	import { MovableElementFrameModel, type MovableElementFrameConfig } from "../element-frame/moveable-element-frame/MovableFrameModel.svelte";
 	import MovableImageFrame from "../element-frame/moveable-element-frame/MovableImageFrame.svelte";
 
 
