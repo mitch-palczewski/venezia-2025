@@ -36,7 +36,7 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 <div
 	class="relative flex h-screen w-screen flex-col justify-between overflow-hidden bg-slate-800 p-6 text-white select-none"
 >
-	<AspectStage {stage} clipContent={false}>
+	<AspectStage model={stage} clipContent={false}>
 	<div 
         class="grid w-full h-full gap-0" 
         style="grid-template-columns: repeat(20, 1fr); grid-template-rows: repeat(20, 1fr);"

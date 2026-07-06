@@ -5,9 +5,11 @@ export interface Point {
 	y: number;
 }
 
-export interface DimensionalSource {
+export interface LayoutBounds {
     width: number;
     height: number;
+    offsetX?: number;
+    offsetY?: number;
 }
 
 // --- Viewport Ratios ---

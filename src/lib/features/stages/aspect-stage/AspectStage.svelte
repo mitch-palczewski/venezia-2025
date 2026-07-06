@@ -3,15 +3,15 @@
 	import type { AspectStageModel } from './aspectStageModel.svelte';
 
     interface Props {
-        stage: AspectStageModel;
+        model: AspectStageModel;
         clipContent?: boolean; 
         class?: string;
         children?: Snippet;
     }
 
     let {
-        stage,
-        clipContent = true, 
+        model: model,
+        clipContent = false, 
         class: className = 'bg-slate-900 border border-slate-800 shadow-2xl',
         children
     }: Props = $props();
@@ -20,10 +20,10 @@
 <div
     class="absolute pointer-events-auto {className} {clipContent ? 'overflow-hidden' : 'overflow-visible'}"
     style="
-        left: {stage.x}px; 
-        top: {stage.y}px; 
-        width: {stage.width}px; 
-        height: {stage.height}px;
+        left: {model.offsetX}px; 
+        top: {model.offsetY}px; 
+        width: {model.width}px; 
+        height: {model.height}px;
     "
 >
     {#if children}

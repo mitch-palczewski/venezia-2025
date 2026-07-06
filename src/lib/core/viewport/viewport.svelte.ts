@@ -5,6 +5,7 @@ import {
 	TIER_TEXT_MAP,
 	widthTierBreaks,
 	type AspectRatio,
+	type LayoutBounds as LayoutBounds,
 	type Orientation,
 	type Tier,
 	type TierBreakpoints,

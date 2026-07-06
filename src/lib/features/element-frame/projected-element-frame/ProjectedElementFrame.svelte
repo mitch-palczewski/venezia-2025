@@ -10,6 +10,9 @@
 
 	function autoMeasure(node: HTMLElement) {
 		if (!model.isContentDrivenWidth && !model.isContentDrivenHeight) return;
+		const initialRect = node.getBoundingClientRect();
+		model.measuredWidth = initialRect.width;
+		model.measuredHeight = initialRect.height;
 		const observer = new ResizeObserver((entries) => {
 			for (let entry of entries) {
 				model.measuredWidth = entry.contentRect.width;

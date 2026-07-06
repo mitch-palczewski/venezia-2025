@@ -1,49 +1,53 @@
 import type { Viewport } from "$lib/core";
+import type { LayoutBounds } from "$lib/core/viewport/viewport.types";
 
 export class AspectStageModel {
-	public readonly viewport: Viewport;
+    public readonly viewport: Viewport;
+    
+    // Controlled margin percentage per side (e.g. 0.05 = 5% edge padding on all sides)
+    public marginPercentage = $state(0);
 
-	public marginPercentage = $state(0);
+    public bounds: LayoutBounds = $derived.by(() => {
+        const viewW = this.viewport.width;
+        const viewH = this.viewport.height;
 
-	#bounds = $derived.by(() => {
-		const targetRatio = this.viewport.closestCommonRatioValue;
-		const maxW = this.viewport.width * (1 - this.marginPercentage * 2);
-		const maxH = this.viewport.height * (1 - this.marginPercentage * 2);
+        // Prevent layout calculation failures if window isn't sized yet
+        if (viewW === 0 || viewH === 0) {
+            return { width: 0, height: 0, offsetX: 0, offsetY: 0 };
+        }
 
-		let stageW = maxW;
-		let stageH = maxW / targetRatio;
+        const targetRatio = this.viewport.closestCommonRatioValue;
+        
+        // Calculate the maximum bounding box ceiling after padding margins are cleared
+        const maxW = viewW * (1 - (this.marginPercentage * 2));
+        const maxH = viewH * (1 - (this.marginPercentage * 2));
 
-		if (stageH > maxH) {
-			stageH = maxH;
-			stageW = maxH * targetRatio;
-		}
+        // Start by sizing completely into the horizontal bounds ceiling
+        let stageW = maxW;
+        let stageH = maxW / targetRatio;
 
-		return {
-			width: stageW,
-			height: stageH,
-			x: (this.viewport.width - stageW) / 2,
-			y: (this.viewport.height - stageH) / 2
-		};
-	});
+        // If the resulting container height breaks the vertical ceiling constraint -> Scale down to fit height
+        if (stageH > maxH) {
+            stageH = maxH;
+            stageW = maxH * targetRatio;
+        }
 
-	get width() {
-		return this.#bounds.width;
-	}
+        return {
+            width: stageW,
+            height: stageH,
+            offsetX: (viewW - stageW) / 2,
+            offsetY: (viewH - stageH) / 2
+        };
+    });
 
-	get height() {
-		return this.#bounds.height;
-	}
+    // Clean, direct, reactive getters mapping directly to your LayoutBounds interface
+    public get width() { return this.bounds.width; }
+    public get height() { return this.bounds.height; }
+    public get offsetX() { return this.bounds.offsetX; }
+    public get offsetY() { return this.bounds.offsetY; }
 
-	get x() {
-		return this.#bounds.x;
-	}
-
-	get y() {
-		return this.#bounds.y;
-	}
-
-	constructor(viewport: Viewport, marginPercentage?: number) {
-		this.viewport = viewport;
-        this.marginPercentage = marginPercentage? marginPercentage : 0;
-	}
+    constructor(viewport: Viewport, marginPercentage: number = 0) {
+        this.viewport = viewport;
+        this.marginPercentage = marginPercentage;
+    }
 }

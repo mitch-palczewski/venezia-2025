@@ -1,16 +1,16 @@
-import type { DimensionalSource, Point } from "../viewport/viewport.types";
+import type { LayoutBounds, Point } from "../viewport/viewport.types";
 
 
 
 export class CoordinateProjector {
-	public source = $state<DimensionalSource>();
+	public source = $state<LayoutBounds>();
 	public virtualResolution = $state(1000);
 
 	public scaleX = $derived((this.source?.width ?? 0) / (this.virtualResolution || 1 ));
 
 	public scaleY = $derived((this.source?.height ?? 0) / (this.virtualResolution || 1));
 
-	constructor(source: DimensionalSource, virtualResolution: number = 1000) {
+	constructor(source: LayoutBounds, virtualResolution: number = 1000) {
 		this.source = source;
 		this.virtualResolution = virtualResolution
 	}
