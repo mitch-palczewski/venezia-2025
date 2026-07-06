@@ -3,7 +3,7 @@
 	import { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
 	import { useViewportProjector } from '$lib/core/projector/projector.context.svelte';
 	import { AspectStage, AspectStageModel, ProjectedFrameModel } from '$lib/features';
-	import ElementFrame from '$lib/features/element-frame/Frame.svelte';
+	import Frame from '$lib/features/frame/Frame.svelte';
 
 	const viewport = useViewport();
 	const vpProjector = useViewportProjector();
@@ -29,7 +29,6 @@
 </script>
 
 <AspectStage model={aspectStage} class="bg-slate-500" clipContent={false}>
-	<ElementFrame projectorModel={element} class="bg-blue-500 ">hello world</ElementFrame>
-
-	<ElementFrame projectorModel={element2} class="bg-red-500 ">hello world2</ElementFrame>
+	<Frame projectorModel={element} class="bg-blue-500 ">hello world</Frame>
+	<Frame projectorModel={element2} class="bg-red-500 ">hello world2</Frame>
 </AspectStage>

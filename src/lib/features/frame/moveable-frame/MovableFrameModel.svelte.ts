@@ -1,4 +1,4 @@
-export interface MovableElementFrameConfig {
+export interface MovableFrameConfig {
 	x: number;
 	y: number;
 	zIndex?: number;
@@ -8,7 +8,7 @@ export interface MovableElementFrameConfig {
     showTransformGizmo?: boolean;
 }
 
-export class MovableElementFrameModel {
+export class MovableFrameModel {
 	public x = $state(0);
 	public y = $state(0);
 	public zIndex = $state(1);
@@ -17,7 +17,7 @@ export class MovableElementFrameModel {
 	public draggable = $state(true);
 	public showTransformGizmo = $state(true)
 
-	constructor(config: MovableElementFrameConfig) {
+	constructor(config: MovableFrameConfig) {
 		this.x = config.x;
 		this.y = config.y;
 		this.zIndex = config.zIndex ?? 1;

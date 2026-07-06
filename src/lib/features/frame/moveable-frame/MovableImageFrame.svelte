@@ -24,12 +24,12 @@
 -->
 
 <script lang="ts">
-	import type { MovableElementFrameModel } from './MovableFrameModel.svelte';
+	import type { MovableFrameModel } from './MovableFrameModel.svelte';
 	import MovableElement from './MovableFrame.svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
-		movableElement: MovableElementFrameModel;
+		movableElement: MovableFrameModel;
 		src: string;
 		alt?: string;
 		togglableTransformGizmo?: boolean;

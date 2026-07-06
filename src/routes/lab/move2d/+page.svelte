@@ -4,9 +4,9 @@
 	import AspectStage from '$lib/features/stages/aspect-stage/AspectStage.svelte';
 	import { AspectStageModel } from '$lib/features/stages/aspect-stage/aspectStageModel.svelte';
 	import { CanvasScaler, type ScalerConfig } from '$lib/core/viewport/canvasScaler.svelte';
-	import ScalerStage from '$lib/features/stages/ScalerStage.svelte';
+	import ScalerStage from '$lib/features/stages/scaler-stage/ScalerStage.svelte';
 	import { useViewport } from '$lib/core';
-	import { MovableElementFrame, MovableElementFrameModel } from '$lib/features';
+	import { MovableFrame ,  MovableFrameModel } from '$lib/features';
 
 	const viewport = useViewport();
 	const stage = new AspectStageModel(viewport, 0.04);
@@ -16,14 +16,14 @@
 	}
 	const canvasScaler = new CanvasScaler(viewport,scalorConfig);
 
-	const testContainer = new MovableElementFrameModel({
+	const testContainer = new MovableFrameModel({
 		x: 200,
 		y: 200,
 		width: 300,
 		height: 200,
 		zIndex: 10,
 	});
-	const testContainer2 = new MovableElementFrameModel({
+	const testContainer2 = new MovableFrameModel({
 		x: 59,
 		y: 446,
 		width: 300,
@@ -56,7 +56,7 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 
 		<SpinningIbex />
 
-		<MovableElementFrame
+		<MovableFrame
 			movableElementFrameModel={testContainer}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
@@ -88,13 +88,13 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 					{Math.round(stage.width)}px × {Math.round(stage.height)}px
 				</div>
 				<div>
-					<span class="text-slate-400">Stage Offset:</span> X: {Math.round(stage.x)}px | Y: {Math.round(
-						stage.y
+					<span class="text-slate-400">Stage Offset:</span> X: {Math.round(stage.offsetX!)}px | Y: {Math.round(
+						stage.offsetY!
 					)}px
 				</div>
 			</div>
-		</MovableElementFrame>
-		<MovableElementFrame
+		</MovableFrame>
+		<MovableFrame
 			movableElementFrameModel={testContainer2}
 			onSelect={() => {
 				console.log('Container body or axis arrow was clicked!');
@@ -120,6 +120,6 @@ const gridCells = Array.from({ length: 400 }, (_, i) => i);
 					</div>
 				</div>
 			</div>
-		</MovableElementFrame>
+		</MovableFrame>
 	</ScalerStage>
 </div>

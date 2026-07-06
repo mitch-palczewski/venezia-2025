@@ -1,8 +1,7 @@
 <script lang="ts">
     import { useViewport } from "$lib/core";
     import { CoordinateProjector } from "$lib/core/projector/coordinateProjector.svelte";
-	import { MovableElementFrame, MovableElementFrameModel, ProjectedFrameModel } from "$lib/features";
-    import ProjectedElement from "$lib/features/element-frame/projected-element-frame/ProjectedFrame.svelte";
+	import { MovableFrame, MovableFrameModel, ProjectedFrame, ProjectedFrameModel } from "$lib/features";
     
 
 
@@ -23,7 +22,7 @@
 
     // 4. TEST MOVABLE ELEMENT: Instantiate with virtual coordinate boundaries (e.g. 0 to 1000)
     // Placed at virtual x: 500, y: 500 with a virtual box size of 200x150 units
-    let testMovable = new MovableElementFrameModel({
+    let testMovable = new MovableFrameModel({
         x: 500,
         y: 500,
         width: 200,
@@ -106,7 +105,7 @@
         {/each}
     </div>
 
-    <ProjectedElement model={targetElement} class="z-40 pointer-events-none will-change-transform">
+    <ProjectedFrame model={targetElement} class="z-40 pointer-events-none will-change-transform">
         <div class="relative flex items-center justify-center">
             <div class="absolute h-8 w-8 rounded-full border-2 border-indigo-500 animate-ping opacity-40"></div>
             <div class="absolute h-4 w-4 rounded-full border border-indigo-400 bg-indigo-500/30 backdrop-blur-xs shadow-lg shadow-indigo-500/50"></div>
@@ -116,9 +115,9 @@
                 LOCKED @ ({targetElement.x}, {targetElement.y})
             </div>
         </div>
-    </ProjectedElement>
+    </ProjectedFrame>
 
-    <MovableElementFrame movableElementFrameModel={testMovable} {projector} class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between">
+    <MovableFrame movableElementFrameModel={testMovable} {projector} class="z-30 bg-slate-800/90 border border-slate-700 rounded-lg p-4 shadow-xl flex flex-col justify-between">
         <div class="pointer-events-none">
             <h3 class="text-xs font-bold text-slate-300 uppercase tracking-wider">Virtual Node</h3>
             <p class="text-[11px] font-mono text-slate-400 mt-1">
@@ -128,6 +127,6 @@
         <div class="text-[10px] bg-slate-900/50 rounded p-1 text-slate-400 font-mono text-center pointer-events-none select-none">
             Drag Me Around
         </div>
-    </MovableElementFrame>
+    </MovableFrame>
 
 </main>
