@@ -4,7 +4,7 @@
 	import { MovableElementFrameModel } from "$lib/features";
 	import MovableElementFrame from "$lib/features/element-frame/moveable-element-frame/MovableElementFrame.svelte";
 
-    import { ProjectedElementFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";
+    import { ProjectedFrameModel } from "$lib/features/element-frame/projected-element-frame/projectedElementFrameModel.svelte";
     
     // Brand new refactored bridge component to test
 
@@ -18,12 +18,12 @@
 
     // 3. TARGETING STATE (using your new custom CanvasElement layer)
     let targetElement = $derived.by(() => {
-        return new ProjectedElementFrameModel({
+        return new ProjectedFrameModel({
             x: 250,
             y: 250,
             width: 0,
             height: 0,
-            projectDimensions: false,
+            projectWidthHeight: false,
             anchor: 'C'
         }, projector);
     });
@@ -54,7 +54,7 @@
     // Helper to snap target to the nearest cell when clicking on the grid
     function handleGridClick() {
         // Mutate target positional coordinate states reactively
-        const mockModel = new ProjectedElementFrameModel({
+        const mockModel = new ProjectedFrameModel({
             x: Math.round(virtualPos.x),
             y: Math.round(virtualPos.y),
             width: 0,

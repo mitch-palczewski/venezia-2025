@@ -1,11 +1,11 @@
 <script lang="ts">
 	import type { HTMLAttributes } from 'svelte/elements';
-	import type { ProjectedElementFrameModel } from './projected-element-frame/projectedElementFrameModel.svelte';
+	import { ProjectedFrameModel } from './projected-element-frame/projectedElementFrameModel.svelte';
 	import ProjectedElement from './projected-element-frame/ProjectedElementFrame.svelte';
 	import { getContext } from 'svelte';
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
-		projectorModel?: ProjectedElementFrameModel;
+		projectorModel?: ProjectedFrameModel;
 	}
 
 	let {

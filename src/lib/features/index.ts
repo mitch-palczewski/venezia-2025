@@ -19,4 +19,4 @@ export {MovableElementFrame}
 export {MovableElementFrameModel} from './element-frame/moveable-element-frame/MovableElementFrameModel.svelte'
 
 export {ProjectedElementFrame}
-export {ProjectedElementFrameModel} from './element-frame/projected-element-frame/projectedElementFrameModel.svelte'
+export {ProjectedFrameModel as ProjectedElementFrameModel} from './element-frame/projected-element-frame/projectedElementFrameModel.svelte'

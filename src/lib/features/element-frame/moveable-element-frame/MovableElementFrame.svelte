@@ -28,7 +28,7 @@
 	import type { MovableElementFrameModel } from './MovableElementFrameModel.svelte';
 	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
 	import type { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
-	import { ProjectedElementFrameModel } from '../projected-element-frame/projectedElementFrameModel.svelte';
+	import { ProjectedFrameModel } from '../projected-element-frame/projectedElementFrameModel.svelte';
 	import ElementFrame from '../ElementFrame.svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
 
@@ -61,12 +61,12 @@
 
 	const projectorModel = $derived.by(() => {
 		if (projector)
-			return new ProjectedElementFrameModel(
+			return new ProjectedFrameModel(
 				{
 					x: movableElement.x,
 					y: movableElement.y,
-					width: movableElement.width,
-					height: movableElement.height,
+					pixelWidth: movableElement.width,
+					pixelHeight: movableElement.height,
 					zIndex: movableElement.zIndex
 				},
 				projector
