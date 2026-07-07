@@ -1,34 +1,34 @@
 import type { LayoutBounds, Point } from "../viewport/viewport.types";
 
-
-
 export class CoordinateProjector {
 	public source = $state<LayoutBounds>();
 	public virtualResolution = $state(1000);
 
 	public scaleX = $derived((this.source?.width ?? 0) / (this.virtualResolution || 1 ));
-
 	public scaleY = $derived((this.source?.height ?? 0) / (this.virtualResolution || 1));
+
+	public scrollX = $derived(this.source?.scrollX ?? 0)
+	public scrollY = $derived(this.source?.scrollY ?? 0)
 
 	constructor(source: LayoutBounds, virtualResolution: number = 1000) {
 		this.source = source;
 		this.virtualResolution = virtualResolution
 	}
 
-	public toVirtual(point: Point, scroll: Point = { x: 0, y: 0 }): Point {
+	public toVirtual(point: Point): Point {
 		if (this.scaleX === 0 || this.scaleY === 0) {
-			return { x: scroll.x, y: scroll.y };
+			return { x: this.scrollX, y: this.scrollY };
 		}
 		return {
-			x: point.x / this.scaleX + scroll.x,
-			y: point.y / this.scaleY + scroll.y
+			x: point.x / this.scaleX + this.scrollX,
+			y: point.y / this.scaleY + this.scrollY
 		};
 	}
 
-	public toViewport(point: Point, scroll: Point = { x: 0, y: 0 }): Point {
+	public toViewport(point: Point): Point {
 		return {
-			x: (point.x - scroll.x) * this.scaleX,
-			y: (point.y - scroll.y) * this.scaleY
+			x: (point.x - this.scrollX) * this.scaleX,
+			y: (point.y - this.scaleY) * this.scaleY
 		};
 	}
 }

@@ -10,6 +10,8 @@ export interface LayoutBounds {
     height: number;
     offsetX?: number;
     offsetY?: number;
+    scrollX?: number;
+    scrollY?: number;
 }
 
 // --- Viewport Ratios ---
