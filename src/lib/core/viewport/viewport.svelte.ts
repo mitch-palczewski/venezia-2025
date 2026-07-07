@@ -21,6 +21,8 @@ import {
 export class Viewport {
 	#width = $state(0);
 	#height = $state(0);
+	#scrollX = $state(0);
+    #scrollY = $state(0);
 	#ticking = false;
 	#targetRatios: readonly AspectRatio[] = COMMON_RATIOS;
 	#closestRatioMatch = $derived(
@@ -82,7 +84,9 @@ export class Viewport {
 		}
 		if (typeof window !== 'undefined') {
 			this.syncDimensions();
+			this.syncScroll();
 			window.addEventListener('resize', this.handleResize);
+			window.addEventListener('scroll', this.handleScroll, { passive: true });
 		}
 	}
 
@@ -90,6 +94,21 @@ export class Viewport {
 		this.#width = window.innerWidth;
 		this.#height = window.innerHeight;
 	}
+
+	private syncScroll() {
+        this.#scrollX = window.scrollX;
+        this.#scrollY = window.scrollY;
+    }
+
+	private handleScroll = () => {
+        if (!this.#ticking) {
+            this.#ticking = true;
+            requestAnimationFrame(() => {
+                this.syncScroll();
+                this.#ticking = false;
+            });
+        }
+    };
 
 	private handleResize = () => {
 		if (!this.#ticking) {
@@ -111,10 +130,17 @@ export class Viewport {
 		return this.#height;
 	}
 
+	/** Reactive getter for the browser's current horizontal scroll offset in pixels. */
+    get scrollX() { return this.#scrollX; }
+
+    /** Reactive getter for the browser's current vertical scroll offset in pixels. */
+    get scrollY() { return this.#scrollY; }
+
 	/** Cleans up browser event listener structures to safely prevent memory leaks. */
 	destroy() {
 		if (typeof window !== 'undefined') {
 			window.removeEventListener('resize', this.handleResize);
+			window.removeEventListener('scroll', this.handleScroll);
 		}
 	}
 }
