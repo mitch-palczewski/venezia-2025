@@ -12,7 +12,7 @@
     let {
         model: model,
         clipContent = false, 
-        class: className = 'bg-slate-900 border border-slate-800 shadow-2xl',
+        class: className = '',
         children
     }: Props = $props();
 </script>
