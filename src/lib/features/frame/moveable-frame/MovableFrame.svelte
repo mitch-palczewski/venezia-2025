@@ -6,18 +6,21 @@
 @Props 
 
 ```svelte
-		movableElement: MovableElementModel;
-		scaleOverride?: number;
+		position: Point
+		width?: number
+		height?: number
+		draggable?: boolean
+		showTransformGizmo?: boolean;
+		scaleOverride?: number | undefined;
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
-		class?: string;
-		children?: Snippet;
+		projector?: CoordinateProjector;
 ```
 
 @example
 
 ```svelte
-<MovableElement {movableElement}>
+<MovableElement position = {{x:100, y:100}}>
     <div>Your custom content, tool, or graphic goes here!</div>
 </MovableElement>
 ```
@@ -25,62 +28,115 @@
 <script lang="ts">
 	import { getContext, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
-	import type { MovableFrameModel } from './MovableFrameModel.svelte';
+	import { MovableFrameModel } from './MovableFrameModel.svelte';
 	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
 	import type { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
 	import { ProjectedFrameModel } from '../projected-frame/projectedFrameModel.svelte';
-	import ElementFrame from '../Frame.svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
+	import type { Point } from '$lib/core/viewport/viewport.types';
+	import { safeGetProjectorContext } from '$lib/core/projector/projector.context.svelte';
+	import ProjectedFrame from '../projected-frame/ProjectedFrame.svelte';
+	import type { CompassAnchor } from '../util/anchor';
 
 	interface Props extends HTMLAttributes<HTMLDivElement> {
-		movableElementFrameModel: MovableFrameModel;
+		position: Point;
+		width?: number;
+		height?: number;
+		anchor?: CompassAnchor;
+		draggable?: boolean;
+		showTransformGizmo?: boolean;
 		scaleOverride?: number | undefined;
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		projector?: CoordinateProjector;
-	};
+	}
 
 	let {
-		movableElementFrameModel: movableElement,
+		position,
+		width,
+		height,
+		anchor = 'C',
+		draggable = true,
+		showTransformGizmo = true,
 		scaleOverride,
 		onSelect,
 		togglableTransformGizmo = true,
 		projector,
+		style = '',
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
 		children,
 		...restProps
 	}: Props = $props();
 
+	const model = new MovableFrameModel({
+		x: position.x,
+		y: position.y,
+		zIndex: position.z,
+		width: width,
+		height: height,
+		draggable: draggable,
+		showTransformGizmo: showTransformGizmo
+	});
+
+	const coordinateProjector = projector ?? safeGetProjectorContext() ?? null;
+	const stageContext = getContext<{ current: number }>('canvas-stage-scale');
+
 	let startPointer = { x: 0, y: 0 };
 	let startBox = { x: 0, y: 0 };
 	let totalMovement = 0;
 
-	const stageContext = getContext<{ current: number }>('canvas-stage-scale');
-	const activeScaleX = $derived(projector?.scaleX ?? scaleOverride ?? stageContext?.current ?? 1);
-	const activeScaleY = $derived(projector?.scaleY ?? scaleOverride ?? stageContext?.current ?? 1);
+	const activeScaleX = $derived(
+		coordinateProjector?.scaleX ?? scaleOverride ?? stageContext?.current ?? 1
+	);
+	const activeScaleY = $derived(
+		coordinateProjector?.scaleY ?? scaleOverride ?? stageContext?.current ?? 1
+	);
 
-	const projectorModel = $derived.by(() => {
-		if (projector)
-			return new ProjectedFrameModel(
+	const isContentDriven = $derived(width === undefined || height === undefined);
+
+	const projectorModel = coordinateProjector
+		? new ProjectedFrameModel(
 				{
-					x: movableElement.x,
-					y: movableElement.y,
-					pixelWidth: movableElement.width,
-					pixelHeight: movableElement.height,
-					zIndex: movableElement.zIndex
+					x: model.x,
+					y: model.y,
+					pixelWidth: model.width,
+					pixelHeight: model.height,
+					zIndex: model.zIndex
 				},
-				projector
-			);
+				coordinateProjector
+			)
+		: null;
+
+	// 2. Reactively synchronize the values whenever the user drags or resizes.
+	// This keeps the DOM projection updated without destroying the instance's measured state!
+	$effect(() => {
+		if (projectorModel) {
+			projectorModel.x = model.x;
+			projectorModel.y = model.y;
+			projectorModel.pixelWidth = model.width;
+			projectorModel.pixelHeight = model.height;
+			projectorModel.zIndex = model.zIndex;
+		}
 	});
 
+	const standardFallbackStyle = $derived(
+		`position: absolute; ` +
+			`left: ${model.x}px; ` +
+			`top: ${model.y}px; ` +
+			(typeof model.width === 'number' && model.width > 0 ? `width: ${model.width}px; ` : '') +
+			(typeof model.height === 'number' && model.height > 0 ? `height: ${model.height}px; ` : '') +
+			`z-index: ${model.zIndex}; ` +
+			`${style}`
+	);
+
 	function handlePointerDown(event: PointerEvent) {
-		if (!movableElement.draggable) return;
+		if (!model.draggable) return;
 		if (event.button !== 0) return;
 		if (onSelect) {
 			onSelect();
 		}
 		startPointer = { x: event.clientX, y: event.clientY };
-		startBox = { x: movableElement.x, y: movableElement.y };
+		startBox = { x: model.x, y: model.y };
 		totalMovement = 0;
 
 		window.addEventListener('pointermove', handlePointerMove);
@@ -96,16 +152,26 @@
 		const designDeltaX = physicalDeltaX / activeScaleX;
 		const designDeltaY = physicalDeltaY / activeScaleY;
 
-		movableElement.x = startBox.x + designDeltaX;
-		movableElement.y = startBox.y + designDeltaY;
+		model.x = startBox.x + designDeltaX;
+		model.y = startBox.y + designDeltaY;
 	}
 
 	function handlePointerUp() {
 		window.removeEventListener('pointermove', handlePointerMove);
 		window.removeEventListener('pointerup', handlePointerUp);
 		if (totalMovement < 4 && togglableTransformGizmo) {
-			movableElement.showTransformGizmo = !movableElement.showTransformGizmo;
+			model.showTransformGizmo = !model.showTransformGizmo;
 		}
+	}
+
+	function fallbackMeasure(node: HTMLElement) {
+		if (!isContentDriven || coordinateProjector) return;
+
+		requestAnimationFrame(() => {
+			const rect = node.getBoundingClientRect();
+			if (rect.width > 0) model.width = rect.width;
+			if (rect.height > 0) model.height = rect.height;
+		});
 	}
 
 	onDestroy(() => {
@@ -117,16 +183,16 @@
 </script>
 
 {#snippet innerContent()}
-	{#if movableElement.showTransformGizmo}
+	{#if model.showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
 				const scaleDeltaX = delta / activeScaleX;
 				const scaleDeltaY = delta / activeScaleY;
 				if (side === 'left' || side === 'right') {
-					movableElement.x = movableElement.x + scaleDeltaX;
+					model.x = model.x + scaleDeltaX;
 				}
 				if (side === 'top' || side === 'bottom') {
-					movableElement.y = movableElement.y + scaleDeltaY;
+					model.y = model.y + scaleDeltaY;
 				}
 			}}
 		/>
@@ -136,14 +202,25 @@
 	</div>
 {/snippet}
 
-<ElementFrame
-	{projectorModel}
-	class="touch-none select-none {movableElement.draggable
-		? 'cursor-move'
-		: 'cursor-default'} {className}"
-	onpointerdown={handlePointerDown}
-	ondragstart={(e) => e.preventDefault()}
-	{...restProps}
->
-	{@render innerContent()}
-</ElementFrame>
+{#if coordinateProjector && projectorModel}
+	<ProjectedFrame
+		model={projectorModel}
+		class="touch-none select-none {model.draggable ? 'cursor-move' : 'cursor-default'} {className}"
+		onpointerdown={handlePointerDown}
+		ondragstart={(e) => e.preventDefault()}
+		{...restProps}
+	>
+		{@render innerContent()}
+	</ProjectedFrame>
+{:else}
+	<div
+		use:fallbackMeasure
+		class="touch-none select-none {model.draggable ? 'cursor-move' : 'cursor-default'} {className}"
+		onpointerdown={handlePointerDown}
+		ondragstart={(e) => e.preventDefault()}
+		style={standardFallbackStyle}
+		{...restProps}
+	>
+		{@render innerContent()}
+	</div>
+{/if}

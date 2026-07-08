@@ -1,4 +1,4 @@
-import { getContext, setContext } from 'svelte';
+import { createContext, getContext, setContext } from 'svelte';
 import { CoordinateProjector } from './coordinateProjector.svelte';
 import type { Viewport } from '../viewport/viewport.svelte';
 
@@ -36,4 +36,21 @@ export function initViewportProjectorContext(viewport: Viewport): CoordinateProj
     const projector = new CoordinateProjector(viewport)
     setViewportProjectorContext(projector)
     return projector
+}
+
+/**
+ * Allows for the get and set of ProjectorContext
+ */
+export const [getProjectorContext, setProjectorContext] = createContext<CoordinateProjector>();
+
+/**
+ * 
+ * @returns CoordinateProjector or null
+ */
+export function safeGetProjectorContext() {
+    try {
+        return getProjectorContext();
+    } catch {
+        return null; // Suppresses "missing_context" if called outside a projector tree
+    }
 }

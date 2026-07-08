@@ -28,7 +28,7 @@ export class CoordinateProjector {
 	public toViewport(point: Point): Point {
 		return {
 			x: (point.x - this.scrollX) * this.scaleX,
-			y: (point.y - this.scaleY) * this.scaleY
+			y: (point.y - this.scrollY) * this.scaleY
 		};
 	}
 }

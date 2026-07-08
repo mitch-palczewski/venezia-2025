@@ -8,13 +8,14 @@ export interface BaseFrameConfig {
 }
 
 type SizingX = 
-    | { projectedWidth: number; pixelWidth?: never }
-    | { pixelWidth: number; projectedWidth?: never }
-    | { projectedWidth?: never; pixelWidth?: never };
+    | { projectedWidth?: number; pixelWidth?: never }
+    | { pixelWidth?: number; projectedWidth?: never }
+    | { projectedWidth?: number; pixelWidth?: never }
+
 
 type SizingY = 
-    | { projectedHeight: number; pixelHeight?: never }
-    | { pixelHeight: number; projectedHeight?: never }
+    | { projectedHeight?: number; pixelHeight?: never }
+    | { pixelHeight?: number; projectedHeight?: never }
     | { projectedHeight?: never; pixelHeight?: never };
 
 export type ProjectedElementFrameConfig = BaseFrameConfig & SizingX & SizingY;

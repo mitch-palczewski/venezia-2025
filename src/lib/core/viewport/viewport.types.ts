@@ -1,8 +1,16 @@
 // --- Projection Util --- 
 
+/**
+ * @member x : number
+ * @member y : number
+ * @member z ?: number | undefined
+ */
 export interface Point {
-	x: number;
-	y: number;
+    x: number;
+    
+    y: number;
+
+    z?: number;
 }
 
 export interface LayoutBounds {

@@ -2,11 +2,6 @@
 	import { MovableFrameModel, type MovableFrameConfig } from "../frame/moveable-frame/MovableFrameModel.svelte";
 	import MovableImageFrame from "../frame/moveable-frame/MovableImageFrame.svelte";
 
-
-
-	
-
-
 	const modelConfig: MovableFrameConfig = {
 		x: 100,
 		y: 100
