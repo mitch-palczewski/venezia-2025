@@ -2,13 +2,14 @@
     import MovableFrame from './MovableFrame.svelte';
     import type { HTMLAttributes } from 'svelte/elements';
     import type { Point } from '$lib/core/viewport/viewport.types';
+	import type { CompassAnchor } from '../util/anchor';
 
     interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'draggable'> {
         // Core structural properties to replace the old model wrapper requirement
         position: Point;
         width?: number;
         height?: number;
-        
+        anchor?: CompassAnchor;
         src: string;
         alt?: string;
         draggable?: boolean;
@@ -22,6 +23,7 @@
         width = $bindable(),
         height = $bindable(),
         src,
+        anchor = 'NW',
         alt = '',
         draggable = true,
         togglableTransformGizmo = true,
@@ -48,10 +50,11 @@
 </script>
 
 <MovableFrame
-	{position}
-	{width}
-	{height}
+    {position}
+    {width}
+    {height}
     {draggable}
+    {anchor}
     {togglableTransformGizmo}
     {onSelect}
     class={className}
@@ -61,11 +64,11 @@
         {src}
         {alt}
         onload={handleImageLoad}
-        class="pointer-events-none absolute inset-0 h-full w-full object-cover select-none"
+        class="pointer-events-none relative block w-full h-full object-cover select-none"
     />
 
     {#if children}
-        <div class="pointer-events-none absolute inset-0 h-full w-full">
+        <div class=" absolute inset-0 h-full w-full">
             {@render children()}
         </div>
     {/if}

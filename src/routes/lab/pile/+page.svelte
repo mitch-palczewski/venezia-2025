@@ -3,6 +3,7 @@
 	import { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
 	import { useViewportProjector } from '$lib/core/projector/projector.context.svelte';
 	import { AspectStage, AspectStageModel, MovableFrame } from '$lib/features';
+	import MovableImageFrame from '$lib/features/frame/moveable-frame/MovableImageFrame.svelte';
 	import BoxView from '$lib/features/pile-home/BoxView.svelte';
 	import Grid from '$lib/features/pile-home/Grid.svelte';
 	import ProjectedStage from '$lib/features/stages/projected-stage/ProjectedStage.svelte';
@@ -16,10 +17,41 @@
 
 <AspectStage model={aspectStage}>
 	<ProjectedStage projector={aspectProjector}>
-		<MovableFrame position={{ x: 20, y: 110 }}  anchor="NW" width={300}>
-			<img src="/media/Cover_v4.1.png" alt="cover" />
+		<MovableImageFrame
+			position={{ x: 600, y: 600 }}
+			anchor="SW"
+			width={150}
+			src={'/gifs/Ibix_01_preview2.gif'}
+		></MovableImageFrame>
+		<MovableImageFrame
+			src="/media/Cover_v4.1.png"
+			alt="cover"
+			position={{ x: 60, y: 110 }}
+			width={300}
+		>
+			<div class="flex h-full w-full items-center justify-center pt-30">
+				<a
+					href="/3d/pile"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="pointer-events-auto inline-flex cursor-pointer items-center justify-center border-3 border-amber-600 bg-pink-800 px-5 py-3 text-4xl font-semibold text-white shadow-md transition-colors duration-200 hover:bg-neutral-700"
+				>
+					Enter Pile 3D
+				</a>
+			</div>
+		</MovableImageFrame>
+		<MovableFrame
+			position={{ x: 5, y: -55 }}
+			showTransformGizmo={false}
+			anchor="NW"
+			class="text-7xl text-slate-800"
+			>Pile Pile Pile
 		</MovableFrame>
-		<MovableFrame position={{ x: 0, y: -50 }} showTransformGizmo={false} anchor="NW" class="text-7xl text-amber-300"
+		<MovableFrame
+			position={{ x: 0, y: -50 }}
+			showTransformGizmo={false}
+			anchor="NW"
+			class="text-7xl text-amber-300"
 			>Pile Pile Pile
 		</MovableFrame>
 	</ProjectedStage>

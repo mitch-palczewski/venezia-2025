@@ -55,7 +55,7 @@
 		position,
 		width,
 		height,
-		anchor = 'C',
+		anchor = 'NW',
 		draggable = true,
 		showTransformGizmo = true,
 		scaleOverride,
