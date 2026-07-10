@@ -3,6 +3,7 @@
     import type { HTMLAttributes } from 'svelte/elements';
     import type { Point } from '$lib/core/viewport/viewport.types';
 	import type { CompassAnchor } from '../util/anchor';
+	import type { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
 
     interface Props extends Omit<HTMLAttributes<HTMLDivElement>, 'draggable'> {
         // Core structural properties to replace the old model wrapper requirement
@@ -14,6 +15,8 @@
         alt?: string;
         draggable?: boolean;
         togglableTransformGizmo?: boolean;
+        showTransformGizmo?: boolean;
+        projector?: CoordinateProjector
         onSelect?: () => void;
         fixedRatio?: boolean;
     }
@@ -26,7 +29,9 @@
         anchor = 'NW',
         alt = '',
         draggable = true,
+        projector,
         togglableTransformGizmo = true,
+        showTransformGizmo,
         onSelect,
         class: className = '',
         children,
@@ -56,6 +61,8 @@
     {draggable}
     {anchor}
     {togglableTransformGizmo}
+    {showTransformGizmo}
+    {projector}
     {onSelect}
     class={className}
     {...restProps}

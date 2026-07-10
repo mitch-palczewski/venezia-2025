@@ -20,67 +20,121 @@
 		position={{ x: 854, y: 30 }}
 		showTransformGizmo={false}
 		anchor="NW"
-		class="text-7xl text-cyan-800"
+		class="text-4xl text-cyan-800 sm:text-7xl"
 		projector={viewportProjector}
-		>Pile Pile Pile
+		>pile pile pile
 	</MovableFrame>
 	<MovableFrame
 		position={{ x: 863, y: 455 }}
 		showTransformGizmo={false}
 		anchor="NW"
-		class="text-7xl text-cyan-950"
+		class="text-4xl text-cyan-950 sm:text-7xl"
 		projector={viewportProjector}
-		>Pile Pile Pile
+		>POUR OUT OF THE ABYSS
 	</MovableFrame>
 	<AspectStage model={aspectStage}>
 		<ProjectedStage projector={aspectProjector}>
 			<MovableImageFrame
-				position={{ x: 600, y: 600 }}
+				position={{ x: 600, y: 450 }}
 				anchor="SW"
-				width={200 * canvasScaler.scale}
+				width={250 * canvasScaler.scale}
 				src={'/gifs/Ibix_01_preview2.gif'}
 			></MovableImageFrame>
 			<MovableImageFrame
-				src="/media/Cover_v4.1.png"
-				alt="cover"
-				position={{ x: 40, y: -10 }}
-				width={400 * canvasScaler.scale}
-				class='border-10 border-b-cyan-600 border-t-cyan-800 border-l-cyan-700 border-r-cyan-700 p-2'
+				position={{ x: 190, y: 800 }}
+				anchor="SW"
+				showTransformGizmo={false}
+				width={80 * canvasScaler.scale}
+				src={'/media/VEN_Stock_01_preview1.png'}
+			></MovableImageFrame>
+
+			<MovableFrame
+				position={{ x: 360, y: 80 }}
+				showTransformGizmo={false}
+				anchor="NW"
+				class=""
+				projector={viewportProjector}
 			>
-				<div class="flex h-full w-full items-center justify-center pt-30 ml-20 mt-20">
-					<a
-						href="/3d/pile"
-						target="_blank"
-						rel="noopener noreferrer"
-						class="shadow-2xl shadow-blue-950 pointer-events-auto inline-flex cursor-pointer items-center justify-center border-3 border-stone-400 bg-pink-800/90 p-5 text-lg font-semibold text-white transition-colors duration-200 hover:bg-neutral-700 sm:text-4xl"
-					>
-						Enter Pile 3D
-					</a>
+				<div class="border-5 border-cyan-900 bg-white">
+					<div class="text-xl text-cyan-950 sm:text-4xl">POUR OUT OF THE ABYSS</div>
+					<div>
+						Pilepilepile is a projected, participatory web 3D open-world, where visitors are invited
+						to wander and edit a digital community garden, building spaces and reconstituting unique
+						stories from the artists’ growing bootleg collection, an archive of accumulated
+						iconography and assets. The journey is unconstrained by scale and weight, yet its
+						objects become familiar through available actions. A personal map evolves out of
+						floating translations.
+					</div>
 				</div>
+			</MovableFrame>
+			<MovableImageFrame
+				src="/gifs/pileflythrough.gif"
+				alt="cover"
+				position={{ x: -10, y: -10 }}
+				width={500 * canvasScaler.scale}
+				showTransformGizmo={false}
+				class="border-10 border-t-cyan-950 border-r-cyan-800 border-b-cyan-600 border-l-cyan-800 hover:border-cyan-300"
+			>
+				<a href="/3d/pile" target="_blank" rel="noopener noreferrer">
+					<img src="/gifs/portal.gif" alt="" class="h-full w-full object-contain opacity-30" />
+					<div class="absolute top-0 h-full w-full p-5 text-4xl text-white">
+						Enter <br /> PILE PILE PILE
+					</div>
+				</a>
 			</MovableImageFrame>
+			<MovableImageFrame
+				position={{ x: 400, y: 300 }}
+				anchor="SW"
+				showTransformGizmo={false}
+				width={100 * canvasScaler.scale}
+				src={'/media/VEN_Stock_02_preview1.png'}
+			></MovableImageFrame>
 		</ProjectedStage>
-		<Grid></Grid>
 	</AspectStage>
 
+	<MovableFrame
+		position={{ x: 300, y: 1800 }}
+		showTransformGizmo={false}
+		anchor="NW"
+		class=""
+		projector={viewportProjector}
+	>
+		<div class="border-5 border-cyan-900 bg-white mr-3">
+			<div class="text-xl text-cyan-950 sm:text-4xl">Prints</div>
+			<div>
+				The digital print series recasts the Pile objects, collapsed into the forced perspective of architecture as still images.  They invoke the involution and compression felt when walking the innards of Venice, where memory and movement become tightly woven.
+			</div>
+		</div>
+	</MovableFrame>
+
+	{#each Array.from({ length: 9 }) as _, i}
+		<MovableImageFrame
+			position={{
+				x: Math.floor(Math.random() * 850 - 90),
+				y: Math.floor(Math.random() * 1500) + 1200
+			}}
+			anchor="SW"
+			projector={viewportProjector}
+			showTransformGizmo={false}
+			width={400 * canvasScaler.scale}
+			src={`/images/prints/${i + 1}_LOD2.avif`}
+			class="border-3 sm:border-15 border-black/50"
+		></MovableImageFrame>
+	{/each}
 
 	<MovableFrame
-		position={{ x: 860, y: 200}}
+		position={{ x: 860, y: 200 }}
 		projector={viewportProjector}
 		showTransformGizmo={false}
 		anchor="NW"
-		class="text-7xl text-cyan-300"
-		>Pile Pile Pile
+		class="text-4xl text-cyan-300 sm:text-7xl"
+		>PILE PILE PILE
 	</MovableFrame>
 
-	<BoxView 
-	resolution={200} 
-	backImg={'/media/veniceBW.JPG'}
-	bottomImg={'/media/waterBW2.JPG'}
-	/>
-	<div class="w-screen h-5 bg-neutral-700"></div>
-	<BoxView 
-	resolution={200} 
-	backImg={'/media/veniceBW.JPG'}
-	bottomImg={'/media/waterBW2.JPG'}
-	/>
+	<BoxView resolution={200} backImg={'/media/veniceBW.JPG'} bottomImg={'/media/waterBW2.JPG'} />
+	<div class=" h-[200%] bg-cyan-950" style={`background-image: url('/media/waterBW2.JPG');`}></div>
+	<div
+		class=" h-[150%] bg-cyan-950"
+		style={`background-image: url('/media/waterBW-shield-man.JPG');`}
+	></div>
 </div>
