@@ -1,3 +1,5 @@
+
+
 <script lang="ts">
 	import type { CanvasScaler } from '$lib/core/viewport/canvasScaler.svelte';
     import { setContext, type Snippet } from 'svelte';

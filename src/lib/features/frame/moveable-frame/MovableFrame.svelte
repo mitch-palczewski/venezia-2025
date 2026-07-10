@@ -53,8 +53,8 @@
 
 	let {
 		position,
-		width,
-		height,
+		width = $bindable(),
+		height = $bindable(),
 		anchor = 'NW',
 		draggable = true,
 		showTransformGizmo = true,
@@ -68,15 +68,22 @@
 		...restProps
 	}: Props = $props();
 
-	const model = new MovableFrameModel({
-		x: position.x,
-		y: position.y,
-		zIndex: position.z,
-		width: width,
-		height: height,
-		draggable: draggable,
-		showTransformGizmo: showTransformGizmo
-	});
+	let x = $state(position.x);
+    let y = $state(position.y);
+    let z = $state(position.z);
+
+
+    $effect(() => {
+        x = position.x;
+        y = position.y;
+        z = position.z;
+    });
+
+    $effect(() => {
+        if (position.x !== x || position.y !== y || position.z !== z) {
+            position = { x, y, z };
+        }
+    });
 
 	const coordinateProjector = projector ?? safeGetProjectorContext() ?? null;
 	const stageContext = getContext<{ current: number }>('canvas-stage-scale');
@@ -86,10 +93,10 @@
 	let totalMovement = 0;
 
 	const activeScaleX = $derived(
-		coordinateProjector?.scaleX ?? scaleOverride ?? stageContext?.current ?? 1
+		stageContext?.current ?? coordinateProjector?.scaleX ?? scaleOverride ??  1
 	);
 	const activeScaleY = $derived(
-		coordinateProjector?.scaleY ?? scaleOverride ?? stageContext?.current ?? 1
+		stageContext?.current ?? coordinateProjector?.scaleY ?? scaleOverride ??  1
 	);
 
 	const isContentDriven = $derived(width === undefined || height === undefined);
@@ -97,46 +104,44 @@
 	const projectorModel = coordinateProjector
 		? new ProjectedFrameModel(
 				{
-					x: model.x,
-					y: model.y,
-					pixelWidth: model.width,
-					pixelHeight: model.height,
-					zIndex: model.zIndex
+					x: position.x,
+					y: position.y,
+					pixelWidth: width,
+					pixelHeight: height,
+					zIndex: position.z
 				},
 				coordinateProjector
 			)
 		: null;
 
-	// 2. Reactively synchronize the values whenever the user drags or resizes.
-	// This keeps the DOM projection updated without destroying the instance's measured state!
 	$effect(() => {
 		if (projectorModel) {
-			projectorModel.x = model.x;
-			projectorModel.y = model.y;
-			projectorModel.pixelWidth = model.width;
-			projectorModel.pixelHeight = model.height;
-			projectorModel.zIndex = model.zIndex;
+			projectorModel.x = x;
+			projectorModel.y = y;
+			projectorModel.pixelWidth = width;
+			projectorModel.pixelHeight = height;
+			projectorModel.zIndex = z ?? 1;
 		}
 	});
 
 	const standardFallbackStyle = $derived(
 		`position: absolute; ` +
-			`left: ${model.x}px; ` +
-			`top: ${model.y}px; ` +
-			(typeof model.width === 'number' && model.width > 0 ? `width: ${model.width}px; ` : '') +
-			(typeof model.height === 'number' && model.height > 0 ? `height: ${model.height}px; ` : '') +
-			`z-index: ${model.zIndex}; ` +
+			`left: ${x}px; ` +
+			`top: ${y}px; ` +
+			(typeof width === 'number' && width > 0 ? `width: ${width}px; ` : '') +
+			(typeof height === 'number' && height > 0 ? `height: ${height}px; ` : '') +
+			`z-index: ${z}; ` +
 			`${style}`
 	);
 
 	function handlePointerDown(event: PointerEvent) {
-		if (!model.draggable) return;
+		if (!draggable) return;
 		if (event.button !== 0) return;
 		if (onSelect) {
 			onSelect();
 		}
 		startPointer = { x: event.clientX, y: event.clientY };
-		startBox = { x: model.x, y: model.y };
+		startBox = { x: x, y: y };
 		totalMovement = 0;
 
 		window.addEventListener('pointermove', handlePointerMove);
@@ -152,27 +157,27 @@
 		const designDeltaX = physicalDeltaX / activeScaleX;
 		const designDeltaY = physicalDeltaY / activeScaleY;
 
-		model.x = startBox.x + designDeltaX;
-		model.y = startBox.y + designDeltaY;
+		x = startBox.x + designDeltaX;
+		y = startBox.y + designDeltaY;
 	}
 
 	function handlePointerUp() {
 		window.removeEventListener('pointermove', handlePointerMove);
 		window.removeEventListener('pointerup', handlePointerUp);
 		if (totalMovement < 4 && togglableTransformGizmo) {
-			model.showTransformGizmo = !model.showTransformGizmo;
+			showTransformGizmo = !showTransformGizmo;
 		}
 	}
 
 	function fallbackMeasure(node: HTMLElement) {
-		if (!isContentDriven || coordinateProjector) return;
+        if (!isContentDriven || coordinateProjector) return;
 
-		requestAnimationFrame(() => {
-			const rect = node.getBoundingClientRect();
-			if (rect.width > 0) model.width = rect.width;
-			if (rect.height > 0) model.height = rect.height;
-		});
-	}
+        requestAnimationFrame(() => {
+            const rect = node.getBoundingClientRect();
+            if (rect.width > 0) width = rect.width;
+            if (rect.height > 0) height = rect.height;
+        });
+    }
 
 	onDestroy(() => {
 		if (browser) {
@@ -183,16 +188,16 @@
 </script>
 
 {#snippet innerContent()}
-	{#if model.showTransformGizmo}
+	{#if showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
 				const scaleDeltaX = delta / activeScaleX;
 				const scaleDeltaY = delta / activeScaleY;
 				if (side === 'left' || side === 'right') {
-					model.x = model.x + scaleDeltaX;
+					x = x + scaleDeltaX;
 				}
 				if (side === 'top' || side === 'bottom') {
-					model.y = model.y + scaleDeltaY;
+					y = y + scaleDeltaY;
 				}
 			}}
 		/>
@@ -205,7 +210,7 @@
 {#if coordinateProjector && projectorModel}
 	<ProjectedFrame
 		model={projectorModel}
-		class="touch-none select-none {model.draggable ? 'cursor-move' : 'cursor-default'} {className}"
+		class="touch-none select-none {draggable ? 'cursor-move' : 'cursor-default'} {className}"
 		onpointerdown={handlePointerDown}
 		ondragstart={(e) => e.preventDefault()}
 		{...restProps}
@@ -215,7 +220,7 @@
 {:else}
 	<div
 		use:fallbackMeasure
-		class="touch-none select-none {model.draggable ? 'cursor-move' : 'cursor-default'} {className}"
+		class="touch-none select-none {draggable ? 'cursor-move' : 'cursor-default'} {className}"
 		onpointerdown={handlePointerDown}
 		ondragstart={(e) => e.preventDefault()}
 		style={standardFallbackStyle}
