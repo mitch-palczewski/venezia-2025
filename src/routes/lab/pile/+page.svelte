@@ -16,32 +16,17 @@
 </script>
 
 <div class="fixed inset-0 h-screen w-screen overflow-x-hidden">
-	<MovableFrame
-		position={{ x: 854, y: 30 }}
-		showTransformGizmo={false}
-		anchor="NW"
-		class="text-4xl text-cyan-800 sm:text-7xl"
-		projector={viewportProjector}
-		>pile pile pile
-	</MovableFrame>
-	<MovableFrame
-		position={{ x: 863, y: 455 }}
-		showTransformGizmo={false}
-		anchor="NW"
-		class="text-4xl text-cyan-950 sm:text-7xl"
-		projector={viewportProjector}
-		>POUR OUT OF THE ABYSS
-	</MovableFrame>
+	
 	<AspectStage model={aspectStage}>
 		<ProjectedStage projector={aspectProjector}>
 			<MovableImageFrame
-				position={{ x: 600, y: 450 }}
+				position={{ x: 750, y: 50 }}
 				anchor="SW"
 				width={250 * canvasScaler.scale}
 				src={'/gifs/Ibix_01_preview2.gif'}
 			></MovableImageFrame>
 			<MovableImageFrame
-				position={{ x: 190, y: 800 }}
+				position={{ x: 150, y: 600 }}
 				anchor="SW"
 				showTransformGizmo={false}
 				width={80 * canvasScaler.scale}
@@ -49,7 +34,7 @@
 			></MovableImageFrame>
 
 			<MovableFrame
-				position={{ x: 360, y: 80 }}
+				position={{ x: 360, y: 1010 }}
 				showTransformGizmo={false}
 				anchor="NW"
 				class=""
@@ -70,26 +55,27 @@
 			<MovableImageFrame
 				src="/gifs/pileflythrough.gif"
 				alt="cover"
-				position={{ x: -10, y: -10 }}
-				width={500 * canvasScaler.scale}
+				position={{ x: 320, y: 200 }}
+				width={400 * canvasScaler.scale}
 				showTransformGizmo={false}
-				class="border-10 border-t-cyan-950 border-r-cyan-800 border-b-cyan-600 border-l-cyan-800 hover:border-cyan-300"
+				class="opacity-90 border-10 border-black/50 hover:border-black hover:opacity-100"
 			>
 				<a href="/3d/pile" target="_blank" rel="noopener noreferrer">
-					<img src="/gifs/portal.gif" alt="" class="h-full w-full object-contain opacity-30" />
-					<div class="absolute top-0 h-full w-full p-5 text-4xl text-white">
+					<img src="/gifs/portal.gif" alt="" class="h-full w-full object-contain opacity-20 border-6 border-black/70 rounded" />
+					<div class="absolute top-0 h-full w-full p-5 text-2xl md:text-4xl text-white">
 						Enter <br /> PILE PILE PILE
 					</div>
 				</a>
 			</MovableImageFrame>
 			<MovableImageFrame
-				position={{ x: 400, y: 300 }}
+				position={{ x: 10, y: 200 }}
 				anchor="SW"
 				showTransformGizmo={false}
 				width={100 * canvasScaler.scale}
 				src={'/media/VEN_Stock_02_preview1.png'}
 			></MovableImageFrame>
 		</ProjectedStage>
+		<Grid></Grid>
 	</AspectStage>
 
 	<MovableFrame
@@ -99,10 +85,12 @@
 		class=""
 		projector={viewportProjector}
 	>
-		<div class="border-5 border-cyan-900 bg-white mr-3">
+		<div class="mr-3 border-5 border-cyan-900 bg-white">
 			<div class="text-xl text-cyan-950 sm:text-4xl">Prints</div>
 			<div>
-				The digital print series recasts the Pile objects, collapsed into the forced perspective of architecture as still images.  They invoke the involution and compression felt when walking the innards of Venice, where memory and movement become tightly woven.
+				The digital print series recasts the Pile objects, collapsed into the forced perspective of
+				architecture as still images. They invoke the involution and compression felt when walking
+				the innards of Venice, where memory and movement become tightly woven.
 			</div>
 		</div>
 	</MovableFrame>
@@ -118,18 +106,10 @@
 			showTransformGizmo={false}
 			width={400 * canvasScaler.scale}
 			src={`/images/prints/${i + 1}_LOD2.avif`}
-			class="border-3 sm:border-15 border-black/50"
+			class="border-3 border-black/50 sm:border-15"
 		></MovableImageFrame>
 	{/each}
 
-	<MovableFrame
-		position={{ x: 860, y: 200 }}
-		projector={viewportProjector}
-		showTransformGizmo={false}
-		anchor="NW"
-		class="text-4xl text-cyan-300 sm:text-7xl"
-		>PILE PILE PILE
-	</MovableFrame>
 
 	<BoxView resolution={200} backImg={'/media/veniceBW.JPG'} bottomImg={'/media/waterBW2.JPG'} />
 	<div class=" h-[200%] bg-cyan-950" style={`background-image: url('/media/waterBW2.JPG');`}></div>

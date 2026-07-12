@@ -15,7 +15,7 @@
   class="grid grid-cols-11 grid-rows-11 w-full h-full  pointer-events-none" 
 >
   {#each gridCells as cell (cell)}
-    <div class="bg-transparent flex justify-center border border-r-slate-300/20 border-b-slate-300/30">
+    <div class="bg-transparent flex justify-center border border-neutral-700">
       
     </div>
   {/each}
