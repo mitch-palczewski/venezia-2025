@@ -1,7 +1,8 @@
 <script>
-	import BoxStage from "$lib/features/pile-home/BoxStage.svelte";
+	import BoxStage from "$lib/features/stages/box-stage/BoxStage.svelte";
+
+
 
 </script>
 <BoxStage>
-    
 </BoxStage>
