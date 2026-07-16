@@ -2,6 +2,7 @@
 	import CanvasPortal from '$lib/components/3d-canvas/CanvasPortal.svelte';
 	import { DeviceContext } from '$lib/core';
 	import { PileScene, type PileData } from '$lib/pile';
+	import MiniMap from '$lib/pile/components/mini-map/MiniMap.svelte';
 	import Pile2DElements from '$lib/pile/components/Pile2DElements.svelte';
 	import { PilePerformance } from '$lib/pile/util/pilePerformance.svelte';
 	import { UiState } from '$lib/pile/util/ui/uiState.svelte.js';
@@ -34,6 +35,8 @@
 		<PileScene bind:this={pileSceneRef} {data} {uiState} {performance} />
 	</CanvasPortal>
 </div>
+
+<MiniMap pileObjects={data.pileObjects} {uiState}/>
 
 <Pile2DElements {pileSceneRef} {uiState} />
 

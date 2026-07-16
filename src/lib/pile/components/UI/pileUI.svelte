@@ -19,6 +19,7 @@
 	import DuplicateBtn from './btns/DuplicateBtn.svelte';
 	import FocusBtn from './btns/FocusBtn.svelte';
 	import Banner from './Banner.svelte';
+	import MiniMapBtn from './btns/MiniMapBtn.svelte';
 
 	interface Props {
 		pileSceneRef: PileScene;
@@ -32,7 +33,7 @@
 	const pileState: PileState = $derived(pileSceneRef?.pileApp?.state);
 
 	let isMd = $state(false);
-	let showBanner = $state(true)
+	let showBanner = $state(true);
 
 	onMount(() => {
 		const watch = window.matchMedia('(min-width: 768px)');
@@ -42,43 +43,51 @@
 		watch.addEventListener('change', listener);
 
 		const timer = setTimeout(() => {
-            showBanner = false;
-        }, 7000);
+			showBanner = false;
+		}, 7000);
 		return () => {
 			clearTimeout(timer);
 			watch.removeEventListener('change', listener);
-		}
+		};
 	});
 </script>
 
 <svelte:window bind:innerWidth={windowWidth} />
 
 {#snippet bannerMessage()}
-	<p><span class="font-bold">Left Click</span> on objects to move, rotate, and scale them. </p>
-	<p>Use the <span class="font-bold">[ + ]</span> button to add objects </p>
-	<p><span class="font-bold">Right Click</span> to pan or use <span class="font-bold">WASD</span> buttons to move around.</p>
+	<p><span class="font-bold">Left Click</span> on objects to move, rotate, and scale them.</p>
+	<p>Use the <span class="font-bold">[ + ]</span> button to add objects</p>
+	<p>
+		<span class="font-bold">Right Click</span> to pan or use <span class="font-bold">WASD</span> buttons
+		to move around.
+	</p>
 {/snippet}
 {#snippet phoneBannerMessage()}
-	<p><span class="font-bold">Tap</span> on objects to move, rotate, and scale them. </p>
-	<p>Use the <span class="font-bold">[+]</span> button to add objects </p>
+	<p><span class="font-bold">Tap</span> on objects to move, rotate, and scale them.</p>
+	<p>Use the <span class="font-bold">[+]</span> button to add objects</p>
 	<p>Use <span class="font-bold">Two Fingers</span> to pan.</p>
 {/snippet}
 
 {#snippet banner()}
 	{#if showBanner}
-        <Banner 
-            children={isMd? bannerMessage : phoneBannerMessage}
-            onClose={() => showBanner = false} 
-        />
-    {/if}
+		<Banner
+			children={isMd ? bannerMessage : phoneBannerMessage}
+			onClose={() => (showBanner = false)}
+		/>
+	{/if}
 {/snippet}
-
 
 {#if uiSettings.showUI && pileApp.isReady}
 	<div
-		class="flex w-full justify-end overflow-hidden pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)] z-10"
+		class="z-10 flex w-full justify-end overflow-hidden pr-[env(safe-area-inset-right)] pb-[env(safe-area-inset-bottom)]"
 	>
-		<div class="P-3 mx-2 mt-2 flex flex-col items-end gap-3">
+		<div class="dock-nw mx-2 mt-2">
+			{#if !pileState.showTransformControls}
+				<MiniMapBtn {uiSettings} />
+			{/if}
+		</div>
+
+		<div class=" mx-2 mt-2 flex flex-col items-end gap-3">
 			<Tooltip settingsState={uiSettings} />
 
 			<div class="flex flex-row items-start gap-3">
@@ -90,20 +99,19 @@
 						{#if !isVertical}
 							<ScaleSlider pileState={pileApp.state} {uiSettings} vertical={false} />
 						{/if}
-						{#if (!uiSettings.showAddMenu && isVertical) || (!isVertical)}
+						{#if (!uiSettings.showAddMenu && isVertical) || !isVertical}
 							<TransformModeBtn {uiSettings} />
-							<DuplicateBtn {pileState} {uiSettings} {pileApp}/>
-						 	{#if !uiSettings.showAddMenu}
-							<FocusBtn {pileState}{uiSettings}/>
-							<DeleteBtn {pileState} {uiSettings} />
+							<DuplicateBtn {pileState} {uiSettings} {pileApp} />
+							{#if !uiSettings.showAddMenu}
+								<FocusBtn {pileState} {uiSettings} />
+								<DeleteBtn {pileState} {uiSettings} />
 							{/if}
-							
 						{/if}
 					</div>
 				{/if}
 
 				<AddBtn {uiSettings} />
-				
+
 				{#if isMd}
 					{#if uiSettings.showScreenshotBtn && !uiSettings.showAddMenu && pileApp.isReady}
 						<ScreenshotBtn app={pileApp} {uiSettings} />
@@ -136,6 +144,3 @@
 
 	{@render banner()}
 {/if}
-
-
-

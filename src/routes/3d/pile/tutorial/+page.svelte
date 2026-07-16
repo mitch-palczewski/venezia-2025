@@ -4,9 +4,7 @@
 	import { useViewportProjector } from '$lib/core/projector/projector.context.svelte';
 	import { AspectStage, AspectStageModel, Frame, MovableFrame, ScalerStage } from '$lib/features';
 	import MovableImageFrame from '$lib/features/frame/moveable-frame/MovableImageFrame.svelte';
-	import ArrowGizmo from '$lib/features/frame/moveable-frame/transform-gizmo/ArrowGizmo.svelte';
 	import BoxView from '$lib/features/pile-home/BoxView.svelte';
-	import Grid from '$lib/features/pile-home/Grid.svelte';
 	import ProjectedStage from '$lib/features/stages/projected-stage/ProjectedStage.svelte';
 
 	const viewportProjector = useViewportProjector();
@@ -34,14 +32,14 @@
 	}
 </script>
 
-<div class="fixed inset-0 h-screen w-screen overflow-x-hidden overflow-y-hidden">
+<div class="fixed inset-0 h-screen w-screen overflow-x-hidden overflow-y-hidden ">
 	
     {#if !hasClicked2}
         <MovableFrame
 		position={{ x: 360, y: 850 }}
 		showTransformGizmo={true}
-		anchor="NW"
-		class=""
+		anchor="N"
+		class="anchor-s"
 		draggable={false}
 		projector={viewportProjector}
 		onSelect={setHasPulled}
@@ -54,8 +52,8 @@
 			}
 		}}
 	>
-		<div class="max-w-[30dvw] border-5 border-cyan-900 bg-white">
-			<div class="pb-3 text-xl text-cyan-950 sm:text-4xl">What if i pull on this arrow thingy?</div>
+		<div class="max-w-[30dvw] border-5 border-cyan-900 bg-white ">
+			<div class="pb-3 text-xl text-cyan-950 sm:text-4xl ">What if i pull on this arrow thingy?</div>
 			<div>
 				You are lucky it is only text that rises out of the abyss. It could have been much worse.
 				What if you pulled out an anglerfish, a spooky device or worse pure dispair. What would you

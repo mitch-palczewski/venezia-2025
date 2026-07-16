@@ -32,6 +32,7 @@ export class UiState {
 	public addMenuState = $state<AddMenuState>('object3D');
 	public canvasContainer: HTMLDivElement | undefined;
 	public deviceContext: DeviceContext;
+	public showMiniMap = $state(false)
 	
 
 	constructor(deviceContext:DeviceContext) {
