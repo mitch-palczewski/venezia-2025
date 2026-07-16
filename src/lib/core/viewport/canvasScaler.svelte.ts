@@ -96,7 +96,7 @@ export class CanvasScaler {
 	}
 
 	private getAreaScaleFactor():number {
-		const scale = this.viewport.area / this.referenceArea
+		const scale = Math.sqrt(this.viewport.area / this.referenceArea);
 		return this.clampScale(scale)
 	}
 

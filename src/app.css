@@ -33,3 +33,13 @@
 @custom-variant r9-16 (:root[data-ratio="9-16"] &);
 @custom-variant r16-9 (:root[data-ratio="16-9"] &);
 
+
+
+.root{
+  --area-scaler: 1;
+}
+
+.area-scale{
+  scale: var(--area-scaler)
+}
+

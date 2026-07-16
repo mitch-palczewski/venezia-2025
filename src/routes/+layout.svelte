@@ -1,20 +1,26 @@
 <script lang="ts">
 	import SEO from '$lib/components/seo/SEO.svelte';
+	import { CanvasScaler } from '$lib/core';
 	import { initViewportProjectorContext } from '$lib/core/projector/projector.context.svelte';
 	import { initViewportContext } from '$lib/core/viewport/viewport.context.svelte';
 	import '../app.css';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';
 
+	let { children } = $props();
+
 	const viewport = initViewportContext();
 	initViewportProjectorContext(viewport);
-
-
-
 	injectSpeedInsights();
 	injectAnalytics();
 
-	let { children } = $props();
+	const scaler = new CanvasScaler(viewport)
+
+	
+
+	$effect(() => {
+      document.documentElement.style.setProperty('--area-scaler', scaler.scale.toFixed(4));
+  });
 </script>
 
 <SEO />
