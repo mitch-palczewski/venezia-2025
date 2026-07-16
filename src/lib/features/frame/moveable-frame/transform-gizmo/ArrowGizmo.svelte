@@ -2,15 +2,18 @@
 	import { onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
 
-	type Props = {
-		side: 'left' | 'right' | 'top' | 'bottom';
-		color: 'red' | 'green' | 'blue' | 'sky';
-		ondrag: (delta: number) => void;
+	export interface ArrowGizmoOptions {
 		length?: number;
 		width?: number;
 		padding?: number;
 		headSize?: number;
 	};
+
+	interface Props extends ArrowGizmoOptions {
+		side: 'left' | 'right' | 'top' | 'bottom';
+		color: 'red' | 'green' | 'blue' | 'sky';
+		ondrag: (delta: number) => void;
+	}
 
 	let { side, color, ondrag, length = 10, width = 2, padding = 6, headSize = 10 }: Props = $props();
 

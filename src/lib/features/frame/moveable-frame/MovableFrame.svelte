@@ -28,8 +28,7 @@
 <script lang="ts">
 	import { getContext, onDestroy } from 'svelte';
 	import { browser } from '$app/environment';
-	import { MovableFrameModel } from './MovableFrameModel.svelte';
-	import TransformGizmo from './transform-gizmo/TransformGizmo.svelte';
+	import TransformGizmo, { type TransformGizmoOptions } from './transform-gizmo/TransformGizmo.svelte';
 	import type { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
 	import { ProjectedFrameModel } from '../projected-frame/projectedFrameModel.svelte';
 	import type { HTMLAttributes } from 'svelte/elements';
@@ -38,8 +37,7 @@
 	import ProjectedFrame from '../projected-frame/ProjectedFrame.svelte';
 	import type { CompassAnchor } from '../util/anchor';
 
-	interface Props extends HTMLAttributes<HTMLDivElement> {
-		position: Point;
+	export interface MovableFrameOptions extends HTMLAttributes<HTMLDivElement> {
 		width?: number;
 		height?: number;
 		anchor?: CompassAnchor;
@@ -49,6 +47,11 @@
 		onSelect?: () => void;
 		togglableTransformGizmo?: boolean;
 		projector?: CoordinateProjector;
+		transformGizmoOptions?: TransformGizmoOptions
+	}
+
+	interface Props extends MovableFrameOptions {
+		position: Point;
 	}
 
 	let {
@@ -62,6 +65,7 @@
 		onSelect,
 		togglableTransformGizmo = true,
 		projector,
+		transformGizmoOptions,
 		style = '',
 		class: className = 'bg-cyan-950 border border-blue-500 text-white',
 		children,
@@ -135,11 +139,16 @@
 	);
 
 	function handlePointerDown(event: PointerEvent) {
-		if (!draggable) return;
 		if (event.button !== 0) return;
 		if (onSelect) {
 			onSelect();
 		}
+		if (!draggable) {
+			showTransformGizmo = !showTransformGizmo;
+			return 
+		};
+		
+
 		startPointer = { x: event.clientX, y: event.clientY };
 		startBox = { x: x, y: y };
 		totalMovement = 0;
@@ -191,6 +200,9 @@
 	{#if showTransformGizmo}
 		<TransformGizmo
 			ondrag={(side, delta) => {
+				if(onSelect){
+					onSelect()
+				}
 				const scaleDeltaX = delta / activeScaleX;
 				const scaleDeltaY = delta / activeScaleY;
 				if (side === 'left' || side === 'right') {
@@ -200,6 +212,13 @@
 					y = y + scaleDeltaY;
 				}
 			}}
+			showTop={transformGizmoOptions?.showTop}
+			showBottom={transformGizmoOptions?.showBottom}
+			showLeft={transformGizmoOptions?.showLeft}
+			showRight={transformGizmoOptions?.showRight}
+			xColor={transformGizmoOptions?.xColor}
+			yColor={transformGizmoOptions?.yColor}
+			arrowGizmoProps={transformGizmoOptions?.arrowGizmoProps}
 		/>
 	{/if}
 	<div class="pointer-events-auto relative h-full w-full cursor-auto">
@@ -210,7 +229,7 @@
 {#if coordinateProjector && projectorModel}
 	<ProjectedFrame
 		model={projectorModel}
-		class="touch-none select-none {draggable ? 'cursor-move' : 'cursor-default'} {className}"
+		class="touch-none select-none cursor-move {className}"
 		onpointerdown={handlePointerDown}
 		ondragstart={(e) => e.preventDefault()}
 		{...restProps}
@@ -220,7 +239,7 @@
 {:else}
 	<div
 		use:fallbackMeasure
-		class="touch-none select-none {draggable ? 'cursor-move' : 'cursor-default'} {className}"
+		class="touch-none select-none cursor-move {className}"
 		onpointerdown={handlePointerDown}
 		ondragstart={(e) => e.preventDefault()}
 		style={standardFallbackStyle}
