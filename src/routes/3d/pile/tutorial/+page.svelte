@@ -36,8 +36,8 @@
 
 <div class="fixed inset-0 h-screen w-screen overflow-x-hidden overflow-y-hidden">
 	
-
-	<MovableFrame
+    {#if !hasClicked2}
+        <MovableFrame
 		position={{ x: 360, y: 850 }}
 		showTransformGizmo={true}
 		anchor="NW"
@@ -66,8 +66,10 @@
 			</div>
 		</div>
 	</MovableFrame>
+    {/if}
+	
 
-	{#if hasPulled}
+	{#if hasPulled && !hasClicked2}
 		<MovableFrame
 			position={{ x: 100, y: 450 }}
 			togglableTransformGizmo={true}
