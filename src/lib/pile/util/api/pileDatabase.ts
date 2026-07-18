@@ -29,15 +29,19 @@ export interface PileDatabaseObj {
 }
 
 export class PileDatabase {
-	public networkManager = new SupabaseNetworkManager<PileDatabaseObj>(supabase, 'pile_objects');
-	public database = new DatabaseMap<PileDatabaseObj, AcceptedPileObjects>(
-		this.networkManager,
-		toPileObj,
-		toDatabaseObj,
-		'last_edited_by'
-	);
+	public databaseName: string;
+	public networkManager: SupabaseNetworkManager<PileDatabaseObj>;
+	public database: DatabaseMap<PileDatabaseObj, AcceptedPileObjects>;
 
-	constructor() {
+	constructor(databaseName?: string) {
+		this.databaseName = databaseName ?? 'pile_objects';
+		this.networkManager = new SupabaseNetworkManager<PileDatabaseObj>(supabase, this.databaseName);
+		this.database = new DatabaseMap<PileDatabaseObj, AcceptedPileObjects>(
+			this.networkManager,
+			toPileObj,
+			toDatabaseObj,
+			'last_edited_by'
+		);
 		this.database.compareObjs = this.databaseObjsMatch;
 	}
 
@@ -67,7 +71,6 @@ export class PileDatabase {
 		return false;
 	}
 
-	
 	/**
 	 * Compares two database objects
 	 * @param obj1
@@ -119,6 +122,3 @@ export class PileDatabase {
 		return result;
 	};
 }
-
-
-

@@ -26,8 +26,8 @@ export class PileApp {
 	modelInventory = new Object3DMapInventory();
 	imageInventory = new Object2DMapInventory();
 	environmentInventory = new EnvironmentMapInventory();
-	database = new PileDatabase();
-	state = new PileState(this.database);
+	database:PileDatabase
+	state:PileState
 	environment: PileEnvironment;
 	cameraRef = $state<PerspectiveCamera>();
 	controlsRef = $state<ThreeOrbitControls>();
@@ -43,8 +43,11 @@ export class PileApp {
 		captureScreenshot: () => Promise<Blob>,
 		uiSettings: UiState,
 		performance: PilePerformance,
-		initalDatabaseObjects?: any
+		initalDatabaseObjects?: any,
+		databaseName?: string
 	) {
+		this.database = new PileDatabase(databaseName)
+		this.state = new PileState(this.database)
 		this.performance = performance;
 		this.deviceContext = performance.deviceContext;
 		this.uiSettings = uiSettings;

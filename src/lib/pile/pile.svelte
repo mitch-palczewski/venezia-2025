@@ -21,8 +21,9 @@
 		data: PileData;
 		uiState: UiState;
 		performance: PilePerformance;
+		databaseName?: string
 	};
-	let { data, uiState, performance }: Props = $props();
+	let { data, uiState, performance, databaseName }: Props = $props();
 
 	const { raycaster } = interactivity();
 	raycaster.firstHitOnly = true;
@@ -32,7 +33,7 @@
 		return captureThrelteScene(renderer, scene, camera, 'image/jpeg', 1);
 	}
 	
-	export const pileApp = new PileApp(capturePileScene, uiState, performance, data);
+	export const pileApp = new PileApp(capturePileScene, uiState, performance, data, databaseName);
 
 	onDestroy(() => {
 		pileApp.database.destroy();
