@@ -63,8 +63,12 @@
 	/>
 {/if}
 
-<Tower />
-<Fireplace />
+{#if databaseName==='pile_objects'}
+	<Tower />
+    <Fireplace />
+{/if}
+
+
 
 {#each pileApp.state.objects2D as [id, image] (id)}
 	{@const { translate: translate, rotation: quaternion, scale: scale } = image.transform3D}
