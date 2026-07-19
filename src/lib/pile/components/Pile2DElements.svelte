@@ -17,8 +17,6 @@
 
 {#if uiState.showSettingsMenu }
 	<AsciiArtIntro/>
-{/if}
-
-{#if uiState.showSettingsMenu}
 	<SettingsMenu uiSettings={uiState} />
 {/if}
+

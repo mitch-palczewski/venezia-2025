@@ -1,5 +1,4 @@
 <script lang="ts">
-    import MovableFrame from '$lib/features/frame/moveable-frame/MovableFrame.svelte';
     import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
     import type { PileDatabaseObj } from '../../util/api/pileDatabase';
     import MapObj from './MapObj.svelte';

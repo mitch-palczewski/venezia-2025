@@ -15,7 +15,6 @@
 	import type { UiState } from './util/ui/uiState.svelte';
 	import { captureThrelteScene } from '$lib/graphics/utils/captureScene';
 	import type { PilePerformance } from './util/pilePerformance.svelte';
-	import { Fog, FogExp2 } from 'three';
 
 	type Props = {
 		data: PileData;
@@ -43,7 +42,7 @@
 	});
 </script>
 
-<T.Fog attach="fog" color="#004d7d" near={10} far={110000} />
+<T.Fog attach="fog" color="#004d7d" near={10} far={100000} />
 
 
 <SettingsKeyBind settingState={uiState} />
