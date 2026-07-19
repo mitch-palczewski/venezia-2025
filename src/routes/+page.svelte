@@ -35,7 +35,7 @@
 		}
 	}
 
-	export function getOptimizedUrl(url: string, width = 640, quality = 75) {
+	export function getOptimizedUrl(url: string | null | undefined, width = 640, quality = 75) {
 		if (dev || !url) return '/media/Cover_v4.1.png';
 		return `/_vercel/image?url=${encodeURIComponent(url)}&w=${width}&q=${quality}`;
 	}
@@ -59,7 +59,7 @@
 		}}
 	>
 		<img
-			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
+			src={getOptimizedUrl(screenshots?.[0]?.url, 1920, 100)}
 			alt="Most recent user captured screenshot"
 			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
 		/>
@@ -98,7 +98,7 @@
 		}}
 	>
 		<img
-			src={getOptimizedUrl(screenshots![0].url, 1920, 100)}
+			src={getOptimizedUrl(screenshots?.[0]?.url, 1920, 100)}
 			alt="Most recent user captured screenshot"
 			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
 		/>
