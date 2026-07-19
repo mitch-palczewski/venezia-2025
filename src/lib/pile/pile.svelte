@@ -14,8 +14,8 @@
 	import type { PileData } from '.';
 	import type { UiState } from './util/ui/uiState.svelte';
 	import { captureThrelteScene } from '$lib/graphics/utils/captureScene';
-	import { DeviceContext } from '$lib/core';
 	import type { PilePerformance } from './util/pilePerformance.svelte';
+	import { Fog, FogExp2 } from 'three';
 
 	type Props = {
 		data: PileData;
@@ -27,6 +27,8 @@
 
 	const { raycaster } = interactivity();
 	raycaster.firstHitOnly = true;
+
+
 
 	const { renderer, scene, camera } = useThrelte();
 	export async function capturePileScene(): Promise<Blob> {
@@ -41,7 +43,7 @@
 	});
 </script>
 
-
+<T.Fog attach="fog" color="#004d7d" near={10} far={110000} />
 
 
 <SettingsKeyBind settingState={uiState} />

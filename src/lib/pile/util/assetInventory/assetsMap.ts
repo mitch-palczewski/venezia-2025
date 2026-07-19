@@ -1,10 +1,7 @@
-
-
 import Papa from 'papaparse';
 
-import { Object2DMap } from "./object2DMap"
-import { Object3DMap } from "./object3DMap"
-
+import { Object2DMap } from './object2DMap';
+import { Object3DMap } from './object3DMap';
 
 export const test2D: Object2DMap[] = [
 	new Object2DMap({
@@ -20,12 +17,10 @@ export const test2D: Object2DMap[] = [
 		category: 'test',
 		path: '/images/pile/Rest.PNG',
 		fileType: 'png'
-	}),
-]
+	})
+];
 
-
-
-export const undertowModels:Object3DMap[] = [
+export const undertowModels: Object3DMap[] = [
 	new Object3DMap({
 		name: 'Arch_01',
 		displayName: 'Arch',
@@ -103,7 +98,7 @@ export const undertowModels:Object3DMap[] = [
 		displayName: 'Jaw Line',
 		path: '/models/undertow/Misc_02.glb',
 		category: 'undertow',
-		baseScale: 10,
+		baseScale: 10
 	}),
 	new Object3DMap({
 		name: 'Misc_05',
@@ -116,8 +111,8 @@ export const undertowModels:Object3DMap[] = [
 		displayName: 'Zardoz',
 		path: '/models/undertow/Zardoz_01.glb',
 		category: 'undertow'
-	}),
-]
+	})
+];
 export const variousModels: Object3DMap[] = [
 	new Object3DMap({
 		name: 'Archway_Multiple_01',
@@ -128,11 +123,9 @@ export const variousModels: Object3DMap[] = [
 		name: 'BT_02',
 		displayName: 'Head 1',
 		path: '/models/various/BT_02.glb'
-	}),
-	
-
-]
-export const potFace: Object3DMap[]=[
+	})
+];
+export const potFace: Object3DMap[] = [
 	new Object3DMap({
 		name: 'Misc_05_fingers',
 		displayName: 'Pot Face Fingers',
@@ -147,17 +140,17 @@ export const potFace: Object3DMap[]=[
 		name: 'Misc_05_pot',
 		displayName: 'Pot For Face',
 		path: '/models/pot_face/Misc_05_pot.glb'
-	}),
-]
-export const architectureModels: Object3DMap[]=[
+	})
+];
+export const architectureModels: Object3DMap[] = [
 	new Object3DMap({
 		name: 'Optimize_02',
 		displayName: 'Spire 01',
 		path: '/models/architecture/Optimize_02.glb'
-	}),
-]
+	})
+];
 
-export const variousMP: Object3DMap[]=[
+export const variousMP: Object3DMap[] = [
 	new Object3DMap({
 		name: 'Courtyard_01',
 		displayName: 'Courtyard',
@@ -173,83 +166,104 @@ export const variousMP: Object3DMap[]=[
 		name: 'Ibix_01',
 		displayName: 'Ibix',
 		path: '/models/various-mp/Ibix_01_LOD1.glb'
-	}),
-]
+	})
+];
 
+export const allModels: Object3DMap[] = await initializeModels();
+export const allModelsV2: Object3DMap[] = await initializeModelsV2();
 
-
-export const allModels:Object3DMap[]= await initializeModels()
 
 export async function initializeModels(): Promise<Object3DMap[]> {
-    const allFiles = import.meta.glob('$lib/assets/3D/**/*.{glb,gltf,csv,png}', {
-        eager: true,
-        query: '?url',
-        import: 'default'
-    });
-	
-	
-    const groupedAssets = groupFilesByFolder(allFiles);
-    const modelPromises = Object.entries(groupedAssets).map(async ([folderName, assets]) => {
-        let displayName = folderName; 
-        if (assets.csv) {
-            displayName = await getDisplayNameFromCSV(assets.csv) || folderName;
-        }
-		
-        return new Object3DMap({
-            name: folderName,
-            displayName: displayName,
-            path: assets.glb || "",
-			preview: assets.png || ""
-        });
-    });
-    return await Promise.all(modelPromises);
+	const allFiles = import.meta.glob('$lib/assets/3D/**/*.{glb,gltf,csv,png}', {
+		eager: true,
+		query: '?url',
+		import: 'default'
+	});
+
+	const groupedAssets = groupFilesByFolder(allFiles);
+	const modelPromises = Object.entries(groupedAssets).map(async ([folderName, assets]) => {
+		let displayName = folderName;
+		if (assets.csv) {
+			displayName = (await getDisplayNameFromCSV(assets.csv)) || folderName;
+		}
+
+		return new Object3DMap({
+			name: folderName,
+			displayName: displayName,
+			path: assets.glb || '',
+			preview: assets.png || ''
+		});
+	});
+	return await Promise.all(modelPromises);
 }
 
+export async function initializeModelsV2(): Promise<Object3DMap[]> {
+	const allFiles = import.meta.glob('$lib/assets/3Dv2/**/*.{glb,gltf,csv,png}', {
+		eager: true,
+		query: '?url',
+		import: 'default'
+	});
+
+	const groupedAssets = groupFilesByFolder(allFiles);
+	const modelPromises = Object.entries(groupedAssets).map(async ([folderName, assets]) => {
+		let displayName = folderName;
+		if (assets.csv) {
+			displayName = (await getDisplayNameFromCSV(assets.csv)) || folderName;
+		}
+
+		return new Object3DMap({
+			name: folderName,
+			displayName: displayName,
+			path: assets.glb || '',
+			preview: assets.png || ''
+		});
+	});
+	return await Promise.all(modelPromises);
+}
 
 type AssetGroup = { glb?: string; csv?: string; png?: string };
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function groupFilesByFolder(allFiles: Record<string, any>) {
-    const groups: Record<string, AssetGroup> = {};
+	const groups: Record<string, AssetGroup> = {};
 
-    for (const path in allFiles) {
-        const url = allFiles[path] as string;
-        const parts = path.split('/');
-        const folderName = parts[parts.length - 2];
+	for (const path in allFiles) {
+		const url = allFiles[path] as string;
+		const parts = path.split('/');
+		const folderName = parts[parts.length - 2];
 
-        if (!groups[folderName]) groups[folderName] = {};
-        if (path.endsWith('.glb') || path.endsWith('.gltf')) groups[folderName].glb = url;
-        if (path.endsWith('.csv')) groups[folderName].csv = url;
-        if (path.includes('_preview')) groups[folderName].png = url;
-    }
-    return groups;
+		if (!groups[folderName]) groups[folderName] = {};
+		if (path.endsWith('.glb') || path.endsWith('.gltf')) groups[folderName].glb = url;
+		if (path.endsWith('.csv')) groups[folderName].csv = url;
+		if (path.includes('_preview')) groups[folderName].png = url;
+	}
+	return groups;
 }
 
 interface MetadataRow {
-    Header: string;
+	Header: string;
 	Value: string;
 	Notes: string;
 }
 
 async function getDisplayNameFromCSV(url: string): Promise<string | null> {
-    try {
-        const response = await fetch(url);
-        const text = await response.text();
-        const parsed = Papa.parse<MetadataRow>(text, { 
-            header: true, 
-            skipEmptyLines: true 
-        });
-        
-		let displayName = null
+	try {
+		const response = await fetch(url);
+		const text = await response.text();
+		const parsed = Papa.parse<MetadataRow>(text, {
+			header: true,
+			skipEmptyLines: true
+		});
+
+		let displayName = null;
 		parsed.data.forEach((row) => {
-			if (row.Header === "name_display"){
-				displayName = row.Value
+			if (row.Header === 'name_display') {
+				displayName = row.Value;
 			}
-		})
-			
-		
-        return displayName;
-    } catch (err) {
-        console.error("CSV Parse Error:", err);
-        return "Error Loading Name";
-    }
+		});
+
+		return displayName;
+	} catch (err) {
+		console.error('CSV Parse Error:', err);
+		return 'Error Loading Name';
+	}
 }

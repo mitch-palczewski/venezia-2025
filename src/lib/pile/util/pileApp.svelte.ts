@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { PerspectiveCamera } from 'three';
 import type { Transform3D } from '../types';
-import { allModels } from './assetInventory/assetsMap';
+import { allModels, allModelsV2 } from './assetInventory/assetsMap';
 import { PileObject2D, PileObject3D } from './pileObject.svelte';
 import { PileState } from './pileState.svelte';
 import { EnvironmentMapInventory, testEnvironments } from './assetInventory/environmentMap';
@@ -83,7 +83,11 @@ export class PileApp {
 	}
 
 	private initInventories() {
-		this.modelInventory.add(allModels);
+		if(this.database.databaseName === 'pile_objects_test'){
+			this.modelInventory.add(allModelsV2);
+		}else{
+			this.modelInventory.add(allModels);
+		}
 		this.environmentInventory.add(testEnvironments);
 	}
 
