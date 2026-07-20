@@ -4,7 +4,6 @@
 	import ModelTemplate from './components/ModelTemplate.svelte';
 	import ImageTemplate from './components/ImageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
-	import CameraControls from './components/camera/CameraController.svelte';
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
@@ -15,6 +14,7 @@
 	import type { UiState } from './util/ui/uiState.svelte';
 	import { captureThrelteScene } from '$lib/graphics/utils/captureScene';
 	import type { PilePerformance } from './util/pilePerformance.svelte';
+	import CameraController from './components/camera/CameraController.svelte';
 
 	type Props = {
 		data: PileData;
@@ -48,7 +48,7 @@
 <SettingsKeyBind settingState={uiState} />
 
 {#if uiState && pileApp}
-	<CameraControls uiSettings={uiState} app={pileApp} />
+	<CameraController {uiState} app={pileApp} cameraType='original' />
 	<OrbitLight ready={pileApp.isReady} performanceTier={performance.lights}/>
 {/if}
 

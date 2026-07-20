@@ -1,112 +1,37 @@
 <script lang="ts">
-	import { T, useTask } from '@threlte/core';
-	import { OrbitControls } from '@threlte/extras';
-	import type { UiState } from '../../util/ui/uiState.svelte';
-	import type { PileApp } from '../../util/pileApp.svelte';
-	import { createIdleManage } from './idleManager.svelte';
-	import { calculateMovement } from './movement';
+	import type { PileApp } from '$lib/pile/util/pileApp.svelte';
+	import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
+	import { createIdleTimer  } from './idleManager.svelte';
+	import OriginalCamera from './OriginalCamera.svelte';
 
 	const IDLE_SEC = 60;
-	const AUTO_ROTATE_SPEED = 0.5;
-	const CAMERA_FAR_BOUND = 110000;
-	const CAMERA_POS: [x: number, y: number, z: number] = [20, 20, 20];
-	const CAMERA_LOOK_AT_POS: [x: number, y: number, z: number] = [0, 3, 0];
-	const SM_SCREEN_MAX_CAMERA_DISTANCE = 3000
-	const MAX_CAMERA_DISTANCE = 30000
-	const SM_SCREEN_ROT_SPEED = .1
-	const ROT_SPEED = .4
-	const SM_SCREEN_DAMPING = 1
-	const DAMPING = .1
-	const SM_SCRREN_PAN_SPEED = .5
-	const PAN_SPEED = .8
 
-	interface Props {
-		uiSettings: UiState;
+	type Props = {
+		cameraType: 'orbit' | 'fly' | 'original';
 		app: PileApp;
-	}
-	let { uiSettings, app }: Props = $props();
-	let screenWidth: number = $state(0);
-	let screenHeight: number = $state(0);
-
-	const idleManager = createIdleManage(IDLE_SEC, () => uiSettings.isIdleEnabled);
-	const smScreen = $derived(screenWidth  < 700 || screenHeight < 500 )
-
-	const farValue = () => {
-		const performanceTier = app.deviceContext.performance.performanceTier
-		switch(performanceTier){
-			case 0:
-				return 50000
-			case 1:
-				return 60000
-			case 2:
-				return 70000
-			case 3:
-				return 90000
-			case 4:
-				return 110000
-		}
-	}
-
-	$effect(() => {
-		if (uiSettings.isIdleEnabled) {
-			idleManager.reset();
-		} else {
-			idleManager.stop();
-		}
-	});
-
-	const keys = $state({
-		w: false,
-		a: false,
-		s: false,
-		d: false,
-		space: false,
-		shift: false
-	});
-
-	const onKey = (e: KeyboardEvent, isPressed: boolean) => {
-		const key = e.key.toLowerCase();
-		const keyMap = e.code === 'Space' ? 'space' : key;
-		if (keyMap in keys) keys[keyMap as keyof typeof keys] = isPressed;
+		uiState: UiState;
 	};
+	let { cameraType, app, uiState }: Props = $props();
 
-	useTask((delta) => {
-		if (!app.cameraRef || !app.controlsRef) return;
-		const speed = uiSettings.movementSpeed * app.controlsRef.getDistance() * .001
-		const moveStep = calculateMovement(app.cameraRef, keys, speed, delta);
+	const idleTimer = createIdleTimer(IDLE_SEC, () => uiState.isIdleEnabled);
 
-		if (moveStep && moveStep.lengthSq() > 0) {
-			idleManager.reset();
-			app.cameraRef.position.add(moveStep);
-			app.controlsRef.target.add(moveStep);
-			app.controlsRef.update();
+	const far = $derived.by(() => {
+		const performanceTier = app.deviceContext.performance.performanceTier;
+		switch (performanceTier) {
+			case 0:
+				return 50000;
+			case 1:
+				return 60000;
+			case 2:
+				return 70000;
+			case 3:
+				return 90000;
+			case 4:
+				return 110000;
 		}
 	});
 </script>
 
-<svelte:window onkeydown={(e) => onKey(e, true)} onkeyup={(e) => onKey(e, false)} bind:innerWidth={screenWidth} bind:innerHeight={screenHeight} />
-
-<T.PerspectiveCamera
-	bind:ref={app.cameraRef}
-	makeDefault
-	far={farValue()}
-	near={15}
-	position={CAMERA_POS}
-	oncreate={(ref) => ref.lookAt(...CAMERA_LOOK_AT_POS)}
-	zoom={.7}
-
->
-	<OrbitControls
-		bind:ref={app.controlsRef}
-		enableDamping
-		dampingFactor={ DAMPING}
-		rotateSpeed={ ROT_SPEED}
-		autoRotate={idleManager.autoRotate}
-		autoRotateSpeed={AUTO_ROTATE_SPEED}
-		zoomSpeed={.4}
-		maxDistance={ MAX_CAMERA_DISTANCE}
-		panSpeed={ PAN_SPEED}
-		onstart={idleManager.stop}
-		onend={idleManager.reset}
-	/>
-</T.PerspectiveCamera>
+{#if cameraType === 'original'}
+	<OriginalCamera {app} {uiState} {idleTimer} {far} />
+{/if}

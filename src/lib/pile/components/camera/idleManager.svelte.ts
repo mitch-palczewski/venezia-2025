@@ -1,22 +1,39 @@
-export function createIdleManage(idleTimeSec: number, getEnabledSetting: () => boolean) {
-	let autoRotate = $state(false);
+
+export type IdleTimer =  {
+			readonly isIdle: boolean;
+			readonly isEnabled: boolean;
+			stop: () => void;
+			reset: () => void;
+		};
+
+export function createIdleTimer(idleTimeSec: number, getEnabledSetting: () => boolean) {
+	let isIdle = $state(false);
 	let timer: ReturnType<typeof setTimeout> | undefined;
 
 	const stop = () => {
-		autoRotate = false;
+		isIdle = false;
 		if (timer) clearTimeout(timer);
 	};
 
 	const reset = () => {
 		stop();
 		if (getEnabledSetting()) {
-			timer = setTimeout(() => (autoRotate = true), idleTimeSec * 1000);
+			timer = setTimeout(() => (isIdle = true), idleTimeSec * 1000);
 		}
 	};
 
+	$effect(() => {
+		if (getEnabledSetting()) {
+			reset();
+		} else {
+			stop();
+		}
+		return stop()
+	});
+
 	return {
-		get autoRotate() {
-			return autoRotate;
+		get isIdle() {
+			return isIdle;
 		},
 		get isEnabled() {
 			return getEnabledSetting();
