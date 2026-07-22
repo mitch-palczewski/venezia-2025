@@ -32,6 +32,7 @@
   {onclick}
   {disabled}
   use:tooltip={tooltipText}
+  onpointerdown={(e) => e.stopPropagation()}
   class="{base} {active ? activeStyle : inactiveStyle} {className} z-50"
 >
   {@render children()}

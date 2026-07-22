@@ -48,7 +48,7 @@
 <SettingsKeyBind settingState={uiState} />
 
 {#if uiState && pileApp}
-	<CameraController {uiState} app={pileApp} cameraType='orbit' />
+	<CameraController {uiState} app={pileApp} cameraType='fly' />
 	<OrbitLight ready={pileApp.isReady} performanceTier={performance.lights}/>
 {/if}
 

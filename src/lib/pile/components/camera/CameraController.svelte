@@ -19,16 +19,12 @@
 	let { cameraType, app, uiState }: Props = $props();
 
 	const idleTimer = createIdleTimer(IDLE_SEC, () => uiState.isIdleEnabled);
-
 	const keys = useKeyboardInput(() => idleTimer.reset(), true);
 	const pointer = usePointerInput();
+
 	const movementSpeed = () => uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1) * 0.001;
-	useKeyboardMovement(keys, movementSpeed, () => app.controlsRef);
-	useKeyboardRotation(
-		keys,
-		() => 1,
-		() => app.controlsRef
-	);
+	useKeyboardMovement(keys, ()=>10, () => app.controlsRef);
+	useKeyboardRotation(keys, () => 1, () => app.controlsRef);
 
 	const far = $derived.by(() => {
 		const performanceTier = app.deviceContext.performance.performanceTier;
@@ -45,11 +41,10 @@
 				return 110000;
 		}
 	});
-
 </script>
 
 {#if cameraType === 'orbit'}
 	<OrbitCamera {app} {idleTimer} {far} />
 {:else if cameraType === 'fly' && pointer}
-	<FlyCamera {app} {idleTimer} {far} {pointer}/>
+	<FlyCamera {app} {idleTimer} {far} {pointer} />
 {/if}

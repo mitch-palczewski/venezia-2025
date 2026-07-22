@@ -20,6 +20,7 @@
   useFlyControls(
     pointer,
     () => 1,
+    ()=> 10,
     undefined,
     () => idleTimer
   )

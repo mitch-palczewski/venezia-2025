@@ -1,10 +1,13 @@
 import { useTask, useThrelte } from '@threlte/core';
-import { Camera, Euler, MathUtils } from 'three';
+import { Camera, Euler, MathUtils, Vector3 } from 'three';
 import type { PointerState } from './inputs/mouseInputs.svelte';
+
+const forward = new Vector3();
 
 export function useFlyControls(
     pointer: PointerState,
     getRotationSpeed: () => number,
+    getMovementSpeed: () => number,
     getCustomCamera?: () => Camera | undefined,
     onRotate?: () => void
 ) {
@@ -37,6 +40,12 @@ export function useFlyControls(
         pitch = MathUtils.clamp(pitch, -maxPitch, maxPitch);
 
         activeCamera.rotation.set(pitch, yaw, 0, 'YXZ');
+        
+        const moveSpeed = getMovementSpeed?.() ?? 0;
+        if (moveSpeed > 0) {
+            activeCamera.getWorldDirection(forward);
+            activeCamera.position.addScaledVector(forward, moveSpeed * delta);
+        }
 
         onRotate?.();
     });
