@@ -1,6 +1,10 @@
 <script lang="ts">
 	import { ambientManager } from '$lib/audio/ambient.svelte';
-	import { audioSettings} from '$lib/audio/audio.svelte';
+	import { audioSettings } from '$lib/audio/audio.svelte';
+
+
+
+
 	import type { UiState } from '$lib/pile/util/ui/uiState.svelte';
 
 	interface Props {

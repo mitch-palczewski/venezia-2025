@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { BLOB_READ_WRITE_TOKEN } from '$env/static/private';
 import { supabase } from '$lib/api/supabaseClient.svelte';
 import { json, type RequestHandler } from '@sveltejs/kit';

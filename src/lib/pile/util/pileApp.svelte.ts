@@ -16,9 +16,9 @@ import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls
 import { uploadScreenshot } from './api/screenshotApi';
 import { useProgress } from '@threlte/extras';
 import { fromStore } from 'svelte/store';
-import type { DeviceContext } from '$lib/core';
 import type { PilePerformance } from './pilePerformance.svelte';
 import { loadPayload } from './initalizeObject';
+import type { DeviceContext } from '$lib/dom/core';
 
 export class PileApp {
 	public readonly performance: PilePerformance;

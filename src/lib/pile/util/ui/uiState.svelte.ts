@@ -1,7 +1,7 @@
 import type { TransformControlsMode } from 'three/examples/jsm/controls/TransformControls.js';
 import type { PileApp } from '../pileApp.svelte';
 import type { AddMenuState } from '$lib/pile/components/UI/add-menu/AddMenu.svelte';
-import type { DeviceContext, PerformanceTier } from '$lib/core';
+import type { DeviceContext, PerformanceTier } from '$lib/dom/core';
 
 
 

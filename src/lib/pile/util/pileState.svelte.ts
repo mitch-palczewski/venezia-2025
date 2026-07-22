@@ -5,7 +5,7 @@ import type { Transform3D } from '../types';
 import { Matrix4, Quaternion, Vector3, type Object3D } from 'three';
 import type { PileApp } from './pileApp.svelte';
 import type { UiState } from './ui/uiState.svelte';
-import { playAddObject } from '$lib/audio/audio.svelte';
+import { playAddObject } from '../../audio/audio.svelte';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 

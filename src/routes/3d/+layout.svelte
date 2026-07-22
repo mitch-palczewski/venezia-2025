@@ -2,8 +2,10 @@
 	Portals Scenes onto a genaric Canvas. Maintains a singular Canvas Context.
 -->
 <script lang="ts">
-	import CanvasPortalTarget from '$lib/components/3d-canvas/CanvasPortalTarget.svelte';
-	import { initInputs } from '$lib/pile/components/controls/inputs/useInputs';
+	import CanvasPortalTarget from '$lib/3d/core/3d-canvas/CanvasPortalTarget.svelte';
+	import { initInputs } from '$lib/3d/core/inputs/useInputs';
+
+
 	import { Canvas } from '@threlte/core';
 	import type { Snippet } from 'svelte';
 	initInputs()

@@ -1,4 +1,4 @@
-import type { DeviceContext, PerformanceTier } from "$lib/core";
+import type { DeviceContext, PerformanceTier } from "$lib/dom/core";
 
 
 export class PilePerformance {

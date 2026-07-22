@@ -1,20 +1,20 @@
 <script lang="ts">
 	import { T, useThrelte } from '@threlte/core';
 	import { Grid } from '@threlte/extras';
-	import ModelTemplate from './components/ModelTemplate.svelte';
-	import ImageTemplate from './components/ImageTemplate.svelte';
 	import { PileApp } from './util/pileApp.svelte';
 	import { onDestroy } from 'svelte';
 	import { interactivity } from '@threlte/extras';
 	import SettingsKeyBind from './components/UI/SettingsKeyBind.svelte';
-	import OrbitLight from '$lib/components/3d/lights/OrbitLight.svelte';
-	import Tower from '../assets/Tower.svelte';
-	import Fireplace from '$lib/assets/Fireplace.svelte';
 	import type { PileData } from '.';
 	import type { UiState } from './util/ui/uiState.svelte';
-	import { captureThrelteScene } from '$lib/graphics/utils/captureScene';
 	import type { PilePerformance } from './util/pilePerformance.svelte';
-	import CameraController from './components/camera/CameraController.svelte';
+	import { captureThrelteScene } from '$lib/3d/features/utils/captureScene';
+	import CameraController from './core/camera/CameraController.svelte';
+	import OrbitLight from '$lib/3d/features/lights/OrbitLight.svelte';
+	import Tower from '$lib/3d/components/Tower.svelte';
+	import Fireplace from '$lib/3d/components/Fireplace.svelte';
+	import ImageTemplate from './core/ImageTemplate.svelte';
+	import ModelTemplate from './core/ModelTemplate.svelte';
 
 	type Props = {
 		data: PileData;

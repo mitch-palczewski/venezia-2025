@@ -1,6 +1,6 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/layouts/PageHeader.svelte';
 	import { dev } from '$app/environment';
+	import PageHeader from '$lib/dom/components/layouts/PageHeader.svelte';
 
 	let { data } = $props();
 	const { screenshots } = $derived(data);

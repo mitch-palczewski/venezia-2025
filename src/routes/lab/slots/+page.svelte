@@ -1,5 +1,6 @@
 <script lang="ts">
-	import SlotMachine from "$lib/features/misc/SlotMachine.svelte";
+	import SlotMachine from "$lib/dom/components/casino/SlotMachine.svelte";
+
 
 
   // Dynamic image assets path array passed directly down to the child component

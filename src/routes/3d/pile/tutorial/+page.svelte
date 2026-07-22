@@ -1,11 +1,11 @@
 <script lang="ts">
-	import { CanvasScaler, useViewport } from '$lib/core';
-	import { CoordinateProjector } from '$lib/core/projector/coordinateProjector.svelte';
-	import { useViewportProjector } from '$lib/core/projector/projector.context.svelte';
-	import { AspectStage, AspectStageModel, Frame, MovableFrame, ScalerStage } from '$lib/features';
-	import MovableImageFrame from '$lib/features/frame/moveable-frame/MovableImageFrame.svelte';
-	import BoxView from '$lib/features/pile-home/BoxView.svelte';
-	import ProjectedStage from '$lib/features/stages/projected-stage/ProjectedStage.svelte';
+import BoxView from "$lib/dom/components/pile-home/BoxView.svelte";
+	import { CanvasScaler, useViewport } from "$lib/dom/core";
+	import { CoordinateProjector } from "$lib/dom/core/projector/coordinateProjector.svelte";
+	import { useViewportProjector } from "$lib/dom/core/projector/projector.context.svelte";
+	import { AspectStage, AspectStageModel, MovableFrame } from "$lib/dom/features";
+	import MovableImageFrame from "$lib/dom/features/frame/moveable-frame/MovableImageFrame.svelte";
+	import ProjectedStage from "$lib/dom/features/stages/projected-stage/ProjectedStage.svelte";
 
 	const viewportProjector = useViewportProjector();
 	const viewport = useViewport();

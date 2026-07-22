@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { ambientManager } from "$lib/audio/ambient.svelte";
-	import { audioSettings } from "$lib/audio/audio.svelte";
 	import { UiState } from "$lib/pile/util/ui/uiState.svelte";
 	import { deleteSelectedModel } from "$lib/pile/util/ui/uiActions";
+	import { audioSettings } from "$lib/audio/audio.svelte";
+	import { ambientManager } from "$lib/audio/ambient.svelte";
+	
 
 	
 

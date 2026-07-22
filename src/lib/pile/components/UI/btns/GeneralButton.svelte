@@ -4,6 +4,7 @@
 	interface Props {
 		onclick: () => void;
 		active?: boolean;
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		tooltip?: any;
 		tooltipText?: string;
 		children: Snippet;

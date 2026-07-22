@@ -1,5 +1,6 @@
 <script lang="ts">
-	import PageHeader from '$lib/components/layouts/PageHeader.svelte';
+	import PageHeader from "$lib/dom/components/layouts/PageHeader.svelte";
+
 </script>
 
 <div class="min-h-screen w-full bg-dark-green">

@@ -1,5 +1,6 @@
 <script>
-	import BoxStage from "$lib/features/stages/box-stage/BoxStage.svelte";
+	import BoxStage from "$lib/dom/features/stages/box-stage/BoxStage.svelte";
+
 
 
 

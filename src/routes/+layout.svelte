@@ -1,8 +1,8 @@
 <script lang="ts">
-	import SEO from '$lib/components/seo/SEO.svelte';
-	import { CanvasScaler } from '$lib/core';
-	import { initViewportProjectorContext } from '$lib/core/projector/projector.context.svelte';
-	import { initViewportContext } from '$lib/core/viewport/viewport.context.svelte';
+	import SEO from '$lib/dom/components/seo/SEO.svelte';
+	import { CanvasScaler } from '$lib/dom/core';
+	import { initViewportProjectorContext } from '$lib/dom/core/projector/projector.context.svelte';
+	import { initViewportContext } from '$lib/dom/core/viewport/viewport.context.svelte';
 	import '../app.css';
 	import { injectAnalytics } from '@vercel/analytics/sveltekit';
 	import { injectSpeedInsights } from '@vercel/speed-insights/sveltekit';

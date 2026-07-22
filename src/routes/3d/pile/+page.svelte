@@ -1,9 +1,9 @@
 <script lang="ts">
-	import CanvasPortal from '$lib/components/3d-canvas/CanvasPortal.svelte';
-	import { DeviceContext } from '$lib/core';
+	import CanvasPortal from '$lib/3d/core/3d-canvas/CanvasPortal.svelte';
+	import { DeviceContext } from '$lib/dom/core';
 	import { PileScene, type PileData } from '$lib/pile';
 	import MiniMap from '$lib/pile/components/mini-map/MiniMap.svelte';
-	import Pile2DElements from '$lib/pile/components/Pile2DElements.svelte';
+	import Pile2DElements from '$lib/pile/core/Pile2DElements.svelte';
 	import { PilePerformance } from '$lib/pile/util/pilePerformance.svelte';
 	import { UiState } from '$lib/pile/util/ui/uiState.svelte.js';
 	import { onDestroy, onMount } from 'svelte';

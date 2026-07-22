@@ -2,7 +2,7 @@ import type { SvelteMap } from 'svelte/reactivity';
 import type { PileDatabaseObj } from './api/pileDatabase';
 import type { PileObject3D } from './pileObject.svelte';
 import { toPileObj } from './api/pileMapper';
-import type { PerformanceTier } from '$lib/core';
+import type { PerformanceTier } from '$lib/dom/core';
 
 interface dbObjectsType {
 	object2D: PileDatabaseObj[];

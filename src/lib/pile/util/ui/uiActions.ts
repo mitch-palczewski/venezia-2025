@@ -13,7 +13,7 @@ import type { PileState } from '../pileState.svelte';
 import type { SvelteMap } from 'svelte/reactivity';
 import type { EnvironmentMap } from '../assetInventory/environmentMap';
 import { roundTo } from '../api/pileMapper';
-import { playAddObject, playDuplicteObject, playSound } from '$lib/audio/audio.svelte';
+import { playDuplicteObject } from '../../../audio/audio.svelte';
 
 const FALLBACK_SCALE = 15;
 const ZOOM_SCALE_MULTIPLY = 0.12;

@@ -1,10 +1,9 @@
 <script lang="ts">
 	import { dev } from '$app/environment';
-	import { ambientManager } from '$lib/audio/ambient.svelte';
-	import AsciiArtIntro from '$lib/components/layouts/AsciiArtIntro.svelte';
-	import InitializingScreen from '$lib/components/layouts/InitializingScreen.svelte';
-	import PageHeader from '$lib/components/layouts/PageHeader.svelte';
-	import PrintsBtnCarousel from '$lib/components/layouts/PrintsBtnCarousel.svelte';
+	import { ambientManager } from '$lib/audio/ambient.svelte.js';
+	import InitializingScreen from '$lib/dom/components/layouts/InitializingScreen.svelte';
+	import PageHeader from '$lib/dom/components/layouts/PageHeader.svelte';
+	import PrintsBtnCarousel from '$lib/dom/components/layouts/PrintsBtnCarousel.svelte';
 	import { onMount } from 'svelte';
 
 	let { data } = $props();
