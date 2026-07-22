@@ -29,7 +29,7 @@ export function useFlyControls(
             isInitialized = true;
         }
 
-        if (!pointer.isDragging) return;
+        if (!pointer.isDragging || pointer.isConsumed) return;
 
         const rotationSpeed = getRotationSpeed();
 

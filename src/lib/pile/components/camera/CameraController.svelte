@@ -4,27 +4,27 @@
 	import { createIdleTimer } from './idleManager.svelte';
 	import { useKeyboardMovement } from '../controls/keyboardMovement';
 	import OrbitCamera from './OrbitCamera.svelte';
-	import { useKeyboardInput } from '../controls/inputs/keyboardInputs.svelte';
 	import { useKeyboardRotation } from '../controls/keyboardRotation';
 	import FlyCamera from './FlyCamera.svelte';
-	import { usePointerInput } from '../controls/inputs/mouseInputs.svelte';
+	import { useInput } from '../controls/inputs/useInputs';
 
 	const IDLE_SEC = 60;
 
 	type Props = {
-		cameraType: 'orbit' | 'fly';
+		cameraType?: 'orbit' | 'fly';
 		app: PileApp;
 		uiState: UiState;
 	};
 	let { cameraType, app, uiState }: Props = $props();
 
 	const idleTimer = createIdleTimer(IDLE_SEC, () => uiState.isIdleEnabled);
-	const keys = useKeyboardInput(() => idleTimer.reset(), true);
-	const pointer = usePointerInput();
+	const inputs = useInput()
 
 	const movementSpeed = () => uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1) * 0.001;
-	useKeyboardMovement(keys, ()=>10, () => app.controlsRef);
-	useKeyboardRotation(keys, () => 1, () => app.controlsRef);
+	useKeyboardMovement(inputs.keys, ()=>10, () => app.controlsRef);
+	useKeyboardRotation(inputs.keys, () => 1, () => app.controlsRef);
+
+	getCameraType()
 
 	const far = $derived.by(() => {
 		const performanceTier = app.deviceContext.performance.performanceTier;
@@ -41,10 +41,21 @@
 				return 110000;
 		}
 	});
+
+	function getCameraType(){
+		if(cameraType) return 
+		const performanceTier = app.deviceContext.performance.performanceTier;
+		if(performanceTier <= 1){
+			cameraType = 'fly'
+		}else{
+			cameraType ='orbit'
+		}
+		
+	}
 </script>
 
 {#if cameraType === 'orbit'}
 	<OrbitCamera {app} {idleTimer} {far} />
-{:else if cameraType === 'fly' && pointer}
-	<FlyCamera {app} {idleTimer} {far} {pointer} />
+{:else if cameraType === 'fly' && inputs.pointer}
+	<FlyCamera {app} {idleTimer} {far} pointer ={inputs.pointer} />
 {/if}

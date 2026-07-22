@@ -27,7 +27,6 @@ export function useKeyboardMovement(
 		const hasMoved = calculateMovement(activeCamera, keys, movementSpeed, delta);
 
 		if (hasMoved) {
-			console.log('Position:', activeCamera.position.toArray()); 
 			activeCamera.position.add(moveStep);
 
 			if (controls) {
