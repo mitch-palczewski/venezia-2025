@@ -1,7 +1,7 @@
 import { useTask, useThrelte } from '@threlte/core';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Camera, MathUtils, Spherical, Vector3 } from 'three';
-import type { KeyState } from './inputs.svelte';
+import type { KeyState } from './inputs/keyboardInputs.svelte';
 
 const WORLD_UP = new Vector3(0, 1, 0);
 const offset = new Vector3();

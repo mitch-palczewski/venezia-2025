@@ -1,7 +1,7 @@
 import { useTask, useThrelte } from '@threlte/core';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Camera, Vector3 } from 'three';
-import type { KeyState } from './inputs.svelte';
+import type { KeyState } from './inputs/keyboardInputs.svelte';
 
 const forward = new Vector3();
 const side = new Vector3();
@@ -32,6 +32,8 @@ export function useKeyboardMovement(
 			if (controls) {
 				controls.target.add(moveStep);
 				controls.update();
+			}else{
+				activeCamera.updateMatrixWorld()
 			}
 			onMove?.();
 		}
