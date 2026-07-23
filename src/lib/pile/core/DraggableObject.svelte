@@ -1,7 +1,13 @@
 <script lang="ts">
-	/* eslint-disable @typescript-eslint/no-explicit-any */
 	import { isInstanceOf, T, useThrelte } from '@threlte/core';
-	import { bvh, BVHSplitStrategy, meshBounds, TransformControls, useGltf } from '@threlte/extras';
+	import {
+		bvh,
+		BVHSplitStrategy,
+		meshBounds,
+		Outlines,
+		TransformControls,
+		useGltf
+	} from '@threlte/extras';
 	import { Box3, Group, Mesh, Object3D, Vector3 } from 'three';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
@@ -12,6 +18,9 @@
 	} from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp.svelte';
 	import { createMover } from '../util/animator.svelte';
+	import { useCameraPlaneDrag } from '$lib/3d/core/controls/interactions/useCameraPlaneDrag';
+	import Pile from '../pile.svelte';
+	import { useCameraLaunch } from '$lib/3d/core/controls/interactions/useCameraLaunch';
 
 	let {
 		fallback,
@@ -61,17 +70,18 @@
 
 	let gltfReady = $state(false);
 	$effect(() => {
-        if (!$gltf?.scene || !renderer) return;
+		if (!$gltf?.scene || !renderer) return;
 
-        renderer.compileAsync($gltf.scene, camera.current, scene)
-            .then(() => {
-                gltfReady = true; 
-            })
-            .catch((err) => {
-                console.error("Failed to pre-compile GLTF:", err);
-                gltfReady = true; // Fallback so it doesn't stay hidden forever
-            });
-    });
+		renderer
+			.compileAsync($gltf.scene, camera.current, scene)
+			.then(() => {
+				gltfReady = true;
+			})
+			.catch((err) => {
+				console.error('Failed to pre-compile GLTF:', err);
+				gltfReady = true; // Fallback so it doesn't stay hidden forever
+			});
+	});
 
 	//Moving Animation
 	const mover = createMover(() => ref);
@@ -89,16 +99,15 @@
 	//Get AssetSize when GLTF store resolves
 	let baseAssetSize = $state(1);
 	$effect(() => {
-        if (!$gltf?.scene) return;
-        const box = new Box3().setFromObject($gltf.scene);
-        const size = new Vector3();
-        box.getSize(size);
-        baseAssetSize = Math.max(size.x, size.y, size.z);
-        if (baseAssetSize === 0) baseAssetSize = 1; 
-    });
+		if (!$gltf?.scene) return;
+		const box = new Box3().setFromObject($gltf.scene);
+		const size = new Vector3();
+		box.getSize(size);
+		baseAssetSize = Math.max(size.x, size.y, size.z);
+		if (baseAssetSize === 0) baseAssetSize = 1;
+	});
 
-
-	// Hide Object if small and far away 
+	// Hide Object if small and far away
 	let shouldRender = $state(true);
 	$effect(() => {
 		if (!ref || !pileApp.cameraRef) return;
@@ -114,14 +123,14 @@
 			const trueWorldSize = baseAssetSize * currentScaleFactor;
 			const apparentSize = trueWorldSize / distance;
 
-			const CUTOFF_THRESHOLD = pileApp.deviceContext.performance.performanceTier <= 1  ? 0.03 : 0.015;
+			const CUTOFF_THRESHOLD =
+				pileApp.deviceContext.performance.performanceTier <= 1 ? 0.03 : 0.015;
 			shouldRender = apparentSize > CUTOFF_THRESHOLD;
 		}, staggeredDelay);
 		return () => clearInterval(interval);
 	});
 
-
-	// BVH Settings 
+	// BVH Settings
 	const isLowQuality = pileApp.deviceContext.performance.performanceTier <= 1;
 	const isMedQuality = pileApp.deviceContext.performance.performanceTier === 2;
 
@@ -129,18 +138,55 @@
 		enabled: pileApp.deviceContext.performance.performanceTier > 2,
 		strategy: BVHSplitStrategy.CENTER,
 		maxDepth: pileApp.deviceContext.performance.performanceTier === 4 ? 10 : 5,
-		maxLeafTris: pileApp.deviceContext.performance.performanceTier ===  4 ? 100 : 500,
+		maxLeafTris: pileApp.deviceContext.performance.performanceTier === 4 ? 100 : 500,
 		verbose: false,
 		setBoundingBox: false,
 		helper: false
 	}));
 
 	$effect(() => {
-        if ($gltf && pileObjectData.onLoad) {
-            pileObjectData.onLoad();
-            delete pileObjectData.onLoad;
-        }
-    });
+		if ($gltf && pileObjectData.onLoad) {
+			pileObjectData.onLoad();
+			delete pileObjectData.onLoad;
+		}
+	});
+
+	let isSelected = $state(false);
+
+	const { onPointerDown } = useCameraPlaneDrag({
+		onPickUp: () => {
+			pileApp.state.selectedObjectID = pileObjectData.id;
+			pileApp.state.cameraControlsLocked = true;
+			isSelected = true;
+		},
+		onDrop: (obj) => {
+			pileApp.state.cameraControlsLocked = false;
+			if (obj) {
+				pileApp.database.update(pileObjectData);
+			}
+			isSelected = false;
+		}
+	});
+
+	function handleSingleClick(e: PointerEvent) {
+		e.stopPropagation();
+		handleClick(e);
+	}
+	function handleClick(e: PointerEvent) {
+		onPointerDown(e, ref!);
+	}
+
+	const { onDblClick } = useCameraLaunch({
+		distance: 200, // Propels object 20 units forward
+		duration: 3, // Takes 0.5 seconds
+		onLaunchComplete: (obj) => {
+			pileApp.database.update(pileObjectData);
+		}
+	});
+
+	function handleDblClick(e: PointerEvent) {
+		onDblClick(e, ref!);
+	}
 </script>
 
 <!-- 
@@ -178,33 +224,30 @@
 	bind:ref
 	dispose={true}
 	name={pileObjectData.name}
-	onclick={(e: any) => {
-		e.stopPropagation();
-		if (pileApp.state.cameraControls === 'fly') return
-		if (pileApp.uiSettings.doubleClick) return;
-		handleModelClick(e, pileApp, pileObjectData);
-	}}
-	ondblclick={(e: any) => {
-		e.stopPropagation();
-		if (pileApp.state.cameraControls === 'fly') return
-		if (!pileApp.uiSettings.doubleClick) return;
-		handleModelClick(e, pileApp, pileObjectData);
-	}}
+	onpointerdown={handleSingleClick}
+	ondblclick={handleDblClick}
 >
 	{#await $gltf}
 		{@render fallback?.()}
 	{:then gltf}
 		{#if shown && sceneChildren && shouldRender && gltfReady}
-			<TransformControls
-				showX={showThisTransformControls}
-				showY={showThisTransformControls}
-				showZ={showThisTransformControls}
-				mode={pileApp.uiSettings.transformControlsMode}
-			>
-				<T.Group>
-					{@render sceneBuilder(sceneChildren)}
-				</T.Group>
-			</TransformControls>
+			<T.Group>
+				{@render sceneBuilder(sceneChildren)}
+				{#if isSelected}
+					<T.Mesh rotation.x={-Math.PI / 2} position.y={0.01}>
+						<T.RingGeometry args={[1.0, 1.04, 32]} />
+						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={.5} />
+					</T.Mesh>
+					<T.Mesh rotation.x={0} position.y={0.01}>
+						<T.RingGeometry args={[1.0, 1.04, 32]} />
+						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={.5} />
+					</T.Mesh>
+					<T.Mesh rotation.y={-Math.PI / 2} position.y={0.01}>
+						<T.RingGeometry args={[1.0, 1.04, 32]} />
+						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={.5} />
+					</T.Mesh>
+				{/if}
+			</T.Group>
 		{/if}
 	{:catch err}
 		{@render error?.({ error: err })}

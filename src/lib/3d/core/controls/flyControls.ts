@@ -9,7 +9,8 @@ export function useFlyControls(
     getRotationSpeed: () => number,
     getMovementSpeed: () => number,
     getCustomCamera?: () => Camera | undefined,
-    onRotate?: () => void
+    onRotate?: () => void,
+    isEnabled?: () => boolean
 ) {
     const { camera } = useThrelte();
 
@@ -18,6 +19,7 @@ export function useFlyControls(
     let isInitialized = false;
 
     useTask((delta) => {
+        if(isEnabled && !isEnabled()) return
         const activeCamera = getCustomCamera?.() ?? camera.current;
         if (!activeCamera) return;
 

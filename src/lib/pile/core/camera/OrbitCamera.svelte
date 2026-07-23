@@ -4,6 +4,7 @@
 	import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 	import type { IdleTimer } from './idleManager.svelte';
 	import type { PerspectiveCamera } from 'three';
+	import Controls from '$lib/pile/components/UI/settings-menu/Controls.svelte';
 
 	const AUTO_ROTATE_SPEED = 0.5;
 	const CAMERA_POS: [x: number, y: number, z: number] = [20, 20, 20];
@@ -17,14 +18,30 @@
         cameraRef?: PerspectiveCamera;
         controlsRef?: ThreeOrbitControls;
     }
+
+	export interface ControlsLockObj {
+		cameraControlsLocked: boolean
+	}
 	
 	interface Props {
 		app: CameraControlsTarget;
 		idleTimer: IdleTimer;
 		far: number;
+		lockableObj?: ControlsLockObj
 	}
 
-	let { app, idleTimer, far}: Props = $props();
+	let { app, idleTimer, far, lockableObj}: Props = $props();
+
+	function getIsEnabled(){
+		if(lockableObj?.cameraControlsLocked === true){
+			return false
+		}
+		if(lockableObj?.cameraControlsLocked === false){
+			return true
+		}
+		return true
+
+	}
 
 </script>
 <T.PerspectiveCamera
@@ -38,6 +55,7 @@
 >
 	<OrbitControls
 		bind:ref={app.controlsRef}
+		enabled={getIsEnabled()}
 		enableDamping
 		dampingFactor={DAMPING}
 		rotateSpeed={ROT_SPEED}

@@ -100,7 +100,9 @@
 							<ScaleSlider pileState={pileApp.state} {uiSettings} vertical={false} />
 						{/if}
 						{#if (!uiSettings.showAddMenu && isVertical) || !isVertical}
-							<TransformModeBtn {uiSettings} />
+							{#if  uiSettings.app?.state.objectControls === 'gizmo'}
+								<TransformModeBtn {uiSettings} />
+							{/if}
 							<DuplicateBtn {pileState} {uiSettings} {pileApp} />
 							{#if !uiSettings.showAddMenu}
 								<FocusBtn {pileState} {uiSettings} />

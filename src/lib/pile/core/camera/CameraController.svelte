@@ -10,8 +10,10 @@
 
 	const IDLE_SEC = 60;
 
+	export type CameraTypes = 'orbit' | 'fly'
+
 	type Props = {
-		cameraType?: 'orbit' | 'fly';
+		cameraType?: CameraTypes;
 		app: PileApp;
 		uiState: UiState;
 	};
@@ -20,11 +22,25 @@
 	const idleTimer = createIdleTimer(IDLE_SEC, () => uiState.isIdleEnabled);
 	const inputs = useInput()
 
-	const movementSpeed = () => uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1) * 0.001;
-	useKeyboardMovement(inputs.keys, ()=>10, () => app.controlsRef);
+	const movementSpeed = () => {
+		if(app.controlsRef){
+			return uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1)* 0.001 + 40 ;
+		}else {
+			return 10
+		}
+	}
+	useKeyboardMovement(inputs.keys, movementSpeed, () => app.controlsRef);
 	useKeyboardRotation(inputs.keys, () => 1, () => app.controlsRef);
+			
+	
+	const performanceTier = app.deviceContext.performance.performanceTier;
 
-	getCameraType()
+
+	let cameraControls = $derived.by(()=>{
+		if(cameraType) return cameraType
+		if(performanceTier <=1) return 'fly'
+		return app.state.cameraControls
+	})
 
 	const far = $derived.by(() => {
 		const performanceTier = app.deviceContext.performance.performanceTier;
@@ -32,30 +48,21 @@
 			case 0:
 				return 50000;
 			case 1:
-				return 60000;
+				return 80000;
 			case 2:
-				return 70000;
-			case 3:
 				return 90000;
+			case 3:
+				return 100000;
 			case 4:
 				return 110000;
 		}
 	});
 
-	function getCameraType(){
-		if(cameraType) return 
-		const performanceTier = app.deviceContext.performance.performanceTier;
-		if(performanceTier <= 1){
-			cameraType = 'fly'
-		}else{
-			cameraType ='orbit'
-		}
-		
-	}
+	
 </script>
 
-{#if cameraType === 'orbit'}
-	<OrbitCamera {app} {idleTimer} {far} />
-{:else if cameraType === 'fly' && inputs.pointer}
-	<FlyCamera {app} {idleTimer} {far} pointer ={inputs.pointer} />
+{#if cameraControls === 'orbit'}
+	<OrbitCamera {app} {idleTimer} {far} lockableObj={app.state}/>
+{:else if cameraControls === 'fly' && inputs.pointer}
+	<FlyCamera {app} {idleTimer} {far} pointer ={inputs.pointer} lockableObj={app.state} {movementSpeed}/>
 {/if}

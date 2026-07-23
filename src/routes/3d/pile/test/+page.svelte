@@ -33,7 +33,7 @@
 
 <div bind:this={uiState.canvasContainer}>
 	<CanvasPortal>
-		<PileScene bind:this={pileSceneRef} {data} {uiState} {performance} databaseName={'pile_objects_test'}/>
+		<PileScene bind:this={pileSceneRef} {data} {uiState} {performance} databaseName={'pile_objects_test'} objectControls="drag"/>
 	</CanvasPortal>
 </div>
 

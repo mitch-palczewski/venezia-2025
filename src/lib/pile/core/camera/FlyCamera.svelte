@@ -9,20 +9,37 @@
         cameraRef?: PerspectiveCamera;
     }
 
+    export interface ControlsLockObj {
+		cameraControlsLocked: boolean
+	}
+
  type Props = {
   app:CameraTarget
   pointer: PointerState
   idleTimer: IdleTimer;
-		far: number;
+	far: number;
+  movementSpeed: () => number;
+  lockableObj?: ControlsLockObj;
  }
- let {app, pointer, idleTimer, far }: Props = $props()
+ let {app, pointer, idleTimer, far, movementSpeed, lockableObj }: Props = $props()
+
+ function getIsEnabled(){
+    if(lockableObj?.cameraControlsLocked === true){
+      return false
+    }
+    if(lockableObj?.cameraControlsLocked === false){
+      return true
+    }
+    return true
+ }
 
   useFlyControls(
     pointer,
     () => 1,
-    ()=> 10,
+    movementSpeed,
     undefined,
-    () => idleTimer
+    () => idleTimer,
+    getIsEnabled
   )
 </script>
 
@@ -31,5 +48,6 @@
 
 <T.PerspectiveCamera
   bind:ref={app.cameraRef}
+  {far}
   makeDefault
 />

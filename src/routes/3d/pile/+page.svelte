@@ -32,7 +32,7 @@
 
 <div bind:this={uiState.canvasContainer}>
 	<CanvasPortal>
-		<PileScene bind:this={pileSceneRef} {data} {uiState} {performance} />
+		<PileScene bind:this={pileSceneRef} {data} {uiState} {performance} objectControls="gizmo"/>
 	</CanvasPortal>
 </div>
 

@@ -6,11 +6,15 @@ import { Matrix4, Quaternion, Vector3, type Object3D } from 'three';
 import type { PileApp } from './pileApp.svelte';
 import type { UiState } from './ui/uiState.svelte';
 import { playAddObject } from '../../audio/audio.svelte';
+import type { CameraTypes } from '../core/camera/CameraController.svelte';
 
 export type UploadStatus = 'Idle' | 'Saved' | 'Saving' | 'Unsaved Changes';
 
 export class PileState {
 	#selectedObjectID = $state<string | null>(null);
+	cameraControls = $state<CameraTypes>('orbit');
+	cameraControlsLocked = $state(false)
+	objectControls = $state<"gizmo" | "drag" | "view">("gizmo")
 	selectedObjectUploaded = $state(true);
 	objects2D = $state(new SvelteMap<string, PileObject2D>());
 	objects3D = $state(new SvelteMap<string, PileObject3D>());
@@ -33,7 +37,6 @@ export class PileState {
 	set selectedObjectID(value) {
 		if (value === this.#selectedObjectID) return;
 		if (!this.selectedObjectUploaded && this.showTransformControls) {
-			//If moving from a selected object to a new object
 			this.updateSelectedObject();
 		}
 		this.#selectedObjectID = value;
@@ -241,3 +244,4 @@ export class PileState {
 		return worldScale;
 	}
 }
+

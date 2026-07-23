@@ -7,6 +7,7 @@ export interface PointerState {
 	x: number;
 	y: number;
 	isConsumed: boolean;
+	key: number | null
 }
 
 export function usePointerInput(onActivity?: () => void, button?: number) {
@@ -14,7 +15,8 @@ export function usePointerInput(onActivity?: () => void, button?: number) {
 		isDragging: false,
 		x: 0,
 		y: 0,
-		isConsumed: false
+		isConsumed: false,
+		key: null
 	});
 
 	const targetButton = button ?? 0;
@@ -29,6 +31,7 @@ export function usePointerInput(onActivity?: () => void, button?: number) {
 			if (e.button !== targetButton) return;
 			pointer.isDragging = true;
 			pointer.isConsumed = false;
+			pointer.key = e.button 
 			updatePosition(e);
 			onActivity?.();
 		};
@@ -52,6 +55,7 @@ export function usePointerInput(onActivity?: () => void, button?: number) {
 			pointer.isConsumed = false;
 			pointer.x = 0;
 			pointer.y = 0;
+			pointer.key = null;
 		};
 
 		window.addEventListener('pointerdown', handlePointerDown);
