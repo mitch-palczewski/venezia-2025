@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { T, useThrelte } from '@threlte/core';
+	import { T, useTask, useThrelte } from '@threlte/core';
 	import { Grid } from '@threlte/extras';
 	import { PileApp } from './util/pileApp.svelte';
 	import { onDestroy } from 'svelte';
@@ -9,7 +9,7 @@
 	import type { UiState } from './util/ui/uiState.svelte';
 	import type { PilePerformance } from './util/pilePerformance.svelte';
 	import { captureThrelteScene } from '$lib/3d/features/utils/captureScene';
-	import CameraController from './core/camera/CameraController.svelte';
+	import CameraController, { type CameraTypes } from './core/camera/CameraController.svelte';
 	import OrbitLight from '$lib/3d/features/lights/OrbitLight.svelte';
 	import Tower from '$lib/3d/components/Tower.svelte';
 	import Fireplace from '$lib/3d/components/Fireplace.svelte';
@@ -23,11 +23,12 @@
 		performance: PilePerformance;
 		databaseName?: string;
 		objectControls?: 'gizmo' | 'drag' | 'view';
+		cameraControls?: CameraTypes
 	};
-	let { data, uiState, performance, databaseName, objectControls = 'gizmo' }: Props = $props();
+	let { data, uiState, performance, databaseName, objectControls = 'gizmo', cameraControls ='orbit' }: Props = $props();
 
 	const { raycaster } = interactivity();
-	raycaster.firstHitOnly = true;
+	
 
 	const { renderer, scene, camera } = useThrelte();
 	export async function capturePileScene(): Promise<Blob> {
@@ -36,6 +37,7 @@
 
 	export const pileApp = new PileApp(capturePileScene, uiState, performance, data, databaseName);
 	pileApp.state.objectControls = objectControls;
+	pileApp.state.cameraControls = cameraControls
 
 	onDestroy(() => {
 		pileApp.database.destroy();
@@ -48,7 +50,7 @@
 <SettingsKeyBind settingState={uiState} />
 
 {#if uiState && pileApp}
-	<CameraController {uiState} app={pileApp} />
+	<CameraController {uiState} app={pileApp} cameraType={cameraControls} />
 	<OrbitLight ready={pileApp.isReady} performanceTier={performance.lights} />
 {/if}
 

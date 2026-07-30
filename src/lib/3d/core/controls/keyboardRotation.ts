@@ -1,94 +1,162 @@
 import { useTask, useThrelte } from '@threlte/core';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { Camera, MathUtils, Spherical, Vector3 } from 'three';
-import type { KeyState } from '../inputs/keyboardInputs.svelte';
+import { onMount, onDestroy } from 'svelte';
 
 const WORLD_UP = new Vector3(0, 1, 0);
 const offset = new Vector3();
 const spherical = new Spherical();
 
-export function useKeyboardRotation(
-	keys: KeyState,
-    getSpeed?: () => number,
-	getControls?: () => ThreeOrbitControls | undefined,
-	getCustomCamera?: () => Camera | undefined,
-	getInvertPitch?: () => boolean,
-	onRotate?: () => void
-) {
-	const { camera } = useThrelte();
+type RotationKeyState = {
+  left: boolean;
+  right: boolean;
+  up: boolean;
+  down: boolean;
+};
 
-	useTask((delta) => {
-		const activeCamera = getCustomCamera?.() ?? camera.current;
-		if (!activeCamera) return;
-
-		const RotationSpeed = getSpeed?.() ?? 0.5;
-		const controls = getControls?.();
-		const invertPitch = getInvertPitch?.();
-
-		const hasRotated = applyRotation(
-			activeCamera,
-			keys,
-			RotationSpeed,
-			delta,
-			controls,
-			invertPitch
-		);
-
-		if (hasRotated) {
-			if (controls) {
-				controls.update();
-			}
-			onRotate?.();
-		}
-	});
+export interface KeyboardRotationOptions {
+  invertPitch?: boolean | (() => boolean);
+  afterRotate?: () => void;
 }
 
-export function applyRotation(
-	camera: Camera,
-	keys: KeyState,
-	rotSpeed: number,
-	delta: number,
-	controls?: ThreeOrbitControls,
-	invertPitch: boolean = false
-): boolean {
-	let yaw = 0;
-	let pitch = 0;
+export function rotateCamera(
+  camera: Camera | undefined,
+  yaw: number,
+  pitch: number
+) {
+  if (!camera) return;
 
-	if (keys.arrowLeft) yaw += 1;
-	if (keys.arrowRight) yaw -= 1;
+  if (yaw !== 0) camera.rotateOnWorldAxis(WORLD_UP, yaw);
+  if (pitch !== 0) camera.rotateX(pitch);
 
-	if (invertPitch) {
-		if (keys.arrowUp) pitch += 1;
-		if (keys.arrowDown) pitch -= 1;
-	} else {
-		if (keys.arrowUp) pitch -= 1;
-		if (keys.arrowDown) pitch += 1;
-	}
+  camera.updateMatrixWorld();
+}
 
-	if (yaw === 0 && pitch === 0) return false;
+export function rotateOrbitControls(
+  controls: ThreeOrbitControls | undefined,
+  camera: Camera | undefined,
+  yaw: number,
+  pitch: number
+) {
+  if (!controls || !camera) return;
 
-	const angle = rotSpeed * delta;
+  offset.copy(camera.position).sub(controls.target);
+  spherical.setFromVector3(offset);
 
-	if (controls) {
-		offset.copy(camera.position).sub(controls.target);
-		spherical.setFromVector3(offset);
+  spherical.theta += yaw;
+  spherical.phi -= pitch;
 
-		spherical.theta += yaw * angle;
-		spherical.phi -= pitch * angle;
+  const minPolar = controls.minPolarAngle ?? 0.0001;
+  const maxPolar = controls.maxPolarAngle ?? Math.PI - 0.0001;
+  spherical.phi = MathUtils.clamp(spherical.phi, minPolar, maxPolar);
 
-		const minPolar = controls.minPolarAngle ?? 0.0001;
-		const maxPolar = controls.maxPolarAngle ?? Math.PI - 0.0001;
-		spherical.phi = MathUtils.clamp(spherical.phi, minPolar, maxPolar);
+  spherical.makeSafe();
 
-		spherical.makeSafe();
+  offset.setFromSpherical(spherical);
+  camera.position.copy(controls.target).add(offset);
+  camera.lookAt(controls.target);
+  controls.update();
+}
 
-		offset.setFromSpherical(spherical);
-		camera.position.copy(controls.target).add(offset);
-		camera.lookAt(controls.target);
-	} else {
-		if (yaw !== 0) camera.rotateOnWorldAxis(WORLD_UP, yaw * angle);
-		if (pitch !== 0) camera.rotateX(pitch * angle);
-	}
 
-	return true;
+export function useKeyboardRotation(
+  getRotationSpeed: number | (() => number),
+  onRotate: (yaw: number, pitch: number) => void,
+  options: KeyboardRotationOptions = {}
+) {
+  const { camera } = useThrelte();
+
+  const keys: RotationKeyState = {
+    left: false,
+    right: false,
+    up: false,
+    down: false
+  };
+
+  const handleKey = (e: KeyboardEvent, isDown: boolean) => {
+    const target = e.target as HTMLElement;
+    if (
+      target &&
+      (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
+    ) {
+      return;
+    }
+
+    switch (e.code) {
+      case 'ArrowLeft':
+        keys.left = isDown;
+        e.preventDefault();
+        break;
+      case 'ArrowRight':
+        keys.right = isDown;
+        e.preventDefault();
+        break;
+      case 'ArrowUp':
+        keys.up = isDown;
+        e.preventDefault();
+        break;
+      case 'ArrowDown':
+        keys.down = isDown;
+        e.preventDefault();
+        break;
+    }
+  };
+
+  const onKeyDown = (e: KeyboardEvent) => handleKey(e, true);
+  const onKeyUp = (e: KeyboardEvent) => handleKey(e, false);
+
+  const onBlur = () => {
+    keys.left = false;
+    keys.right = false;
+    keys.up = false;
+    keys.down = false;
+  };
+
+  onMount(() => {
+    window.addEventListener('keydown', onKeyDown);
+    window.addEventListener('keyup', onKeyUp);
+    window.addEventListener('blur', onBlur);
+  });
+
+  onDestroy(() => {
+    window.removeEventListener('keydown', onKeyDown);
+    window.removeEventListener('keyup', onKeyUp);
+    window.removeEventListener('blur', onBlur);
+  });
+
+  useTask((delta) => {
+    const activeCamera = camera.current;
+    if (!activeCamera) return;
+
+    let yawInput = 0;
+    let pitchInput = 0;
+
+    if (keys.left) yawInput += 1;
+    if (keys.right) yawInput -= 1;
+
+    const invert =
+      typeof options.invertPitch === 'function'
+        ? options.invertPitch()
+        : options.invertPitch ?? false;
+
+    if (invert) {
+      if (keys.up) pitchInput += 1;
+      if (keys.down) pitchInput -= 1;
+    } else {
+      if (keys.up) pitchInput -= 1;
+      if (keys.down) pitchInput += 1;
+    }
+
+    if (yawInput === 0 && pitchInput === 0) return;
+
+    const speed =
+      typeof getRotationSpeed === 'function' ? getRotationSpeed() : getRotationSpeed;
+
+    const angleStep = speed * delta;
+    const yawStep = yawInput * angleStep;
+    const pitchStep = pitchInput * angleStep;
+
+    onRotate(yawStep, pitchStep);
+    options.afterRotate?.()
+  });
 }

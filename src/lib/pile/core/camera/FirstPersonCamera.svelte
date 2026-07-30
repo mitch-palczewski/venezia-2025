@@ -3,7 +3,7 @@
 	import type { IdleTimer } from './idleManager.svelte';
 	import type { PerspectiveCamera } from 'three';
 	import type { PointerState } from '$lib/3d/core/inputs/mouseInputs.svelte';
-	import { useFlyControls } from '$lib/3d/core/controls/flyControls';
+	import { useFirstPersonControls } from '$lib/3d/core/controls/movement/firstPersonControls';
 
   export interface CameraTarget {
         cameraRef?: PerspectiveCamera;
@@ -33,14 +33,7 @@
     return true
  }
 
-  useFlyControls(
-    pointer,
-    () => 1,
-    movementSpeed,
-    undefined,
-    () => idleTimer,
-    getIsEnabled
-  )
+  useFirstPersonControls(.001 )
 </script>
 
 
@@ -52,3 +45,4 @@
   near={15}
   makeDefault
 />
+

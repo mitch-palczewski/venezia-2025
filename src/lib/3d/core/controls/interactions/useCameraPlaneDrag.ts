@@ -94,9 +94,7 @@ export function useCameraPlaneDrag({
     }
   };
 
-  // ==========================================
-  // ROTATION LOGIC
-  // ==========================================
+
   const rotateObject = (deltaX: number, deltaY: number) => {
     if (!activeObject) return;
 
@@ -140,7 +138,7 @@ export function useCameraPlaneDrag({
     if (interactionMode === 'translate') {
       updateMouseCoordinates(nativeEv);
       initializeDragPlane(currentCamera, object);
-    } else {
+    } else if (interactionMode === 'rotate'){
       math.previousMouse2D.set(nativeEv.clientX, nativeEv.clientY);
     }
 
@@ -184,21 +182,16 @@ export function useCameraPlaneDrag({
     currentCamera.getWorldDirection(math.camDir);
     currentCamera.getWorldPosition(math.camPos);
 
-    // Get current perpendicular distance from camera to the drag plane
     const currentDistance = math.plane.distanceToPoint(math.camPos);
 
-    // Normalize wheel direction (-1 = scroll away, 1 = scroll towards)
     const wheelSign = Math.sign(e.deltaY);
 
-    // Scale step relative to depth (closer = smaller steps, farther = larger steps)
     let distanceShift = -wheelSign * Math.max(currentDistance * 0.15, 0.05) * scrollSpeed;
 
-    // Enforce minDistance safety floor to prevent passing behind the camera
     if (currentDistance + distanceShift < minDistance) {
       distanceShift = minDistance - currentDistance;
     }
 
-    // Only update if there is actual movement allowed
     if (Math.abs(distanceShift) > 0.0001) {
       math.camDir.multiplyScalar(distanceShift);
       math.plane.translate(math.camDir);

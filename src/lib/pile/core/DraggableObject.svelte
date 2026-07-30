@@ -1,25 +1,13 @@
 <script lang="ts">
 	import { isInstanceOf, T, useThrelte } from '@threlte/core';
-	import {
-		bvh,
-		BVHSplitStrategy,
-		meshBounds,
-		Outlines,
-		TransformControls,
-		useGltf
-	} from '@threlte/extras';
+	import { bvh, BVHSplitStrategy, meshBounds, useGltf } from '@threlte/extras';
 	import { Box3, Group, Mesh, Object3D, Vector3 } from 'three';
 	import type { Props } from '@threlte/core';
 	import { type Snippet } from 'svelte';
-	import {
-		handleModelClick,
-		setObjectMapIfNull,
-		type PileObject3D
-	} from '../util/pileObject.svelte';
+	import { setObjectMapIfNull, type PileObject3D } from '../util/pileObject.svelte';
 	import type { PileApp } from '../util/pileApp.svelte';
 	import { createMover } from '../util/animator.svelte';
 	import { useCameraPlaneDrag } from '$lib/3d/core/controls/interactions/useCameraPlaneDrag';
-	import Pile from '../pile.svelte';
 	import { useCameraLaunch } from '$lib/3d/core/controls/interactions/useCameraLaunch';
 
 	let {
@@ -58,15 +46,7 @@
 		return thisSceneChildren;
 	});
 
-	let showThisTransformControls = $derived.by(() => {
-		if (!pileObjectData.id || pileObjectData.id === '')
-			throw Error(`Pile Object has no id ${pileObjectData}`);
-		if (pileApp.state.selectedObjectID === pileObjectData.id) {
-			return pileApp.state.showTransformControls;
-		} else {
-			return false;
-		}
-	});
+
 
 	let gltfReady = $state(false);
 	$effect(() => {
@@ -168,23 +148,43 @@
 		}
 	});
 
-	function handleSingleClick(e: PointerEvent) {
-		e.stopPropagation();
-		handleClick(e);
+	const MAX_INTERACTION_DISTANCE = $state((pileApp.controlsRef?.getDistance() ?? 1 ) * 1000);
+
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+	function isWithinInteractionRange(e: any): boolean {
+		if (typeof e.distance === 'number' && e.distance <= MAX_INTERACTION_DISTANCE) {
+			return true;
+		}
+
+		if (ref && camera.current) {
+			const cameraPos = camera.current.position;
+			const box = new Box3().setFromObject(ref);
+			if (
+				box.containsPoint(cameraPos) ||
+				box.distanceToPoint(cameraPos) <= MAX_INTERACTION_DISTANCE
+			) {
+				return true;
+			}
+		}
+		return false;
 	}
-	function handleClick(e: PointerEvent) {
+
+	function handleSingleClick(e: PointerEvent) {
+		if (!isWithinInteractionRange(e)) return;
+		e.stopPropagation();
 		onPointerDown(e, ref!);
 	}
 
 	const { onDblClick } = useCameraLaunch({
-		distance: 200, // Propels object 20 units forward
-		duration: 3, // Takes 0.5 seconds
+		distance: 200,
+		duration: 3,
 		onLaunchComplete: (obj) => {
 			pileApp.database.update(pileObjectData);
 		}
 	});
 
 	function handleDblClick(e: PointerEvent) {
+		if (!isWithinInteractionRange(e)) return;
 		onDblClick(e, ref!);
 	}
 </script>
@@ -236,15 +236,15 @@
 				{#if isSelected}
 					<T.Mesh rotation.x={-Math.PI / 2} position.y={0.01}>
 						<T.RingGeometry args={[1.0, 1.04, 32]} />
-						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={.5} />
+						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
 					</T.Mesh>
 					<T.Mesh rotation.x={0} position.y={0.01}>
 						<T.RingGeometry args={[1.0, 1.04, 32]} />
-						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={.5} />
+						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
 					</T.Mesh>
 					<T.Mesh rotation.y={-Math.PI / 2} position.y={0.01}>
 						<T.RingGeometry args={[1.0, 1.04, 32]} />
-						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={.5} />
+						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
 					</T.Mesh>
 				{/if}
 			</T.Group>

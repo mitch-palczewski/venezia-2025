@@ -5,12 +5,22 @@
 	import OrbitCamera from './OrbitCamera.svelte';
 	import FlyCamera from './FlyCamera.svelte';
 	import { useInput } from '$lib/3d/core/inputs/useInputs';
-	import { useKeyboardMovement } from '$lib/3d/core/controls/keyboardMovement';
-	import { useKeyboardRotation } from '$lib/3d/core/controls/keyboardRotation';
+	import {
+		moveCamera,
+		moveOrbitControls,
+		useKeyboardMovement
+	} from '$lib/3d/core/controls/keyboardMovement';
+	import {
+		rotateCamera,
+		rotateOrbitControls,
+		useKeyboardRotation
+	} from '$lib/3d/core/controls/keyboardRotation';
+	import FirstPersonCamera from './FirstPersonCamera.svelte';
+	import { useThrelte } from '@threlte/core';
 
 	const IDLE_SEC = 60;
 
-	export type CameraTypes = 'orbit' | 'fly'
+	export type CameraTypes = 'orbit' | 'fly' | 'first_person';
 
 	type Props = {
 		cameraType?: CameraTypes;
@@ -19,28 +29,57 @@
 	};
 	let { cameraType, app, uiState }: Props = $props();
 
+	const { camera } = useThrelte();
 	const idleTimer = createIdleTimer(IDLE_SEC, () => uiState.isIdleEnabled);
-	const inputs = useInput()
+	const inputs = useInput();
 
 	const movementSpeed = () => {
-		if(app.controlsRef){
-			return uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1)* 0.001 + 40 ;
-		}else {
-			return 10
+		if (app.controlsRef) {
+			return uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1) * 0.001 + 50;
+		} else {
+			return 10;
 		}
-	}
-	useKeyboardMovement(inputs.keys, movementSpeed, () => app.controlsRef);
-	useKeyboardRotation(inputs.keys, () => 1, () => app.controlsRef);
-			
-	
+	};
+
+	useKeyboardMovement(
+		movementSpeed,
+		(step) => {
+			if (cameraType === 'orbit' && app.controlsRef) {
+				moveOrbitControls(app.controlsRef, step);
+			} else {
+				moveCamera(camera.current, step);
+			}
+		},
+		{
+			afterMove: () => {
+				idleTimer.reset();
+			}
+		}
+	);
+
+	useKeyboardRotation(
+		() => 0.4,
+		(yaw, pitch) => {
+			if (cameraType === 'orbit' && app.controlsRef) {
+				rotateOrbitControls(app.controlsRef, camera.current, yaw, pitch);
+			} else {
+				rotateCamera(camera.current, yaw, pitch);
+			}
+		},
+		{
+			afterRotate: () => {
+				idleTimer.reset()
+			}
+		}
+	);
+
 	const performanceTier = app.deviceContext.performance.performanceTier;
 
-
-	let cameraControls = $derived.by(()=>{
-		if(cameraType) return cameraType
-		if(performanceTier <=1) return 'fly'
-		return app.state.cameraControls
-	})
+	let cameraControls = $derived.by(() => {
+		if (cameraType) return cameraType;
+		if (performanceTier <= 1) return 'fly';
+		return app.state.cameraControls;
+	});
 
 	const far = $derived.by(() => {
 		const performanceTier = app.deviceContext.performance.performanceTier;
@@ -57,12 +96,26 @@
 				return 110000;
 		}
 	});
-
-	
 </script>
 
 {#if cameraControls === 'orbit'}
-	<OrbitCamera {app} {idleTimer} {far} lockableObj={app.state}/>
+	<OrbitCamera {app} {idleTimer} {far} lockableObj={app.state} />
 {:else if cameraControls === 'fly' && inputs.pointer}
-	<FlyCamera {app} {idleTimer} {far} pointer ={inputs.pointer} lockableObj={app.state} {movementSpeed}/>
+	<FlyCamera
+		{app}
+		{idleTimer}
+		{far}
+		pointer={inputs.pointer}
+		lockableObj={app.state}
+		{movementSpeed}
+	/>
+{:else if cameraControls === 'first_person'}
+	<FirstPersonCamera
+		{app}
+		{idleTimer}
+		{far}
+		pointer={inputs.pointer}
+		lockableObj={app.state}
+		{movementSpeed}
+	/>
 {/if}
