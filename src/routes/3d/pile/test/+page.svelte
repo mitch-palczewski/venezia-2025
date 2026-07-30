@@ -30,6 +30,10 @@
 	const performance = new PilePerformance(deviceContext);
 	const uiState = new UiState(deviceContext);
 
+	if(performance.performance <= 1){
+		cameraType = 'fly'
+	}
+
 	onMount(() => {
 		if (!deviceContext.isInitialized) {
 			deviceContext.initalize();

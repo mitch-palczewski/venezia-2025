@@ -4,6 +4,7 @@
 	import { DeviceContext, type PerformanceTier } from '$lib/dom/core';
 	import { PileScene, type PileData } from '$lib/pile';
 	import MiniMap from '$lib/pile/components/mini-map/MiniMap.svelte';
+	import type { CameraTypes } from '$lib/pile/core/camera/CameraController.svelte';
 	import Pile2DElements from '$lib/pile/core/Pile2DElements.svelte';
 	import { PilePerformance } from '$lib/pile/util/pilePerformance.svelte';
 	import { UiState } from '$lib/pile/util/ui/uiState.svelte.js';
@@ -17,6 +18,8 @@
 
 	let query = $derived(page.url.searchParams.get('p'));
 	let override: PerformanceTier | undefined = undefined
+	let cameraType: CameraTypes = $state('orbit')
+
 	// svelte-ignore state_referenced_locally
 	if(query){
 		switch(query){
@@ -43,6 +46,11 @@
 	const performance = new PilePerformance(deviceContext)
 	const uiState = new UiState(deviceContext);
 
+	
+	if(deviceContext.performance.performanceTier <= 1){
+		cameraType = 'fly'
+	}
+
 	onMount(() => {
 		if (!deviceContext.isInitialized) {
 			deviceContext.initalize();
@@ -57,7 +65,7 @@
 
 <div bind:this={uiState.canvasContainer}>
 	<CanvasPortal>
-		<PileScene bind:this={pileSceneRef} {data} {uiState} {performance} objectControls="drag"/>
+		<PileScene bind:this={pileSceneRef} {data} {uiState} {performance} objectControls="drag" cameraControls={cameraType}/>
 	</CanvasPortal>
 </div>
 
