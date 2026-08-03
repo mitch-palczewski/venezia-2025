@@ -35,7 +35,7 @@
 
 	const movementSpeed = () => {
 		if (app.controlsRef) {
-			return uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1) * 0.001 + 50;
+			return uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1) * 0.005 + 50;
 		} else {
 			return 10;
 		}
@@ -85,15 +85,15 @@
 		const performanceTier = app.deviceContext.performance.performanceTier;
 		switch (performanceTier) {
 			case 0:
-				return 50000;
+				return 9000;
 			case 1:
-				return 80000;
+				return 10000;
 			case 2:
-				return 90000;
-			case 3:
-				return 100000;
-			case 4:
 				return 110000;
+			case 3:
+				return 120000;
+			case 4:
+				return 130000;
 		}
 	});
 </script>

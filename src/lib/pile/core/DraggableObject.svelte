@@ -46,7 +46,15 @@
 		return thisSceneChildren;
 	});
 
-
+	let showThisTransformControls = $derived.by(() => {
+		if (!pileObjectData.id || pileObjectData.id === '')
+			throw Error(`Pile Object has no id ${pileObjectData}`);
+		if (pileApp.state.selectedObjectID === pileObjectData.id) {
+			return pileApp.state.showTransformControls;
+		} else {
+			return false;
+		}
+	});
 
 	let gltfReady = $state(false);
 	$effect(() => {
@@ -148,7 +156,7 @@
 		}
 	});
 
-	const MAX_INTERACTION_DISTANCE = $state((pileApp.controlsRef?.getDistance() ?? 1 ) * 1000);
+	const MAX_INTERACTION_DISTANCE = $state((pileApp.controlsRef?.getDistance() ?? 1) * 1000);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	function isWithinInteractionRange(e: any): boolean {
@@ -233,20 +241,22 @@
 		{#if shown && sceneChildren && shouldRender && gltfReady}
 			<T.Group>
 				{@render sceneBuilder(sceneChildren)}
-				{#if isSelected}
-					<T.Mesh rotation.x={-Math.PI / 2} position.y={0.01}>
-						<T.RingGeometry args={[1.0, 1.04, 32]} />
-						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
-					</T.Mesh>
-					<T.Mesh rotation.x={0} position.y={0.01}>
-						<T.RingGeometry args={[1.0, 1.04, 32]} />
-						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
-					</T.Mesh>
-					<T.Mesh rotation.y={-Math.PI / 2} position.y={0.01}>
-						<T.RingGeometry args={[1.0, 1.04, 32]} />
-						<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
-					</T.Mesh>
-				{/if}
+				{#key isSelected}
+					{#if isSelected}
+						<T.Mesh rotation.x={-Math.PI / 2} position.y={0.01}>
+							<T.RingGeometry args={[1.0, 1.04, 32]} />
+							<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
+						</T.Mesh>
+						<T.Mesh rotation.x={0} position.y={0.01}>
+							<T.RingGeometry args={[1.0, 1.04, 32]} />
+							<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
+						</T.Mesh>
+						<T.Mesh rotation.y={-Math.PI / 2} position.y={0.01}>
+							<T.RingGeometry args={[1.0, 1.04, 32]} />
+							<T.MeshBasicMaterial color="#E7F04D" side={2} transparent={true} opacity={0.5} />
+						</T.Mesh>
+					{/if}
+				{/key}
 			</T.Group>
 		{/if}
 	{:catch err}

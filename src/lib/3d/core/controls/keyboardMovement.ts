@@ -1,12 +1,13 @@
 import { useTask, useThrelte } from '@threlte/core';
 import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { Camera, Object3D, Vector3 } from 'three';
+import { Box3, Camera, Object3D, Vector3 } from 'three';
 import { onMount, onDestroy } from 'svelte';
 
 const forward = new Vector3();
 const side = new Vector3();
 const direction = new Vector3();
 const moveStep = new Vector3();
+const candidatePos = new Vector3();
 
 type InternalKeyState = {
 	forward: boolean;
@@ -17,11 +18,24 @@ type InternalKeyState = {
 	down: boolean;
 };
 
-export function moveCamera(camera: Camera | undefined, movement: Vector3) {
-  if (!camera) return;
-  camera.position.add(movement);
-  camera.updateMatrixWorld();
+export function moveCamera(
+    camera: Camera | undefined, 
+    movement: Vector3, 
+    bounds?: Box3
+) {
+    if (!camera) return;
+
+    if (bounds) {
+        candidatePos.copy(camera.position).add(movement);
+        bounds.clampPoint(candidatePos, candidatePos);
+        camera.position.copy(candidatePos);
+    } else {
+        camera.position.add(movement);
+    }
+
+    camera.updateMatrixWorld();
 }
+
 
 export function moveOrbitControls(controls: ThreeOrbitControls | undefined, movement: Vector3) {
   if (!controls) return;
@@ -37,7 +51,8 @@ export function moveObject3D(object: Object3D | undefined, movement: Vector3) {
 }
 
 export interface KeyboardMovementOptions {
-	afterMove?: () => void
+	afterMove?: () => void,
+	lockYMovement?: boolean 
 }
 
 
@@ -119,7 +134,7 @@ export function useKeyboardMovement(
 
 		const speed = typeof getMovementSpeed === 'function' ? getMovementSpeed() : getMovementSpeed;
 
-		const movement = calculateMovement(activeCamera, keys, speed, delta);
+		const movement = calculateMovement(activeCamera, keys, speed, delta, options.lockYMovement);
 
 		if (movement) {
 			moveStep(movement)
@@ -134,12 +149,15 @@ function calculateMovement(
 	camera: Camera,
 	keys: InternalKeyState,
 	speed: number,
-	delta: number
+	delta: number,
+	lockYMovement?: boolean
 ): Vector3 | null {
 	direction.set(0, 0, 0);
 
 	camera.getWorldDirection(forward);
-	//forward.y = 0;
+	if(lockYMovement){
+		forward.y = 0;
+	}
 	forward.normalize();
 
 	side.crossVectors(camera.up, forward).normalize();

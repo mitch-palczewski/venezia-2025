@@ -52,9 +52,9 @@
 	<div class="flex items-center justify-center {vertical ? 'h-full w-full' : 'flex-1 gap-3'}">
 		<input
 			type="range"
-			min="0.01"
+			min="1"
 			max={maxScale}
-			step="0.01"
+			step="0.5"
 			bind:value={localScale}
 			oninput={() => applyScale(localScale)}
 			class="gothic-slider cursor-pointer appearance-none rounded-full bg-white/10

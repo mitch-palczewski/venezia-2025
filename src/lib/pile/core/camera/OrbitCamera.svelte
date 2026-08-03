@@ -4,12 +4,11 @@
 	import { OrbitControls as ThreeOrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 	import type { IdleTimer } from './idleManager.svelte';
 	import type { PerspectiveCamera } from 'three';
-	import Controls from '$lib/pile/components/UI/settings-menu/Controls.svelte';
 
 	const AUTO_ROTATE_SPEED = 0.5;
 	const CAMERA_POS: [x: number, y: number, z: number] = [20, 20, 20];
 	const CAMERA_LOOK_AT_POS: [x: number, y: number, z: number] = [0, 3, 0];
-	const MAX_CAMERA_DISTANCE = 30000;
+	const MAX_CAMERA_DISTANCE = 3000;
 	const ROT_SPEED = 0.4;
 	const DAMPING = 0.1;
 	const PAN_SPEED = 0.8;
