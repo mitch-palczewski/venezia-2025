@@ -1,7 +1,7 @@
 <script lang='ts'>
 	import { T } from "@threlte/core";
 	import { BackSide, Box3, Vector3 } from "three";
-	import { Lodge } from "../Lodge.svelte";
+	import { Lodge } from "../../Lodge.svelte";
 
     type Props = {
         lodge: Lodge,
@@ -16,8 +16,6 @@
     lodge.bounds = new Box3(boundsMin, boundsMax )
 
 </script>
-
-
 
 <T.Mesh position={[0, height / 2, 0]}>
     <T.BoxGeometry args={[width, height, depth]} />
