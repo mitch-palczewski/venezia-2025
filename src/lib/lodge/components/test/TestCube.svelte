@@ -9,6 +9,6 @@
 </script>
 
 <T.Mesh {...rest}>
-	<T.BoxGeometry args={[1, 1, 1]} />
+	<T.BoxGeometry args={[2, 1, .5]} />
 	<T.MeshStandardMaterial color="#fcba03" roughness={0.8} />
 </T.Mesh>
