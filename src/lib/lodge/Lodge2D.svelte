@@ -9,7 +9,7 @@
 </script>
 
 <div class="fixed text-white">
-	Use the 'f' Key to change grab type. Current Grab Type: {lodge.objectOrientState?.()}
+	Use the 'f' Key to change grab type. Current Grab Type: {lodge.heldObjectOrientationState?.()}
 
 </div>
 

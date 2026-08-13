@@ -1,4 +1,4 @@
-import { useTask } from '@threlte/core';
+import { useTask, useThrelte } from '@threlte/core';
 import { onDestroy, onMount } from 'svelte';
 import { Object3D, Quaternion, Vector3, type Object3DEventMap } from 'three';
 
@@ -10,20 +10,22 @@ type KeyState = {
 };
 
 interface RotationOptions {
-  speed?: number
-  pivotName?: string;
-  invertPitch?: boolean;
+	speed?: number;
+	pivotName?: string;
+	invertPitch?: boolean;
 }
 
 const _vUp = new Vector3(0, 1, 0);
 const _vRight = new Vector3(1, 0, 0);
 const _qStep = new Quaternion();
+const _qCam = new Quaternion();
 
 export function usePivotRotation(
-    getTarget: () => Object3D | undefined | null,
-    options: RotationOptions = {}
+	getTarget: () => Object3D | undefined | null,
+	options: RotationOptions = {}
 ) {
-    const { speed = Math.PI, pivotName = 'pivot', invertPitch = false } = options
+	const { speed = Math.PI, pivotName = 'pivot', invertPitch = false } = options;
+	const { camera } = useThrelte();
 
 	const keys: KeyState = {
 		left: false,
@@ -32,7 +34,7 @@ export function usePivotRotation(
 		down: false
 	};
 
-    const handleKey = (e: KeyboardEvent, isDown: boolean) => {
+	const handleKey = (e: KeyboardEvent, isDown: boolean) => {
 		const target = e.target as HTMLElement;
 		if (
 			target &&
@@ -56,7 +58,7 @@ export function usePivotRotation(
 		}
 	};
 
-    const onKeyDown = (e: KeyboardEvent) => handleKey(e, true);
+	const onKeyDown = (e: KeyboardEvent) => handleKey(e, true);
 	const onKeyUp = (e: KeyboardEvent) => handleKey(e, false);
 
 	const onBlur = () => {
@@ -78,29 +80,32 @@ export function usePivotRotation(
 		window.removeEventListener('blur', onBlur);
 	});
 
-   useTask((delta) => {
-    const target = getTarget()
-    if (!target) return
+	useTask((delta) => {
+		const target = getTarget();
+		const activeCamera = camera.current;
+		if (!target || !activeCamera) return;
 
-    const dirX = (keys.right ? 1 : 0) - (keys.left ? 1 : 0)
-    const dirY = (keys.up ? 1 : 0) - (keys.down ? 1 : 0)
+		const dirX = (keys.right ? 1 : 0) - (keys.left ? 1 : 0);
+		const dirY = (keys.up ? 1 : 0) - (keys.down ? 1 : 0);
 
-    if (dirX === 0 && dirY === 0) return
+		if (dirX === 0 && dirY === 0) return;
 
-	const pivot = target.getObjectByName(pivotName) ?? target
-    const step = speed * delta
-	
-    if (dirX !== 0) {
-      _qStep.setFromAxisAngle(_vUp, -dirX * step);
-      pivot.quaternion.premultiply(_qStep);
-    }
+		const pivot = target.getObjectByName(pivotName) ?? target;
+		const step = speed * delta;
 
+		activeCamera.getWorldQuaternion(_qCam);
+		_vRight.set(1, 0, 0).applyQuaternion(_qCam);
+		_vUp.set(0, 1, 0).applyQuaternion(_qCam);
 
-    if (dirY !== 0) {
-      const pitchSign = invertPitch ? 1 : -1;
-      _qStep.setFromAxisAngle(_vRight, dirY * pitchSign * step);
-      pivot.quaternion.premultiply(_qStep);
-    }
+		if (dirX !== 0) {
+			_qStep.setFromAxisAngle(_vUp, dirX * step);
+			pivot.quaternion.premultiply(_qStep);
+		}
 
-  })
+		if (dirY !== 0) {
+			const pitchSign = invertPitch ? -1 : 1;
+			_qStep.setFromAxisAngle(_vRight, dirY * pitchSign * step);
+			pivot.quaternion.premultiply(_qStep);
+		}
+	});
 }

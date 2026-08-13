@@ -1,9 +1,9 @@
 import type { Box3 } from 'three';
-import type { KeyCycleState } from './core/interaction/useKeyCycle.svelte';
+import type { KeyCycleState } from './core/interaction/key-listeners/useKeyCycle.svelte';
 
 export class Lodge {
 	public bounds = $state<Box3>();
-	public objectOrientState = $state<KeyCycleState<string>>();
+	public heldObjectOrientationState = $state<KeyCycleState<string>>();
 
 	constructor() {}
 }

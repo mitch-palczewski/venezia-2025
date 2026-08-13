@@ -6,7 +6,13 @@ export type KeyCycleState<T> = {
 	setIndex(index: number): void;
 };
 
-export function useKeyCycle<T>(states: T[], targetKey = 'KeyF', initialIndex = 0) {
+export function useKeyCycle<T>(
+	states: T[],  
+	cycleForwardKey = 'KeyF', 
+	cycleBackwardKey?: string | null, 
+	initialIndex = 0,
+	onChange?: (newState: T, index: number) => void
+) {
 	if (!states || states.length === 0) {
 		throw new Error('useKeyCycle requires a non-empty states array.');
 	}
@@ -21,9 +27,13 @@ export function useKeyCycle<T>(states: T[], targetKey = 'KeyF', initialIndex = 0
 		) {
 			return;
 		}
-		if (e.code === targetKey && !e.repeat) {
-			currentIndex = (currentIndex + 1) % states.length;
-		}
+		if (e.code === cycleForwardKey && !e.repeat) {
+            currentIndex = (currentIndex + 1) % states.length;
+			onChange?.(states[currentIndex], currentIndex);
+        } else if (cycleBackwardKey && e.code === cycleBackwardKey && !e.repeat) {
+            currentIndex = (currentIndex - 1 + states.length) % states.length;
+			onChange?.(states[currentIndex], currentIndex);
+        }
 	};
 
 	onMount(() => {
@@ -39,6 +49,7 @@ export function useKeyCycle<T>(states: T[], targetKey = 'KeyF', initialIndex = 0
 	getState.getIndex = () => currentIndex;
 	getState.setIndex = (index: number) => {
 		currentIndex = Math.max(0, Math.min(index, states.length - 1));
+		onChange?.(states[currentIndex], currentIndex);
 	};
 
 	return getState;

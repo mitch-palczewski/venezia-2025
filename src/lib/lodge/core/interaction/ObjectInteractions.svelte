@@ -1,11 +1,13 @@
 <script lang="ts">
 	import type { Lodge } from '$lib/lodge/Lodge.svelte';
-	import type { Group } from 'three';
+	import { Box3, type Group } from 'three';
 	import { useObjectHold } from './useObjectHold.svelte';
-	import { usePivotRotation } from './useKeyboardAxis';
 	import { useObjectGrab } from './useObjectGrab.svelte';
 	import { onDestroy, onMount } from 'svelte';
-	import { useKeyCycle } from './useKeyCycle.svelte';
+	import { usePivotReset } from './pivot/usePivotReset';
+	import { useKeyCycle } from './key-listeners/useKeyCycle.svelte';
+	import { usePivotRotation } from './pivot/usePivotRotation';
+	import { usePivotScale } from './pivot/usePivotScale';
 
 	type Props = {
 		lodge: Lodge;
@@ -13,28 +15,34 @@
 	};
 	let { lodge, interactiveGroup }: Props = $props();
 
+	//Object orientation 
+	const orientationCycle = useKeyCycle(['No Orientation', 'Orient To Camera'], 'KeyF', null, 1);
+	lodge.heldObjectOrientationState = orientationCycle;
+	const isOrientingToCamera = () => orientationCycle.getIndex() >= 1;
+
+	//Grab Objects
 	const grab = useObjectGrab(() => (interactiveGroup ? interactiveGroup.children : []));
-	const FKeyState = useKeyCycle(["No Orientation", "Orient To Camera", "Lock Pitch"], "KeyF");
-	lodge.objectOrientState = FKeyState
-	const isOrienting = () => {
-		if (FKeyState.getIndex() >= 1) {
-			return true;
-		}
-		return false;
-	};
-	const isLockedPitch = () => {
-		if (FKeyState() === "Lock Pitch") {
-			return true;
-		}
-		return false;
-	};
+	const getGrabbedObject = () => grab.grabbedObject;
+	
+	//Hold Objects
+	const _heldObjectBounds = new Box3();
 	const hold = useObjectHold(
-		() => grab.grabbedObject,
+		getGrabbedObject,
 		() => grab.initialDistance,
-		{ orientToCamera: isOrienting, lockPitch: isLockedPitch }
+		{
+			orientToCamera: isOrientingToCamera,
+			lockPitch: () => true,
+			bounds: () => {
+				if (!lodge.bounds) return null;
+				return _heldObjectBounds.copy(lodge.bounds).expandByScalar(1);
+			}
+		}
 	);
 
-	usePivotRotation(() => grab.grabbedObject);
+	//Transform Objects on Pivot
+	usePivotRotation(getGrabbedObject);
+	usePivotReset(getGrabbedObject);
+	usePivotScale(getGrabbedObject);
 
 	function onPointerDown(e: MouseEvent) {
 		if (e.button !== 0 || !document.pointerLockElement) return;
