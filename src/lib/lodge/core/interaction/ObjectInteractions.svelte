@@ -2,13 +2,12 @@
 	import type { Lodge } from '$lib/lodge/Lodge.svelte';
 	import { Box3, type Group } from 'three';
 	import { useObjectHold } from './useObjectHold.svelte';
-	import { useObjectGrab } from './useObjectGrab.svelte';
 	import { onDestroy, onMount } from 'svelte';
 	import { usePivotReset } from './pivot/usePivotReset';
 	import { useKeyCycle } from './key-listeners/useKeyCycle.svelte';
 	import { usePivotRotation } from './pivot/usePivotRotation';
 	import { usePivotScale } from './pivot/usePivotScale';
-	import { usePlayerInteraction as useInteraction } from './usePlayerInteraction.svelte';
+	import { usePlayerInteraction as useInteraction } from './useInteraction.svelte';
 
 	type Props = {
 		lodge: Lodge;

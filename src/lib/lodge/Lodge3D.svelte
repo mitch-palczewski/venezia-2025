@@ -6,6 +6,8 @@
 	import { type Group } from 'three';
 	import TestInteractableObjects from './components/test/TestInteractableObjects.svelte';
 	import ObjectInteractions from './core/interaction/ObjectInteractions.svelte';
+	import { SoftShadows } from '@threlte/extras';
+	import StatsOverlay from '$lib/3d/components/StatsOverlay.svelte';
 
 	type Props = {
 		lodge: Lodge;
@@ -19,9 +21,14 @@
 
 <CameraControls {lodge} position={[0, 3, 0]} />
 
-<T.AmbientLight intensity={2} />
-<T.PointLight position={[2, 8, 5]} intensity={13} distance={25} />
+<T.AmbientLight intensity={1.5} />
+<T.PointLight position={[2, 8, 5]} intensity={13} distance={25} castShadow />
 
 <TestLodgeRoom {lodge} height={10} width={20} depth={20} />
 
 <TestInteractableObjects {lodge} bind:interactiveGroup />
+
+
+<SoftShadows/>
+
+<StatsOverlay/>

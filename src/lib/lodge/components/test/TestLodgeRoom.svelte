@@ -17,7 +17,7 @@
 
 </script>
 
-<T.Mesh position={[0, height / 2, 0]}>
+<T.Mesh position={[0, height / 2, 0]} receiveShadow>
     <T.BoxGeometry args={[width, height, depth]} />
     <T.MeshStandardMaterial 
         color="#2b2b2b" 
@@ -26,7 +26,7 @@
     />
 </T.Mesh>
 
-<T.Mesh rotation.x={-Math.PI / 2} position.y={0.01}>
+<T.Mesh rotation.x={-Math.PI / 2} position.y={0.01} receiveShadow>
     <T.PlaneGeometry args={[width, depth]} />
     <T.MeshStandardMaterial color="#1a1a1a" roughness={0.5} />
 </T.Mesh>

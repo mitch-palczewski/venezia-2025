@@ -3,6 +3,7 @@
 	import TestCube from "./TestCube.svelte";
 	import { T } from "@threlte/core";
 	import type { Lodge } from "$lib/lodge/Lodge.svelte";
+	import TestLightSwitch from "./TestLightSwitch.svelte";
 
     type Props = {
         lodge: Lodge
@@ -36,5 +37,7 @@
 	{#each cubePositions as pos, i (i)}
 		<TestCube position={pos} />
 	{/each}
+
+	<TestLightSwitch position={[0,5,-9.9]}/>
 </T.Group>
 
