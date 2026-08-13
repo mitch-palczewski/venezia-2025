@@ -1,11 +1,17 @@
 import { onDestroy, onMount } from 'svelte';
 
+export type KeyCycleState<T> = {
+	(): T;
+	getIndex(): number;
+	setIndex(index: number): void;
+};
+
 export function useKeyCycle<T>(states: T[], targetKey = 'KeyF', initialIndex = 0) {
 	if (!states || states.length === 0) {
 		throw new Error('useKeyCycle requires a non-empty states array.');
 	}
 
-	let currentIndex = Math.max(0, Math.min(initialIndex, states.length - 1));
+	let currentIndex = $state(Math.max(0, Math.min(initialIndex, states.length - 1)));
 
 	const onKeyDown = (e: KeyboardEvent) => {
 		const target = e.target as HTMLElement;
@@ -17,7 +23,6 @@ export function useKeyCycle<T>(states: T[], targetKey = 'KeyF', initialIndex = 0
 		}
 		if (e.code === targetKey && !e.repeat) {
 			currentIndex = (currentIndex + 1) % states.length;
-			
 		}
 	};
 

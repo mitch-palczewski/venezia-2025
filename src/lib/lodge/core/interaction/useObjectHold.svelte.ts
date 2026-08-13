@@ -70,6 +70,7 @@ export function useObjectHold(
   useTask((delta) => {
     const grabbedObject = getGrabbedObject();
     const activeCamera = camera.current;
+    if (!grabbedObject) return;
 
     if (grabbedObject !== lastGrabbedObject) {
       if (grabbedObject) {
@@ -94,11 +95,9 @@ export function useObjectHold(
       _dummyObject.position.copy(grabbedObject.position);
 
       if (lockPitch()) {
-        // Flatten Y-coordinate so the target point is level with the object
         _lookAtPosition.set(_cameraPosition.x, grabbedObject.position.y, _cameraPosition.z);
         _dummyObject.lookAt(_lookAtPosition);
       } else {
-        // Look directly at camera position in 3D space
         _dummyObject.lookAt(_cameraPosition);
       }
 

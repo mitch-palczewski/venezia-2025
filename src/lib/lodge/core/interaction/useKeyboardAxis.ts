@@ -1,6 +1,6 @@
 import { useTask } from '@threlte/core';
 import { onDestroy, onMount } from 'svelte';
-import { Object3D, type Object3DEventMap } from 'three';
+import { Object3D, Quaternion, Vector3, type Object3DEventMap } from 'three';
 
 type KeyState = {
 	left: boolean;
@@ -11,13 +11,19 @@ type KeyState = {
 
 interface RotationOptions {
   speed?: number
+  pivotName?: string;
+  invertPitch?: boolean;
 }
 
-export function useKeyboardAxis(
+const _vUp = new Vector3(0, 1, 0);
+const _vRight = new Vector3(1, 0, 0);
+const _qStep = new Quaternion();
+
+export function usePivotRotation(
     getTarget: () => Object3D | undefined | null,
     options: RotationOptions = {}
 ) {
-    const { speed = Math.PI } = options
+    const { speed = Math.PI, pivotName = 'pivot', invertPitch = false } = options
 
 	const keys: KeyState = {
 		left: false,
@@ -81,8 +87,20 @@ export function useKeyboardAxis(
 
     if (dirX === 0 && dirY === 0) return
 
+	const pivot = target.getObjectByName(pivotName) ?? target
     const step = speed * delta
-    target.rotation.y += dirX * step 
-    target.rotation.x += dirY * step 
+	
+    if (dirX !== 0) {
+      _qStep.setFromAxisAngle(_vUp, -dirX * step);
+      pivot.quaternion.premultiply(_qStep);
+    }
+
+
+    if (dirY !== 0) {
+      const pitchSign = invertPitch ? 1 : -1;
+      _qStep.setFromAxisAngle(_vRight, dirY * pitchSign * step);
+      pivot.quaternion.premultiply(_qStep);
+    }
+
   })
 }
