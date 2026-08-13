@@ -1,6 +1,6 @@
 import { Object3D, type Intersection } from 'three';
 import { useFPSRaycast } from './useFPSRaycast.svelte';
-import { getInteractiveEntity } from './util/getInteractiveEntity';
+import { getInteractiveEntity } from './util/interaction';
 
 export function useObjectGrab(getInteractiveObjects: () => Object3D[]) {
   const raycast = useFPSRaycast(getInteractiveObjects);

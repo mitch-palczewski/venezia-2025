@@ -8,6 +8,7 @@
 	import { useKeyCycle } from './key-listeners/useKeyCycle.svelte';
 	import { usePivotRotation } from './pivot/usePivotRotation';
 	import { usePivotScale } from './pivot/usePivotScale';
+	import { usePlayerInteraction as useInteraction } from './usePlayerInteraction.svelte';
 
 	type Props = {
 		lodge: Lodge;
@@ -20,15 +21,14 @@
 	lodge.heldObjectOrientationState = orientationCycle;
 	const isOrientingToCamera = () => orientationCycle.getIndex() >= 1;
 
-	//Grab Objects
-	const grab = useObjectGrab(() => (interactiveGroup ? interactiveGroup.children : []));
-	const getGrabbedObject = () => grab.grabbedObject;
+	const interaction = useInteraction(() => (interactiveGroup ? interactiveGroup.children : []))
+	const getGrabbedObject = () => interaction.grabbedObject;
 	
 	//Hold Objects
 	const _heldObjectBounds = new Box3();
 	const hold = useObjectHold(
 		getGrabbedObject,
-		() => grab.initialDistance,
+		() => interaction.initialDistance,
 		{
 			orientToCamera: isOrientingToCamera,
 			lockPitch: () => true,
@@ -48,7 +48,7 @@
 		if (e.button !== 0 || !document.pointerLockElement) return;
 
 		if (interactiveGroup) {
-			grab.toggleGrab();
+			interaction.handleAction()
 		}
 	}
 

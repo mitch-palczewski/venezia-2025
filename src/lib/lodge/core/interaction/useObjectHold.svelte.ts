@@ -151,14 +151,11 @@ function updateOrientation(
 
 		_targetQuaternion.copy(_dummyObject.quaternion);
 		grabbedObject.quaternion.slerp(_targetQuaternion, delta * rotateSpeed);
+		_originalQuaternion.copy(grabbedObject.quaternion);
 		wasFacingCamera = true;
 	} else if (wasFacingCamera) {
-		grabbedObject.quaternion.slerp(_originalQuaternion, delta * rotateSpeed);
-
-		if (grabbedObject.quaternion.angleTo(_originalQuaternion) < 0.001) {
-			grabbedObject.quaternion.copy(_originalQuaternion);
-			wasFacingCamera = false;
-		}
+		_originalQuaternion.copy(grabbedObject.quaternion);
+        wasFacingCamera = false;
 	}
 	return wasFacingCamera;
 }
