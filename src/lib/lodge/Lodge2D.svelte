@@ -8,8 +8,15 @@
 
 </script>
 
-<div class="fixed text-white">
-	Use the 'f' Key to change grab type. Current Grab Type: {lodge.heldObjectOrientationState?.()}
+<div class="fixed text-white mt-30 p-2">
+	<p>'left click' - Grab/Drop & Interact</p>
+	<p>'right click' - bring object close</p>
+	<p>'mouse wheel' - adjust distance</p>
+	<p>'f' - Object Orientation: {lodge.heldObjectOrientationState?.()}</p>
+	<p>'e' & 'r' - cycle object rotation</p>
+	<p>'arrow keys' - precise object rotation</p>
+	<p>'+/-' - scale objects</p>
+	
 	
 </div>
 

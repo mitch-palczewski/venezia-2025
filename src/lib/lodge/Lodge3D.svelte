@@ -6,8 +6,7 @@
 	import { type Group } from 'three';
 	import TestInteractableObjects from './components/test/TestInteractableObjects.svelte';
 	import ObjectInteractions from './core/interaction/ObjectInteractions.svelte';
-	import { SoftShadows } from '@threlte/extras';
-	import StatsOverlay from '$lib/3d/components/StatsOverlay.svelte';
+	import { PerfMonitor, SoftShadows } from '@threlte/extras';
 
 	type Props = {
 		lodge: Lodge;
@@ -31,4 +30,4 @@
 
 <SoftShadows/>
 
-<StatsOverlay/>
+<PerfMonitor/>

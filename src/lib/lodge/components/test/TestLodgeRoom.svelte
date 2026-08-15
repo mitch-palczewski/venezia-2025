@@ -20,7 +20,7 @@
 <T.Mesh position={[0, height / 2, 0]} receiveShadow>
     <T.BoxGeometry args={[width, height, depth]} />
     <T.MeshStandardMaterial 
-        color="#2b2b2b" 
+        color="#383832" 
         side={BackSide} 
         roughness={0.8} 
     />
@@ -28,5 +28,5 @@
 
 <T.Mesh rotation.x={-Math.PI / 2} position.y={0.01} receiveShadow>
     <T.PlaneGeometry args={[width, depth]} />
-    <T.MeshStandardMaterial color="#1a1a1a" roughness={0.5} />
+    <T.MeshStandardMaterial color="#242016" roughness={0.5} />
 </T.Mesh>
