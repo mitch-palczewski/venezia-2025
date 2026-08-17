@@ -6,9 +6,7 @@
     radius: number;
     borderColor?: string; 
     borderWidth?: number;
-    /** URL or path to the center icon image (e.g., "/icons/gargoyle.png") */
     imageSrc?: string;
-    /** Optional custom size for the center icon. Defaults to 80% of the radius. */
     imageSize?: number;
   }
 
@@ -22,18 +20,22 @@
     imageSize
   }: Props = $props();
 
-  // 1. Determine the size of the icon dynamically
   let imgSize = $derived(imageSize ?? radius * 0.8);
-
-  // 2. Calculate top-left coordinates so the image is perfectly centered on (x, y)
   let imgX = $derived(x - imgSize / 2);
   let imgY = $derived(y - imgSize / 2);
-
-  // 3. Offset the radius line so it doesn't draw underneath/clash with the icon
   let lineStartX = $derived(imageSrc ? x + imgSize / 2 : x);
 </script>
 
-<svg class="absolute inset-0 pointer-events-none h-full w-full">
+<!-- 
+  Fix: Instead of h-full w-full relative to a 0x0 container, 
+  we position the SVG wrapper at (x, y) with a bounding box 
+  large enough to hold the object and its radius line.
+-->
+<svg 
+  class="absolute pointer-events-none overflow-visible"
+  style="left: {x - radius - borderWidth}px; top: {y - radius - borderWidth}px; width: {(radius + borderWidth) * 2}px; height: {(radius + borderWidth) * 2}px;"
+  viewBox="{x - radius - borderWidth} {y - radius - borderWidth} {(radius + borderWidth) * 2} {(radius + borderWidth) * 2}"
+>
   <!-- The outer boundary circle -->
   <circle 
     cx={x} 
@@ -43,11 +45,7 @@
     stroke-width={borderWidth}
   />
 
-  <!-- 
-    The Radius Line. 
-    If there is an image, the line starts from the edge of the image 
-    instead of the center, keeping the look incredibly clean!
-  -->
+  <!-- The Radius Line -->
   <line 
     x1={lineStartX} 
     y1={y} 
@@ -58,7 +56,6 @@
   />
 
   {#if imageSrc}
-    <!-- Centered Custom Image -->
     <image 
       href={imageSrc} 
       x={imgX} 
@@ -68,7 +65,6 @@
       preserveAspectRatio="xMidYMid meet"
     />
   {:else}
-    <!-- Fallback Center Dot (if no image is provided) -->
     <line 
       x1={x} 
       y1={y} 

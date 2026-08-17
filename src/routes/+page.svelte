@@ -89,7 +89,7 @@
 		<a
 			href="/3d/pile/world1"
 			aria-label="Enter Archived World1"
-			class="group relative flex h-16 w-full items-center justify-between overflow-hidden border-2 border-teal bg-teal text-white transition-colors hover:bg-light-yellow hover:text-dark-gray"
+			class="group relative flex h-16 w-full items-center ml-6 justify-between overflow-hidden border-2 border-teal bg-teal text-white transition-colors hover:bg-light-yellow hover:text-dark-gray"
 			onclick={() => {
 				ambientManager.play();
 				toggleFullscreen();
