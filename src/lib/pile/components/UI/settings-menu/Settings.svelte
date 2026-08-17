@@ -65,38 +65,6 @@
 			</div>
 		</div>
 
-		<div class="flex flex-col gap-2">
-			<span class="text-xs font-medium tracking-wider text-white uppercase">Movement Controls</span>
-			<div class="flex rounded-md bg-zinc-800 p-1">
-				<button
-					onclick={() => (uiState.app!.state.cameraControls = 'orbit')}
-					class="flex-1 rounded-sm py-1.5 text-sm font-medium transition-all
-                        {uiState.app!.state.cameraControls === 'orbit'
-						? 'bg-zinc-600 text-white shadow-sm'
-						: 'text-zinc-400 hover:text-zinc-200'}"
-				>
-					Orbit
-				</button>
-				<button
-					onclick={() => (uiState.app!.state.cameraControls = 'fly')}
-					class="flex-1 rounded-sm py-1.5 text-sm font-medium transition-all
-                        {uiState.app!.state.cameraControls === 'fly'
-						? 'bg-zinc-600 text-white shadow-sm'
-						: 'text-zinc-400 hover:text-zinc-200'}"
-				>
-					Fly
-				</button>
-				<button
-					onclick={() => (uiState.app!.state.cameraControls = 'first_person')}
-					class="flex-1 rounded-sm py-1.5 text-sm font-medium transition-all
-                        {uiState.app!.state.cameraControls === 'first_person'
-						? 'bg-zinc-600 text-white shadow-sm'
-						: 'text-zinc-400 hover:text-zinc-200'}"
-				>
-					First Person
-				</button>
-			</div>
-		</div>
 	</div>
 
 	<div class="space-y-4 text-white">

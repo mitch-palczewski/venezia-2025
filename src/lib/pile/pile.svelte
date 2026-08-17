@@ -16,6 +16,7 @@
 	import ImageTemplate from './core/ImageTemplate.svelte';
 	import PileObject from './core/DraggableObject.svelte';
 	import ModelTemplate from './core/ModelTemplate.svelte';
+	import ViewableObject from './core/ViewableObject.svelte';
 
 	type Props = {
 		data: PileData;
@@ -23,12 +24,18 @@
 		performance: PilePerformance;
 		databaseName?: string;
 		objectControls?: 'gizmo' | 'drag' | 'view';
-		cameraControls?: CameraTypes
+		cameraControls?: CameraTypes;
 	};
-	let { data, uiState, performance, databaseName, objectControls = 'gizmo', cameraControls ='orbit' }: Props = $props();
+	let {
+		data,
+		uiState,
+		performance,
+		databaseName,
+		objectControls = 'gizmo',
+		cameraControls = 'orbit'
+	}: Props = $props();
 
 	const { raycaster } = interactivity();
-	
 
 	const { renderer, scene, camera } = useThrelte();
 	export async function capturePileScene(): Promise<Blob> {
@@ -37,7 +44,7 @@
 
 	export const pileApp = new PileApp(capturePileScene, uiState, performance, data, databaseName);
 	pileApp.state.objectControls = objectControls;
-	pileApp.state.cameraControls = cameraControls
+	pileApp.state.cameraControls = cameraControls;
 
 	onDestroy(() => {
 		pileApp.database.destroy();
@@ -96,6 +103,15 @@
 		/>
 	{:else if objectControls === 'drag'}
 		<PileObject
+			{pileApp}
+			bind:ref={model.ref}
+			pileObjectData={model}
+			position={[translate.x, translate.y, translate.z]}
+			quaternion={[quaternion.x, quaternion.y, quaternion.z, quaternion.w]}
+			scale={[scale.x, scale.y, scale.z]}
+		/>
+	{:else if objectControls === 'view'}
+		<ViewableObject
 			{pileApp}
 			bind:ref={model.ref}
 			pileObjectData={model}

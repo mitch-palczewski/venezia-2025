@@ -54,24 +54,20 @@
 
 <svelte:window bind:innerWidth={windowWidth} />
 
-{#snippet bannerMessage()}
-	<p><span class="font-bold">Left Click</span> on objects to move, rotate, and scale them.</p>
-	<p>Use the <span class="font-bold">[ + ]</span> button to add objects</p>
-	<p>
-		<span class="font-bold">Right Click</span> to pan or use <span class="font-bold">WASD</span> buttons
-		to move around.
-	</p>
+{#snippet keyboardMovementBanner()}
+	<p><span class="font-bold">Left Click</span> on objects to move.</p>
+	<p><span class="font-bold">Right Click</span> on objects to rotate.</p>
+	<p><span class="font-bold">WASD</span> camera movement</p>
+	<p><span class="font-bold">Arrow Keys</span> camera rotation</p>
 {/snippet}
 {#snippet phoneBannerMessage()}
-	<p><span class="font-bold">Tap</span> on objects to move, rotate, and scale them.</p>
-	<p>Use the <span class="font-bold">[+]</span> button to add objects</p>
-	<p>Use <span class="font-bold">Two Fingers</span> to pan.</p>
+	<p>Tap to move</p>
 {/snippet}
 
 {#snippet banner()}
-	{#if showBanner}
+	{#if showBanner && pileApp.state.objectControls !== 'view'}
 		<Banner
-			children={isMd ? bannerMessage : phoneBannerMessage}
+			children={isMd ? keyboardMovementBanner : phoneBannerMessage}
 			onClose={() => (showBanner = false)}
 		/>
 	{/if}
@@ -111,9 +107,11 @@
 						{/if}
 					</div>
 				{/if}
-
-				<AddBtn {uiSettings} />
-
+				
+				{#if pileApp.state.objectControls !== 'view'}
+					<AddBtn {uiSettings} />
+				{/if}
+				
 				{#if isMd}
 					{#if uiSettings.showScreenshotBtn && !uiSettings.showAddMenu && pileApp.isReady}
 						<ScreenshotBtn app={pileApp} {uiSettings} />
@@ -139,7 +137,7 @@
 				</div>
 			</div>
 		</div>
-		{#if uiSettings.showAddMenu}
+		{#if uiSettings.showAddMenu && pileApp.state.objectControls !== 'view'}
 			<AddMenu {uiSettings} />
 		{/if}
 	</div>

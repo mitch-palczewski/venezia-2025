@@ -37,7 +37,7 @@
 		if (app.controlsRef) {
 			return uiState.movementSpeed * (app.controlsRef?.getDistance() ?? 1) * 0.005 + 50;
 		} else {
-			return 10;
+			return uiState.movementSpeed;
 		}
 	};
 
