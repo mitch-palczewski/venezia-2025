@@ -47,49 +47,74 @@
 <svelte:window bind:innerWidth />
 
 {#snippet enterPile3DDesktop()}
-	<a
-		href="/3d/pile"
-		aria-label="Enter 3D Pile"
-		class="group relative flex h-100 max-h-200 min-h-[82vh] w-full overflow-hidden bg-dark-gray pb-10 pl-20 sm:h-full"
-		onclick={() => {
-			ambientManager.play();
-			toggleFullscreen();
-			enteringPile = true;
-		}}
-	>
-		<img
-			src={getOptimizedUrl(screenshots?.[0]?.url, 1920, 100)}
-			alt="Most recent user captured screenshot"
-			class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
-		/>
-		<div class="absolute inset-0 flex flex-col md:flex-row">
-			<img class="md:pt-[50%]" src="/gifs/Misc_05_preview2.gif" alt="Fire Pot Rotating" />
-
-			<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
-		</div>
-		<div class="absolute inset-0 flex flex-col items-center justify-center p-6">
-			<div
-				class="mr-25 border-r-2 border-b-2 border-teal bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50"
-			>
-				<p
-					class="w-full p-1 text-center text-3xl font-extrabold text-white group-hover:invert sm:text-6xl"
-				>
-					Enter Pile-3D
-				</p>
-				<p class="  text-sm font-extrabold text-white group-hover:invert">
-					Shared public space in a web-based 3D environment which needs your participation. Move,
-					rotate, and scale objects to build community architecture in a persistent sandbox.
-				</p>
+	<div class="flex h-full w-full flex-col gap-4">
+		<!-- Main Button (Top / Large) -->
+		<a
+			href="/3d/pile"
+			aria-label="Enter 3D Pile"
+			class="group relative flex min-h-[60vh] w-full flex-1 overflow-hidden bg-dark-gray pb-10 pl-20"
+			onclick={() => {
+				ambientManager.play();
+				toggleFullscreen();
+				enteringPile = true;
+			}}
+		>
+			<img
+				src={getOptimizedUrl(screenshots?.[0]?.url, 1920, 100)}
+				alt="Most recent user captured screenshot"
+				class="h-full w-full object-cover sm:border-b-8 sm:border-l-20 sm:border-light-yellow"
+			/>
+			<div class="absolute inset-0 flex flex-col md:flex-row">
+				<img class="md:pt-[50%]" src="/gifs/Misc_05_preview2.gif" alt="Fire Pot Rotating" />
+				<img src="/gifs/Ibix_01_preview2.gif" alt="Ibix Rotating" />
 			</div>
-		</div>
-	</a>
+			<div class="absolute inset-0 flex flex-col items-center justify-center p-6">
+				<div
+					class="mr-25 border-r-2 border-b-2 border-teal bg-teal group-hover:border-dark-gray group-hover:bg-light-yellow md:mr-50"
+				>
+					<p
+						class="w-full p-1 text-center text-3xl font-extrabold text-white group-hover:invert sm:text-6xl"
+					>
+						Enter Pile-3D
+					</p>
+					<p class="text-sm font-extrabold text-white group-hover:invert">
+						Shared public space in a web-based 3D environment which needs your participation. Move,
+						rotate, and scale objects to build community architecture in a persistent sandbox.
+					</p>
+				</div>
+			</div>
+		</a>
+
+		<!-- Secondary Button (Bottom / Smaller) -->
+		<a
+			href="/3d/pile/world1"
+			aria-label="Enter Archived World1"
+			class="group relative flex h-16 w-full items-center justify-between overflow-hidden border-2 border-teal bg-teal text-white transition-colors hover:bg-light-yellow hover:text-dark-gray"
+			onclick={() => {
+				ambientManager.play();
+				toggleFullscreen();
+				enteringPile = true;
+			}}
+		>
+			<!-- Left Image -->
+			<img src="/gifs/pileflythrough.gif" alt="Left Icon" class="h-full w-16 object-cover" />
+
+			<!-- Button Text -->
+			<span class="px-4 text-center text-xl font-bold">
+				Enter Archived World 1 : Pour out of the Abyss
+			</span>
+
+			<!-- Right Image -->
+			<img src="/gifs/pileflythrough.gif" alt="Right Icon" class="h-full w-16 object-cover" />
+		</a>
+	</div>
 {/snippet}
 
 {#snippet enterPile3DMobile()}
 	<a
 		href="/3d/pile"
 		aria-label="Enter 3D Pile"
-		class="group relative flex h-[70vh] max-h-200 min-h-[70vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
+		class="group relative flex h-[60vh] max-h-200 min-h-[70vh] w-full overflow-hidden border-r-8 border-light-yellow sm:h-full"
 		onclick={() => {
 			ambientManager.play();
 			toggleFullscreen();
@@ -150,10 +175,10 @@
 		href="/gallery/film"
 		aria-label="City Pile"
 		target="_blank"
-		class="group relative flex min-h-0 w-full flex-1 bg-dark-gray overflow-hidden"
+		class="group relative flex min-h-0 w-full flex-1 overflow-hidden bg-dark-gray"
 	>
 		<iframe
-			class="absolute  left-1/2 ] min-w-[190%] min-h-[135%] -translate-x-1/2 -translate-y-1/2 aspect-video"
+			class="] absolute left-1/2 aspect-video min-h-[135%] min-w-[190%] -translate-x-1/2 -translate-y-1/2"
 			src="https://www.youtube.com/embed/4N1fsPaxdyg?si=lGfyfc7HnqyR96DM&autoplay=1&mute=1&controls=0&loop=1&showinfo=0&modestbranding=1&rel=0"
 			title="YouTube video player"
 			frameborder="0"
