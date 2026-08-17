@@ -9,6 +9,7 @@
 </script>
 
 <div class="fixed text-white mt-30 p-2">
+	<p>'WASD shift space' - Movement</p>
 	<p>'left click' - Grab/Drop & Interact</p>
 	<p>'right click' - bring object close</p>
 	<p>'mouse wheel' - adjust distance</p>

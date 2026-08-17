@@ -60,7 +60,7 @@
 		rotateSpeed={ROT_SPEED}
 		autoRotate={idleTimer.isIdle}
 		autoRotateSpeed={AUTO_ROTATE_SPEED}
-		zoomSpeed={0.4}
+		enableZoom={false}
 		maxDistance={MAX_CAMERA_DISTANCE}
 		panSpeed={PAN_SPEED}
 		onstart={idleTimer.stop}

@@ -45,7 +45,7 @@
 	});
 </script>
 
-<T.Fog attach="fog" color="#004d7d" near={10} far={100000} />
+<T.Fog attach="fog" color="#5c84bf" near={15000} far={200000} />
 
 <SettingsKeyBind settingState={uiState} />
 
